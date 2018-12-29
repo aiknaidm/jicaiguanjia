@@ -1,0 +1,33 @@
+<style lang="less">
+</style>
+<template>
+  <view class="container">
+    
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class newslist extends wepy.page {
+  config = {
+    navigationBarTitleText: '新闻中心'
+  };
+  components = {   };
+  data = {
+  
+  };
+  computed = {};
+  methods = {
+  
+  };
+  events = {};
+  async getIndexNewsList(id) {
+   
+  }
+
+  async onLoad(option) {
+   
+  }
+}
+</script>
