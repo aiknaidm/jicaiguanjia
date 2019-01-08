@@ -1,0 +1,203 @@
+<style lang="less">
+.share-list {
+  display: flex;
+  justify-content: space-between;
+  font-size: 28rpx;
+  padding: 20rpx 40rpx;
+  border-top: 16rpx solid #f0f0f0;
+  position: relative;
+}
+
+.status-box {
+  height: auto;
+  line-height: 50rpx;
+}
+
+.status-box .status-label {
+  padding: 20rpx 40rpx;
+}
+
+.tixian {
+  text-align: right;
+}
+
+.data {
+  color: #666;
+  font-size: 26rpx;
+}
+
+.iconfont {
+  color: #aaa;
+}
+
+.tixian-btn {
+  background: #f6bf31;
+  color: #fff;
+  padding: 5rpx 10rpx;
+  font-size: 25rpx;
+  border-radius: 4rpx;
+}
+
+.icon-yitixian {
+  position: absolute;
+  font-size: 110rpx;
+  right: 75rpx;
+  top: 0rpx;
+  z-index: 10;
+}
+</style>
+<template>
+ <view class='container'>
+  <!-- <view>
+    <view></view>
+    <view>分享所得总收益</view>
+  </view>
+  <view>
+ 
+    <view>可提现收入</view>
+  </view> -->
+  
+  <statusTap :statusType="statusType" :currentType.sync="status" @statusTap.user="statusTap" >
+    <view  slot="content">
+       <view wx:if="{{index==0}}" class='shouyi'>￥{{zong}}</view>
+           <view wx:if="{{index==1}}" class='shouyi'>￥{{ketx}}</view>
+    </view>
+  </statusTap>
+  <view class='share-list' wx:for="{{list}}" wx:key="{{index}}" @tap='toShareDetails({{item.id}})' >
+    <view>
+      <view class='red'>+￥{{item.order_amount}}</view>
+      <view>分享所得收益</view>
+    </view>
+    <view class='tixian'>
+      <view class=''>
+        <text class='iconfont icon-yitixian' wx:if="{{item.is_tixian}}"> </text>
+        <text class='tixian-btn' wx:else> 可提现</text>
+        <text class='iconfont icon-arrow-right'></text>
+      </view>
+      <view class='data'>{{item.add_time_t}}</view>
+    </view>
+  </view>
+ <popup :isshowdetails.sync="isshowdetails" :shareDetail.sync="shareDetail"></popup>
+
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import statusTap from '../../components/statusTap';
+import api from '../../API/api';
+import utils from '../../utils/index';
+import popup from '../../components/popup';
+export default class newslist extends wepy.page {
+  config = {
+    navigationBarTitleText: '收益'
+  };
+  components = { statusTap, popup };
+  data = {
+    statusType: ['分享所得总收益', '可提现收入'],
+    statusKey: ['0', '1'],
+    status: '0',
+    list: [],
+    shareDetail: [],
+    zong: '',
+    ketx: '',
+    isshowdetails: false
+  };
+  computed = {};
+  methods = {
+    statusTap(index) {
+      console.log(index);
+      this.getShareList(this.userId, index);
+    },
+    // 详情
+    toShareDetails: function(id) {
+      console.log('点击的是', this.list, id);
+      wepy
+        .request({
+          url: api.fxfxDetail,
+          data: {
+            id
+          }
+        })
+        .then(res => {
+          this.isshowdetails = true;
+          var shareDetail = [];
+          shareDetail[0] = res.data.data;
+          shareDetail = this.dataForEach(shareDetail);
+          this.shareDetail=shareDetail[0]
+          console.log('分享订单详情', this.shareDetail);
+          this.$apply();
+        });
+    }
+  };
+  events = {};
+  async getIndexNewsList(id) {}
+  // 分享列表
+  getShareList(userId, status) {
+    wepy
+      .request({
+        url: api.fxfxList,
+        data: {
+          user_id: userId
+        }
+      })
+      .then(res => {
+        console.log('分享列表', res);
+        if (res.data.code == '0') {
+          var shareList = res.data.data;
+          shareList.ketx = this.dataForEach(shareList.ketx);
+          shareList.zong = this.dataForEach(shareList.zong);
+          this.shareList = shareList;
+          this.list = status == '0' ? shareList.zong : shareList.ketx;
+          this.$apply();
+        } else {
+          wx.showToast({
+            title: res.data.message
+          });
+        }
+      })
+      .catch(res => {
+        console.log(res);
+        wx.showToast({
+          title: res.TypeError,
+          icon: 'none'
+        });
+      });
+  }
+  dataForEach(data) {
+    console.log(data.length);
+    console.log(data);
+    // console.log(utils);
+    data.forEach(function(item, index) {
+      console.log(new Date(item.add_time * 1000));
+      if (data[index].add_time)
+        data[index].add_time_t = utils.formatTime(
+          new Date(item.add_time * 1000),
+          'yyyy-mm:dd'
+        );
+      if (data[index].create_time)
+        data[index].create_time_t = utils.formatTime(
+          new Date(item.create_time * 1000),
+          'yyyy-mm:dd'
+        );
+      if (data[index].tixian_time)
+        data[index].tixian_time_t = utils.formatTime(
+          new Date(item.tixian_time * 1000),
+          'yyyy-mm:dd'
+        );
+      // if (data[index].create_time) data[index].create_time_t = utils.formatTime(new Date(item.create_time * 1000));
+    });
+
+    return data;
+  }
+  async onLoad(option) {
+    var userId = await this.$parent.loginInfo();
+    this.userId = userId;
+    this.status = option.status;
+    this.getShareList(userId, this.status);
+    console.log(option);
+    this.zong = option.zong;
+    this.ketx = option.ketx;
+  }
+}
+</script>

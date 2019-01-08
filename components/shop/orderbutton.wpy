@@ -1,0 +1,134 @@
+
+<style>
+/* 订单按钮 */
+</style>
+<template>
+  <view class="price-box" >
+
+      <view
+        class="btn cancel-btn"
+        wx:if="{{orderDetail.order_status==1}}"
+        @tap.stop="cancelOrderTap({{orderDetail.id}})"
+      >取消订单</view>
+      <view
+        class="btn topay-btn"
+        wx:if="{{orderDetail.order_status==1}}"
+        @tap.stop="toPayTap({{orderDetail.id}},{{orderDetail.id}},{{orderDetail.order_amount}},{{index}})"
+      >马上付款</view>
+     
+      <view
+        class="btn topay-btn"
+        wx:if="{{orderDetail.order_status==2&&orderDetail.shipping_status==1}}"
+        @tap.stop="confirmBtnTap({{orderDetail.id}})"
+      >确认收货</view>
+
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+import api from '../../API/api';
+import wxpay1 from '../../utils/index';
+export default class orderbutton extends wepy.component {
+  props = {
+    orderDetail: {
+      type: Object,
+      default: {},
+      twoWay: true
+    }
+  };
+  data = {};
+
+  events = {};
+
+  methods = {
+    // 取消订单
+    async cancelOrderTap(id) {
+      var that = this;
+      var modalRes = await wepy.showModal({
+        title: '提示', //提示的标题,
+        content: '你确定要取消订单吗', //提示的内容,
+        showCancel: true, //是否显示取消按钮,
+        confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
+        confirmColor: '#e50012' //确定按钮的文字颜色,
+      });
+      if (modalRes.confirm) {
+        var res = await this.toCancelOrder(id);
+        if (res.data.code == 0) this.$emit('cancelOrderTap');
+        else
+          wx.showToast({
+            title: '取消失败', //提示的内容,
+            icon: 'none', //图标,
+            duration: 2000, //延迟时间,
+            mask: true //显示透明蒙层，防止触摸穿透,
+          });
+      } else if (modalRes.cancel) {
+      }
+    },
+    // 确认收货
+    async confirmBtnTap(id) {
+      var that = this;
+      var modalRes = await wepy.showModal({
+        title: '提示', //提示的标题,
+        content: '你确定收货吗', //提示的内容,
+        showCancel: true, //是否显示取消按钮,
+        cancelText: '取消', //取消按钮的文字，默认为取消，最多 4 个字符,
+        cancelColor: '#000000', //取消按钮的文字颜色,
+        confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
+        confirmColor: '#e50012' //确定按钮的文字颜色,
+      });
+      if (modalRes.confirm) {
+        var res = await this.toConfirmBtn(id);
+        if (res.data.code == 0) this.$emit('confirmBtnTap');
+        else
+          wx.showToast({
+            title: '确认收货失败', //提示的内容,
+            icon: 'none', //图标,
+            duration: 2000, //延迟时间,
+            mask: true //显示透明蒙层，防止触摸穿透,
+          });
+      } else if (modalRes.cancel) {
+      }
+    },
+    // 马上付款
+    async toPayTap(id) {
+      console.log('id', id);
+      wx.showLoading({
+        title: '支付中...', //提示的内容,
+        mask: true //显示透明蒙层，防止触摸穿透,
+      });
+      var res = await wxpay1.wxpay1(
+        id,
+        '/Shop/pages/orderList?order_status=2',
+        '/Shop/pages/orderList?order_status=1'
+      );
+      wx.hideLoading();
+      console.log(res);
+      wx.showToast({
+        title: res.msg, //提示的内容,
+        icon: 'none', //图标,
+        mask: true //显示透明蒙层，防止触摸穿透,
+      });
+    }
+  };
+  // 取消订单
+  async toCancelOrder(id) {
+    return await wepy.request({
+      url: api.cancelOrder, //开发者服务器接口地址",
+      data: { id } //请求的参数",
+    });
+  }
+  // 确认收货
+  async toConfirmBtn(id) {
+    return await wepy.request({
+      url: api.confirmOrder, //开发者服务器接口地址",
+      data: { id } //请求的参数",
+    });
+  }
+  toPayTap() {
+    this.$emit('toPayTap');
+  }
+  async onLoad() {
+    console.log(wxpay1);
+  }
+}
+</script>

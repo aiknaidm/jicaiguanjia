@@ -33,9 +33,9 @@
     border-radius: 50%;
   }
 }
-.goodsListnum{
-  border:1px solid #e50012;
-  display:flex;
+.goodsListnum {
+  border: 1px solid #e50012;
+  display: flex;
   align-items: center;
   justify-content: center;
   color: #e50012;
@@ -58,6 +58,9 @@
         class="status-label {{index == currentType ? 'active' : ''}} {{isclick?'down':'up'}}"
         @tap="statusTap({{index}})"
       >
+      <slot name="content">
+          
+        </slot>
         {{item}}<text class='goodsListnum' wx:if="{{goodsListnum[index]&&goodsListnum[index]!=0}}">{{goodsListnum[index]}}</text>
         <block wx:if="{{type=='shop'}}">
           <image wx:if="{{index==2&&index != currentType}}" src="/images/sanjiao.png">
@@ -69,6 +72,7 @@
           <image wx:if="{{index==3&&index != currentType}}" src="/images/shaixuan.png">
           <image wx:if="{{index==3&&index == currentType}}" src="/images/shaixuan-active.png">
         </block>
+        
       </view>
     </block>
   </view>
@@ -79,9 +83,9 @@ import wepy from 'wepy';
 export default class statusTap extends wepy.component {
   props = {
     statusType: { type: Object, default: [] },
-    currentType: { type: String, default: "0" },
-    type:{ type: String, default: "txt" },
-    goodsListnum:{ type: Array, default: []}
+    currentType: { type: String, default: '0' },
+    type: { type: String, default: 'txt' },
+    goodsListnum: { type: Array, default: [] }
   };
   data = {
     isclick: false
@@ -93,14 +97,13 @@ export default class statusTap extends wepy.component {
     statusTap(index) {
       if (index == 2) {
         this.isclick = !this.isclick;
-      }else{
-        this.isclick=false
+      } else {
+        this.isclick = false;
       }
       this.currentType = index;
       this.$apply();
       this.$emit('statusTap', index);
     }
   };
-
 }
 </script>

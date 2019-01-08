@@ -1,0 +1,51 @@
+<style lang="less">
+.sections {
+  border: 1rpx solid #eee;
+  border-top: 0px solid;
+}
+
+.section {
+  padding: 30rpx 40rpx;
+  border-top: 0px solid;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0px;
+  border-bottom: 0px;
+  font-size: 30rpx;
+    border-bottom: 1px solid #eee;
+}
+.section text:last-child {
+
+  padding-bottom: 20rpx;
+  padding-top: 10rpx;
+  color: #c4c4c4;
+  font-size: 26rpx;
+}
+</style>
+<template>
+  <view class="section" @tap="bgxyDetail({{newsList.id}})" >
+    <text>{{newsList.post_title}}</text>
+    <text class="hui">{{newsList.published_time}}</text>
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+export default class newsList extends wepy.component {
+  props = {
+    newsList: {
+      type: Object,
+      default: {}
+    }
+  };
+  data = {};
+
+  events = {};
+
+  methods = {
+    bgxyDetail(id) {
+      this.$emit("toDetail",id)
+    }
+  };
+  onLoad() {}
+}
+</script>

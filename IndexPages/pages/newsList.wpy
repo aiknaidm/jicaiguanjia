@@ -1,0 +1,84 @@
+<style lang="less">
+</style>
+<template>
+  <view class="container">
+    <statusTap :statusType.sync="statusType" @statusTap.user="statusTap" wx:if="{{showSatuts}}"></statusTap>
+    <noOrder text="暂无文章" show="2" wx:if="{{newsList.length==0}}"></noOrder>
+    <repeat wx:for="{{newsList}}" wx:key="{{index}}">
+      <newsList :newsList.sync="item" @toDetail.user="toDetail"></newsList>
+    </repeat>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import api from '../../API/api';
+import statusTap from '../../components/statusTap';
+import noOrder from '../../components/noOrder';
+import newsList from '../../components/newsList';
+import util from '../../utils/index';
+export default class newslist extends wepy.page {
+  config = {
+    navigationBarTitleText: '新闻中心'
+  };
+  components = { statusTap, noOrder, newsList };
+  data = {
+    statusType: [],
+    newsList: [],
+    showSatuts: true
+  };
+  computed = {};
+  methods = {
+    statusTap(index) {
+      this.getNewsList(this.newKind[index].id);
+    },
+    toDetail(id) {
+      console.log('id', id);
+      wx.navigateTo({ url: 'details?id=' + id });
+    }
+  };
+  events = {};
+  async getNewsKind() {
+    var that = this;
+    wepy
+      .request({
+        url: api.newsKind
+      })
+      .then(res => {
+        this.newKind = res.data.data;
+        this.newKind.forEach(function(item, index) {
+          that.statusType.push(item.name);
+        });
+        this.getNewsList(this.newKind[0].id);
+        this.$apply();
+        console.log('新闻分类tab', this.statusType);
+      });
+  }
+  async getNewsList(id) {
+    var that = this;
+    var res = await wepy.request({ url: api.newsList, data: { id: id } });
+    this.newsList = res.data.data;
+    this.newsList.forEach(function(item, index) {
+      that.newsList[index].published_time = util.formatTime(
+        new Date(item.published_time * 1000),
+        'yyyy-MM-dd'
+      );
+    });
+    this.$apply();
+    console.log('新闻列表', id, this.newsList);
+  }
+
+  async onLoad(option) {
+    if (option.name)
+      wx.setNavigationBarTitle({
+        title: option.name
+      });
+    if (option.id) {
+      this.getNewsList(option.id);
+    } else {
+      this.getNewsKind();
+    }
+    this.showSatuts = option.showSatuts ? option.showSatuts : true;
+  }
+}
+</script>

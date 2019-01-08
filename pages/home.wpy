@@ -366,25 +366,25 @@ export default class Index extends wepy.page {
       {
         icon: '/images/gonggao.png',
         text: '通知公告',
-        url: '/Index/pages/newsList?id=5&name=通知公告',
+        url: '/IndexPages/pages/newsList?id=5&name=通知公告',
         color: '#a68cd3'
       },
       {
         icon: '/images/zhengce.png',
         text: '最新资讯',
-        url: '/Index/pages/newsList?id=6&name=最新资讯',
+        url: '/IndexPages/pages/newsList?id=6&name=最新资讯',
         color: '#f6bf31'
       },
       {
         icon: '/images/shangxin.png',
         text: '联系易站',
-        url: '/Index/pages/newsList?id=8&name=联系易站',
+        url: '/IndexPages/pages/newsList?id=8&name=联系易站',
         color: '#10b3b0'
       },
       {
         icon: '/images/new.png',
         text: '厂家招商',
-        url: '/Index/pages/newsList?id=31&name=厂家招商',
+        url: '/IndexPages/pages/newsList?id=31&name=厂家招商',
         color: '#fd7603'
       }
     ],
@@ -420,19 +420,19 @@ export default class Index extends wepy.page {
     toZiXunDetailTap(id) {
       // wx.navigationBarTitleText
       wx.navigateTo({
-        url: '/Index/pages/details?id=' + id
+        url: '/IndexPages/pages/details?id=' + id
       });
     },
     toZiXunTap: function() {
       wx.navigateTo({
-        url: '/Index/pages/newsList'
+        url: '/IndexPages/pages/newsList'
       });
     },
     toBannerDetail: function(url) {
 
       if (url != '0') {
         wx.navigateTo({
-          url: '/Index/pages/details?id=' + url
+          url: '/IndexPages/pages/details?id=' + url
         });
       }
     },
@@ -459,11 +459,11 @@ export default class Index extends wepy.page {
     });
     let that = this;
     var userId = await this.$parent.loginInfo();
-    var userInfo = await this.$parent.getUserInfo(userId);
+    // var userInfo = await this.$parent.getUserInfo(userId);
     this.getMessage();
     this.getCarousel();
     console.log('userId', userId);
-    console.log('userInfo', userInfo);
+    // console.log('userInfo', userInfo);
   }
 }
 </script>

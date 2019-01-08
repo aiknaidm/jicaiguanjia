@@ -1,0 +1,273 @@
+<style lang="less">
+page {
+  background: #fff;
+}
+
+/* .isshowerweima {
+  height: 1000rpx;
+} */
+.container {
+  /* margin-top: 20rpx; */
+}
+.btn {
+  /* width: 80rpx; */ /* height: 80rpx; */
+  color: #fff;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  line-height: 75rpx;
+  background-color: transparent;
+  border: 0px solid;
+  height: inherit;
+}
+
+button::after {
+  border: none;
+}
+
+input {
+  outline: none;
+  border: none;
+  list-style: none;
+}
+
+.btn::before {
+  border: none;
+}
+
+.btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn text {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: #14c09a;
+  display: inline-block;
+  font-size: 38rpx;
+}
+
+.btn:first-child {
+  margin-right: 80rpx;
+}
+
+.bottom {
+  text-align: center;
+  font-size: 30rpx;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  height: 200rpx;
+  background: #f2f2f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bottom view {
+  color: #666;
+  line-height: 30rpx;
+  margin-top: 15rpx;
+  font-size: 30rpx;
+}
+canvas {
+  margin: auto;
+}
+</style>
+<template>
+  <view class="container">
+    <!--pages/shoperweima/index.wxml-->
+<!-- <view style="margin-top:20px;" class="isshowerweima"> -->
+  <view class="container">
+    <!-- <img src="{{shareImage}}" class="share-image" /> -->
+    <canvasdrawer painting="{{painting}}" class="canvasdrawer" bindgetImage="eventGetImage" />
+
+  </view>
+<!-- </view> -->
+<view class='bottom'>
+  <button open-type='share' class="btn">
+    <text class='iconfont icon-weixin'></text>
+    <view>微信</view>
+  </button>
+  <button bindtap="eventSave" class="btn">
+    <text class='iconfont icon-tupian'></text>
+    <view>保存到相册</view>
+  </button>
+</view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class newslist extends wepy.page {
+  config = {
+    navigationBarTitleText: '分享海报',
+    usingComponents: {
+      canvasdrawer: '/components/canvasdrawer/canvasdrawer'
+    }
+  };
+  components = {};
+  data = {};
+  computed = {};
+  methods = {
+    eventSave() {
+      // console.log(this.shareImage)
+      wx.saveImageToPhotosAlbum({
+        filePath: this.shareImage,
+        success(res) {
+          // console.log(res)
+          wx.showToast({
+            title: '保存图片成功',
+            icon: 'success',
+            duration: 2000
+          });
+        }
+      });
+    }
+  };
+  events = {};
+  async getIndexNewsList(id) {}
+  eventDraw(userId) {
+    // console.log(app.globalData.yizhanInfo.suppliers_id, app.globalData.userId);
+    // var suppliers_id = app.globalData.yizhanInfo.suppliers_id;
+    var that = this;
+    // if (!app.globalData.yizhanInfo.suppliers_id) {
+    //   wx.showToast({
+    //     title: '没有店铺信息',
+    //     icon: "none"
+    //   })
+    //   wx.navigateBack({
+
+    //   })
+    //   return;
+    // }
+    wx.request({
+      url: 'https://lmbge.com/wxapi/index/getQRCode2',
+      data: {
+        path: '/pages/my-renzheng/index',
+        user_id: userId
+      },
+      success: function(res) {
+        console.log('getqrcode', res.data);
+        wx.showLoading({
+          title: '绘制图片中'
+        });
+        var a = wx.getSystemInfoSync().windowWidth / 375;
+        var height = wx.getSystemInfoSync().windowHeight;
+        var width = wx.getSystemInfoSync().windowWidth;
+        var canvasHeight = height - 105 * a;
+        that.data.painting = {
+          width: canvasHeight / 1.77,
+          height: canvasHeight,
+          clear: false,
+          views: [
+            {
+              type: 'image',
+              //url: 'https://d.funcodeit.com/test/onepayqrcode_template.jpg',
+              url: 'https://lmbge.com/qrcode/bg.jpg',
+              top: 0,
+              left: 0,
+              width: canvasHeight / 1.77,
+              height: canvasHeight
+            },
+            // {
+            //   type: 'image',
+            //   //url: 'https://d.funcodeit.com/test/mplogo-430.jpg',
+            //   url: e.data.data.qrcode2,
+            //   top: 50,
+            //   left: (width - width * 0.5) / 2,
+            //   width: width * 0.5,
+            //   height: width * 0.5 + 15 * a,
+            //   // borderRadius:90,
+            // },
+            // {
+            //   type: 'image',
+            //   url: '',
+            //   top: 140,
+            //   left: 145,
+            //   width: 80,
+            //   height: 80,
+            //   borderRadius:40,
+            // },
+            {
+              type: 'image',
+              //url: 'https://d.funcodeit.com/test/mplogo-430.jpg',
+              url: res.data.data.qrcode2,
+              top: canvasHeight - 0.4 * ((height - 50 * a) / 1.77) - 52 * a,
+              left: (0.6 * (canvasHeight / 1.77)) / 2,
+              width: 0.4 * (canvasHeight / 1.77),
+              height: 0.4 * ((height - 50 * a) / 1.77)
+            },
+            {
+              type: 'text',
+              content: '—— 邀请码 ——',
+              fontSize: 15 * a,
+              width: 180,
+              height: 15 * a,
+              top: canvasHeight - 45 * a,
+              left: canvasHeight / 1.77 / 2,
+              color: '#000',
+              textAlign: 'center',
+              bolder: false
+            },
+
+            {
+              type: 'text',
+              content: res.data.data.share_code,
+              fontSize: 15 * a,
+              width: 180,
+              height: 15 * a,
+              top: canvasHeight - 25 * a,
+              left: canvasHeight / 1.77 / 2,
+              color: '#000',
+              textAlign: 'center',
+              bolder: false
+            }
+          ]
+        };
+        that.setData({
+          painting: that.data.painting,
+          code: res.data.data.share_code
+        });
+      }
+    });
+  }
+  /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage(res) {
+    if (res.from == 'button') {
+      console.log('share', res.target);
+      that.setData({
+        path: 'pages/my-renzheng/index?&shareCode=' + that.data.code,
+        title: '分享'
+      });
+    }
+    return {
+      title: that.data.title,
+      path: that.data.path,
+      success: function(res) {
+        // 转发成功
+      },
+      fail: function(res) {
+        // 转发失败
+      }
+    };
+  }
+  eventGetImage(event) {
+    console.log('eventGetImage', event);
+    wx.hideLoading();
+    this.shareImage = event.detail.tempFilePath;
+  }
+  async onLoad(option) {
+    var userId = await this.$parent.loginInfo();
+    this.eventDraw(userId);
+  }
+}
+</script>

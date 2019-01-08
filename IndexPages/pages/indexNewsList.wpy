@@ -1,0 +1,52 @@
+<style lang="less">
+</style>
+<template>
+  <view class="container">
+    <noOrder text="暂无文章" show="2" wx:if="{{newsList.length==0}}"></noOrder>
+    <repeat wx:for="{{newsList}}" wx:key="{{index}}">
+      <newsList :newsList.sync="item" @toDetail.user="toDetail"></newsList>
+    </repeat>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import api from '../../API/api';
+import noOrder from '../../components/noOrder';
+import newsList from '../../components/newsList';
+import util from '../../utils/index';
+export default class newslist extends wepy.page {
+  config = {
+    navigationBarTitleText: '新闻中心'
+  };
+  components = {  noOrder, newsList };
+  data = {
+    newsList: []
+  };
+  computed = {};
+  methods = {
+    toDetail(id) {
+      console.log('id', id);
+      wx.navigateTo({ url: 'details?id=' + id });
+    }
+  };
+  events = {};
+  async getIndexNewsList(id) {
+    var that = this;
+    var res = await wepy.request({ url: api.newsList, data: { id: id } });
+    this.newsList = res.data.data;
+    this.newsList.forEach(function(item, index) {
+      that.newsList[index].published_time = util.formatTime(
+        new Date(item.published_time * 1000),
+        'yyyy-MM-dd'
+      );
+    });
+    this.$apply();
+    console.log('新闻列表', id, this.newsList);
+  }
+
+  async onLoad(option) {
+    getIndexNewsList(option.id)
+  }
+}
+</script>

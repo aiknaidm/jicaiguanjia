@@ -1,0 +1,95 @@
+
+  <style lang="less" scope>
+.info_list {
+  .weui_cell {
+    position: relative;
+    display: flex;
+    padding: 15px;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    /* border-bottom: 1px solid #eee; */
+  }
+  .weui_cell_hd {
+    display: inline-block;
+  
+  }
+  .weui_cell_hd image {
+      width: 50rpx;
+    height: 50rpx;
+    vertical-align: -2px;
+  }
+  .weui_cell_hd {
+    margin-bottom: 10rpx;
+  }
+  .weui_cell_hd {
+    margin-right: 10rpx;
+  }
+  
+}
+.badge {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  height: 15px;
+  min-width: 5px;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-color: #fff;
+  font-size: 20rpx;
+  font-weight: bold;
+  border: 2px solid #f60;
+  color: #f60;
+  text-align: center;
+  padding: 0 5px;
+  line-height: 15px;
+  border-radius: 50px;
+}
+</style>
+<template>
+  <view class="weui_cell" @tap="toUrl({{tabItem.url}},{{tabItem.type}})" tabItem="列表内容">
+    <view class="weui_cell_hd" style="background:{{tabItem.bgcolor}}">
+      <image src="{{tabItem.icon}}" wx:if="{{tabItem.icon}}"></image>
+      <view  wx:else>{{tabItem.num}}</view>
+    </view>
+    <view class="weui_cell_bd">
+      <view class="weui_cell_bd_p" >{{tabItem.text}}</view>
+    </view>
+    <view wx:if="{{tabItem.unreadNum}}" class="badge">{{tabItem.unreadNum}}</view>
+    <view class="with_arrow"></view>
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+
+export default class myList extends wepy.component {
+  props = {
+    tabItem: { type: Object, default: {}, twoWay: true }
+  };
+  data = {};
+
+  events = {};
+
+  methods = {
+    toUrl(url, type) {
+      if (type && type == 1) {
+        console.log('跳转', url);
+        wx.navigateToMiniProgram({
+          appId: this.tabItem.appId,
+          path: url,
+          // envVersion: 'release',
+          envVersion: 'develop',
+          success(res) {
+            // 打开成功
+          }
+        });
+      } else {
+        wx.navigateTo({ url: url });
+      }
+    }
+  };
+
+  onLoad() {
+  }
+}
+</script>

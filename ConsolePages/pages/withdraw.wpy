@@ -1,0 +1,156 @@
+<style lang="less">
+page {
+  height: auto;
+}
+.container {
+  background-color: #f2f2f2;
+  padding: 30rpx 30rpx 0 30rpx;
+  height: 100%;
+  font-size: 30rpx;
+}
+.tx-yhk-c view:first-child {
+  color: #e50012;
+}
+.tx-yhk-c {
+  font-size: 28rpx;
+  text-align: right;
+}
+.tx-yc {
+  display: flex;
+  justify-content: space-around;
+}
+.tx-sx {
+  margin-top: 5rpx;
+  font-size: 22rpx;
+  color: #989898;
+}
+.tx {
+  /* width: 90%; */
+  background-color: #fff;
+  margin: auto;
+  padding: 40rpx;
+}
+.tx-yhk {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 30rpx;
+  border-bottom: 1px solid #eee;
+}
+.tx-jine {
+  padding: 30rpx 0;
+  justify-content: center;
+  /* align-items: center; */
+  display: flex;
+  flex-direction: column;
+}
+.tx-yue {
+  color: #ff9900;
+  font-size: 28rpx;
+}
+.tx-input {
+  font-size: 66rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30rpx 0;
+  font-weight: bold;
+}
+.tx-input input {
+  height: 100%;
+  padding-left: 20rpx;
+  border-bottom: 1px solid #eee;
+}
+.tx-btn button {
+  background-color: #e50012;
+  color: #fff;
+}
+</style>
+<template>
+  <!--pages/qb-tixian/index.wxml-->
+<view class='container'>
+  <form bindsubmit="formSubmit">
+    <view class='tx'>
+      <view class='tx-yhk'>
+        <view>提现到零钱</view>
+        <view class='tx-yhk-c'>
+        </view>
+      </view>
+      <view class='tx-jine'>
+        <view>提现金额</view>
+        <view class='tx-input'>￥
+          <input type='digit' name="money" disabled value='{{ketx}}'></input>
+        </view>
+        <view class='tx-yue'>当前余额:{{ketx}}元</view>
+        <!-- <view class='tx-sx'>提现将会收取0.6%的手续费</view> -->
+      </view>
+      <view class='tx-btn'>
+        <button formType="submit">提现</button>
+      </view>
+    </view>
+  </form>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import pay from '../../utils/index';
+
+export default class withdraw extends wepy.page {
+  config = {
+    navigationBarTitleText: '提现'
+  };
+  components = {};
+  data = {
+    ketx: 0
+  };
+  computed = {};
+  methods = {
+    async formSubmit(e) {
+      console.log(e);
+
+      var userId = await this.$parent.loginInfo();
+      // var money = e.detail.value.money
+      // if (money==""){
+      // 	wx.showToast({
+      // 		title: '提现金额不能为空',
+      // 		icon:"none"
+      // 	})
+      // 	return;
+      // }
+      // if (money > that.data.ketx) {
+      // 	wx.showToast({
+      // 		title: '提现金额不能大于当前余额',
+      // 		icon: "none"
+      // 	})
+      // 	return;
+      // }
+      wx.showLoading({
+        title: '提现中'
+      });
+      var res = await pay.wxpay3(userId);
+      wx.hideLoading();
+
+      wx.showToast({
+        title: res.msg, //提示的内容,
+        icon: 'none', //图标,
+        duration: 2000, //延迟时间,
+        mask: true, //显示透明蒙层，防止触摸穿透,
+        success: res => {}
+      });
+      if (res.code == 0) {
+        this.ketx = 0;
+        wx.navigateBack({
+          delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+        });
+        this.$apply();
+      }
+    }
+  };
+  events = {};
+  async getIndexNewsList(id) {}
+
+  async onLoad(option) {
+    this.ketx = option.ketx;
+  }
+}
+</script>

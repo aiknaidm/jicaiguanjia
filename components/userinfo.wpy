@@ -1,0 +1,78 @@
+<style lang="less">
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #e50012;
+  position: relative;
+}
+
+.userinfo-avatar {
+  width: 158rpx;
+  height: 158rpx;
+  margin: 50rpx;
+  margin-bottom: 20rpx;
+  border-radius: 50%;
+  position: relative;
+  border: 1px solid #fff;
+  z-index: 4;
+  background-color: #fff;
+}
+
+.info_list {
+  /* padding-top: 30rpx; */
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.userinfo-bg {
+  width: 96%;
+  height: 50%;
+  background: #fff;
+  position: absolute;
+  bottom: 0px;
+}
+
+.userinfo-nickname {
+  color: #333;
+  position: relative;
+  z-index: 4;
+  font-size: 30rpx;
+  top:-5rpx;
+}
+</style>
+<template>
+  <view @tap="upTouxiang" class="userinfo" userData="用户信息">
+ 
+      <image class="userinfo-avatar" src="{{userData.avatarUrl}}" background-size="cover"/>
+      <text
+        class="userinfo-nickname"
+        wx:if="{{userData.nickName.length > 0}}"
+      >{{userData.nickName}}</text>
+      <text class="userinfo-nickname" wx:else>jc{{userId}}</text>
+      <view class="userinfo-bg"></view>
+    
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+
+export default class List extends wepy.component {
+  props = {
+    userData: { type: Object, default: {}, twoWay: true }
+  };
+  data = {
+    userId:""
+  };
+
+  events = {};
+
+  methods = {};
+
+ async onLoad() {
+   console.log(this)
+  //  let userId = await this.$parent.loginInfo();
+  //  this.userId=userId;
+   this.$apply();
+  }
+}
+</script>

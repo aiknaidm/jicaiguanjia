@@ -1,0 +1,185 @@
+<style lang="less">
+.container {
+  font-size: 30rpx;
+}
+.data-qian {
+  background-color: #e50012;
+  color: #fff;
+  height: 220rpx;
+  padding: 40rpx;
+  font-size: 35rpx;
+}
+.data-qian-jia {
+  font-size: 86rpx;
+  line-height: 140rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+}
+.data-qian-jia image {
+  width: 60rpx;
+  height: 60rpx;
+  line-height: 100rpx;
+  display: inline-block;
+}
+.data-num {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.weui_cell {
+  display: flex;
+  flex-direction: column;
+  width: 33%;
+  text-align: center;
+  height: 150rpx;
+  justify-content: center;
+  align-items: center;
+  border-left: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.weui_cell_hd image {
+  width: 100%;
+  height: 100%;
+  vertical-align: -2px;
+}
+
+.weui_cell_bd {
+  display: inline-block;
+}
+
+.weui_cell_bd_p {
+  font-size: 28rpx;
+  color: #333;
+}
+</style>
+<template>
+<view class='container'>
+  <view class='data-qian'>
+    <view class='data-qian-zong'>商品总交易额（元）</view>
+    <view class='data-qian-jia'>
+
+      <view>{{num}}</view>
+       <view @tap='toDataManageDetail'>
+        <image src='/images/go.png'></image>
+       </view>
+    </view>
+  </view>
+  <view class='data-num'>
+    <block wx:for="{{tabList}}" wx:key="{{index}}">
+          <view class="weui_cell">
+            <view class="weui_cell_hd">
+              {{item.num}}
+            </view>
+            <view class="weui_cell_bd">
+              <view class="weui_cell_bd_p"> {{item.text}}</view>
+            </view>
+          </view>
+      </block>
+  </view>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class data extends wepy.page {
+  config = {
+    navigationBarTitleText: '数据管理'
+  };
+  components = {};
+  data = {
+    tabList: [
+      {
+        icon: '../../images/my/fukuan.png',
+        num: 0,
+        text: '今日订单数',
+
+        url: '/pages/Shop/jlorder-list/index?type=daifukuan&currentIndex=0'
+      },
+      {
+        icon: '../../images/my/shouhuo.png',
+        num: 0,
+
+        text: '今日成交金额',
+        url: '/pages/Shop/jlorder-list/index?type=daifahuo&currentIndex=1'
+      },
+      {
+        icon: '../../images/my/wancheng.png',
+        num: 0,
+        text: '今日访客',
+
+        url: '/pages/Shop/jlorder-list/index?type=yifahuo&currentIndex=2'
+      },
+      {
+        icon: '../../images/my/wancheng.png',
+        num: 0,
+        text: '总订单数',
+        url: '/pages/Shop/jlorder-list/index?type=tuikuan&currentIndex=3'
+      },
+      {
+        icon: '../../images/my/wancheng.png',
+        num: 0,
+        text: '昨日成交金额',
+        url: '/pages/Shop/jlorder-list/index?type=chenggong&currentIndex=4'
+      },
+      {
+        icon: '../../images/my/wancheng.png',
+        num: 0,
+        text: '昨日访客',
+        url: '/pages/Shop/jlorder-list/index?type=guanbi&currentIndex=5'
+      }
+    ],
+    num: 0
+  };
+  computed = {};
+  methods = {
+    toDataManageDetail() {
+      wx.navigateTo({ url: 'dataManageDetail' });
+    }
+  };
+  events = {};
+  async getIndexNewsList(id) {}
+  async getDataManage(user_id, suppliers_id) {
+    wx.showLoading({
+      title: '加载中', //提示的内容,
+      mask: true, //显示透明蒙层，防止触摸穿透,
+      success: res => {}
+    });
+    wepy
+      .request({
+        url: 'https://lmbge.com/wxapi/gztai/shuju',
+        method: 'GET',
+        data: {
+          user_id,
+          suppliers_id
+        },
+        header: {
+          Accept: 'application/json'
+        }
+      })
+      .then(res => {
+        console.log('数据管理', res.data);
+        var datas = res.data.data;
+        wx.hideLoading();
+        if (res.data.code == 0) {
+          this.tabList[0].num = datas.jinridingdanshu;
+          this.tabList[1].num = datas.jinrichengjiaoe;
+          this.tabList[2].num = datas.jinrifangke;
+          this.tabList[3].num = datas.zongdingdanshu;
+          this.tabList[4].num = datas.zuorichengjiaoe;
+          this.tabList[5].num = datas.zuorifangke;
+          this.num = datas.zongchengjiaoe;
+          this.$apply();
+        }
+      });
+  }
+  async onLoad(option) {
+    this.user_id = await this.$parent.loginInfo();
+    var yizhanInfo = await this.$parent.getYizhanInfo(this.user_id);
+    this.suppliers_id = yizhanInfo.suppliers_id;
+    this.getDataManage(this.user_id, this.suppliers_id);
+  }
+}
+</script>

@@ -1,0 +1,240 @@
+<style lang="less">
+.container {
+  background-color: #fff;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.withdraw {
+  color: #333;
+  background-color: #fff;
+  display: flex;
+  width: 100%;
+  border-radius: 10rpx;
+  padding: 40rpx;
+  position: relative;
+  justify-content: space-between;
+}
+.withdraw .iconfont {
+  color: #aaa;
+}
+.all-withdraw {
+  flex: 1;
+  line-height: 50rpx;
+}
+
+.can-withdraw {
+  flex: 1;
+  line-height: 50rpx;
+}
+.can-withdraw .red {
+  font-size: 35rpx;
+}
+.to-withdraw {
+  position: absolute;
+  height: 66rpx;
+  right: 0;
+  top: 50%;
+  padding: 0 30rpx 0 50rpx;
+  margin-top: -33rpx;
+  line-height: 66rpx;
+  background: #e50012;
+  border-radius: 50px 0 0 50px;
+  color: #fff;
+}
+
+.control-title {
+  background-color: #e50012;
+  display: flex;
+  padding: 20rpx 40rpx 40rpx 40rpx;
+  align-items: center;
+  color: #fff;
+  position: relative;
+  height: 100rpx;
+  justify-content: center;
+  padding: 20rpx 0;
+}
+.control-title.code {
+  background: #f0f0f0;
+  padding: 30rpx 40rpx;
+}
+.control-title .yaoqingma {
+  line-height: 88rpx;
+  background-color: rgba(255, 255, 255, 1);
+  position: relative;
+  padding: 0 40rpx 0 80rpx;
+  border-radius: 50rpx 0 0 50rpx;
+  color: #333;
+}
+
+.control-title .copy {
+  padding: 0 40rpx;
+  background-color: #e50012;
+  line-height: 88rpx;
+  border-radius: 0 50rpx 50rpx 0;
+  color: #fff;
+}
+
+.control-content {
+  text-align: center;
+}
+.control-content .share-guize text {
+  color: #14c09a;
+  font-size: 40rpx;
+  line-height: 110rpx;
+}
+
+.poster-btn {
+  width: 600rpx;
+  text-align: center;
+  line-height: 88rpx;
+  color: #fff;
+  border-radius: 50px;
+  background: #e50012;
+  margin: auto;
+}
+
+.qrcode {
+}
+
+.qrcode image {
+  width: 350rpx;
+  height: 380rpx;
+  margin: 50rpx auto;
+}
+</style>
+<template>
+  <view class='container'>
+  <view class='control-title'>
+    <view class='withdraw'>
+      <view class='all-withdraw' @tap='toShareList(0)'>
+        <view>分享所得总收益
+          <text class='iconfont icon-f11'></text>
+        </view>
+        <view class=''>￥{{qrcode.zong}}</view>
+      </view>
+      <view class='can-withdraw' @tap='toShareList(1)' >
+        <view>可提现收益
+          <text class='iconfont icon-f11'></text>
+        </view>
+        <view class='red'>￥{{qrcode.ketx}}</view>
+      </view>
+      <view class='to-withdraw' @tap='toWithdraw'>提现</view>
+    </view>
+  </view>
+  <view class='control-title code'>
+    <view class='yaoqingma'>邀请码：{{qrcode.share_code}}</view>
+    <view class='copy' @tap='copy({{qrcode.share_code}})'>复制邀请码</view>
+
+  </view>
+  <view class='control-content'>
+    <view class='share-guize' @tap='toShareRule'>
+      <text class='iconfont icon-iconmianxingshujuwenhao' ></text> 分享规则
+    </view>
+
+    <navigator url='poster'>
+      <view class='poster-btn'>生成推广海报</view>
+    </navigator>
+    <view class='qrcode'>
+      <image src="{{qrcode.qrcode2}}"></image>
+    </view>
+  </view>
+
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import api from '../../API/api';
+export default class share extends wepy.page {
+  config = {
+    navigationBarTitleText: '分享'
+  };
+  components = {};
+  data = {
+    qrcode: {}
+  };
+  computed = {};
+  methods = {
+    copy(share_code) {
+      // 复制邀请码
+      wx.setClipboardData({
+        data: share_code,
+        success(res) {
+          wx.getClipboardData({
+            success(res) {
+              console.log(res.data); // data
+            }
+          });
+        }
+      });
+    },
+    toShareRule() {
+      wx.navigateTo({
+        url: '/pages/my-console/sharerule/index'
+      });
+    },
+    toWithdraw: function() {
+      if (this.qrcode && this.qrcode.ketx == 0) {
+        wx.showModal({
+          title: '提示',
+          content: '你还没有可以提现的金额，去分享试试',
+          showCancel: false
+        });
+      } else {
+        wx.navigateTo({
+          url: 'withdraw?ketx=' + this.qrcode.ketx
+        });
+      }
+    },
+    // 跳转收益列表页面
+    toShareList(status) {
+      wx.navigateTo({
+        url:
+          'shareList?status=' +
+          status +
+          '&zong=' +
+          this.qrcode.zong +
+          '&ketx=' +
+          this.qrcode.ketx
+      });
+    }
+  };
+  events = {};
+
+  getCode(user_id) {
+    wx.showLoading({
+      title: '加载中'
+    });
+
+    wepy
+      .request({
+        url: api.getShareImg,
+        data: {
+          path: '/ConsolePage/pages/renzheng',
+          user_id
+        }
+      })
+      .then(res => {
+        if (res.data.code == '0') {
+          wx.hideLoading();
+          this.qrcode = res.data.data;
+        } else {
+          wx.hideLoading();
+          wx.showToast({
+            title: '获取邀请码失败'
+          });
+        }
+        this.$apply();
+      });
+    // .catch(function(res) {
+    //   console.log('失败：' + res);
+    // });
+  }
+  async onLoad(option) {
+    var userId = await this.$parent.loginInfo();
+    this.getCode(userId);
+  }
+}
+</script>

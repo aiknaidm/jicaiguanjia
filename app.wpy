@@ -60,7 +60,8 @@ input {
 .orange {
   color: #f60;
 }
-mask {
+mask,
+.mask {
   background: rgba(0, 0, 0, 0.5);
   position: fixed;
   height: 100%;
@@ -111,11 +112,27 @@ export default class extends wepy.app {
     subPackages: [
       {
         root: 'IndexPages',
-        pages: ['pages/index']
+        pages: [
+          'pages/index',
+          'pages/details',
+          'pages/indexNewsList',
+          'pages/newsList'
+        ]
       },
       {
         root: 'ConsolePages',
-        pages: ['pages/index']
+        pages: [
+          'pages/index',
+          'pages/orderList',
+          'pages/orderDetail',
+          'pages/renzheng',
+          'pages/share',
+          'pages/shareList',
+          'pages/withdraw',
+          'pages/poster',
+          'pages/dataManage',
+          'pages/dataManageDetail'
+        ]
       }
     ],
 
@@ -266,14 +283,14 @@ export default class extends wepy.app {
       }
     });
     this.globalData.userId = loginInfo.data.data.user_id;
-    console.log("loginInfo.data.data.user_id",loginInfo.data.data.user_id);
-    wx.setStorageSync('userId',loginInfo.data.data.user_id)
+    console.log('loginInfo.data.data.user_id', loginInfo.data.data.user_id);
+    wx.setStorageSync('userId', loginInfo.data.data.user_id);
 
     // wx.setStorage({
     //   key: 'userId',
     //   value: loginInfo.data.data.user_id
     // });
-    
+
     return loginInfo.data.data.user_id;
   }
   async getUserInfo(userId) {
@@ -287,6 +304,24 @@ export default class extends wepy.app {
     else
       wx.showToast({
         title: '获取用户信息失败', //提示的内容,
+        icon: 'none', //图标,
+        duration: 2000, //延迟时间,
+        mask: true //显示透明蒙层，防止触摸穿透,
+      });
+    return 0;
+  }
+  async getYizhanInfo(user_id, suppliers_id = '') {
+    let userInfo = await wepy.request({
+      url: api.getYizhanInfo,
+      data: {
+        user_id,
+        suppliers_id
+      }
+    });
+    if (userInfo.data.code == '0') return userInfo.data.data;
+    else
+      wx.showToast({
+        title: '获取易站信息失败', //提示的内容,
         icon: 'none', //图标,
         duration: 2000, //延迟时间,
         mask: true //显示透明蒙层，防止触摸穿透,

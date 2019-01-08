@@ -1,0 +1,274 @@
+<style lang="less">
+/* pages/yizhan-list/index.wxss */
+
+view {
+  box-sizing: border-box;
+}
+
+.a-order {
+  width: 100%;
+  background-color: #fff;
+  border-top: 16rpx solid #f0f0f0;
+}
+
+.a-order .order-date {
+  padding: 10rpx 30rpx;
+  line-height: 50rpx;
+  font-size: 26rpx;
+  color: #666;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  .date-box {
+    color: #666;
+  }
+}
+
+.a-order .goods-info,
+.goods-img-container {
+  /* width: 720rpx; */
+  margin-left: 30rpx;
+  /* border-bottom: 1rpx solid #eee; */
+  padding: 30rpx 0;
+  display: flex;
+  align-items: center;
+  padding-bottom: 0px;
+}
+.price-box {
+  .name,
+  .total-price {
+    padding: 0 30rpx;
+    padding-top: 20rpx;
+    line-height: 60rpx;
+  }
+}
+.goods-info .img-box {
+  width: 120rpx;
+  height: 120rpx;
+  overflow: hidden;
+  margin-right: 30rpx;
+  background-color: #f7f7f7;
+}
+
+.goods-info .img-box .goods-img,
+.goods-img-container .img-box .goods-img {
+  width: 120rpx;
+  height: 120rpx;
+}
+
+.img-box1 {
+  display: flex;
+  /* align-items: center; */
+  font-size: 30rpx;
+  justify-content: space-between;
+  padding: 20rpx 30rpx;
+  border-bottom: 1px solid #f0f0f0;
+  background: #f0f0f0;
+}
+
+.img-box1 .goods-img {
+  width: 120rpx;
+  height: 120rpx;
+  /* padding-left: 30rpx; */
+  margin-right: 30rpx;
+  padding: 20rpx 0 20rpx 30rpx;
+}
+
+.img-box1-2 {
+  font-size: 24rpx;
+  color: #797979;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 140rpx;
+}
+
+.img-box1-1 {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.goods-des {
+  /* width: 540rpx; */ /* height: 78rpx; */
+  line-height: 44rpx;
+  font-size: 26rpx;
+  color: #666;
+  overflow: hidden;
+}
+
+.goods-img-container {
+  height: 180rpx;
+  box-sizing: border-box;
+  white-space: nowrap;
+  /* display: flex; */
+}
+
+.img-box {
+  width: 130rpx;
+  height: 130rpx;
+  overflow: hidden;
+  margin-right: 20rpx;
+  background-color: #f7f7f7;
+  display: inline-block;
+}
+
+.order-price {
+  color: red;
+  font-size: 28rpx;
+}
+
+.img-box1-guige {
+  font-size: 26rpx;
+  color: #aaa;
+}
+button.ss-my-d {
+  margin: 0;
+  padding: 0;
+  border: 0px solid;
+  margin-left: 10rpx;
+}
+.shop-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1px solid #f0f0f0;
+  .icon-dianpu {
+    font-size: 40rpx;
+    color: #e50012;
+  }
+}
+.list-title {
+  font-size: 28rpx;
+  color: #000;
+  padding: 30rpx 0 25rpx 30rpx;
+  border-top: 16rpx solid #f0f0f0;
+  display: flex;
+}
+.list-title text {
+  color: #e50012;
+  font-size: 45rpx;
+  margin-right: 10rpx;
+}
+
+.address-box {
+  font-size: 24rpx;
+  color: #797979;
+  background-color: #f2f2f2;
+  padding: 20rpx 40rpx;
+  display: flex;
+  align-items: center;
+
+  /* margin-bottom: 20rpx; */
+}
+
+.price-box {
+  position: relative;
+  /* width: 720rpx; */
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  /* align-items: center;  */ /* justify-content: space-between; */
+  font-size: 26rpx;
+  justify-content: space-between;
+  text-align: left;
+}
+.price-box2 {
+  text-align: left;
+   justify-content: flex-end
+}
+</style>
+<template>
+  <view>
+    <view class="a-order" orderList="订单内容" goodsMap="商品内容">
+      <!-- <view class="shop-box" @tap="toshop({{orderList.suppliers_id}})">
+        <view class="list_title">
+          <text class="iconfont icon-dianpu"></text>{{orderList.suppliers_name}}
+        </view>
+        <view>
+          <text class="iconfont icon-arrow-right"></text>
+        </view>
+      </view> -->
+   
+      <view @tap="orderDetail({{orderList.order_id}})" >
+        <view wx:if="{{goodsMap.length==1}}" class="img-box1">
+          <image src="{{goodsMap[0].goods_imgs}}" class="goods-img">
+          <view class="img-box1-1">
+            <view>{{goodsMap[0].goods_name}}</view>
+            <view class="img-box1-guige">{{goodsMap[0].goods_attr}}</view>
+          </view>
+          <view class="img-box1-2">
+            <view>￥{{goodsMap[0].goods_price}}</view>
+            <view>x{{goodsMap[0].goods_number}}</view>
+          </view>
+        </view>
+        <scroll-view class="goods-img-container" scroll-x="true" wx:else>
+          <view class="img-box" wx:for-items="{{goodsMap}}" wx:key="{{index2}}">
+            <image src="{{item.goods_imgs}}" class="goods-img">
+          </view>
+        </scroll-view>
+      </view>
+      <view class="price-box">
+        <view class="name">{{orderList.consignee}}</view>
+        <view class="total-price">共{{goodsMap.length}}件商品 合计：<text class="red">¥ {{orderList.order_amount}}</text></view>
+      </view>
+        <view class="price-box price-box2" wx:if="{{item.pay_id}}">
+        <view class='name'>支付方式：{{item.pay_id==2?"线下支付 请注意核对订单":"线上支付"}}</view>
+        <!-- <view class="total-price">{{item.pay_id==2?"微信昵称：":"银行卡号："}}{{item.pay_note}}</view> -->
+      </view>
+			 <view class="price-box" wx:if="{{item.pay_note&&item.pay_note!=''}}">
+        <view class='name' >备注：{{item.pay_note}}</view>
+        <!-- <view class="total-price">{{item.pay_id==2?"微信昵称：":"银行卡号："}}{{item.pay_note}}</view> -->
+      </view>
+      <view class="address-box">
+        <text class='iconfont icon-icon-'></text>
+        <view>{{item.region}} {{item.address}}</view>
+      </view>
+      <slot name="btn">
+       
+      </slot>
+    </view>
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+export default class List extends wepy.component {
+  props = {
+    orderList: {
+      type: Object,
+      default: {},
+      twoWay: true
+    },
+    goodsMap: {
+      type: Array,
+      default: [],
+      twoWay: true
+    }
+  };
+
+  events = {};
+
+  methods = {
+    // 再来一单
+    toOrderAgain(suppliersId, orderId) {
+      this.$emit('toOrderAgain', suppliersId, orderId);
+    },
+    // 订单详情
+    orderDetail(id) {
+      console.log('id', id);
+      this.$emit('orderDetail', id);
+    },
+    // 去店铺页面
+    toshop(id) {
+      console.log('id', id);
+      wx.navigateTo({ url: '/Shop/pages/index?suppliers_id=' + id });
+    }
+  };
+
+  async onLoad() {}
+}
+</script>

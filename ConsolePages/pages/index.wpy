@@ -1,33 +1,485 @@
 <style lang="less">
+.control-title {
+  background-color: #e50012;
+  display: flex;
+  padding: 20rpx 40rpx 40rpx 40rpx;
+  align-items: center;
+  color: #fff;
+  position: relative;
+  height: 100rpx;
+}
+
+.scrolllist {
+  flex: 1;
+}
+
+.control-title-img {
+  width: 110rpx;
+  height: 110rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid #fff;
+  margin-right: 20rpx;
+  background-color: #fff;
+}
+
+.control-title-img image {
+  width: 100%;
+  height: 100%;
+}
+
+.control-title-txt {
+  position: relative;
+  top: 10rpx;
+}
+
+.control-title-txt .txt {
+  border: 1px solid #fff;
+  padding: 0 30rpx;
+  border-radius: 50px;
+  margin-right: 20rpx;
+}
+.control-title-txt .iconfont {
+  width: 60rpx;
+  height: 60rpx;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  font-size: 24rpx;
+  text-align: center;
+  line-height: 50rpx;
+  padding: 5rpx;
+}
+.control-title-txt1 {
+  font-size: 32rpx;
+  font-weight: bold;
+  line-height: 55rpx;
+  padding-left: 10rpx;
+}
+/* 分享好友 */
+
+.share {
+  position: absolute;
+  right: 40rpx;
+  bottom: 40rpx;
+  color: #fff;
+}
+
+.share text {
+  margin-right: 10rpx;
+  color: #14c09a;
+  font-size: 30rpx;
+}
+.share button {
+  color: #fff;
+}
+
+.yizhan-list2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 75%;
+  height: 100%;
+  /* padding: 40rpx; */
+  background: #fff;
+  /* -webkit-transform: translateY(-50%); */
+  transform: translateX(-100%);
+  -ms-transform: translateX(-100%); /* IE 9 */
+  -moz-transform: translateX(-100%); /* Firefox */
+  -webkit-transform: translateX(-100%); /* Safari 和 Chrome */
+  -o-transform: translateX(-100%);
+  color: #000;
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+
+.list {
+  transform: translateX(0);
+  -ms-transform: translateX(0); /* IE 9 */
+  -moz-transform: translateX(0); /* Firefox */
+  -webkit-transform: translateX(0); /* Safari 和 Chrome */
+  -o-transform: translateX(0);
+  transition: transform 0.3s;
+}
+
+.list.active {
+  transform: translateX(75%);
+  -ms-transform: translateX(75%); /* IE 9 */
+  -moz-transform: translateX(75%); /* Firefox */
+  -webkit-transform: translateX(75%); /* Safari 和 Chrome */
+  -o-transform: translateX(75%);
+  transition: transform 0.3s;
+  width: 100%;
+  height: 100%;
+  /* overflow: hidden */
+}
+
+.container.active {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.scroll-view {
+  height: 100%;
+}
+
+.yizhan-list2 .title {
+  text-align: center;
+  font-size: 40rpx;
+  padding: 30rpx 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.scroll-view-item {
+  line-height: 100rpx;
+  padding: 0 30rpx;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 30rpx;
+}
+
+.scroll-view-item text {
+  border: 1px solid #e50012;
+  border-radius: 50%;
+  display: inline-block;
+  width: 50rpx;
+  height: 50rpx;
+  color: #e50012;
+  text-align: center;
+  line-height: 50rpx;
+  font-size: 30rpx;
+}
+
+.weui-loading {
+  color: #333;
+}
+
+.loading {
+  padding: 20rpx 0;
+  text-align: center;
+  color: #666;
+  font-size: 26rpx;
+}
+
+.qiehuan {
+  padding: 0 10rpx;
+  margin-left: 10rpx;
+  font-size: 24rpx;
+  display: inline-block;
+  margin-top: 10rpx;
+}
+.info_list .weui_cell {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  border-right: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+  width: 33%;
+  padding: 30rpx 0;
+}
+.info_list {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 16rpx solid #f0f0f0;
+  font-size: 28rpx;
+  .weui_cell_hd {
+    border-radius: 50%;
+    padding: 10rpx;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+     width: 50rpx;
+  height: 50rpx;
+    image {
+      width: 70%;
+      height: 70%;
+      vertical-align: -2px;
+    }
+  }
+  navigator {
+    display: block;
+    width: 100%;
+    line-height: 120rpx;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #f0f0f0;
+    image {
+      height: 50rpx;
+      width: 50rpx;
+      margin-right: 10rpx;
+      margin-left: 40rpx;
+    }
+  }
+}
 </style>
 <template>
+<view style='position:relative;' class="list {{right?'active':''}}" catchtouchmove="{{right?'stopscroll':''}}">
+     <view class=" {{right?'mask':''}}" bindtap='hiddenyizhan'></view>
   <view class="container">
-    
+      <view class='control-title'>
+      <view class='control-title-img'>
+        <image src='{{yizhanInfo.avatar}}'></image>
+      </view>
+      
+      <view>
+        <view class='control-title-txt1'>{{yizhanInfo.user_nickname}}</view>
+        <view class='control-title-txt' wx:if="{{yizhanInfo.yizhan_name!=null}}">
+          <text class='txt'>{{yizhanInfo.yizhan_name}}</text>
+          <text class='iconfont icon-qiehuan' @tap='showyizhan' wx:if="{{yizhanlist.length>1}}"></text>
+        </view>
+        <!-- <view class='control-title-txt qiehuan' bindtap='showyizhan'>切换店铺</view> -->
+      </view>
+      <view class='share'>
+        <form report-submit bindsubmit='getFormId'>
+          <navigator url='/pages/my-console/share/index'>
+            <button form-type="submit">
+              <text class='iconfont icon-fenxiang'></text>分享好友</button>
+
+          </navigator>
+        </form>
+
+      </view>
+    </view>
+    <view class="info_list">
+        <navigator
+          url="{{}}"
+          open-type="navigate"
+          hover-class="none"> 
+          <image src="/images/console/transaction-manage.png">交易管理
+        </navigator>
+       <repeat for="{{tabList}}" wx:key="{{index}}">
+        <myList :tabItem="item"></myList>
+      </repeat>
+    </view>
+    <view class="info_list">
+        <navigator
+          url="{{}}"
+          open-type="navigate"
+          hover-class="none"> 
+          <image src="/images/console/goods-manage.png">商品管理
+        </navigator>
+       <repeat for="{{shopList}}" wx:key="{{index}}">
+        <myList :tabItem="item"></myList>
+      </repeat>
+    </view>
+    <view class="info_list">
+        <navigator
+          url="{{}}"
+          open-type="navigate"
+          hover-class="none"> 
+          <image src="/images/console/wdyy.png">我的应用
+        </navigator>
+       <repeat for="{{applicationList}}" wx:key="{{index}}">
+        <myList :tabItem="item"></myList>
+      </repeat>
+    </view>
   </view>
+    <view class='yizhan-list2' catchtouchmove='' style="height: {{height}}PX;overflow: hidden">
+    <scroll-view scroll-y style="height: {{height}}PX;overflow: hidden" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
+      <view class='title'>
+        我管理的店铺列表
+      </view>
+      <view style='height:100rpx' class="scroll-view-item bc_green" wx:for="{{yizhanlist}}"  @tap='changeShop({{item.suppliers_id}})' wx:key="{{index}}">
+        {{item.suppliers_desc}}
+        <text class='iconfont icon-qiehuan' wx:if="{{item.suppliers_id!==userinfo.suppliers_id}}"></text>
+      </view>
+    </scroll-view>
+
+  </view>
+</view>
 </template>
 
 <script>
 import wepy from 'wepy';
-
+import api from '../../API/api';
+import myList from '../../components/myList';
 export default class newslist extends wepy.page {
   config = {
-    navigationBarTitleText: '新闻中心'
+    navigationBarTitleText: '管理工作台'
   };
-  components = {   };
+  components = { myList };
   data = {
-  
+    yizhanInfo: {},
+    yizhanlist: [],
+    right: 0,
+    tabList: [
+      {
+        num: 0,
+        text: '待付款',
+
+        url: 'orderList?order_status=0'
+      },
+      {
+        num: 0,
+
+        text: '待发货',
+        url: 'orderList?order_status=1'
+      },
+      {
+        num: 0,
+        text: '已发货',
+
+        url: 'orderList?order_status=2'
+      },
+      {
+        num: 0,
+        text: '售后退款',
+        url: '/orderList?order_status=3'
+      },
+      {
+        num: 0,
+        text: '交易成功',
+        url: 'orderList?order_status=4'
+      },
+      {
+        num: 0,
+        text: '交易关闭',
+        url: 'orderList?order_status=5'
+      }
+    ],
+    shopList: [
+      {
+        icon: '/images/console/fabushangpin.png',
+        num: 0,
+        text: '发布商品',
+        url: 'publish/index',
+        bgcolor: '#10b3b1'
+      },
+      {
+        icon: '/images/console/shangpinliebiao.png',
+        num: 0,
+        text: '商品列表',
+        url: '../my-goods-manage/index',
+        bgcolor: '#f7bf30'
+      }
+
+      // {
+      //   icon: '/images/my/console/shangpinliebiao.png',
+      //   num: 0,
+      //   text: '分类管理',
+      //   url: 'my-kindManage/index',
+      //   bgcolor: "#f7bf30"
+      // },
+      // {
+      // 	icon: '/images/goods/fenlei.png',
+      // 	num: 0,
+      // 	text: '分类管理',
+      // 	url: 'my-kindManage/index'
+      // },
+      // {
+      // 	icon: '/images/goods/pinpai.png',
+      // 	num: 0,
+      // 	text: '商品品牌',
+      // 	url: 'my-goodsBrand/index'
+      // },
+      // {
+      // 	icon: '/images/goods/leixing.png',
+      // 	num: 0,
+      // 	text: '商品类型',
+      // 	url: 'my-goodsType/index'
+      // },
+    ],
+    applicationList: [
+      {
+        icon: '/images/console/shujuguanli.png',
+        text: '数据管理',
+        url: 'dataManage',
+        bgcolor: '#f7bf30'
+      },
+      {
+        icon: '/images/console/shenheguanli.png',
+        text: '会员管理',
+        url: '../my-console-check/index',
+        bgcolor: '#10b3b1'
+      },
+      {
+        icon: '/images/console/xufeiguanli.png',
+        text: '续费管理',
+        url: '../my-console-renew/index',
+        bgcolor: '#fd7602'
+      },
+      {
+        icon: '/images/console/dianpushezhi.png',
+        text: '店铺设置',
+        url: '../my-setShopInfo/index',
+        bgcolor: '#a78dd3',
+        isshow: 0
+      },
+      {
+        icon: '/images/console/kefuguanli.png',
+        text: '客服管理',
+        url: '../my-setServiceInfo/index',
+        bgcolor: '#f7bf30'
+      },
+      {
+        icon: '/images/console/guanliyuanbd.png',
+        text: '管理员绑定',
+        url: '../my-setManagerInfo/index',
+        bgcolor: '#10b3b1',
+        isshow: 0
+      },
+      {
+        icon: '/images/console/iconfont-yzm.png',
+        text: '查看我的店铺',
+        url: '/pages/shoperweima/index',
+        bgcolor: '#f7bf30'
+      }
+    ]
   };
   computed = {};
   methods = {
-  
+    showyizhan: function() {
+      this.right = 1;
+    },
+    hiddenyizhan: function() {
+      this.right = 0;
+    },
+    async changeShop(suppliers_id) {
+      this.yizhanInfo = await this.$parent.getYizhanInfo(
+        this.userId,
+        suppliers_id
+      );
+      this.right = 0;
+      this.orderNum();
+      this.$apply();
+    }
   };
   events = {};
-  async getIndexNewsList(id) {
-   
+  async getIndexNewsList(id) {}
+  // 获取管理的易站列表
+  async getjllist() {
+    wepy
+      .request({
+        url: api.jlList,
+        data: {
+          user_id: this.userId
+        }
+      })
+      .then(res => {
+        console.log('管理工作台-易站列表res', res);
+        this.yizhanlist = res.data.data;
+        this.$apply();
+      });
   }
-
+  async orderNum() {
+    this.tabList[0].num = this.yizhanInfo.daifukuan;
+    this.tabList[1].num = this.yizhanInfo.daifahuo;
+    this.tabList[2].num = this.yizhanInfo.yifahuo;
+    this.tabList[3].num = this.yizhanInfo.tuikuan;
+    this.tabList[4].num = this.yizhanInfo.chenggong;
+    this.tabList[5].num = this.yizhanInfo.guanbi;
+    this.$parent.globalData.suppliers_id=this.yizhanInfo.suppliers_id
+  }
   async onLoad(option) {
-   
+    this.userId = await this.$parent.loginInfo();
+    let yizhanInfo = await this.$parent.getYizhanInfo(this.userId);
+    this.yizhanInfo = yizhanInfo;
+    
+    this.orderNum();
+    this.getjllist();
+    this.$apply();
+    console.log('yizhanInfo', yizhanInfo);
   }
 }
 </script>
