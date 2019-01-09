@@ -1,0 +1,283 @@
+<style lang="less">
+.icon-shouji {
+  color: #44b8f4;
+  font-size: 35rpx;
+}
+.icon-youcecaidan {
+  color: #e50012;
+}
+.check-list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 40rpx;
+  border-bottom: 8rpx solid #f0f0f0;
+  background: #fff;
+}
+
+.check-list-img {
+  width: 100rpx;
+  height: 100rpx;
+}
+
+.check-list-img image {
+  width: 100%;
+  height: 100%;
+}
+.check-list-content {
+  line-height: 40rpx;
+}
+.check-list-btn {
+  width: 150rpx;
+  text-align: right;
+}
+.check-list-btn button {
+  height: 55rpx;
+  color: #fff;
+  background-color: #e50012;
+  line-height: 55rpx;
+  font-size: 26rpx;
+  border-radius: 50px;
+  padding: 0 40rpx;
+}
+.status-box {
+  width: 100%;
+  height: 100rpx;
+  line-height: 100rpx;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-top: 1rpx solid #eee;
+}
+.status-box .status-label {
+  border-right: 1px solid #f0f0f0;
+  text-align: center;
+  font-size: 30rpx;
+  padding: 0px 40rpx;
+  flex: 1;
+  border-bottom: 6rpx solid #eee;
+  position: relative;
+}
+.status-box .status-label.active {
+  color: #e50012;
+  border-bottom: 6rpx solid #e50012;
+}
+.status-box .status-label .red-dot {
+  width: 16rpx;
+  height: 16rpx;
+  position: absolute;
+  left: 116rpx;
+  top: 23rpx;
+  background-color: #f43530;
+  border-radius: 50%;
+}
+/* 添加会员 */
+.checkLists {
+  padding-bottom: 80rpx;
+  background: #f0f0f0;
+}
+.addmember {
+  text-align: center;
+  line-height: 80rpx;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  background: #e50012;
+  color: #fff;
+}
+</style>
+<template>
+<view class='container'>
+  <view class="status-box">
+    <view @tap="statusTap" class="status-label {{index == currentType ? 'active' : ''}}" wx:for-items="{{statusType}}" wx:key="{{index}}" data-index="{{index}}" data-statu="{{statusKey[index]}}">
+      {{item}}
+      <view class="{{tabClass[index]}}"></view>
+    </view>
+  </view>
+	  <view class='checkLists' >
+  <!--未审核  -->
+  <view class='check-list' wx:for="{{weishenhe}}" wx:key="{{index}}" wx:if="{{currentStatu==0}}" data-id="{{item.user_id}}" @tap='toCheckDetail'>
+    <view class='check-list-img'>
+      <image src='{{item.avatar}}'/>
+    </view>
+    <view class='check-list-content'>
+      <view>姓名：{{item.user_name}}</view>
+      <view @tap='tocallphone' data-phone="{{item.mobile_phone}}">手机号码：{{item.mobile_phone}}
+        <text class='iconfont icon-shouji'></text>
+      </view>
+    </view>
+    <view class='check-list-btn'>
+      <form report-submit bindsubmit='getFormId'>
+        <button @tap='toShenhe' data-id="{{item.user_id}}">审核</button>
+      </form>
+    </view>
+  </view>
+  <!--已审核  -->
+    <view class='check-list checked-list' wx:for="{{yishenhe}}" wx:key="{{index}}" @tap='toCheckDetail' data-id="{{item.user_id}}" wx:if="{{currentStatu==1}}">
+      <view class='check-list-img'>
+        <image src='{{item.avatar}}'></image>
+      </view>
+      <view class='check-list-content'>
+        <view>姓名：{{item.user_name}}</view>
+        <view @tap='tocallphone' data-phone="{{item.mobile_phone}}">手机号码：{{item.mobile_phone}}
+          <text class='iconfont icon-shouji'></text>
+        </view>
+      </view>
+      <view class='check-list-btn'>
+        <text class='iconfont icon-youcecaidan' @tap='toJiechu' data-id="{{item.user_id}}"></text>
+      </view>
+    </view>
+  </view>
+	<navigator url='/ConsolePages/pages/my_addManagerInfo/index?type=member'>    <view class='addmember'>+添加会员</view></navigator>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import api from '../../API/api';
+export default class my_console_check extends wepy.page {
+  config = {
+    navigationBarTitleText: '会员管理'
+  };
+  data = {
+    statusType: ['未审核', '已审核'],
+    statusKey: ['0', '1'],
+    currentType: 0,
+    currentStatu: '0',
+    weishenhe: [],
+    yishenhe: []
+  };
+  computed = {};
+  components = {};
+  methods = {
+    getFormId: function(e) {
+      //util.submitFormId(app.globalData.userId, e.detail.formId);
+    },
+    statusTap: function(e) {
+      var curType = e.currentTarget.dataset.index;
+      var curStatu = e.currentTarget.dataset.statu;
+      this.currentType = curType;
+      this.currentStatu = curStatu;
+    },
+    //需要审核提示
+    toShenhe: function(e) {
+      var that = this;
+      //审核人的id
+      var id = e.currentTarget.dataset.id;
+      wx.showActionSheet({
+        itemList: ['通过', '拒绝'],
+        success: function(res) {
+          if (res.tapIndex == 0) {
+            that.shenhe(id, 'tongguo');
+          } else if (res.tapIndex == 1) {
+            that.shenhe(id, 'jujue');
+          }
+        },
+        fail: function(res) {
+          //console.log(res.errMsg)
+        }
+      });
+    },
+    //解除关系提示
+    toJiechu: function(e) {
+      var that = this;
+      //审核人的id
+      var id = e.currentTarget.dataset.id;
+      console.log(id);
+      wx.showActionSheet({
+        itemList: ['解除关系'],
+        success: function(res) {
+          if (res.tapIndex == 0) {
+            that.jiechu(id);
+          }
+        },
+        fail: function(res) {
+          //console.log(res.errMsg)
+        }
+      });
+    },
+    tocallphone: function(e) {
+      var phone = e.currentTarget.dataset.phone;
+      wx.makePhoneCall({
+        phoneNumber: phone
+      });
+    },
+    toCheckDetail: function(e) {
+      //审核人的id
+      var id = e.currentTarget.dataset.id;
+      var currentStatu = this.data.currentStatu;
+      wx.navigateTo({
+        url:
+          '/ConsolePages/pages/my_console_checkDetail?id=' +
+          id +
+          '&currentStatu=' +
+          currentStatu
+      });
+    }
+  };
+  events = {};
+  async onLoad(option) {}
+  async onShow() {
+    this.getShenheList();
+  }
+
+  //审核列表
+  async getShenheList() {
+    let suppliers_id = this.$parent.globalData.suppliers_id;
+    let yhlb = await wepy.request({
+      url: api.yhlb,
+      data: {
+        suppliers_id
+      }
+    });
+    if (yhlb.data.code == '0') {
+      this.weishenhe = yhlb.data.data.weishenhe;
+      this.yishenhe = yhlb.data.data.yishenhe;
+      this.$apply();
+    }
+  }
+  //解除关系
+  async jiechu(id) {
+    let user_id = id;
+    let suppliers_id = this.$parent.globalData.suppliers_id;
+    let jcgx = await wepy.request({
+      url: api.jcgx,
+      data: {
+        user_id,
+        suppliers_id
+      }
+    });
+    if (jcgx.data.code == '0') {
+      wx.showToast({
+        title: '解除关系成功',
+        icon: 'success',
+        duration: 2000
+      });
+      this.getShenheList();
+    } else {
+      wx.showToast({
+        title: '解除关系失败',
+        icon: 'success',
+        duration: 2000
+      });
+    }
+  }
+  //审核
+  async shenhe(id, type) {
+    let user_id = id;
+    let suppliers_id = this.$parent.globalData.suppliers_id;
+    var type = type;
+    let yhsh = await wepy.request({
+      url: api.yhsh,
+      data: {
+        user_id,
+        suppliers_id,
+        type
+      }
+    });
+    if (yhsh.data.code == '0') {
+      this.getShenheList();
+    }
+  }
+}
+</script>

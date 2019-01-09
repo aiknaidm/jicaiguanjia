@@ -18,6 +18,9 @@ const api = {
   orderList: `${host}/ddlb`,
   serviceList: `${host}/kefu_list`,
   addService: `${host}/kefu_add`,
-  delService: `${host}/kefu_del`
+  delService: `${host}/kefu_del`,
+  yhlb: `${host}/yhlb`,
+  jcgx: `${host}/jcgx`,
+  yhsh: `${host}/yhsh`
 }
 export default api

@@ -350,7 +350,7 @@ export default class newslist extends wepy.page {
         icon: '/images/console/shangpinliebiao.png',
         num: 0,
         text: '商品列表',
-        url: '../my_goods-manage/index',
+        url: '../my_goods_manage/index',
         bgcolor: '#f7bf30'
       }
     ],
@@ -364,13 +364,13 @@ export default class newslist extends wepy.page {
       {
         icon: '/images/console/shenheguanli.png',
         text: '会员管理',
-        url: '../pages/my_console-check',
+        url: '../pages/my_console_check',
         bgcolor: '#10b3b1'
       },
       {
         icon: '/images/console/xufeiguanli.png',
         text: '续费管理',
-        url: '../pages/my_console-renew',
+        url: '../pages/my_console_renew',
         bgcolor: '#fd7602'
       },
       {
