@@ -37,7 +37,7 @@
   position: relative;
   z-index: 4;
   font-size: 30rpx;
-  top:-5rpx;
+  top: -5rpx;
 }
 </style>
 <template>
@@ -61,18 +61,18 @@ export default class List extends wepy.component {
     userData: { type: Object, default: {}, twoWay: true }
   };
   data = {
-    userId:""
+    userId: ''
   };
 
   events = {};
 
   methods = {};
 
- async onLoad() {
-   console.log(this)
-  //  let userId = await this.$parent.loginInfo();
-  //  this.userId=userId;
-   this.$apply();
+  async onLoad() {
+    console.log(this);
+    //  let userId = await this.$parent.loginInfo();
+    //  this.userId=userId;
+    this.$apply();
   }
 }
 </script>

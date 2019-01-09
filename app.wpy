@@ -131,7 +131,8 @@ export default class extends wepy.app {
           'pages/withdraw',
           'pages/poster',
           'pages/dataManage',
-          'pages/dataManageDetail'
+          'pages/dataManageDetail',
+          'pages/my_setServiceInfo'
         ]
       }
     ],

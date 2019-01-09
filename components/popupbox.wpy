@@ -1,0 +1,176 @@
+<style lang="less">
+form {
+  display: block;
+  width: 100%;
+}
+
+.changeTitle {
+  background-color: #fff;
+  border-radius: 10rpx;
+  font-size: 30rpx;
+  overflow: hidden;
+  width: 80%;
+  margin: auto;
+}
+
+.changeTitle.active {
+  position: relative;
+  top: -200rpx;
+}
+
+.inputList {
+  display: flex;
+  align-items: center;
+}
+
+.inputList text {
+  width: 150rpx;
+  padding: 0 10rpx;
+}
+
+.inputList input {
+  flex: 1;
+  border: 1px solid #f0f0f0;
+  margin-bottom: 20rpx;
+  line-height: 88rpx;
+  height: 88rpx;
+  padding: 0 20rpx;
+}
+
+.changeTitle .title {
+  padding: 40rpx;
+  padding-bottom: 0;
+  text-align: center;
+}
+
+.changeTitle .content {
+  padding: 40rpx;
+}
+
+.changeTitle .content textarea {
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  width: 400rpx;
+  padding: 10rpx;
+  height: 120rpx;
+  position: relative;
+  z-index: 1000;
+}
+
+.changeTitle .btn {
+  display: flex;
+  position: relative;
+  z-index: 10;
+}
+
+.changeTitle .btn {
+  background-color: #f0f0f0;
+  text-align: center;
+  line-height: 88rpx;
+}
+
+.changeTitle .btn button {
+  flex: 1;
+  border: 1px solid #ccc;
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+}
+button::after {
+  border: none;
+}
+input {
+  outline: none;
+  border: none;
+  list-style: none;
+}
+</style>
+<template>
+  <view class='body-bg' wx:if="{{popupdata.isshowpopup}}" @tap='quxiaoChange' style='position: absolute' isshowpopup="客服">
+    <form bindsubmit='formSubmit'>
+      <view class='changeTitle active' catchtap='showpopup2'>
+        <view class='title'>{{popupdata.title}}</view>
+        <view class='content'>
+          <block wx:for="{{popupdata.inputList}}" wx:key="{{index}}">
+            <view class='inputList'>
+						<text wx:if="{{item.name}}">{{item.name?item.name:""}}</text>  <input placeholder='{{item.placeholder}}' type='text' name="{{item.inputName}}"></input>
+						</view>
+          </block>
+        </view>
+        <view class='btn'>
+          <button form-type='submit'>确定</button>
+          <button catchtap='quxiaoChange'>取消</button>
+
+        </view>
+      </view>
+    </form>
+  </view>
+
+</template>
+<script>
+import wepy from 'wepy';
+import api from '../API/api';
+export default class Popupbox extends wepy.component {
+  props = {
+    popupdata: {
+      type: Object,
+      default: {},
+      twoWay: true
+    }
+  };
+  data = {};
+  events = {};
+  methods = {
+    quxiaoChange() {
+      this.popupdata.isshowpopup = false;
+    },
+    showpopup2: function() {
+      return;
+    },
+    formSubmit: function(e) {
+      console.log(e.detail.value);
+      if (e.detail.value.name === '') {
+        wx.showToast({
+          title: '客服姓名不能为空',
+          icon: 'none'
+        });
+        return;
+      }
+      if (e.detail.value.phone === '') {
+        wx.showToast({
+          title: '客服电话不能为空',
+          icon: 'none'
+        });
+        return;
+      }
+      var suppliers_id = this.$parent.$parent.globalData.suppliers_id;
+      var kefu_name = e.detail.value.name;
+      var mobile = e.detail.value.phone;
+      wepy
+        .request({
+          url: api.addService,
+          data: {
+            suppliers_id,
+            kefu_name,
+            mobile
+          }
+        })
+        .then(res => {
+          if (res.data.code == '0') {
+            wx.showToast({
+              title: '添加成功'
+            });
+            this.popupdata.isshowpopup = false;
+            this.$parent.serviceList();
+          } else {
+            wx.showToast({
+              title: '请求超时'
+            });
+          }
+        });
+    }
+  };
+  async onLoad() {
+  }
+}
+</script>

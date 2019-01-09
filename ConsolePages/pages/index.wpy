@@ -189,8 +189,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-     width: 50rpx;
-  height: 50rpx;
+    width: 50rpx;
+    height: 50rpx;
     image {
       width: 70%;
       height: 70%;
@@ -232,7 +232,7 @@
       </view>
       <view class='share'>
         <form report-submit bindsubmit='getFormId'>
-          <navigator url='/pages/my-console/share/index'>
+          <navigator url='/pages/my_console/share/index'>
             <button form-type="submit">
               <text class='iconfont icon-fenxiang'></text>分享好友</button>
 
@@ -350,35 +350,9 @@ export default class newslist extends wepy.page {
         icon: '/images/console/shangpinliebiao.png',
         num: 0,
         text: '商品列表',
-        url: '../my-goods-manage/index',
+        url: '../my_goods-manage/index',
         bgcolor: '#f7bf30'
       }
-
-      // {
-      //   icon: '/images/my/console/shangpinliebiao.png',
-      //   num: 0,
-      //   text: '分类管理',
-      //   url: 'my-kindManage/index',
-      //   bgcolor: "#f7bf30"
-      // },
-      // {
-      // 	icon: '/images/goods/fenlei.png',
-      // 	num: 0,
-      // 	text: '分类管理',
-      // 	url: 'my-kindManage/index'
-      // },
-      // {
-      // 	icon: '/images/goods/pinpai.png',
-      // 	num: 0,
-      // 	text: '商品品牌',
-      // 	url: 'my-goodsBrand/index'
-      // },
-      // {
-      // 	icon: '/images/goods/leixing.png',
-      // 	num: 0,
-      // 	text: '商品类型',
-      // 	url: 'my-goodsType/index'
-      // },
     ],
     applicationList: [
       {
@@ -390,32 +364,32 @@ export default class newslist extends wepy.page {
       {
         icon: '/images/console/shenheguanli.png',
         text: '会员管理',
-        url: '../my-console-check/index',
+        url: '../pages/my_console-check',
         bgcolor: '#10b3b1'
       },
       {
         icon: '/images/console/xufeiguanli.png',
         text: '续费管理',
-        url: '../my-console-renew/index',
+        url: '../pages/my_console-renew',
         bgcolor: '#fd7602'
       },
       {
         icon: '/images/console/dianpushezhi.png',
         text: '店铺设置',
-        url: '../my-setShopInfo/index',
+        url: '../pages/my_setShopInfo',
         bgcolor: '#a78dd3',
         isshow: 0
       },
       {
         icon: '/images/console/kefuguanli.png',
         text: '客服管理',
-        url: '../my-setServiceInfo/index',
+        url: '../pages/my_setServiceInfo',
         bgcolor: '#f7bf30'
       },
       {
         icon: '/images/console/guanliyuanbd.png',
         text: '管理员绑定',
-        url: '../my-setManagerInfo/index',
+        url: '../pages/my_setManagerInfo',
         bgcolor: '#10b3b1',
         isshow: 0
       },
@@ -469,17 +443,17 @@ export default class newslist extends wepy.page {
     this.tabList[3].num = this.yizhanInfo.tuikuan;
     this.tabList[4].num = this.yizhanInfo.chenggong;
     this.tabList[5].num = this.yizhanInfo.guanbi;
-    this.$parent.globalData.suppliers_id=this.yizhanInfo.suppliers_id
+    this.$parent.globalData.suppliers_id = this.yizhanInfo.suppliers_id;
   }
   async onLoad(option) {
     this.userId = await this.$parent.loginInfo();
     let yizhanInfo = await this.$parent.getYizhanInfo(this.userId);
     this.yizhanInfo = yizhanInfo;
-    
+
     this.orderNum();
     this.getjllist();
     this.$apply();
-    console.log('yizhanInfo', yizhanInfo);
+    console.log('yizhanInfo-----', yizhanInfo);
   }
 }
 </script>
