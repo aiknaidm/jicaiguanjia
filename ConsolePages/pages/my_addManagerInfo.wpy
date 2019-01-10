@@ -116,6 +116,62 @@
 .no-order {
   color: #666;
 }
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.headPortrait {
+  /* background: #e50012; */ /* vertical-align: middle; */
+  margin: 20rpx;
+  position: relative;
+  display: block;
+}
+.headPortrait .img {
+  border-radius: 50%;
+  width: 100rpx;
+  height: 100rpx;
+  line-height: 100rpx;
+  text-align: center;
+  color: #aaa;
+  border: 1px solid #eee;
+}
+.headPortrait .text {
+  text-align: center;
+}
+.headPortrait text.icon-close {
+  position: absolute;
+  display: inline-block;
+  right: -10rpx;
+  top: -10rpx;
+  color: #e50012;
+  font-size: 30rpx;
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  border: 1px solid #e50012;
+  text-align: center;
+  line-height: 40rpx;
+  background: #fff;
+}
+
+.headPortrait.redborder .img {
+  border: 1px solid #e50012;
+}
+
+.headPortrait .iconfont {
+  font-size: 60rpx;
+}
+
+.headPortrait image {
+  width: 100rpx;
+  height: 100rpx;
+  display: inline-block;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
 </style>
 <template>
 <view class='container'>

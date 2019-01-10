@@ -27,6 +27,7 @@ const api = {
   addMember: `${host}/tjhy`,
   addManager: `${host}/manager_add`,
   delManager: `${host}/manager_del`,
-  yhxq: `${host}/yhxq`
+  yhxq: `${host}/yhxq`,
+  findManagers: `${host}/find_managers`
 }
 export default api
