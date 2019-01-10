@@ -93,7 +93,7 @@ input {
         <view class='content'>
           <block wx:for="{{popupdata.inputList}}" wx:key="{{index}}">
             <view class='inputList'>
-						<text wx:if="{{item.name}}">{{item.name?item.name:""}}</text>  <input placeholder='{{item.placeholder}}' type='text' name="{{item.inputName}}"></input>
+						<text wx:if="{{item.name}}">{{item.name?item.name:""}}</text>  <input placeholder='{{item.placeholder}}' type="{{item.type?item.type:'text'}}" name="{{item.inputName}}"></input>
 						</view>
           </block>
         </view>

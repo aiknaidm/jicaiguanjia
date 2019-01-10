@@ -21,6 +21,12 @@ const api = {
   delService: `${host}/kefu_del`,
   yhlb: `${host}/yhlb`,
   jcgx: `${host}/jcgx`,
-  yhsh: `${host}/yhsh`
+  yhsh: `${host}/yhsh`,
+  find_users: `${host}/find_users`,
+  find_users_c: `${host}/find_users_c`,
+  addMember: `${host}/tjhy`,
+  addManager: `${host}/manager_add`,
+  delManager: `${host}/manager_del`,
+  yhxq: `${host}/yhxq`
 }
 export default api

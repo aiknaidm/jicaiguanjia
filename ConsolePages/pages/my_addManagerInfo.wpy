@@ -1,0 +1,236 @@
+<style lang="less">
+.container {
+  display: block;
+  padding: 0;
+}
+.ss-my {
+  display: flex;
+
+  text-align: center;
+  width: 100%;
+  height: 92rpx;
+  justify-content: center;
+  align-items: center;
+}
+
+.ss-my.active {
+  display: flex;
+}
+
+.ss-my-c {
+  display: flex;
+  flex: 1;
+  margin-left: 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #f0f0f0;
+}
+
+.ss-my-c image {
+  width: 30rpx;
+  height: 30rpx;
+}
+
+.ss-my-c-img {
+  background-color: #fff;
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px 0 0 3px;
+}
+
+.ss-my-c-ipt {
+  background-color: #fff;
+  height: 60rpx;
+  line-height: 60rpx;
+  flex: 1;
+}
+
+.ss-my-c-ipt input {
+  width: 100%;
+  height: 100%;
+  font-size: 30rpx;
+}
+
+.ss-my-c-x {
+  background-color: #fff;
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0px 3px 3px 0px;
+}
+
+.ss-my-d {
+  width: 100rpx;
+  height: 60rpx;
+  border: 1px solid #f0f0f0;
+  text-align: center;
+  line-height: 60rpx;
+  border-radius: 10rpx;
+  font-size: 28rpx;
+  color: #fff;
+  margin-left: 10rpx;
+  margin-right: 10px;
+  background: #e50012;
+}
+
+.ss-hot {
+  padding: 24rpx;
+  background-color: #fff;
+}
+
+.ss-title {
+  display: flex;
+  justify-content: space-between;
+  font-size: 30rpx;
+}
+
+.ss-title view:last-child {
+  font-size: 28rpx;
+  color: #e50112;
+}
+
+.ss-content {
+  display: flex;
+  margin-top: 24rpx;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.ss-content view {
+  margin-right: 24rpx;
+  padding: 15rpx 20rpx;
+  background-color: #f0f0f0;
+  margin-bottom: 24rpx;
+  border-radius: 10rpx;
+  font-size: 30rpx;
+}
+
+.queding {
+  background-color: #fff;
+  color: #333;
+}
+.no-order {
+  color: #666;
+}
+</style>
+<template>
+<view class='container'>
+  <!--搜索  -->
+  <view class="ss-my {{showSearch?'active':''}}">
+    <view class='ss-my-c'>
+      <view class='ss-my-c-img'>
+        <image src='/images/s.png'/>
+      </view>
+      <view class='ss-my-c-ipt'>
+        <input value='{{keyword}}' placeholder='请输入您要搜索的用户昵称' bindinput="searchIpt"></input>
+      </view>
+      <view class='ss-my-c-x'>
+        <text hidden='true'></text>
+      </view>
+    </view>
+    <view class='ss-my-d {{buttonClass}}' @tap='buttonTap'>
+      {{ssButton}}
+    </view>
+
+  </view>
+		<block wx:if="{{adminList.length==0}}">
+		<view class='no-order'>	您搜索的昵称不存在，请更换关键词试试。</view>
+		</block>
+  <view class='list' wx:else>
+    <block wx:for="{{adminList}}" wx:key="index">
+      <view class='headPortrait '>
+			  <view class='img'>
+        <image src="{{item.avatar?item.avatar:'https://lmbge.com/upload/avatar/weixin3.png'}}" data-user_id="{{type=='member'?item.user_id:item.id}}" bindtap='addManager' mode='aspectFill'></image>
+      </view>
+      <view class='text' wx:if="{{type=='member'}}">{{item.user_name?item.user_name:'jc'+item.user_id}}</view>
+      <view class='text' wx:else>{{item.user_nickname?item.user_nickname:'jc'+item.id}}</view>
+      </view>
+    </block>
+	
+  </view>
+	
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import api from '../../API/api';
+export default class my_addManagerInfo extends wepy.page {
+  config = {
+    navigationBarTitleText: '用户搜索'
+  };
+  data = {
+    ssButton: '搜索',
+    keyword: '',
+    type: '',
+    adminList: []
+  };
+  computed = {};
+  components = {};
+  methods = {
+    searchIpt: function(e) {
+      console.log(e.detail.value);
+      this.keyword = e.detail.value;
+    },
+    buttonTap: function() {
+      var keyword = this.keyword;
+      var url = this.type ? api.find_users_c : api.find_users;
+      wepy
+        .request({
+          url: url,
+          data: {
+            keyword
+          }
+        })
+        .then(res => {
+          console.log('搜索结果', res.data.data);
+          this.adminList = res.data.data;
+          this.$apply();
+        });
+    },
+    async addManager(e) {
+      var user_id = e.currentTarget.dataset.user_id;
+      var suppliers_id = this.$parent.globalData.suppliers_id;
+
+      var modalRes = await wepy.showModal({
+        title: '提示', //提示的标题,
+        content: '确定要添加吗', //提示的内容,
+        showCancel: true //是否显示取消按钮,
+      });
+      if (modalRes.confirm) {
+        var url = this.type ? api.addMember : api.addManager;
+        wepy
+          .request({
+            url: url,
+            data: {
+              user_id,
+              suppliers_id
+            }
+          })
+          .then(res => {
+            console.log('添加完成', res.data.data);
+            if (res.data.code == '0') {
+              wx.navigateBack({});
+            } else {
+              wx.showToast({
+                title: res.data.message,
+                icon: 'none'
+              });
+            }
+          });
+      }
+    }
+  };
+  events = {};
+  onLoad(options) {
+    console.log(options.type);
+    if (options.type) {
+      this.type = options.type;
+    }
+  }
+}
+</script>

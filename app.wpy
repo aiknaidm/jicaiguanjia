@@ -133,7 +133,9 @@ export default class extends wepy.app {
           'pages/dataManage',
           'pages/dataManageDetail',
           'pages/my_setServiceInfo',
-          'pages/my_console_check'
+          'pages/my_console_check',
+          'pages/my_console_checkDetail',
+          'pages/my_addManagerInfo'
         ]
       }
     ],

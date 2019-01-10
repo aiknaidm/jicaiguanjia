@@ -1,0 +1,237 @@
+<style lang="less">
+.icon-shouji {
+  color: #44b8f4;
+  font-size: 35rpx;
+}
+
+.icon-jiantou {
+  color: #e50012;
+  /* margin-left: 10rpx; */
+}
+
+.jiantou {
+  display: inline-block;
+  transition: transform 0.3s;
+}
+
+.jiantou.active {
+  transform: rotate(180deg);
+  -ms-transform: rotate(180deg); /* IE 9 */
+  -moz-transform: rotate(180deg); /* Firefox */
+  -webkit-transform: rotate(180deg); /* Safari 和 Chrome */
+  -o-transform: rotate(180deg);
+}
+
+.title {
+  line-height: 88rpx;
+  border-bottom: 8rpx solid #f0f0f0;
+  padding: 0 40rpx;
+  font-weight: bold;
+}
+
+.content {
+  line-height: 78rpx;
+}
+
+.content view {
+  border: 1px solid #f0f0f0;
+  padding: 0 40rpx;
+}
+
+.yizhan {
+  display: flex;
+}
+
+.yizhan view {
+  border: 0px solid;
+  padding: 0;
+  margin-left: 10rpx;
+}
+
+.yizhan-list {
+  height: 0px;
+  overflow: hidden;
+  transition: height 0.5s;
+}
+
+.yizhan-list-title {
+  text-align: center;
+  font-weight: bold;
+}
+
+.yizhan-list-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.yizhan-list.active {
+  height: auto;
+  padding: 40rpx;
+  border: 1px solid #f0f0f0;
+  line-height: 68rpx;
+  padding-top: 20rpx;
+}
+.btn {
+  margin-top: 200rpx;
+  display: flex;
+  padding-bottom: 100rpx;
+}
+.btn button {
+  background-color: #e50012;
+  color: #ffffff;
+  font-size: 28rpx;
+  padding: 0 100rpx;
+  height: 68rpx;
+  line-height: 68rpx;
+  border-radius: 50px;
+}
+.btn .refuse {
+  background-color: #14c09a;
+}
+</style>
+<template>
+<view class='container'>
+  <view class='title'>基本信息</view>
+  <view class='content'>
+    <view>姓名：{{info.user_name}}</view>
+    <view catchtap='tocallphone' data-phone="{{info.mobile_phone}}">手机号码：{{info.mobile_phone}}
+      <text class='iconfont icon-shouji'></text>
+    </view>
+    <view class='yizhan' bindtap='changeisclick'>所属批发商：{{yizhan.length>0?"有":"无"}}
+      <view class="jiantou {{isclick?'active':''}}">
+        <text class='iconfont icon-jiantou'></text>
+      </view>
+    </view>
+    
+  </view>
+  <view class="yizhan-list {{isclick?'active':''}}" wx:if="{{yizhan.length>0}}">
+    <view class='yizhan-list-title'>批发商
+      <text class='red'>（进货记录）</text>
+    </view>
+    <view class='yizhan-list-content ' wx:for="{{yizhan}}" wx:key="{{index}}">
+      <view>{{item.suppliers_name}}</view>
+    </view>
+  </view>
+  <view class='btn' wx:if="{{currentStatu==0}}">
+    <button bindtap='tongguo'>通过</button>
+    <button bindtap='jujue' class='refuse'>拒绝</button>
+  </view>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import api from '../../API/api';
+export default class my_console_checkDetail extends wepy.page {
+  config = {
+    navigationBarTitleText: '审核管理'
+  };
+  data = {
+    iscilck: false,
+    id: '',
+    currentStatu: '',
+    info: [],
+    yizhan: [],
+    isclick: false
+  };
+  computed = {};
+  components = {};
+  methods = {
+    //通过
+    tongguo: function(e) {
+      var that = this;
+      wx.showModal({
+        content: '通过该用户的审核请求',
+        success: function(res) {
+          if (res.confirm) {
+            that.shenhe(that.id, 'tongguo');
+          } else if (res.cancel) {
+          }
+        }
+      });
+    },
+    //拒绝
+    jujue: function(e) {
+      var that = this;
+      wx.showModal({
+        content: '拒绝该用户的审核请求',
+        success: function(res) {
+          if (res.confirm) {
+            that.shenhe(that.id, 'jujue');
+          } else if (res.cancel) {
+          }
+        }
+      });
+    },
+    changeCheckStatus: function() {
+      wx.showActionSheet({
+        itemList: ['解除关系'],
+        success: function(res) {
+          console.log(res.tapIndex);
+        },
+        fail: function(res) {
+          console.log(res.errMsg);
+        }
+      });
+    },
+    changeisclick: function() {
+      this.isclick = !this.isclick;
+    },
+    tocallphone: function(e) {
+      var phone = e.currentTarget.dataset.phone;
+      wx.makePhoneCall({
+        phoneNumber: phone
+      });
+    }
+  };
+  events = {};
+  async onLoad(options) {
+    this.id = options.id;
+    this.currentStatu = options.currentStatu;
+    this.getInfo(this.id);
+  }
+  //个人信息
+  async getInfo(id) {
+    var user_id = id;
+    wepy
+      .request({
+        url: api.yhxq,
+        data: {
+          user_id
+        }
+      })
+      .then(res => {
+        this.info = res.data.data;
+        this.yizhan = res.data.data.jiameng;
+        this.$apply();
+      });
+  }
+  async shenhe(id, type) {
+    let user_id = id;
+    let suppliers_id = this.$parent.globalData.suppliers_id;
+    var type = type;
+    let yhsh = await wepy.request({
+      url: api.yhsh,
+      data: {
+        user_id,
+        suppliers_id,
+        type
+      }
+    });
+    if (yhsh.data.code == '0') {
+      wx.showToast({
+        title: '操作成功',
+        icon: 'success',
+        duration: 2000
+      });
+    } else {
+      wx.showToast({
+        title: '操作失败',
+        icon: 'success',
+        duration: 2000
+      });
+    }
+  }
+}
+</script>

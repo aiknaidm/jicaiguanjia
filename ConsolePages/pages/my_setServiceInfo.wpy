@@ -70,7 +70,7 @@ checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
     </checkbox-group>
     <view class='btn2'>
       <button @tap='addServiceInfo' form-type='submit'>添加客服</button>
-      <button @tap='delServiceInfo' form-type='submit'>删除客服</button>
+      <button class="{{values.length?'active':''}}" @tap='delServiceInfo' form-type='submit'>删除客服</button>
     </view>
   </form>
   <popupbox :popupdata.sync="popupdata"></popupbox>

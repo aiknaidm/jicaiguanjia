@@ -115,7 +115,7 @@
   <!--已审核  -->
     <view class='check-list checked-list' wx:for="{{yishenhe}}" wx:key="{{index}}" @tap='toCheckDetail' data-id="{{item.user_id}}" wx:if="{{currentStatu==1}}">
       <view class='check-list-img'>
-        <image src='{{item.avatar}}'></image>
+        <image src='{{item.avatar}}'/>
       </view>
       <view class='check-list-content'>
         <view>姓名：{{item.user_name}}</view>
@@ -128,7 +128,7 @@
       </view>
     </view>
   </view>
-	<navigator url='/ConsolePages/pages/my_addManagerInfo/index?type=member'>    <view class='addmember'>+添加会员</view></navigator>
+	<navigator url='/ConsolePages/pages/my_addManagerInfo?type=member'>    <view class='addmember'>+添加会员</view></navigator>
 </view>
 </template>
 
@@ -205,7 +205,7 @@ export default class my_console_check extends wepy.page {
     toCheckDetail: function(e) {
       //审核人的id
       var id = e.currentTarget.dataset.id;
-      var currentStatu = this.data.currentStatu;
+      var currentStatu = this.currentStatu;
       wx.navigateTo({
         url:
           '/ConsolePages/pages/my_console_checkDetail?id=' +
