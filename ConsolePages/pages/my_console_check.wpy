@@ -102,13 +102,13 @@
     </view>
     <view class='check-list-content'>
       <view>姓名：{{item.user_name}}</view>
-      <view @tap='tocallphone' data-phone="{{item.mobile_phone}}">手机号码：{{item.mobile_phone}}
+      <view @tap.stop='tocallphone' data-phone="{{item.mobile_phone}}">手机号码：{{item.mobile_phone}}
         <text class='iconfont icon-shouji'></text>
       </view>
     </view>
     <view class='check-list-btn'>
       <form report-submit bindsubmit='getFormId'>
-        <button @tap='toShenhe' data-id="{{item.user_id}}">审核</button>
+        <button @tap.stop='toShenhe' data-id="{{item.user_id}}">审核</button>
       </form>
     </view>
   </view>
@@ -119,12 +119,12 @@
       </view>
       <view class='check-list-content'>
         <view>姓名：{{item.user_name}}</view>
-        <view @tap='tocallphone' data-phone="{{item.mobile_phone}}">手机号码：{{item.mobile_phone}}
+        <view @tap.stop='tocallphone' data-phone="{{item.mobile_phone}}">手机号码：{{item.mobile_phone}}
           <text class='iconfont icon-shouji'></text>
         </view>
       </view>
       <view class='check-list-btn'>
-        <text class='iconfont icon-youcecaidan' @tap='toJiechu' data-id="{{item.user_id}}"></text>
+        <text class='iconfont icon-youcecaidan' @tap.stop='toJiechu' data-id="{{item.user_id}}"></text>
       </view>
     </view>
   </view>

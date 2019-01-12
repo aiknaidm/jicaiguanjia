@@ -177,7 +177,8 @@ export default class extends wepy.app {
     navigateToMiniProgramAppIdList: [
       'wx024ea505bcfdda8e',
       'wx04135fb8cc44a57c',
-      'wxf48cdd6a7dae8c21'
+      'wxf48cdd6a7dae8c21',
+      'wx7e302245debd521a'
     ]
   };
   globalData = {

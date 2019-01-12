@@ -121,7 +121,7 @@ export default class my_console_renew extends wepy.page {
     navigationBarTitleText: '续费管理'
   };
   data = {
-    yizhanInfo:[],
+    yizhanInfo: [],
     isHasShareCode: false,
     shareCode: '',
     renewList: []
@@ -150,21 +150,13 @@ export default class my_console_renew extends wepy.page {
         this.isHasShareCode = 0;
       }
     },
-    // toBuy: utils.throttle(function(e) {
-    //   var index = e.currentTarget.dataset.index;
-    //   var data = that.data.renewList[index];
-    //   data.isHasShareCode = that.data.isHasShareCode;
-    //   // console.log(data);
-    //   fwfwxpay(
-    //     this.$parent.globalData.userId,
-    //     this.$parent.globalData.yizhanInfo.suppliers_id,
-    //     data,
-    //     that.data.shareCode,
-    //     function() {
-    //       that.getUserInfo();
-    //     }
-    //   );
-    // }, 2000),
+    toBuy: function(e) {
+      var index = e.currentTarget.dataset.index;
+      var data = this.renewList[index];
+      data.isHasShareCode = this.isHasShareCode;
+      // console.log(data);
+      util.fwfwxpay(this.user_id, this.suppliers_id, data, this.shareCode);
+    },
     toRenewRecord: function() {
       wx.navigateTo({
         url: 'my_console_renewRecord'
@@ -177,19 +169,21 @@ export default class my_console_renew extends wepy.page {
     this.suppliers_id = this.$parent.globalData.suppliers_id;
     var yizhanInfo = this.$parent.globalData.yizhanInfo;
     if (!yizhanInfo) {
-      yizhanInfo = await this.$parent.getYizhanInfo(this.user_id,this.suppliers_id);
+      yizhanInfo = await this.$parent.getYizhanInfo(
+        this.user_id,
+        this.suppliers_id
+      );
     }
     var newDate = new Date();
     if (yizhanInfo.end_time) {
       newDate.setTime(yizhanInfo.end_time * 1000);
-      yizhanInfo.end_time = util.formatTime(newDate,'yyyy-MM-dd');
+      yizhanInfo.end_time = util.formatTime(newDate, 'yyyy-MM-dd');
     } else {
       console.log(yizhanInfo.end_time);
     }
 
     this.yizhanInfo = yizhanInfo;
-    this.shareCode =
-      yizhanInfo.pid == '0' ? '' : yizhanInfo.pid;
+    this.shareCode = yizhanInfo.pid == '0' ? '' : yizhanInfo.pid;
     this.isHasShareCode =
       yizhanInfo.pid == '' || yizhanInfo.pid == '0' ? false : true;
     this.getrenewList();

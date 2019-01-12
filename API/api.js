@@ -34,6 +34,8 @@ const api = {
   fwfwxpay: `${host}/fwfwxpay`,
   fwfpaysuccess: `${host}/fwfpaysuccess`,
   fwfpaylist: `${host}/fwfpaylist`,
-  supplier_upd: `${host}/supplier_upd`
+  supplier_upd: `${host}/supplier_upd`,
+  fwfwxpay: `${host}/fwfwxpay`,
+  fwfpaysuccess: `${host}/fwfpaysuccess`
 }
 export default api

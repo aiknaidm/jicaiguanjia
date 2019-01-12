@@ -382,7 +382,7 @@ page {
 
   <view wx:for-items="{{moneyList}}" wx:key="{{index}}" class='list-box'>
         <view  class='img-box1'>
-          <image src="http://maijia.jicaizx.com/{{item.goods_imgs}}" class="goods-img"/>
+          <image src="{{item.goods_imgs}}" class="goods-img"/>
           <view class='img-box1-1'>
             <view>{{item.goods_name}}</view>
             <view class='img-box1-guige'>{{item.goods_attr}}</view>
