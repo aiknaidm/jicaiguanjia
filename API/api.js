@@ -28,6 +28,12 @@ const api = {
   addManager: `${host}/manager_add`,
   delManager: `${host}/manager_del`,
   yhxq: `${host}/yhxq`,
-  findManagers: `${host}/find_managers`
+  findManagers: `${host}/find_managers`,
+  verifyCode: `${host}/chk_share_code`,
+  renewList: `${host}/fuwufei`,
+  fwfwxpay: `${host}/fwfwxpay`,
+  fwfpaysuccess: `${host}/fwfpaysuccess`,
+  fwfpaylist: `${host}/fwfpaylist`,
+  supplier_upd: `${host}/supplier_upd`
 }
 export default api

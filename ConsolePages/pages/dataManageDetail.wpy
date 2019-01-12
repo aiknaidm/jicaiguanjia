@@ -382,7 +382,7 @@ page {
 
   <view wx:for-items="{{moneyList}}" wx:key="{{index}}" class='list-box'>
         <view  class='img-box1'>
-          <image src="http://maijia.jicaizx.com/{{item.goods_imgs}}" class="goods-img"></image>
+          <image src="http://maijia.jicaizx.com/{{item.goods_imgs}}" class="goods-img"/>
           <view class='img-box1-1'>
             <view>{{item.goods_name}}</view>
             <view class='img-box1-guige'>{{item.goods_attr}}</view>
@@ -409,7 +409,8 @@ export default class newslist extends wepy.page {
   data = {
     paramtime: '2019-01',
     currtime: '2019-01',
-    zonge: 0
+    zonge: 0,
+    moneyList: []
   };
   computed = {};
   methods = {
@@ -439,18 +440,18 @@ export default class newslist extends wepy.page {
         }
       })
       .then(res => {
-        console.log(res.data.data);
+        console.log('jyjl',res.data.data);
         var datas = res.data.data.data;
         for (var i = 0; i < datas.length; i++) {
           datas[i].pay_time = util.formatTime(
-            new Data(datas[i].pay_time * 1000),
+            new Date(datas[i].pay_time * 1000),
             'yyyy-MM-dd hh:mm:ss             '
           );
         }
         if (page == 1) {
-          this.moneyList = res.data.data;
+          this.moneyList = datas;
         } else {
-          this.moneyList.push(...res.data.data);
+          this.moneyList.push(...datas);
         }
         this.zonge = res.data.data.zonge;
         if (res.data.data.length == 0) {
@@ -459,15 +460,16 @@ export default class newslist extends wepy.page {
           this.isMoreData = true;
         }
         this.$apply();
-      }).catch(res=>{
-          console.log(res)
-          wx.showToast({
-            title: "出错了！", //提示的内容,
-            icon: 'none', //图标,
-            duration: 2000, //延迟时间,
-            mask: true, //显示透明蒙层，防止触摸穿透,
-            success: res => {}
-          });
+      })
+      .catch(res => {
+        console.log(res);
+        wx.showToast({
+          title: '出错了！', //提示的内容,
+          icon: 'none', //图标,
+          duration: 2000, //延迟时间,
+          mask: true, //显示透明蒙层，防止触摸穿透,
+          success: res => {}
+        });
       });
   }
   init() {}

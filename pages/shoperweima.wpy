@@ -1,0 +1,209 @@
+<style lang="less">
+page {
+  background: #fff;
+}
+.isshowerweima {
+  height: 1000rpx;
+}
+.btn {
+  padding: 20rpx 40rpx;
+  border: 1px solid #e50012;
+  color: #e50012;
+  display: inline-block;
+  margin-right: 20rpx;
+  background: #fff;
+  height: auto;
+  line-height: inherit;
+}
+.bottom {
+  text-align: center;
+  font-size: 30rpx;
+}
+</style>
+<template>
+<view>
+  <view style="margin-top:20px;" class="isshowerweima">
+  <view class="container">
+    <!-- <img src="{{shareImage}}" class="share-image" /> -->
+    <canvasdrawer painting="{{painting}}" class="canvasdrawer" bindgetImage="eventGetImage" />
+
+  </view>
+  </view>
+<view class="bottom">
+  <button bindtap="toshop" class="btn">查看店铺</button>
+  <button bindtap="eventSave" class="btn">保存图片</button>
+</view>
+</view>
+
+</template>
+
+<script>
+import wepy from 'wepy';
+import api from '../API/api';
+export default class shoperweima extends wepy.page {
+  config = {
+    navigationBarTitleText: '我的',
+    usingComponents: {
+      canvasdrawer: '/components/canvasdrawer/canvasdrawer'
+    }
+  };
+  data = {};
+  computed = {};
+  components = {};
+  methods = {
+    eventSave() {
+      // console.log(this.shareImage)
+      wx.saveImageToPhotosAlbum({
+        filePath: this.shareImage,
+        success(res) {
+          // console.log(res)
+          wx.showToast({
+            title: '保存图片成功',
+            icon: 'success',
+            duration: 2000
+          });
+        }
+      });
+    },
+    toshop() {
+      console.log(this.$parent.globalData.suppliers_id);
+      wx.navigateToMiniProgram({
+        appId: 'wx7e302245debd521a',
+        path:
+          '/Shop/pages/index?suppliers_id=' +
+          this.$parent.globalData.suppliers_id,
+        // extraData: {
+        // 	suppliers_id: suppliers_id,
+        // },
+        // envVersion: 'release',
+        envVersion: 'develop',
+        success(res) {
+          // 打开成功
+        }
+      });
+    }
+  };
+  events = {};
+  async onLoad() {
+    var userId = await this.$parent.loginInfo();
+    this.eventDraw(userId);
+  }
+  eventGetImage(event) {
+    console.log('eventGetImage', event);
+    wx.hideLoading();
+    this.shareImage = event.detail.tempFilePath;
+  }
+
+  async eventDraw(userId) {
+    console.log(this.$parent.globalData.yizhanInfo, userId);
+    var suppliers_id = this.$parent.globalData.suppliers_id;
+    var user_id = userId;
+    var that = this;
+    if (!suppliers_id) {
+      wx.showToast({
+        title: '没有店铺信息',
+        icon: 'none'
+      });
+      wx.navigateBack({});
+      return;
+    }
+    var yizhanInfo = await this.$parent.getYizhanInfo(user_id, suppliers_id);
+    wx.request({
+      url: 'https://lmbge.com/wxapi/index/getQRCode1',
+      data: {
+        path: '/Shop/pages/index?suppliers_id=' + suppliers_id,
+        user_id,
+        suppliers_id
+      },
+      success: function(e) {
+        var a = wx.getSystemInfoSync().windowWidth / 375;
+        var height = wx.getSystemInfoSync().windowHeight;
+        var width = wx.getSystemInfoSync().windowWidth;
+        console.log('getqrcode', e.data);
+        wx.showLoading({ title: '绘制图片中' });
+        that.data.painting = {
+          width: 375 * a,
+          height: 474 * a,
+          clear: true,
+          views: [
+            {
+              type: 'image',
+              //url: 'https://d.funcodeit.com/test/onepayqrcode_template.jpg',
+              url: 'https://lmbge.com/qrcode/hand.jpg',
+              top: 0,
+              left: 0,
+              width: 375 * a,
+              height: 474 * a
+            },
+            {
+              type: 'image',
+              //url: 'https://d.funcodeit.com/test/mplogo-430.jpg',
+              url: e.data.data,
+              top: 50 * a,
+              left: 95 * a,
+              width: 180 * a,
+              height: 200 * a
+              // borderRadius:90,
+            },
+            // {
+            //   type: 'image',
+            //   url: '',
+            //   top: 140,
+            //   left: 145,
+            //   width: 80,
+            //   height: 80,
+            //   borderRadius:40,
+            // },
+            {
+              type: 'image',
+              //url: 'https://d.funcodeit.com/test/mplogo-430.jpg',
+              url: yizhanInfo.avatar,
+              top: 270 * a,
+              left: 150 * a,
+              width: 60 * a,
+              height: 60 * a,
+              borderRadius: 30 * a
+            },
+            {
+              type: 'text',
+              content: yizhanInfo.yizhan_name,
+              fontSize: 16 * a,
+              width: 180 * a,
+              top: 335 * a,
+              left: 180 * a,
+              color: '#333',
+              textAlign: 'center',
+              bolder: false
+            },
+            {
+              type: 'text',
+              content: '用微信扫描二维码',
+              fontSize: 15 * a,
+              width: 180 * a,
+              top: 380 * a,
+              left: 180 * a,
+              color: '#aaa',
+              textAlign: 'center',
+              bolder: false
+            },
+            {
+              type: 'text',
+              content: '成为我的会员',
+              fontSize: 15 * a,
+              width: 180 * a,
+              top: 400 * a,
+              left: 180 * a,
+              color: '#aaa',
+              textAlign: 'center',
+              bolder: false
+            }
+          ]
+        };
+        that.setData({
+          painting: that.data.painting
+        });
+      }
+    });
+  }
+}
+</script>

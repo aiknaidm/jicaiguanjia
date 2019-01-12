@@ -1,5 +1,4 @@
 <style lang="less">
-/* page/lmbg/login/login.wxss */
 page {
   background-color: #fff;
 }
@@ -10,6 +9,7 @@ page {
   font-size: 15px;
   color: #666;
   background-color: #fff;
+  padding-bottom: 20rpx;
 }
 
 form {
@@ -44,9 +44,8 @@ picker {
   height: 43rpx;
 }
 .section .label {
-  width: 180rpx;
+  width: 150rpx;
   text-align: left;
-  /* text-align-last:justify; */
 }
 .section .label2 {
   width: 200rpx;
@@ -102,6 +101,52 @@ button {
   flex: 1;
 }
 
+/* 上传身份证 */
+
+.upImg {
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  height: 300rpx;
+  overflow: hidden;
+  margin-top: 40rpx;
+  text-align: center;
+  border: 0px solid #eee;
+  color: #888;
+}
+
+.upImg button {
+  width: 180rpx;
+  font-size: 32rpx;
+  padding: 0 20rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  margin-right: 30rpx;
+}
+
+.upImg view {
+  flex: 1;
+}
+
+.upImg view image {
+  width: 100%;
+}
+
+.upImg .text {
+  flex: 1;
+  height: 296rpx;
+  border: 1px solid #eee;
+  line-height: 296rpx;
+  overflow: hidden;
+}
+
+.zhuce {
+  text-align: left;
+  border: 0px solid;
+  margin-top: 40rpx;
+  font-size: 26rpx;
+}
+
 .smsCode {
   /* border: 0px solid #c4c4c4; */
   border-bottom: 1rpx solid #eee;
@@ -130,13 +175,19 @@ button {
    line-height: 84rpx; */
   background-color: #e50012;
 }
-
+.register {
+  background-color: #e50012;
+}
 .rz-submit {
   width: 80%;
   margin: auto;
   margin-top: 40rpx;
+  font-size: 36rpx;
 }
-
+/* @import "../login/index.wxss"; */
+.content {
+  font-size: 30rpx;
+}
 .smsCode {
   display: flex;
   justify-content: space-between;
@@ -159,6 +210,15 @@ button {
   background-color: #e50012;
 }
 
+.logo {
+  margin-top: 80rpx;
+  margin-bottom: 80rpx;
+}
+
+.logo image {
+  width: 600rpx;
+  height: 200rpx;
+}
 button {
   background-color: #e50012;
 }
@@ -183,20 +243,10 @@ wx-button[disabled]:not([type]) {
   align-items: center;
   padding-left: 20rpx;
 }
-/* 开店规则 */
-.check {
-  text-align: left;
-  margin: 50rpx 0;
-  font-size: 24rpx;
-  padding: 0 30rpx;
-}
-.main-color {
-  color: #e50012;
-}
 </style>
 <template>
- <view class='container'>
-  <form bindsubmit="formSubmit">
+<view class='container'>
+  <form bindsubmit="formSubmit" report-submit>
 
     <view class="input-area">
 
@@ -212,13 +262,15 @@ wx-button[disabled]:not([type]) {
         <input name="smscode" maxlength='4' type="number" placeholder="验证码" bindinput="listenerSmsCodeInput" disabled='{{isuserDetail}}' />
         <button bindtap="getSmsCode" disabled="{{smsCodeDisabled}}" style="background-color:{{getSmsCodeBtnColor}}" class="getSmsCodeBtn">{{getSmsCodeBtnTxt}}</button>
       </view>
+
+
     </view>
 
     <view class="section">
       <view class="label">
         <text>*</text>真实姓名</view>
       <view class="label-right">
-        <input name="realname" class="input" type="text" value="{{userDetail.user_nickname}}" disabled='{{isuserDetail}}' />
+        <input name="realname" class="input" type="text" value="{{userDetail.user_nickname}}" disabled/>
       </view>
     </view>
     <view class="section">
@@ -232,16 +284,17 @@ wx-button[disabled]:not([type]) {
       <view class="label label2">
         <text>*</text>pc管理账号</view>
       <view class="label-right">
-        <input name="pcusername" class="input" type="text" value="{{userDetail.suppliers_name}}" disabled='{{isuserDetail}}' />
+        <input name="pcusername" class="input" type="text" value="{{userDetail.suppliers_name}}" disabled/>
       </view>
     </view>
     <view class="section">
-      <view class="label label2">
-        <text>*</text>pc管理密码</view>
+      <view class="label">
+        <text>*</text>默认密码</view>
       <view class="label-right">
-        <input name="password" class="input" type="text" value="{{password}}"  disabled/>
+        <input name="password" class="input" type="password" value="{{password}}" />
       </view>
     </view>
+    
     <view class="section" >
       <view class="label">
         <text>*</text>所属地区</view>
@@ -252,25 +305,9 @@ wx-button[disabled]:not([type]) {
    
       </picker>
     </view>
-		<view class="section" wx:if='{{!isuserDetail}}'>
-      <view class="label label2">
-        邀请码</view>
-      <view class="label-right">
-        <input name="shareCode" class="input" type="text" value="{{shareCode}}"  />
-      </view>
-    </view>
-		 <view class='check' wx:if='{{!isuserDetail}}'>
-        <checkbox-group bindchange="agreeClick">
-          <label class="checkbox">
-            <checkbox value="{{isAgreed}}" checked="{{isAgreed}}" />
-            <text >我已阅读</text><text class='main-color'  catchtap='showtext'>吉采易站批发版规则</text><text >，同意在吉采易站批发版开店</text>
-          </label>
-        </checkbox-group>
 
-      </view>
-
-    <button class='rz-submit' formType="submit" wx:if="{{!isuserDetail}}" disabled='{{issubmit}}'>提交</button>
-    <!-- <button class='rz-submit' disabled='true' wx:if="{{userDetail.user_status=='0'}}">审核中...</button> -->
+    <button class='rz-submit' formType="submit" wx:if="{{!isuserDetail}}" disabled='{{issubmit}}'>提交修改</button>
+    <button class='rz-submit' disabled='true' wx:if="{{userDetail.user_status=='0'||isshenhe}}">审核中...</button>
   </form>
 </view>
 </template>
@@ -279,34 +316,68 @@ wx-button[disabled]:not([type]) {
 import wepy from 'wepy';
 import api from '../../API/api';
 import util from '../../utils/index';
-export default class newslist extends wepy.page {
+export default class my_setShopInfo extends wepy.page {
   config = {
-    navigationBarTitleText: '认证'
+    navigationBarTitleText: '店铺信息修改'
   };
-  components = {};
   data = {
     userDetail: {},
     region: [],
-    isuserDetail: false,
-    issubmit: false,
+    userInfo: {},
     getSmsCodeBtnTxt: '获取验证码',
     getSmsCodeBtnColor: '#E50012',
-    password: '123456',
+    //#E50012红色
+    //#0099FF蓝色
+    //getSmsCodeBtnTime:60,
+    btnLoading: false,
+    registDisabled: false,
     smsCodeDisabled: false,
-    isAgreed: false,
-    shareCode: ''
+    isuserDetail: false,
+    inputPhone: '',
+    inputCode: '',
+    gotCode: '',
+    //城市列表
+    multiIndex: [0, 0, 0],
+    CityData: [],
+    sheng: new Array(),
+    shi: new Array(),
+    qu: new Array(),
+    //上传图片
+    index: 0,
+    img: [
+      {
+        imgSrc: '',
+        content: '身份证正面'
+      },
+      {
+        imgSrc: '',
+        content: '身份证背面'
+      }
+    ],
+    imgPath: '',
+    //判断照片是否上传
+    imgZM: false,
+    imgFM: false,
+    //需要上传的数据id
+    provinceId: '',
+    cityId: '',
+    districtId: '',
+    //用户身份
+    // identity: [
+    //   { name: 'gongzhang', value: '工长', checked: 'true' },
+    //   { name: 'jingli', value: '经理'}
+    // ],
+    yizhanIndex: '0',
+    yizhanId: '',
+    shenfen: 'jl',
+    password: '123456',
+    issubmit: false
   };
   computed = {};
+  components = {};
   methods = {
-    // 免责条款
-    showtext: function() {
-      wx.navigateTo({
-        url: '/pages/my-rulesDescription/index'
-      });
-    },
-    // 同意免责条款
-    agreeClick: function(e) {
-      this.isAgreed = !this.isAgreed;
+    getFormId: function(e) {
+      //util.submitFormId(app.globalData.userId, e.detail.formId);
     },
     listenerPhoneInput(e) {
       console.log('输入的值', e.detail.value);
@@ -359,12 +430,6 @@ export default class newslist extends wepy.page {
       }
     },
     /**
-     * 监听手机号输入
-     */
-    listenerPhoneInput: function(e) {
-      this.inputPhone = e.detail.value;
-    },
-    /**
      * 监听验证码输入
      */
     listenerSmsCodeInput: function(e) {
@@ -377,6 +442,30 @@ export default class newslist extends wepy.page {
     }
   };
   events = {};
+  async onLoad(option) {
+    let userId = await this.$parent.loginInfo();
+    let suppliers_id = this.$parent.globalData.suppliers_id;
+    let shareCode = option.shareCode;
+    this.shareCode = shareCode;
+    this.userId = userId;
+    if (shareCode) this.bindSuperior(shareCode, userId);
+    let yizhanInfo = await this.$parent.getYizhanInfo(userId,suppliers_id);
+
+    console.log('易站信息', yizhanInfo);
+    if (yizhanInfo.user_type == 4) {
+      console.log('已注册');
+      //this.isuserDetail = true;
+      this.userDetail = yizhanInfo;
+      this.region[0] = yizhanInfo.sheng;
+      this.region[1] = yizhanInfo.shi;
+      this.region[2] = yizhanInfo.qu;
+      this.phone = yizhanInfo.mobile;
+    } else {
+      console.log('开始注册');
+    }
+    this.$apply();
+  }
+
   setTime(count) {
     var count = count;
     var that = this;
@@ -395,19 +484,6 @@ export default class newslist extends wepy.page {
         that.$apply();
       }
     }, 1000);
-  }
-  // 绑定上级
-  bindSuperior(shareCode, userId) {
-    wx.request({
-      url: url.jlxx,
-      data: {
-        share_code: shareCode,
-        user_id: userId
-      },
-      success: res => {
-        console.log('分享码绑定成功', res);
-      }
-    });
   }
   //检查输入的手机号
   checkPhone(param) {
@@ -447,13 +523,14 @@ export default class newslist extends wepy.page {
     var flag = that.checkPhone(param.phone) && that.checkSmsCode(param.smscode);
     if (flag) {
       if (this.inputCode == this.code) {
-        var phone = e.detail.value.phone;
-        var smscode = e.detail.value.smscode;
-        var realname = e.detail.value.realname;
-        var storename = e.detail.value.storename;
-        var pcusername = e.detail.value.pcusername;
-        var password = '123456';
-        var share_code = e.detail.value.shareCode;
+        var suppliers_id = this.$parent.globalData.suppliers_id;
+        var phone = param.phone;
+        var smscode = param.smscode;
+        var realname = param.realname;
+        var storename = param.storename;
+        var pcusername = param.pcusername;
+        var password = param.password == '123456' ? '' : param.password;
+        var share_code = param.shareCode;
         console.log('邀请码', share_code);
         if (this.userId == '-1') {
           wx.showModal({
@@ -490,13 +567,6 @@ export default class newslist extends wepy.page {
           });
           return;
         }
-        if (!that.data.isAgreed) {
-          wx.showModal({
-            content: '请同意吉采易站批发版规则',
-            showCancel: false
-          });
-          return;
-        }
         var sheng = this.region[0];
         var shi = this.region[1];
         var qu = this.region[2];
@@ -508,9 +578,10 @@ export default class newslist extends wepy.page {
         });
         wepy
           .request({
-            url: api.renzheng,
+            url: api.supplier_upd,
             method: 'POST',
             data: {
+              suppliers_id,
               user_id: this.userId,
               mobile: phone,
               realname: realname,
@@ -527,16 +598,10 @@ export default class newslist extends wepy.page {
             }
           })
           .then(res => {
-            console.log('认证', res);
             wx.hideLoading();
             if (res.data.code == 0) {
-              wx.redirectTo({
-                url: '/pages/my-console/index'
-              });
-              wx.showToast({
-                title: '注册成功'
-              });
-              this.isuserDetail = true;
+              wx.navigateBack({});
+              //this.isuserDetail = true;
             } else {
               this.issubmit = false;
               wx.showModal({
@@ -548,6 +613,7 @@ export default class newslist extends wepy.page {
                 }
               });
             }
+
             this.$apply();
           });
       } else {
@@ -557,29 +623,6 @@ export default class newslist extends wepy.page {
         });
       }
     }
-  }
-  async onLoad(option) {
-    let userId = await this.$parent.loginInfo();
-    let suppliers_id = this.$parent.globalData.suppliers_id;
-    let shareCode = option.shareCode;
-    this.shareCode = shareCode;
-    this.userId = userId;
-    if (shareCode) this.bindSuperior(shareCode, userId);
-    let yizhanInfo = await this.$parent.getYizhanInfo(userId,suppliers_id);
-
-    console.log('易站信息', yizhanInfo);
-    if (yizhanInfo.user_type == 4) {
-      console.log('已注册');
-        this.isuserDetail = true;
-      this.userDetail = yizhanInfo;
-      this.region[0] = yizhanInfo.sheng;
-      this.region[1] = yizhanInfo.shi;
-      this.region[2] = yizhanInfo.qu;
-      this.phone = yizhanInfo.mobile;
-    } else {
-      console.log('开始注册');
-    }
-    this.$apply();
   }
 }
 </script>

@@ -396,7 +396,7 @@ export default class newslist extends wepy.page {
       {
         icon: '/images/console/iconfont-yzm.png',
         text: '查看我的店铺',
-        url: '/pages/shoperweima/index',
+        url: '/pages/shoperweima',
         bgcolor: '#f7bf30'
       }
     ]

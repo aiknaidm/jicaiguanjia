@@ -228,9 +228,7 @@ export default class orderlist extends wepy.page {
       mask: true //显示透明蒙层，防止触摸穿透,
     });
     this.userId = await this.$parent.loginInfo();
-    this.suppliers_id = this.$parent.globalData.suppliers_id
-      ? this.$parent.globalData.suppliers_id
-      : await this.$parent.getYizhanInfo(this.userId);
+    this.suppliers_id = this.$parent.globalData.suppliers_id;
     this.currentType = option.order_status;
     this.thisindex = option.order_status;
     this.isMoreData = true;

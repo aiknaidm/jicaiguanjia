@@ -108,7 +108,7 @@ import api from './API/api';
 
 export default class extends wepy.app {
   config = {
-    pages: ['pages/home', 'pages/my'],
+    pages: ['pages/home', 'pages/my', 'pages/shoperweima'],
     subPackages: [
       {
         root: 'IndexPages',
@@ -136,7 +136,10 @@ export default class extends wepy.app {
           'pages/my_console_check',
           'pages/my_console_checkDetail',
           'pages/my_addManagerInfo',
-          'pages/my_setManagerInfo'
+          'pages/my_setManagerInfo',
+          'pages/my_console_renew',
+          'pages/my_console_renewRecord',
+          'pages/my_setShopInfo'
         ]
       }
     ],

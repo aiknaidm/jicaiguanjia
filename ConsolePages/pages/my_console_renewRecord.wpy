@@ -1,0 +1,82 @@
+<style lang="less">
+.record-list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1px solid #f0f0f0;
+}
+.record-list .txt {
+  margin: 0 20rpx;
+}
+
+.record-list .txt view:last-child {
+  font-size: 25rpx;
+  color: #aaa;
+  margin-top: 10rpx;
+}
+.record-list .money {
+  color: #e50012;
+}
+</style>
+<template>
+<view class='container'>
+  <view class='record-list' wx:for="{{fwfpaylist}}" wx:key="index">
+    <view class='txt'>
+      <view>{{item.goods_name}}{{item.end_time}}</view>
+      <view>{{item.pay_time}}</view>
+    </view>
+    <view class='money'>￥{{item.goods_price}}</view>
+  </view>
+ 
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import api from '../../API/api';
+import util from '../../utils/index';
+export default class my_console_renewRecord extends wepy.page {
+  config = {
+    navigationBarTitleText: '续费记录'
+  };
+  data = { fwfpaylist: [] };
+  computed = {};
+  components = {};
+  methods = {};
+  events = {};
+  async onShow() {
+    let user_id = await this.$parent.loginInfo();
+    let suppliers_id = this.$parent.globalData.suppliers_id;
+    wepy
+      .request({
+        url: api.fwfpaylist,
+        data: {
+          user_id,
+          suppliers_id
+        }
+      })
+      .then(res => {
+        var fwfpaylist = res.data.data;
+
+        fwfpaylist.forEach((item, index) => {
+          var newDate = new Date();
+          var newDate2 = new Date();
+
+          newDate.setTime(item.pay_time * 1000);
+          newDate2.setTime(item.end_time * 1000);
+          fwfpaylist[index].pay_time = util.formatTime(
+            newDate,
+            'yyyy-MM-dd hh:mm:ss'
+          );
+          fwfpaylist[index].end_time = util.formatTime(
+            newDate2,
+            'yyyy-MM-dd hh:mm:ss'
+          );
+        });
+        this.fwfpaylist = fwfpaylist;
+        this.$apply();
+      });
+  }
+}
+</script>

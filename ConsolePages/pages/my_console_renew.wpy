@@ -1,0 +1,209 @@
+<style lang="less">
+.renew-top {
+  display: flex;
+  padding: 40rpx 40rpx 10rpx 40rpx;
+}
+
+.renew-top .img {
+  width: 120rpx;
+  height: 120rpx;
+}
+
+.renew-top .img image {
+  width: 100%;
+  height: 100%;
+}
+
+.renew-top .txt {
+  margin: 0 20rpx;
+  flex: 1;
+  font-size: 26rpx;
+}
+
+.renew-top .txt view:last-child {
+  font-size: 25rpx;
+  color: #aaa;
+  margin-top: 20rpx;
+}
+
+.renew-top .xufei {
+  width: 130rpx;
+  text-align: center;
+  color: #2dc7a5;
+}
+
+.renew-list {
+  display: flex;
+  justify-content: space-between;
+  padding: 30rpx 40rpx;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.renew-list:last-child {
+  border-bottom: 10rpx solid #f0f0f0;
+}
+
+.money {
+  color: #e50012;
+}
+
+.money .buy-btn {
+  padding: 5rpx 30rpx;
+  color: #fff;
+  background-color: #e50012;
+  border-radius: 50px;
+  margin-left: 20rpx;
+  font-size: 28rpx;
+}
+.money .old-price {
+  text-decoration: line-through;
+  font-size: 25rpx;
+  color: #aaa;
+}
+.text {
+  display: flex;
+  padding: 30rpx 40rpx;
+  border-top: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+  align-items: center;
+}
+.text input {
+  background: #a78dd3;
+  color: #fff;
+  text-align: center;
+}
+.text .placeholder {
+  color: #fff;
+}
+.text view:first-child {
+  width: 200rpx;
+}
+</style>
+<template>
+<view class='container'>
+  <view class='renew-top'>
+    <view class='img'>
+      <image src='{{yizhanInfo.avatar}}'></image>
+    </view>
+    <view class='txt'>
+      <view wx:if="{{yizhanInfo.end_time}}">服务费到期时间：{{yizhanInfo.end_time}}</view>
+      <view>店铺进行商品批发交易时选择线上支付，另收取1%财务服务费</view>
+    </view>
+    <view class='xufei' bindtap="toRenewRecord">续费记录</view>
+  </view>
+	<view class='text'>
+		<view>邀请码</view>
+		<view><input type='' value='{{shareCode}}' bindinput='changeInput' maxlength='6' placeholder='请输入邀请码' placeholder-class="placeholder"></input></view>
+		<!-- <view class=''>您已获得优惠 </view> -->
+	</view>
+  <view class='renew-list' wx:for="{{renewList}}" wx:key="index" >
+    <view>{{item.goods_name}}</view>
+    <view class='money'>
+		<!--已填写邀请码 -->
+		<block wx:if="{{isHasShareCode}}">
+		<text class='old-price'>￥{{item.goods_price}}</text>
+		<text>￥{{item.youhui_price}}</text>
+		</block>
+		<!--未填写邀请码 -->
+			<block wx:else>￥{{item.goods_price}}</block>
+      <text class='buy-btn' data-index='{{index}}' bindtap='toBuy'>购买</text>
+    </view>
+  </view>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import api from '../../API/api';
+import util from '../../utils/index';
+export default class my_console_renew extends wepy.page {
+  config = {
+    navigationBarTitleText: '续费管理'
+  };
+  data = {
+    yizhanInfo:[],
+    isHasShareCode: false,
+    shareCode: '',
+    renewList: []
+  };
+  computed = {};
+  components = {};
+  methods = {
+    changeInput: function(e) {
+      var shareCode = e.detail.value;
+      if (shareCode.length == 6) {
+        wepy
+          .request({
+            url: api.verifyCode,
+            data: {
+              share_code: shareCode
+            }
+          })
+          .then(res => {
+            if (res.data.code == '0') {
+              this.isHasShareCode = res.data.data;
+              this.shareCode = shareCode;
+              this.$apply();
+            }
+          });
+      } else {
+        this.isHasShareCode = 0;
+      }
+    },
+    // toBuy: utils.throttle(function(e) {
+    //   var index = e.currentTarget.dataset.index;
+    //   var data = that.data.renewList[index];
+    //   data.isHasShareCode = that.data.isHasShareCode;
+    //   // console.log(data);
+    //   fwfwxpay(
+    //     this.$parent.globalData.userId,
+    //     this.$parent.globalData.yizhanInfo.suppliers_id,
+    //     data,
+    //     that.data.shareCode,
+    //     function() {
+    //       that.getUserInfo();
+    //     }
+    //   );
+    // }, 2000),
+    toRenewRecord: function() {
+      wx.navigateTo({
+        url: 'my_console_renewRecord'
+      });
+    }
+  };
+  events = {};
+  async onLoad(options) {
+    this.user_id = await this.$parent.loginInfo();
+    this.suppliers_id = this.$parent.globalData.suppliers_id;
+    var yizhanInfo = this.$parent.globalData.yizhanInfo;
+    if (!yizhanInfo) {
+      yizhanInfo = await this.$parent.getYizhanInfo(this.user_id,this.suppliers_id);
+    }
+    var newDate = new Date();
+    if (yizhanInfo.end_time) {
+      newDate.setTime(yizhanInfo.end_time * 1000);
+      yizhanInfo.end_time = util.formatTime(newDate,'yyyy-MM-dd');
+    } else {
+      console.log(yizhanInfo.end_time);
+    }
+
+    this.yizhanInfo = yizhanInfo;
+    this.shareCode =
+      yizhanInfo.pid == '0' ? '' : yizhanInfo.pid;
+    this.isHasShareCode =
+      yizhanInfo.pid == '' || yizhanInfo.pid == '0' ? false : true;
+    this.getrenewList();
+  }
+  async getrenewList() {
+    wepy
+      .request({
+        url: api.renewList,
+        data: {}
+      })
+      .then(res => {
+        this.renewList = res.data.data;
+        this.$apply();
+      });
+  }
+}
+</script>
