@@ -171,7 +171,6 @@
   border-radius: 50%;
   overflow: hidden;
 }
-
 </style>
 <template>
 <view class='container'>
@@ -234,7 +233,7 @@ export default class my_addManagerInfo extends wepy.page {
     },
     buttonTap: function() {
       var keyword = this.keyword;
-      var url = this.type ? api.find_users_c : api.find_users;
+      var url = this.type == 'member' ? api.find_users_c : api.find_users;
       wepy
         .request({
           url: url,
@@ -258,7 +257,14 @@ export default class my_addManagerInfo extends wepy.page {
         showCancel: true //是否显示取消按钮,
       });
       if (modalRes.confirm) {
-        var url = this.type ? api.addMember : api.addManager;
+        var url = '';
+        if (this.type == 'member') {
+          url = api.addMember;
+        } else if (this.type == 'salesman') {
+          url = api.addSalesman;
+        } else {
+          url = api.addManager;
+        }
         wepy
           .request({
             url: url,

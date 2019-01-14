@@ -394,6 +394,13 @@ export default class newslist extends wepy.page {
         isshow: 0
       },
       {
+        icon: '/images/console/guanliyuanbd.png',
+        text: '业务员绑定',
+        url: '../pages/my_setSalesman',
+        bgcolor: '#10b3b1',
+        isshow: 0
+      },
+      {
         icon: '/images/console/iconfont-yzm.png',
         text: '查看我的店铺',
         url: '/pages/shoperweima',

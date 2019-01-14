@@ -1,0 +1,163 @@
+<style lang="less">
+.container {
+  /* padding: 30rpx; */
+
+  padding-left: 10rpx;
+  flex-wrap: wrap;
+}
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.headPortrait {
+  /* background: #e50012; */ /* vertical-align: middle; */
+  margin: 20rpx;
+  position: relative;
+  display: block;
+}
+.headPortrait .img {
+  border-radius: 50%;
+  width: 100rpx;
+  height: 100rpx;
+  line-height: 100rpx;
+  text-align: center;
+  color: #aaa;
+  border: 1px solid #eee;
+}
+.headPortrait .text {
+  text-align: center;
+}
+.headPortrait text.icon-close {
+  position: absolute;
+  display: inline-block;
+  right: -10rpx;
+  top: -10rpx;
+  color: #e50012;
+  font-size: 30rpx;
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  border: 1px solid #e50012;
+  text-align: center;
+  line-height: 40rpx;
+  background: #fff;
+}
+
+.headPortrait.redborder .img {
+  border: 1px solid #e50012;
+}
+
+.headPortrait .iconfont {
+  font-size: 60rpx;
+}
+
+.headPortrait image {
+  width: 100rpx;
+  height: 100rpx;
+  display: inline-block;
+  border-radius: 50%;
+  overflow: hidden;
+}
+</style>
+<template>
+<view class='container' bindtap='hiddenclose'>
+<view class=''>
+</view>
+<view class='list'>
+ <block wx:for="{{adminList}}" wx:key="index">
+    <view class='headPortrait '>
+      <view class='img'>
+        <image src="{{item.avatar?item.avatar:'https://lmbge.com/upload/avatar/weixin3.png'}}" data-user_id='{{item.id}}' mode='aspectFill'></image>
+    
+        <text class='iconfont icon-close' wx:if="{{isshowclose}}" data-user_id='{{item.id}}' catchtap='delSalesman'></text>
+      </view>
+      <view class='text'>{{item.user_nickname?item.user_nickname:'jc'+item.id}}</view>
+    </view>
+  </block>
+
+  <view class='headPortrait redborder'>
+    <view class='img'>
+      <text class='iconfont icon-tianjia-copy' catchtap='addSalesman'></text>
+    </view>
+  </view>
+  <view class='headPortrait redborder' catchtap='showclose' wx:if="{{adminList.length}}">
+    <view class='img'>
+      <text class='iconfont icon-jian'></text>
+
+    </view>
+  </view>
+</view>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import api from '../../API/api';
+export default class my_setSalesman extends wepy.page {
+  config = {
+    navigationBarTitleText: '业务员绑定'
+  };
+  data = {
+    adminList: [],
+    isshowclose: false
+  };
+  computed = {};
+  components = {};
+  methods = {
+    async delSalesman(e) {
+      let user_id = e.currentTarget.dataset.user_id;
+      let suppliers_id = this.$parent.globalData.suppliers_id;
+      let delSalesman = await wepy.request({
+        url: api.delSalesman,
+        data: {
+          user_id,
+          suppliers_id
+        }
+      });
+      if (delSalesman.data.code == '0') {
+        wx.showToast({
+          title: '删除成功',
+          icon: 'success',
+          duration: 2000
+        });
+        this.managerList();
+      } else {
+        wx.showToast({
+          title: delSalesman.data.message,
+          icon: 'success',
+          duration: 2000
+        });
+      }
+    },
+    addSalesman: function() {
+      wx.navigateTo({
+        url: '/ConsolePages/pages/my_addManagerInfo?type=salesman'
+      });
+    },
+    hiddenclose: function() {
+      this.isshowclose = false;
+    },
+    showclose: function() {
+      this.isshowclose = true;
+    }
+  };
+  events = {};
+  async onShow() {
+    this.managerList();
+  }
+  async managerList() {
+    let suppliers_id = this.$parent.globalData.suppliers_id;
+    let Salesman = await wepy.request({
+      url: api.findSalesman,
+      data: {
+        suppliers_id
+      }
+    });
+    if (Salesman.data.code == '0') {
+      this.adminList = Salesman.data.data;
+      this.$apply();
+    }
+  }
+}
+</script>

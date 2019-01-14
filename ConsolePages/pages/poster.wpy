@@ -117,16 +117,46 @@ export default class newslist extends wepy.page {
   computed = {};
   methods = {
     eventSave() {
-      // console.log(this.shareImage)
-      wx.saveImageToPhotosAlbum({
-        filePath: this.shareImage,
-        success(res) {
-          // console.log(res)
-          wx.showToast({
-            title: '保存图片成功',
-            icon: 'success',
-            duration: 2000
-          });
+      wx.getSetting({
+        success: res => {
+          var that = this;
+          // console.log(res.authSetting)
+          if (
+            res.authSetting['scope.writePhotosAlbum'] == undefined ||
+            res.authSetting['scope.writePhotosAlbum']
+          ) {
+            wx.saveImageToPhotosAlbum({
+              filePath: this.shareImage,
+              success(res) {
+                // console.log(res)
+                wx.showToast({
+                  title: '保存图片成功',
+                  icon: 'success',
+                  duration: 2000
+                });
+              }
+            });
+            return;
+          }
+          if (!res.authSetting['scope.writePhotosAlbum']) {
+            wx.openSetting({
+              success: res => {
+                if (res.authSetting['scope.writePhotosAlbum']) {
+                  wx.saveImageToPhotosAlbum({
+                    filePath: this.shareImage,
+                    success(res) {
+                      // console.log(res)
+                      wx.showToast({
+                        title: '保存图片成功',
+                        icon: 'success',
+                        duration: 2000
+                      });
+                    }
+                  });
+                }
+              }
+            });
+          }
         }
       });
     }
@@ -200,7 +230,7 @@ export default class newslist extends wepy.page {
               //url: 'https://d.funcodeit.com/test/mplogo-430.jpg',
               url: res.data.data.qrcode2,
               top: canvasHeight - 0.4 * ((height - 50 * a) / 1.77) - 52 * a,
-              left: (0.6 * (canvasHeight / 1.77)) / 2,
+              left: 0.6 * (canvasHeight / 1.77) / 2,
               width: 0.4 * (canvasHeight / 1.77),
               height: 0.4 * ((height - 50 * a) / 1.77)
             },
