@@ -400,6 +400,7 @@ page {
 
 <script>
 import wepy from 'wepy';
+import api from '../../API/api';
 import util from '../../utils/index';
 export default class newslist extends wepy.page {
   config = {
@@ -417,11 +418,11 @@ export default class newslist extends wepy.page {
     bindDateChange(e) {
       console.log('picker发送选择改变，携带值为', e.detail.value);
       this.currtime = e.detail.value;
-      this.getMoneyData(this.user_id, this.suppliers_id, e.detail.value);
+      this.getMoneyData(this.suppliers_id, e.detail.value);
     }
   };
   events = {};
-  async getMoneyData(user_id, suppliers_id, shijian, page = 1) {
+  async getMoneyData(suppliers_id, shijian, page = 1) {
     var that = this;
 
     //交易列表
@@ -430,7 +431,6 @@ export default class newslist extends wepy.page {
         url: api.jyjl, //res.data
         method: 'GET',
         data: {
-          user_id,
           shijian,
           page,
           suppliers_id
@@ -440,7 +440,7 @@ export default class newslist extends wepy.page {
         }
       })
       .then(res => {
-        console.log('jyjl',res.data.data);
+        console.log('jyjl', res.data.data);
         var datas = res.data.data.data;
         for (var i = 0; i < datas.length; i++) {
           datas[i].pay_time = util.formatTime(
@@ -476,14 +476,13 @@ export default class newslist extends wepy.page {
   async onLoad(option) {
     this.isMoreData = true;
     this.page = 1;
-    this.user_id = await this.$parent.loginInfo();
     this.suppliers_id = this.$parent.globalData.suppliers_id;
     // 调用函数时，传入new Date()参数，返回值是日期和时间
     var time = util.formatTime(new Date(), 'yyyy-MM');
     // 再通过setData更改Page()里面的data，动态更新页面的数据
 
     this.paramtime = time;
-    this.getMoneyData(this.user_id, this.suppliers_id, time);
+    this.getMoneyData(this.suppliers_id, time);
   }
   onReachBottom() {
     console.log('page');
@@ -494,7 +493,6 @@ export default class newslist extends wepy.page {
         success: res => {}
       });
       this.getMoneyData(
-        this.user_id,
         this.suppliers_id,
         this.currtime ? this.currtime : this.paramtime,
         this.page + 1

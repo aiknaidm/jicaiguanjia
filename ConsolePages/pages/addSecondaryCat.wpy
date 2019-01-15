@@ -131,6 +131,7 @@ button {
 
 <script>
 import wepy from 'wepy';
+import api from '../../API/api';
 
 export default class newslist extends wepy.page {
   config = {
