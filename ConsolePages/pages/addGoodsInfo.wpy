@@ -1069,7 +1069,7 @@ wx.showLoading({
     });
     wepy
       .request({
-        url: 'https://lmbge.com/wxapi/jcgj/goodinfo',
+        url: api.goodinfo,
         data: {
           goods_id
         }

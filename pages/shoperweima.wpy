@@ -139,7 +139,7 @@ export default class shoperweima extends wepy.page {
     }
     var yizhanInfo = await this.$parent.getYizhanInfo(user_id, suppliers_id);
     wx.request({
-      url: 'https://lmbge.com/wxapi/index/getQRCode1',
+      url: api.getQRCodeImg,
       data: {
         path: '/Shop/pages/index?suppliers_id=' + suppliers_id,
         user_id,

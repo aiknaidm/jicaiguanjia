@@ -427,7 +427,7 @@ export default class newslist extends wepy.page {
     //交易列表
     wepy
       .request({
-        url: 'https://lmbge.com/wxapi/gztai/jyjl', //res.data
+        url: api.jyjl, //res.data
         method: 'GET',
         data: {
           user_id,

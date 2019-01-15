@@ -228,7 +228,7 @@ export default class newslist extends wepy.page {
     wepy
       .request({
         //
-        url: 'https://lmbge.com/wxapi/pfgztai/del_categorys',
+        url: api.del_categorys,
         method: 'GET',
         data: {
           cat_id: id,
@@ -268,7 +268,7 @@ export default class newslist extends wepy.page {
     });
     wepy
       .request({
-        url: 'https://lmbge.com/wxapi/pfgztai/categorys',
+        url: api.categorys,
         data: {
           user_id: userId,
           suppliers_id: suppliers_id,
@@ -294,7 +294,7 @@ export default class newslist extends wepy.page {
     console.log('suppliers_id', suppliers_id);
     wepy
       .request({
-        url: 'https://lmbge.com/wxapi/pfgztai/add_categorys',
+        url: api.add_categorys,
         data: {
           user_id: userId,
           suppliers_id: suppliers_id,

@@ -149,7 +149,7 @@ export default class data extends wepy.page {
     });
     wepy
       .request({
-        url: 'https://lmbge.com/wxapi/gztai/shuju',
+        url: api.shuju,
         method: 'GET',
         data: {
           user_id,

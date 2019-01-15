@@ -11,6 +11,7 @@ const api = {
     carousel: `${host}/lunbo`, //轮播图
     yizhanIndex: `${host}/wdyz`, //商城首页
     yizhanBanner: `${host}/yzgg`, //首页广告
+    getQRCodeImg: `${host}/getQRCode1`,
     getShareImg: `${host}/getQRCode2`,
     fxfxList: `${host}/fxfx_list`,
     fxfxDetail: `${host}/fxfx_detail`,
@@ -54,6 +55,10 @@ const api = {
     changePrice: `${host}/xgjg`, //修改价格
     changeNum: `${host}/xgkc`, //修改价格
     fahuodan: `${host}/fahuodan`,
-    fahuo: `${host}/fahuo`
+    fahuo: `${host}/fahuo`,
+    shuju: `${host}/shuju`,
+    jyjl: `${host}/jyjl`,
+    del_goods: `${host}/del_goods`,
+    xgbt: `${host}/xgbt`
 }
 export default api

@@ -887,7 +887,7 @@ export default class newslist extends wepy.page {
       });
       wepy
         .request({
-          url: 'https://lmbge.com/wxapi/gztai/shanchu',
+          url: api.del_goods,
           data: {
             goods_id: deleteSelectList
           }
@@ -977,7 +977,7 @@ export default class newslist extends wepy.page {
       this.isshowBox = false;
       wepy
         .request({
-          url: 'https://lmbge.com/wxapi/gztai/xgbt?',
+          url: api.xgbt,
           method: 'GET',
           data: {
             goods_id: this.goods_id,

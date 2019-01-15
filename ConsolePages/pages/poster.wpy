@@ -178,7 +178,7 @@ export default class newslist extends wepy.page {
     //   return;
     // }
     wx.request({
-      url: 'https://lmbge.com/wxapi/index/getQRCode2',
+      url: api.getShareImg,
       data: {
         path: '/pages/my-renzheng/index',
         user_id: userId

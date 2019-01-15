@@ -3,7 +3,7 @@
 <template>
 <view>
 
- <xing-editor @finish="finish" output-type="html" image-upload-url="https://lmbge.com/wxapi/pfgztai/upload" image-upload-name="file" image-upload-key-chain="image.url" html="{{html}}"/>
+ <xing-editor @finish="finish" output-type="html" image-upload-url="https://lmbge.com/wxapi/jcgj/upload" image-upload-name="file" image-upload-key-chain="image.url" html="{{html}}"/>
 
 </view>
 </template>
