@@ -62,8 +62,6 @@
 </style>
 <template>
 <view class='container' bindtap='hiddenclose'>
-<view class=''>
-</view>
 <view class='list'>
  <block wx:for="{{adminList}}" wx:key="index">
     <view class='headPortrait '>
@@ -121,7 +119,7 @@ export default class my_setSalesman extends wepy.page {
           icon: 'success',
           duration: 2000
         });
-        this.managerList();
+        this.salesmanList();
       } else {
         wx.showToast({
           title: delSalesman.data.message,
@@ -144,9 +142,9 @@ export default class my_setSalesman extends wepy.page {
   };
   events = {};
   async onShow() {
-    this.managerList();
+    this.salesmanList();
   }
-  async managerList() {
+  async salesmanList() {
     let suppliers_id = this.$parent.globalData.suppliers_id;
     let Salesman = await wepy.request({
       url: api.findSalesman,

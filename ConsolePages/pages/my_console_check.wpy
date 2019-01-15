@@ -85,9 +85,68 @@
   background: #e50012;
   color: #fff;
 }
+
+.search-title {
+  display: flex;
+  justify-content: space-between;
+  line-height: 85rpx;
+  font-size: 30rpx;
+  align-items: center;
+  background-color: #fff;
+  width: 100%;
+  z-index: 10;
+  padding: 0 20rpx;
+}
+
+.border {
+  display: inline-block;
+  padding: 0 20rpx;
+  border-right: 1px solid #f0f0f0;
+  max-width: 300rpx;
+}
+
+.search {
+  text-align: right;
+  padding-right: 40rpx;
+}
+
+.body-bg {
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.list {
+  background-color: #fff;
+  width: 60%;
+  text-align: center;
+  line-height: 88rpx;
+  font-size: 30rpx;
+  max-height: 450rpx;
+  overflow: scroll;
+}
+
+.list view {
+  border-bottom: 1px solid #f0f0f0;
+}
 </style>
 <template>
 <view class='container'>
+  
+  <view class='search-title '>
+    <view bindtap="buttonTap" class="status-label up" >
+      <view class='border'>选择业务员
+        <text class='iconfont icon-jiantou'></text>
+      </view>
+    </view>
+  </view>
   <view class="status-box">
     <view @tap="statusTap" class="status-label {{index == currentType ? 'active' : ''}}" wx:for-items="{{statusType}}" wx:key="{{index}}" data-index="{{index}}" data-statu="{{statusKey[index]}}">
       {{item}}
@@ -129,6 +188,13 @@
     </view>
   </view>
 	<navigator url='/ConsolePages/pages/my_addManagerInfo?type=member'>    <view class='addmember'>+添加会员</view></navigator>
+  <view class='body-bg' wx:if="{{isShowSalesList}}" bindtap='hiddenSalesList' touchstart='hiddenbg' touchmove="hiddenbg">
+  <view class='list'>
+    <view wx:for="{{adminList}}" wx:key="{{index}}" data-index="{{item.id}}" bindtap='changeShopList'>
+      {{item.user_nickname}}
+    </view>
+  </view>
+</view>
 </view>
 </template>
 
@@ -145,7 +211,10 @@ export default class my_console_check extends wepy.page {
     currentType: 0,
     currentStatu: '0',
     weishenhe: [],
-    yishenhe: []
+    yishenhe: [],
+    sales_id: 0,
+    isShowSalesList: false,
+    adminList: []
   };
   computed = {};
   components = {};
@@ -213,21 +282,38 @@ export default class my_console_check extends wepy.page {
           '&currentStatu=' +
           currentStatu
       });
+    },
+
+    buttonTap: function() {
+      this.isShowSalesList = true;
+    },
+
+    hiddenSalesList: function() {
+      this.isShowSalesList = false;
+    },
+    changeShopList: function(e) {
+      this.isShowSalesList = false;
+      var sales_id = e.currentTarget.dataset.index;
+      this.sales_id = sales_id;
+      this.getShenheList();
     }
   };
   events = {};
   async onLoad(option) {}
   async onShow() {
     this.getShenheList();
+    this.salesmanList();
   }
 
   //审核列表
   async getShenheList() {
     let suppliers_id = this.$parent.globalData.suppliers_id;
+    var sales_id = this.sales_id;
     let yhlb = await wepy.request({
       url: api.yhlb,
       data: {
-        suppliers_id
+        suppliers_id,
+        sales_id
       }
     });
     if (yhlb.data.code == '0') {
@@ -277,6 +363,21 @@ export default class my_console_check extends wepy.page {
     });
     if (yhsh.data.code == '0') {
       this.getShenheList();
+    }
+  }
+
+  async salesmanList() {
+    let suppliers_id = this.$parent.globalData.suppliers_id;
+    let Salesman = await wepy.request({
+      url: api.findSalesman,
+      data: {
+        suppliers_id,
+        getall: 1
+      }
+    });
+    if (Salesman.data.code == '0') {
+      this.adminList = Salesman.data.data;
+      this.$apply();
     }
   }
 }
