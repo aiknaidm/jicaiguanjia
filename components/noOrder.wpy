@@ -52,7 +52,7 @@
     <view class="text" wx:if="{{show==1}}">当前没有进货记录， 赶紧去
       <text class="xuanhuo" @tap="xuanhuoTap">选货</text>
     </view>
-    <view class="text" text="你还没有供应商" wx:if="{{show==2}}">{{text}}</view>
+    <view class="text" text="你还没有供应商" >{{text}}</view>
   </view>
 </template>
 <script>

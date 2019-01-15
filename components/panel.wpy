@@ -1,43 +1,99 @@
 <style lang="less">
-  .panel {
-    width: 100%;
-    margin-top: 20rpx;
-    text-align: left;
-    font-size: 12px;
-    padding-top: 20rpx;
-    padding-left: 50rpx;
-    padding-bottom: 20rpx;
-    border: 1px solid #ccc;
+.body-bg{
+   background-color: rgba(0, 0, 0, 0.5);
+   height: 100%;
+   width: 100%;
+   position: fixed;
+   left: 0px;
+   top: 0px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   z-index: 10;
+ }
+ .changeTitle {
+  background-color: #fff;
+  border-radius: 10rpx;
+  font-size: 30rpx;
+  overflow: hidden;
+}
 
-    .title {
-      padding-bottom: 20rpx;
-      font-size: 14px;
-      font-weight: bold;
-    }
-    .info {
-      padding: 15rpx;
-    }
-    .testcounter {
-      margin-top: 15rpx;
-      position: absolute;
-    }
-    .counterview {
-      margin-left: 120rpx;
-    }
-  }
+.changeTitle .title {
+  padding: 40rpx;
+  padding-bottom: 0;
+  text-align: center;
+}
+
+.changeTitle .content {
+  padding: 40rpx;
+}
+
+.changeTitle .content input {
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  width: 450rpx;
+  padding: 10rpx;
+  margin-bottom: 20rpx;
+}
+
+.changeTitle .btn {
+  display: flex;
+}
+
+.changeTitle .btn {
+  background-color: #f0f0f0;
+  text-align: center;
+  line-height: 88rpx;
+}
+.changeTitle .btn view{
+  flex: 1;
+  border: 1px solid #ccc;
+}
+
 </style>
 <template>
-  <view class="panel">
-    <slot name="title">
-      Title
-    </slot>
-    <slot>
-    </slot>
+ <!--批量提交  -->
+
+<view class='body-bg' bindtap='hiddenBox' wx:if="{{isshowBox}}"  isshowBox="是否显示" title="标题" placeholder="placeholder">
+
+  <view class='changeTitle' catchtap='showBox'>
+    <view class='title'>{{title}}</view>
+    <view class='content'>
+      <input auto-height placeholder="" @input="inputChange" type="{{type}}" placeholder='{{placeholder}}' />
+         
+    </view>
+    <view class='btn'>
+      <view catchtap='tapSure'>确定</view>
+      <view catchtap='hiddenBox'>取消</view>
+    </view>
   </view>
+</view>
 </template>
 <script>
-  import wepy from 'wepy'
+import wepy from 'wepy';
 
-  export default class Panel extends wepy.component {
-  }
+export default class Panel extends wepy.component {
+  props = {
+    title: String,
+    type:String,
+    placeholder: String,
+    isshowBox:{
+      type:Boolean ,
+      default: false,
+      twoWay: true
+    },
+  };
+  data = {};
+  methods = {
+    inputChange(e) {
+      this.value = e.detail.value;
+    },
+    tapSure() {
+      this.$emit('tapSure', this.value);
+    },
+    hiddenBox() {
+      this.isshowBox = false;
+    }
+  };
+}
 </script>
