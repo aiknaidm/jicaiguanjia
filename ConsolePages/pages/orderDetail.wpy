@@ -9,6 +9,22 @@
       @cancelOrderTap.user="cancelOrderTap"
       @confirmBtnTap.user="confirmBtnTap"
     ></orderDetail>
+ 
+    <form @submit="fahuoSubmit">
+     <view class="btn-row" wx:if="{{orderDetail.order_status==2 && orderDetail.shipping_status==0}}">
+    <radio-group class="radio-group" name="fahuo">
+      是否需要发货单：
+      <label class="radio">
+        <radio value="1" checked="true" color='red' />是
+      </label>
+      <label class="radio">
+        <radio value="0" checked="false" color='red' />否
+      </label>
+    </radio-group>
+    <button class="confirm-btn" form-type="submit" data-order_id="{{orderDetail.order_id}}">发货</button>
+
+  </view>
+      </form>
   </view>
 </template>
 
@@ -30,7 +46,31 @@ export default class orderDetails extends wepy.page {
   };
 
   computed = {};
-  methods = {};
+  methods = {
+    fahuoSubmit: function(e) {
+      console.log(e);
+      var fahuo = e.detail.value.fahuo;
+      wepy
+        .showModal({
+          title: '提示', //提示的标题,
+          content: '你确定要发货吗', //提示的内容,
+          showCancel: true, //是否显示取消按钮,
+          cancelText: '取消', //取消按钮的文字，默认为取消，最多 4 个字符,
+          cancelColor: '#000000', //取消按钮的文字颜色,
+          confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
+          confirmColor: '#e50012' //确定按钮的文字颜色,
+        })
+        .then(res => {
+          if (res.confirm) {
+            if (fahuo == 1) this.upfahuoimg(this.id);
+            else this.fahuo(this.id);
+          }
+        })
+        .catch(res => {
+          console.log(res);
+        });
+    }
+  };
   events = {
     cancelOrderTap: res => {
       this.$parent.$pages['/Shop/pages/orderList'].events.cancelOrderTap(
@@ -45,12 +85,83 @@ export default class orderDetails extends wepy.page {
       this.getOrderDetail(this.id);
     }
   };
+  // 上传发货图片
+  upfahuoimg(orderId) {
+    //https://lmbge.com/wxapi/gztai/fahuodan    参数   order_id  订单ID   upload  图片
+    var that = this;
+    wepy
+      .chooseImage({
+        count: 1, // 默认9
+        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+        sourceType: ['album', 'camera'] // 可以指定来源是相册还是相机，默认二者都有
+      })
+      .then(res => {
+        var tempFilePaths = res.tempFilePaths;
+        wepy
+          .uploadFile({
+            url: api.fahuodan + '?order_id=' + orderId,
+            filePath: tempFilePaths + '',
+            name: 'file',
+            header: {
+              Accept: 'application/json'
+            }
+          })
+          .then(res => {
+            console.log('上传成功', res);
+            var datas = JSON.parse(res.data.trim());
+            if (datas.code == 0) {
+              this.orderDetail.shipping_status = 1;
+              this.orderDetail.fahuodan = tempFilePaths[0];
+              var order_status = this.$parent.$pages[
+                '/ConsolePages/pages/orderList'
+              ].thisindex;
+              this.$parent.$pages['/ConsolePages/pages/orderList'].getOrderList(
+                order_status,
+                1
+              );
+              this.$apply();
+            }
+          })
+          .catch(res => {
+            wepy.showToast({
+              title: res.errMsg, //提示的内容,
+              icon: none //图标,
+            });
+          });
+      });
+  }
+  // 发货
+
+  fahuo(orderId) {
+    var that = this;
+    wx.request({
+      url: api.fahuo,
+      data: {
+        order_id: orderId
+      },
+      success: res => {
+        if (res.data.code == 0) {
+          this.orderDetail.shipping_status = 1;
+          var order_status = this.$parent.$pages[
+            '/ConsolePages/pages/orderList'
+          ].thisindex;
+          this.$parent.$pages['/ConsolePages/pages/orderList'].getOrderList(
+            order_status,
+            1
+          );
+          this.$apply();
+        }
+      }
+    });
+  }
   async getOrderDetail(id) {
     wepy
       .request({
         url: api.orderDetail,
         data: {
-          id
+          user_id: this.user_id,
+          order_id: id,
+          suppliers_id: this.suppliers_id
         }
       })
       .then(res => {
@@ -71,15 +182,23 @@ export default class orderDetails extends wepy.page {
         );
         this.$apply();
         console.log('订单详情', this.orderDetail);
+      })
+      .catch(res => {
+        wx.hideLoading();
+        console.log(res);
       });
   }
 
   async onLoad(option) {
     this.id = option.id;
+    this.user_id = await this.$parent.loginInfo();
+    this.suppliers_id = this.$parent.globalData.suppliers_id
+      ? this.$parent.globalData.suppliers_id
+      : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
+
     this.getOrderDetail(this.id);
     wx.showLoading({
-      title: '加载中...', //提示的内容,
-
+      title: '加载中...' //提示的内容,
     });
   }
 }

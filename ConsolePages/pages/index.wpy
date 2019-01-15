@@ -343,14 +343,14 @@ export default class newslist extends wepy.page {
         icon: '/images/console/fabushangpin.png',
         num: 0,
         text: '发布商品',
-        url: 'publish/index',
+        url: 'addGoodsInfo',
         bgcolor: '#10b3b1'
       },
       {
         icon: '/images/console/shangpinliebiao.png',
         num: 0,
         text: '商品列表',
-        url: '../my_goods_manage/index',
+        url: 'goodsList',
         bgcolor: '#f7bf30'
       }
     ],
@@ -401,7 +401,7 @@ export default class newslist extends wepy.page {
         isshow: 0
       },
       {
-        icon: '/images/console/iconfont-yzm.png',
+        icon: '/images/console/chakanmyshop.png',
         text: '查看我的店铺',
         url: '/pages/shoperweima',
         bgcolor: '#f7bf30'
