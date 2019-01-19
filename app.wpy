@@ -144,7 +144,7 @@ export default class extends wepy.app {
           'pages/addGoodsInfo',
           'pages/addSecondaryCat',
           'pages/addGoodsDec',
-          "pages/goodsList",
+          'pages/goodsList',
           'pages/changeGoodsInfo'
         ]
       }
@@ -275,7 +275,6 @@ export default class extends wepy.app {
   }
   async testAsync() {
     const data = await this.sleep(3);
-    console.log(data);
   }
 
   async loginInfo() {
@@ -333,8 +332,11 @@ export default class extends wepy.app {
         suppliers_id
       }
     });
-    if (userInfo.data.code == '0') return userInfo.data.data;
-    else
+    if (userInfo.data.code == '0') {
+      this.globalData.yizhanInfo = userInfo.data.data;
+      this.globalData.suppliers_id = userInfo.data.data.suppliers_id;
+      return userInfo.data.data;
+    } else
       wx.showToast({
         title: '获取易站信息失败', //提示的内容,
         icon: 'none', //图标,

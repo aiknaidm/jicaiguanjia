@@ -4,7 +4,7 @@ page {
   background-color: #fff;
 }
 .container {
-  background-color: #f0f0f0
+  background-color: #f0f0f0;
 }
 /* .container{
     justify-content:initial;
@@ -679,8 +679,8 @@ button::after {
         </view>
       </view>
 
-      <button class="ss-my-d {{keyword==''?'':'button-hover'}}" @tap='buttonTap' form-type='submit'>
-        {{keyword==''?"取消":"确定"}}
+      <button class="ss-my-d button-hover" @tap='buttonTap' form-type='submit'>
+        确定
       </button>
 
 
@@ -797,21 +797,15 @@ export default class newslist extends wepy.page {
       this.keyword = e.detail.value;
     },
     buttonTap() {
-    
-      if (this.keyword == '') {
-        this.showSearch = false;
-         this.initdata.keyword = "";
-         this.getShopList(this.initdata);
-        wx.setNavigationBarTitle({ title: "商品管理"});
-      } else {
-          this.showSearch = false;
-        this.initdata.keyword = this.keyword;
-        this.initdata.page = 1;
-        wx.setNavigationBarTitle({ title: "商品管理-"+this.keyword });
-        this.getShopList(this.initdata);
-      }
+      this.showSearch = false;
+      this.initdata.keyword = this.keyword;
+      this.initdata.page = 1;
+      this.isMoreData = true;
+      var title = this.keyword == '' ? '商品管理' : '商品管理-' + this.keyword;
+      wx.setNavigationBarTitle({ title: title });
+      this.getShopList(this.initdata);
     },
-    hiddenSearch(){
+    hiddenSearch() {
       this.showSearch = false;
     },
     //改变分类
@@ -878,29 +872,63 @@ export default class newslist extends wepy.page {
       this.isallSelect = active;
     },
     // 删除
-    deleteSelected() {
+    async deleteSelected() {
       var deleteSelectList = [];
+      var deleteSelectName = '';
       this.list.forEach((item, index) => {
         if (item.active) {
           deleteSelectList.push(item.goods_id);
+          if (deleteSelectList.length == 1) {
+            deleteSelectName += item.goods_name;
+          } else if (deleteSelectList.length <= 3) {
+            deleteSelectName +=',' +item.goods_name  ;
+          } else if (deleteSelectList.length == 4) {
+            deleteSelectName += '...';
+          }
         }
       });
+
+      var res = await wepy.showModal({
+        title: '提示', //提示的标题,
+        content: '你确定要删除' + deleteSelectName + '吗', //提示的内容,
+        showCancel: true, //是否显示取消按钮,
+        cancelText: '取消', //取消按钮的文字，默认为取消，最多 4 个字符,
+        cancelColor: '#000000', //取消按钮的文字颜色,
+        confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
+        confirmColor: '#e50012' //确定按钮的文字颜色,
+      });
+      if (res.confirm) {
+        this.delGoods(deleteSelectList);
+      } else if (res.cancel) {
+        console.log('用户点击取消');
+      }
+    },
+    delGoods(deleteSelectList) {
       wepy
         .request({
           url: api.del_goods,
           data: {
             goods_id: deleteSelectList
-          }
+          },
+          method: 'POST'
         })
         .then(res => {
-          wx.showToast({
-            title: '删除成功',
-            icon: 'none',
-            duration: 2000
-          });
-          this.initdata.page = 1;
-
-          this.getShopList(this.initdata);
+          if (res.data.code) {
+            wx.showToast({
+              title: '删除成功',
+              icon: 'none',
+              duration: 2000
+            });
+            this.isMoreData = true;
+            this.initdata.page = 1;
+            this.getShopList(this.initdata);
+          } else {
+            wx.showToast({
+              title: res.data.message,
+              icon: 'none',
+              duration: 2000
+            });
+          }
         });
     },
     // 修改
@@ -1095,6 +1123,7 @@ export default class newslist extends wepy.page {
   }
   onReachBottom() {
     if (this.isMoreData) {
+      console.log('下拉刷新');
       wx.showLoading({
         title: '加载中', //提示的内容,
         mask: true, //显示透明蒙层，防止触摸穿透,

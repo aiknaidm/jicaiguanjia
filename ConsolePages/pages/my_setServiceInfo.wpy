@@ -29,6 +29,7 @@ checkbox {
   line-height: 88rpx;
   background: #e50012;
   color: #fff;
+  border-radius: 0px 
 }
 
 .btn2 button:last-child {
@@ -73,7 +74,7 @@ checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
       <button class="{{values.length?'active':''}}" @tap='delServiceInfo' form-type='submit'>删除客服</button>
     </view>
   </form>
-  <popupbox :popupdata.sync="popupdata"></popupbox>
+  <popupbox :popupdata.sync="popupdata" @formSubmit.user="formSubmit"></popupbox>
 </view>
 </template>
 
@@ -97,6 +98,47 @@ export default class my_setServiceInfo extends wepy.page {
     // 收集formid
     getFormId: function(e) {
       //util.submitFormId(app.globalData.userId, e.detail.formId);
+    },
+    formSubmit(e){
+      if (e.detail.value.name === '') {
+        wx.showToast({
+          title: '客服姓名不能为空',
+          icon: 'none'
+        });
+        return;
+      }
+      if (e.detail.value.phone === '') {
+        wx.showToast({
+          title: '客服电话不能为空',
+          icon: 'none'
+        });
+        return;
+      }
+      var suppliers_id = this.suppliers_id;
+      var kefu_name = e.detail.value.name;
+      var mobile = e.detail.value.phone;
+      wepy
+        .request({
+          url: api.addService,
+          data: {
+            suppliers_id,
+            kefu_name,
+            mobile
+          }
+        })
+        .then(res => {
+          if (res.data.code == '0') {
+            wx.showToast({
+              title: '添加成功'
+            });
+            this.popupdata.isshowpopup = false;
+            this.serviceList();
+          } else {
+            wx.showToast({
+              title: '请求超时'
+            });
+          }
+        });
     },
     // 选择客服
     checkboxChange: function(e) {
@@ -175,11 +217,11 @@ export default class my_setServiceInfo extends wepy.page {
   }
 
   async serviceList() {
-    let suppliers_id = this.$parent.globalData.suppliers_id;
+   this.suppliers_id = this.$parent.globalData.suppliers_id;
     let serviceList = await wepy.request({
       url: api.serviceList,
       data: {
-        suppliers_id
+       suppliers_id: this.suppliers_id 
       }
     });
     if (serviceList.data.code == '0') {

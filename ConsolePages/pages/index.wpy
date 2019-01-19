@@ -114,7 +114,10 @@
 }
 
 .container.active {
-  background: rgba(0, 0, 0, 0.2);
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
 }
 
 .scroll-view {
@@ -212,11 +215,15 @@
     }
   }
 }
+.info_list .weui_cell_hd {
+    margin-right: 0rpx;
+  }
 </style>
 <template>
-<view style='position:relative;' class="list {{right?'active':''}}" catchtouchmove="{{right?'stopscroll':''}}">
-     <view class=" {{right?'mask':''}}" bindtap='hiddenyizhan'></view>
-  <view class="container">
+
+<view style='position:relative;' class="list {{right?'active':''}}" >
+     <view class=" {{right?'mask':''}}" catchtouchmove="{{right?'stopscroll':''}}" bindtap='hiddenyizhan'></view>
+  <view class="container {{right?'active':''}}" >
       <view class='control-title'>
       <view class='control-title-img'>
         <image src='{{yizhanInfo.avatar}}'></image>
@@ -232,7 +239,7 @@
       </view>
       <view class='share'>
         <form report-submit bindsubmit='getFormId'>
-          <navigator url='/pages/my_console/share/index'>
+          <navigator url='/ConsolePages/pages/share'>
             <button form-type="submit">
               <text class='iconfont icon-fenxiang'></text>分享好友</button>
 
@@ -241,7 +248,8 @@
 
       </view>
     </view>
-    <view class="info_list">
+     <form report-submit bindsubmit='getFormId'>
+    <view class="info_list" wx:if="{{yizhanInfo.is_admin==1}}">
         <navigator
           url="{{}}"
           open-type="navigate"
@@ -252,7 +260,7 @@
         <myList :tabItem="item"></myList>
       </repeat>
     </view>
-    <view class="info_list">
+    <view class="info_list" wx:if="{{yizhanInfo.is_admin==1}}">
         <navigator
           url="{{}}"
           open-type="navigate"
@@ -271,9 +279,16 @@
           <image src="/images/console/wdyy.png">我的应用
         </navigator>
        <repeat for="{{applicationList}}" wx:key="{{index}}">
-        <myList :tabItem="item"></myList>
+         <!-- 店铺所有者 -->
+         <myList :tabItem="item" wx:if="{{yizhanInfo.is_boss==1}}"></myList>
+          <!-- 管理员 -->
+        <myList :tabItem="item" wx:elif="{{item.isadmin==1&&yizhanInfo.is_admin==1}}"></myList>
+        <!-- 业务员 -->
+        <myList :tabItem="item" wx:elif="{{item.isyewuyuan==1&&yizhanInfo.is_salesman==1}}"></myList>
+       
       </repeat>
     </view>
+     </form>
   </view>
     <view class='yizhan-list2' catchtouchmove='' style="height: {{height}}PX;overflow: hidden">
     <scroll-view scroll-y style="height: {{height}}PX;overflow: hidden" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
@@ -283,7 +298,7 @@
       <view style='height:100rpx' class="scroll-view-item bc_green" wx:for="{{yizhanlist}}"  @tap='changeShop({{item.suppliers_id}})' wx:key="{{index}}">
         {{item.suppliers_desc}}
         <text class='iconfont icon-qiehuan' wx:if="{{item.suppliers_id!==userinfo.suppliers_id}}"></text>
-      </view>
+      </view> 
     </scroll-view>
 
   </view>
@@ -293,6 +308,7 @@
 <script>
 import wepy from 'wepy';
 import api from '../../API/api';
+import util from '../../utils/index';
 import myList from '../../components/myList';
 export default class newslist extends wepy.page {
   config = {
@@ -359,54 +375,61 @@ export default class newslist extends wepy.page {
         icon: '/images/console/shujuguanli.png',
         text: '数据管理',
         url: 'dataManage',
-        bgcolor: '#f7bf30'
+        bgcolor: '#f7bf30',
+        isadmin: 1
       },
       {
         icon: '/images/console/shenheguanli.png',
         text: '会员管理',
-        url: '../pages/my_console_check',
-        bgcolor: '#10b3b1'
+        url: 'my_console_check',
+        bgcolor: '#10b3b1',
+        isyewuyuan: 1,
+        isadmin: 1
       },
       {
         icon: '/images/console/xufeiguanli.png',
         text: '续费管理',
-        url: '../pages/my_console_renew',
-        bgcolor: '#fd7602'
+        url: 'my_console_renew',
+        bgcolor: '#fd7602',
+        isadmin: 1
       },
       {
         icon: '/images/console/dianpushezhi.png',
         text: '店铺设置',
-        url: '../pages/my_setShopInfo',
-        bgcolor: '#a78dd3',
-        isshow: 0
+        url: 'my_setShopInfo',
+        bgcolor: '#a78dd3'
       },
       {
         icon: '/images/console/kefuguanli.png',
         text: '客服管理',
-        url: '../pages/my_setServiceInfo',
-        bgcolor: '#f7bf30'
+        url: 'my_setServiceInfo',
+        bgcolor: '#f7bf30',
+        isadmin: 1
       },
       {
         icon: '/images/console/guanliyuanbd.png',
         text: '管理员绑定',
-        url: '../pages/my_setManagerInfo',
-        bgcolor: '#10b3b1',
-        isshow: 0
+        url: 'my_setManagerInfo',
+        bgcolor: '#10b3b1'
       },
       {
         icon: '/images/console/guanliyuanbd.png',
         text: '业务员绑定',
-        url: '../pages/my_setSalesman',
+        url: 'my_setSalesman',
         bgcolor: '#10b3b1',
-        isshow: 0
+        isadmin: 1
       },
       {
         icon: '/images/console/chakanmyshop.png',
         text: '查看我的店铺',
         url: '/pages/shoperweima',
-        bgcolor: '#f7bf30'
+        bgcolor: '#f7bf30',
+        isyewuyuan: 1,
+        isadmin: 1
       }
-    ]
+    ],
+
+    height: 0
   };
   computed = {};
   methods = {
@@ -421,9 +444,14 @@ export default class newslist extends wepy.page {
         this.userId,
         suppliers_id
       );
+
       this.right = 0;
-      this.orderNum();
+      this.onShow();
       this.$apply();
+    },
+    getFormId(e) {
+      console.log("formid",e);
+      util.submitFormId(this.userId, e.detail.formId);
     }
   };
   events = {};
@@ -443,6 +471,7 @@ export default class newslist extends wepy.page {
         this.$apply();
       });
   }
+  // 订单数量
   async orderNum() {
     this.tabList[0].num = this.yizhanInfo.daifukuan;
     this.tabList[1].num = this.yizhanInfo.daifahuo;
@@ -450,15 +479,83 @@ export default class newslist extends wepy.page {
     this.tabList[3].num = this.yizhanInfo.tuikuan;
     this.tabList[4].num = this.yizhanInfo.chenggong;
     this.tabList[5].num = this.yizhanInfo.guanbi;
-    this.$parent.globalData.suppliers_id = this.yizhanInfo.suppliers_id;
   }
-  async onLoad(option) {
+  // 是否过期
+  isexpired(yizhanInfo) {
+    var new_time = new Date().getTime();
+    var shiyong_time = 7 * 24 * 3600 * 1000;
+    var end_time = yizhanInfo.end_time * 1000;
+    if (end_time == 0) {
+      return;
+    }
+    if (new_time > end_time) {
+      wx.showModal({
+        title: '提示', //提示的标题,
+        content: '您的小程序已到期', //提示的内容,
+        showCancel: false, //是否显示取消按钮,
+        cancelColor: '#000000', //取消按钮的文字颜色,
+        confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
+        confirmColor: '#e50012', //确定按钮的文字颜色,
+        success: res => {
+          wx.navigateTo({ url: '/ConsolePages/pages/my_console_renew' });
+        }
+      });
+    } else if (new_time + shiyong_time > end_time) {
+      var time = Math.floor((end_time - new_time) / 1000 / 3600 / 24);
+      console.log('time', time);
+      wx.showModal({
+        title: '提示', //提示的标题,
+        content:
+          '您的小程序将在' +
+          time +
+          '天以后到期，请及时续费，以免到期系统自动关闭，影响您的正常使用。', //提示的内容,
+        showCancel: true, //是否显示取消按钮,
+        cancelText: '取消', //取消按钮的文字，默认为取消，最多 4 个字符,
+        cancelColor: '#000000', //取消按钮的文字颜色,
+        confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
+        confirmColor: '#3CC51F', //确定按钮的文字颜色,
+        success: res => {
+          if (res.confirm) {
+            wx.navigateTo({ url: '/ConsolePages/pages/my_console_renew' });
+          } else if (res.cancel) {
+            console.log('用户点击取消');
+          }
+        }
+      });
+    }
+  }
+  // 是否是业务员
+  isSalesman() {
+    if (this.yizhanInfo.is_salesman == 1 && this.yizhanInfo.is_admin == 0) {
+      this.applicationList[1].url =
+        'my_console_check?sales_id=' +
+        this.userId +
+        '&sales_name=' +
+        this.yizhanInfo.user_nickname;
+    }
+    if (this.yizhanInfo.is_salesman == 1) {
+      this.applicationList[7].url =
+        '/pages/shoperweima?sales_id=' +
+        this.userId +
+        '&sales_name=' +
+        this.yizhanInfo.user_nickname;
+    }
+  }
+  async onShow(option) {
     this.userId = await this.$parent.loginInfo();
-    let yizhanInfo = await this.$parent.getYizhanInfo(this.userId);
+    this.suppliers_id = this.$parent.globalData.suppliers_id
+      ? this.$parent.globalData.suppliers_id
+      : '';
+    let yizhanInfo = await this.$parent.getYizhanInfo(
+      this.userId,
+      this.suppliers_id
+    );
     this.yizhanInfo = yizhanInfo;
-
     this.orderNum();
     this.getjllist();
+    this.isexpired(yizhanInfo);
+    this.isSalesman();
+    this.height = wx.getSystemInfoSync().windowHeight;
     this.$apply();
     console.log('yizhanInfo-----', yizhanInfo);
   }

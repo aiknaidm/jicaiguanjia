@@ -75,7 +75,7 @@
 .btn {
   margin-top: 200rpx;
   display: flex;
-  padding-bottom: 100rpx;
+  padding-bottom: 100rpx; justify-content: center;
 }
 .btn button {
   background-color: #e50012;

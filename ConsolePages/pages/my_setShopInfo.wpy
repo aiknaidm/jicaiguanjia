@@ -243,6 +243,13 @@ wx-button[disabled]:not([type]) {
   align-items: center;
   padding-left: 20rpx;
 }
+.section2 {
+  display: flex;
+  justify-content: space-between;
+}
+.section2 .label {
+  width: 180px;
+}
 </style>
 <template>
 <view class='container'>
@@ -260,7 +267,7 @@ wx-button[disabled]:not([type]) {
         <view class="label">
           <text>*</text>验证码</view>
         <input name="smscode" maxlength='4' type="number" placeholder="验证码" bindinput="listenerSmsCodeInput" disabled='{{isuserDetail}}' />
-        <button bindtap="getSmsCode" disabled="{{smsCodeDisabled}}" style="background-color:{{getSmsCodeBtnColor}}" class="getSmsCodeBtn">{{getSmsCodeBtnTxt}}</button>
+        <button bindtap="getSmsCode({{userDetail.mobile}})" disabled="{{smsCodeDisabled}}" style="background-color:{{getSmsCodeBtnColor}}" class="getSmsCodeBtn">{{getSmsCodeBtnTxt}}</button>
       </view>
 
 
@@ -270,7 +277,7 @@ wx-button[disabled]:not([type]) {
       <view class="label">
         <text>*</text>真实姓名</view>
       <view class="label-right">
-        <input name="realname" class="input" type="text" value="{{userDetail.user_nickname}}" disabled/>
+        <input name="realname" class="input" type="text" value="{{userDetail.username}}" />
       </view>
     </view>
     <view class="section">
@@ -305,7 +312,24 @@ wx-button[disabled]:not([type]) {
    
       </picker>
     </view>
+    <view class="section section2" >
+          <view class="label">
+            商品无图模式</view>
+          <view class="body-view">
+      <switch color="#e50012" checked="{{!userDetail.is_picture}}"  name="is_picture"/>
 
+    </view>
+    </view>
+    <view class="section section2" >
+      <view class="label">
+       代下单</view>
+     
+        <view class="body-view" >
+        <switch color="#e50012" checked="{{userDetail.is_friend}}"  name="is_friend" />
+        </view>
+   
+ 
+    </view>
     <button class='rz-submit' formType="submit" wx:if="{{!isuserDetail}}" disabled='{{issubmit}}'>提交修改</button>
     <button class='rz-submit' disabled='true' wx:if="{{userDetail.user_status=='0'||isshenhe}}">审核中...</button>
   </form>
@@ -384,17 +408,17 @@ export default class my_setShopInfo extends wepy.page {
       this.phone = e.detail.value;
     },
     //联网获取验证码
-    async getSmsCode() {
+    async getSmsCode(phone) {
       this.smsCodeDisabled = true;
-      console.log('输入的电话号码', this.phone);
+      console.log('输入的电话号码', phone);
       //点击了获取验证码先在本地验证手机号的合法性
-      if (this.checkPhone(this.phone)) {
+      if (this.checkPhone(phone)) {
         try {
           var res = await wepy.request({
             url: api.yzm,
             mothod: 'GET',
             data: {
-              mobile: this.phone
+              mobile: phone
             },
             header: {
               'content-type': 'application/json' // 默认值
@@ -444,28 +468,29 @@ export default class my_setShopInfo extends wepy.page {
   events = {};
   async onLoad(option) {
     let userId = await this.$parent.loginInfo();
-    let suppliers_id = this.$parent.globalData.suppliers_id;
-    let shareCode = option.shareCode;
-    this.shareCode = shareCode;
-    this.userId = userId;
-    if (shareCode) this.bindSuperior(shareCode, userId);
-    let yizhanInfo = await this.$parent.getYizhanInfo(userId,suppliers_id);
-
-    console.log('易站信息', yizhanInfo);
-    if (yizhanInfo.user_type == 4) {
-      console.log('已注册');
-      //this.isuserDetail = true;
-      this.userDetail = yizhanInfo;
-      this.region[0] = yizhanInfo.sheng;
-      this.region[1] = yizhanInfo.shi;
-      this.region[2] = yizhanInfo.qu;
-      this.phone = yizhanInfo.mobile;
-    } else {
-      console.log('开始注册');
-    }
+    let suppliers_id = this.$parent.globalData.suppliers_id
+      ? this.$parent.globalData.suppliers_id
+      : (await this.$parent.getYizhanInfo(userId, suppliers_id)).suppliers_id;
+    this.userDetail=await this.getSuppliersDetails(userId, suppliers_id);
+    console.log("店铺信息", this.userDetail)
+    this.region[0] =  this.userDetail.sheng;
+    this.region[1] =  this.userDetail.shi;
+    this.region[2] =  this.userDetail.qu;
     this.$apply();
   }
-
+  async getSuppliersDetails(user_id, suppliers_id) {
+   var res=await wepy
+      .request({
+        url: api.supplier_detail, //开发者服务器接口地址",
+        data: {
+          user_id,
+          suppliers_id
+        }, //请求的参数",
+        method: 'GET'
+      })
+    return res.data.data;
+     
+  }
   setTime(count) {
     var count = count;
     var that = this;
@@ -530,8 +555,10 @@ export default class my_setShopInfo extends wepy.page {
         var storename = param.storename;
         var pcusername = param.pcusername;
         var password = param.password == '123456' ? '' : param.password;
-        var share_code = param.shareCode;
-        console.log('邀请码', share_code);
+        // var share_code = param.shareCode;
+        var is_picture = param.is_picture ? 0 : 1;
+        var is_friend = param.is_friend ? 1 : 0;
+   
         if (this.userId == '-1') {
           wx.showModal({
             content: '登录失败请稍后再试',
@@ -591,7 +618,9 @@ export default class my_setShopInfo extends wepy.page {
               suppliers_name: pcusername,
               password,
               suppliers_desc: storename,
-              share_code: share_code
+    
+              is_picture,
+              is_friend
             },
             header: {
               Accept: 'application/json'

@@ -1,13 +1,18 @@
 <style lang="less">
-.ad{
-	width: 100%;
-	height: 200rpx;
+.ad {
+  width: 100%;
+  height: 200rpx;
 }
-.ad image{
-	width: 100%;
-	height: 100%;
+.ad image {
+  width: 100%;
+  height: 100%;
 }
-.info_list{border-top: 0px solid
+.info_list {
+  border-top: 0px solid;
+}
+.info_list .weui_cell {
+  border-bottom: 1px solid #eee;
+  margin-bottom: 0
 }
 </style>
 <template>
@@ -57,17 +62,17 @@ export default class my extends wepy.page {
 
     tabList: [
       {
-        icon: '/images/icon-shopcar.png',
+        icon: '/images/icon_normal.png',
         text: '实名认证',
         url: '/ConsolePages/pages/renzheng'
       },
       {
-        icon: '/images/icon_normal.png',
+        icon: '/images/console.png',
         text: '管理工作台',
         url: '/ConsolePages/pages/index'
       },
       {
-        icon: '/images/shangcheng.png',
+        icon: '/images/share.png',
         text: '分享',
         url: '/ConsolePages/pages/share'
       }
@@ -88,18 +93,18 @@ export default class my extends wepy.page {
       this.isShowprompt = false;
       this.$apply();
     },
-    toBannerDetail2: function () {
-		wx.navigateToMiniProgram({
-			appId: 'wxf48cdd6a7dae8c21',
-			path: 'pages/my/survey-ticket3/index',
+    toBannerDetail2: function() {
+      wx.navigateToMiniProgram({
+        appId: 'wxf48cdd6a7dae8c21',
+        path: 'pages/my/survey-ticket3/index',
 
-			// envVersion: 'release',
-			envVersion: 'develop',
-			success(res) {
-				// 打开成功
-			}
-		})
-	},
+        // envVersion: 'release',
+        envVersion: 'develop',
+        success(res) {
+          // 打开成功
+        }
+      });
+    }
   };
   events = {};
   upUserInfo() {

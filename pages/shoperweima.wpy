@@ -101,7 +101,7 @@ export default class shoperweima extends wepy.page {
         appId: 'wx7e302245debd521a',
         path:
           '/Shop/pages/index?suppliers_id=' +
-          this.$parent.globalData.suppliers_id,
+          this.$parent.globalData.suppliers_id+"&sales_id="+this.sales_id,
         // extraData: {
         // 	suppliers_id: suppliers_id,
         // },
@@ -114,9 +114,11 @@ export default class shoperweima extends wepy.page {
     }
   };
   events = {};
-  async onLoad() {
+  async onLoad(options) {
+    console.log(options)
     var userId = await this.$parent.loginInfo();
     this.eventDraw(userId);
+    this.sales_id=options.sales_id?options.sales_id:0
   }
   eventGetImage(event) {
     console.log('eventGetImage', event);
@@ -141,7 +143,7 @@ export default class shoperweima extends wepy.page {
     wx.request({
       url: api.getQRCodeImg,
       data: {
-        path: '/Shop/pages/index?suppliers_id=' + suppliers_id,
+        path: '/Shop/pages/index?suppliers_id=' + suppliers_id+"&sales_id="+this.sales_id,
         user_id,
         suppliers_id
       },

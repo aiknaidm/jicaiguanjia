@@ -11,6 +11,9 @@ const api = {
     carousel: `${host}/lunbo`, //轮播图
     yizhanIndex: `${host}/wdyz`, //商城首页
     yizhanBanner: `${host}/yzgg`, //首页广告
+    articleDetail: `${host}/ggnr`,
+    newsKind: `${host}/ggfl`,
+    newsList: `${host}/gglb`,
     getQRCodeImg: `${host}/getQRCode1`,
     getShareImg: `${host}/getQRCode2`,
     fxfxList: `${host}/fxfx_list`,
@@ -59,6 +62,7 @@ const api = {
     shuju: `${host}/shuju`,
     jyjl: `${host}/jyjl`,
     del_goods: `${host}/del_goods`,
-    xgbt: `${host}/xgbt`
+    xgbt: `${host}/xgbt`,
+    supplier_detail: `${host}/supplier_detail`
 }
 export default api

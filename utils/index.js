@@ -107,7 +107,7 @@ const wxpay3 = async function(user_id) {
     }
     try {
         var res = await wepy.request({
-            url: 'https://lmbge.com/wxapi/jicai/wxpay3',
+            url: 'https://lmbge.com/wxapi/index/wxpay3',
             data: {
                 weixin: res0.code,
                 user_id,

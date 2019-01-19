@@ -193,7 +193,8 @@
 
   </view>
 		<block wx:if="{{adminList.length==0}}">
-		<view class='no-order'>	您搜索的昵称不存在，请更换关键词试试。</view>
+		<!-- <view class='no-order'>	</view> -->
+    <noorder :text.sync="text"></noorder>
 		</block>
   <view class='list' wx:else>
     <block wx:for="{{adminList}}" wx:key="index">
@@ -214,6 +215,7 @@
 <script>
 import wepy from 'wepy';
 import api from '../../API/api';
+import noorder from '../../components/noOrder';
 export default class my_addManagerInfo extends wepy.page {
   config = {
     navigationBarTitleText: '用户搜索'
@@ -222,10 +224,11 @@ export default class my_addManagerInfo extends wepy.page {
     ssButton: '搜索',
     keyword: '',
     type: '',
-    adminList: []
+    adminList: [],
+    text: ''
   };
   computed = {};
-  components = {};
+  components = { noorder };
   methods = {
     searchIpt: function(e) {
       console.log(e.detail.value);
@@ -244,6 +247,7 @@ export default class my_addManagerInfo extends wepy.page {
         .then(res => {
           console.log('搜索结果', res.data.data);
           this.adminList = res.data.data;
+          this.text = '您搜索的昵称不存在，请更换关键词试试。';
           this.$apply();
         });
     },
@@ -276,7 +280,76 @@ export default class my_addManagerInfo extends wepy.page {
           .then(res => {
             console.log('添加完成', res.data.data);
             if (res.data.code == '0') {
-              wx.navigateBack({});
+              if (this.type == 'member') {
+              } else if (this.type == 'salesman') {
+                wepy
+                  .showModal({
+                    title: '提示', //提示的标题,
+                    content: '业务员添加成功，同时将改用户设为管理员吗', //提示的内容,
+                    confirmColor: '#e50012' //确定按钮的文字颜色,
+                  })
+                  .then(res => {
+                    if (res.confirm) {
+                      wepy
+                        .request({
+                          url: api.addManager,
+                          data: {
+                            user_id,
+                            suppliers_id
+                          }
+                        })
+                        .then(res => {
+                          if (res.data.code == 0)
+                            wepy
+                              .showToast({
+                                title: '设置成功' //提示的内容,
+                              })
+                              .then(res => {});
+                          else
+                            wepy.showToast({
+                              title: res.message //提示的内容,
+                            });
+                        });
+                    }
+                    wx.navigateBack({
+                      delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+                    });
+                  });
+              } else {
+                wepy
+                  .showModal({
+                    title: '提示', //提示的标题,
+                    content: '管理员添加成功，同时将改用户设为业务员吗', //提示的内容,
+                    confirmColor: '#e50012' //确定按钮的文字颜色,
+                  })
+                  .then(res => {
+                    if (res.confirm) {
+                      wepy
+                        .request({
+                          url: api.addSalesman,
+                          data: {
+                            user_id,
+                            suppliers_id
+                          }
+                        })
+                        .then(res => {
+                          if (res.data.code == 0)
+                            wepy
+                              .showToast({
+                                title: '设置成功' //提示的内容,
+                              })
+                              .then(res => {});
+                          else
+                            wepy.showToast({
+                              title: res.message //提示的内容,
+                            });
+                        });
+                    }
+                    wx.navigateBack({
+                      delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+                    });
+                  });
+              }
             } else {
               wx.showToast({
                 title: res.data.message,

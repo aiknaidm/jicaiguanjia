@@ -81,7 +81,7 @@ picker {
   <view class=' goodstitle'>
     <view class="label">
       批量修改</view>
-    <view class="label-right" bindtap='showBox'>
+    <view class="label-right" bindtap='showBox' wx:if="{{properties.length>0}}">
      批量修改 {{piliangtitle}}
     </view>
   </view>
@@ -154,24 +154,24 @@ picker {
   <view class='goodsbtn'>
     <button form-type='submit'>保存修改</button>
   </view></form>
-  <panel :isshowBox.sync="isshowBox" :title.sync="title" :placeholder.sync="placeholder" @tapSure.user="tapSure" type="number"></panel>
+  <popupbox :popupdata.sync="popupdata" @formSubmit.user="tapSure"></popupbox>
 </view>
 </template>
 
 <script>
 import wepy from 'wepy';
-import panel from '../../components/panel';
+import popupbox from '../../components/popupbox';
 import api from '../../API/api';
 export default class newslist extends wepy.page {
   config = {
     navigationBarTitleText: '修改'
   };
-  components = { panel };
+  components = { popupbox };
   data = {
     goodsdetail: {},
     properties: [],
     piliangtitle: '库存',
-    isshowBox: false,
+    popupdata: {},
     title: '修改库存',
     placeholder: '批量修改',
     disable_jiage: false,
@@ -181,32 +181,153 @@ export default class newslist extends wepy.page {
   computed = {};
   methods = {
     showBox() {
-      this.title = this.xiugaitype == 'jiage' ? '修改价格' : '修改库存';
-      this.placeholder =
-        this.xiugaitype == 'jiage' ? '批量修改价格' : '批量修改库存';
-      this.isshowBox = true;
+      if (this.xiugaitype == 'kucun') {
+        this.popupdata = {
+          isshowpopup: true,
+          title: '修改库存',
+          inputList: [
+            {
+              name: '',
+              placeholder: '批量修改库存',
+              inputName: 'goods_number',
+              type: 'number'
+            }
+          ]
+        };
+      } else {
+        this.popupdata = {
+          isshowpopup: true,
+          title: '修改价格',
+          inputList: [
+            {
+              name: '',
+              placeholder: '批量修改批发价',
+              inputName: 'attr_price',
+              type: 'digit'
+            },
+            {
+              name: '',
+              placeholder: '批量修改零售价',
+              inputName: 'floor_price',
+              type: 'digit'
+            }
+          ]
+        };
+      }
     },
-    tapSure(value) {
-      this.isshowBox = false;
-      var value = parseFloat(value).toFixed(2);
-      var datas = this.childsCurGoods;
+    tapSure(e) {
+      var value = e.detail.value;
+
+      var datas = this.properties;
       if (this.xiugaitype == 'jiage') {
+        var attr_price = parseFloat(value.attr_price).toFixed(2);
+        var floor_price = parseFloat(value.floor_price).toFixed(2);
         for (var i = 0; i < datas.length; i++) {
-          datas[i].attr_price = value;
+          if (floor_price && floor_price != 'NaN')
+            datas[i].floor_price = floor_price;
+          if (attr_price && attr_price != 'NaN')
+            datas[i].attr_price = attr_price;
         }
       } else {
+        var goods_number = parseFloat(value.goods_number).toFixed(2);
         for (var i = 0; i < datas.length; i++) {
-          datas[i].goods_number = value;
+          datas[i].goods_number = goods_number;
         }
       }
       console.log(value);
     },
     quedingChange(e) {
       // 修改价格
+      var shop_price = this.goodsdetail.shop_price;
+      var floor_price = this.goodsdetail.floor_price;
+      var goods_attr = this.goodsdetail.properties;
+      var goods_number = this.goodsdetail.goods_number;
+      if (goods_number.length == 0 && goods_attr.length == 0) {
+        wx.showToast({
+          title: '请填写商品数量',
+          icon: 'none'
+        });
+        return;
+      }
+      if (
+        parseFloat(shop_price) > parseFloat(floor_price) &&
+        goods_attr.length == 0
+      ) {
+        wx.showToast({
+          title: '批发价不能大于零售价',
+          icon: 'none'
+        });
+        return;
+      }
+      if (floor_price <= 0 && goods_attr.length == 0) {
+        wx.showToast({
+          title: '零售价格不能为0',
+          icon: 'none'
+        });
+        return;
+      }
+      if (shop_price <= 0 && goods_attr.length == 0) {
+        wx.showToast({
+          title: '批发价格不能为0',
+          icon: 'none'
+        });
+        return;
+      }
+
+      for (var i = 0; i < goods_attr.length; i++) {
+        console.log('批发价', goods_attr[i].attr_price);
+        console.log('零售价', goods_attr[i].floor_price);
+        if (goods_attr[i].attr_value == '') {
+          wx.showToast({
+            title: '请填写商品规格',
+            icon: 'none'
+          });
+          return;
+        }
+        if (goods_attr[i].attr_price == '') {
+          wx.showToast({
+            title: '请填写商品批发价',
+            icon: 'none'
+          });
+          return;
+        }
+        if (goods_attr[i].floor_price == '') {
+          wx.showToast({
+            title: '请填写商品零售价',
+            icon: 'none'
+          });
+          return;
+        }
+        if (
+          parseFloat(goods_attr[i].floor_price) <
+          parseFloat(goods_attr[i].attr_price)
+        ) {
+          wx.showToast({
+            title: '批发价不能大于零售价',
+            icon: 'none'
+          });
+          return;
+        }
+        if (goods_attr[i].floor_price <= 0 || goods_attr[i].attr_price <= 0) {
+          wx.showToast({
+            title: '商品价格不能为0',
+            icon: 'none'
+          });
+          return;
+        }
+        if (goods_attr[i].goods_number == '') {
+          wx.showToast({
+            title: '请填写商品数量',
+            icon: 'none'
+          });
+          return;
+        }
+      }
       console.log('规格修改', this.properties);
       if (this.xiugaitype == 'jiage') {
         if (this.properties.length > 0) {
           var data = {
+            goods_id: this.goodsdetail.goods_id,
             properties: this.properties
           };
         } else {
@@ -319,7 +440,7 @@ export default class newslist extends wepy.page {
       var goods_attr_id = e.currentTarget.dataset.goods_attr_id;
       var jiage = e.detail.value;
       var i = e.currentTarget.dataset.index;
-      var datas = that.data.childsCurGoods;
+      var datas = that.data.properties;
       datas[i].floor_price = jiage;
       this.properties = datas;
     },
@@ -330,7 +451,7 @@ export default class newslist extends wepy.page {
       var goods_attr_id = e.currentTarget.dataset.goods_attr_id;
       var jiage = e.detail.value;
       var i = e.currentTarget.dataset.index;
-      var datas = that.data.childsCurGoods;
+      var datas = that.data.properties;
       datas[i].attr_price = jiage;
 
       this.properties = datas;
@@ -342,7 +463,7 @@ export default class newslist extends wepy.page {
       var goods_attr_id = e.currentTarget.dataset.goods_attr_id;
       var kucun = e.detail.value;
       var i = e.currentTarget.dataset.index;
-      var datas = that.data.childsCurGoods;
+      var datas = that.data.properties;
 
       datas[i].goods_number = kucun;
       this.properties = datas;

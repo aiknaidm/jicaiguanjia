@@ -11,6 +11,7 @@ form {
   overflow: hidden;
   width: 80%;
   margin: auto;
+  z-index:10
 }
 
 .changeTitle.active {
@@ -128,49 +129,10 @@ export default class Popupbox extends wepy.component {
       return;
     },
     formSubmit: function(e) {
-      console.log(e.detail.value);
-      if (e.detail.value.name === '') {
-        wx.showToast({
-          title: '客服姓名不能为空',
-          icon: 'none'
-        });
-        return;
-      }
-      if (e.detail.value.phone === '') {
-        wx.showToast({
-          title: '客服电话不能为空',
-          icon: 'none'
-        });
-        return;
-      }
-      var suppliers_id = this.$parent.$parent.globalData.suppliers_id;
-      var kefu_name = e.detail.value.name;
-      var mobile = e.detail.value.phone;
-      wepy
-        .request({
-          url: api.addService,
-          data: {
-            suppliers_id,
-            kefu_name,
-            mobile
-          }
-        })
-        .then(res => {
-          if (res.data.code == '0') {
-            wx.showToast({
-              title: '添加成功'
-            });
-            this.popupdata.isshowpopup = false;
-            this.$parent.serviceList();
-          } else {
-            wx.showToast({
-              title: '请求超时'
-            });
-          }
-        });
+      this.popupdata.isshowpopup = false;
+      this.$emit('formSubmit', e);
     }
   };
-  async onLoad() {
-  }
+  async onLoad() {}
 }
 </script>
