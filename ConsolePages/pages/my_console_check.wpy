@@ -193,7 +193,7 @@
       </view>
     </view>
   </view>
-	<navigator url='/ConsolePages/pages/my_addManagerInfo?type=member'>    <view class='addmember'>+添加会员</view></navigator>
+	<navigator url='/ConsolePages/pages/my_addManagerInfo?type=member&sales_id={{sales_id}}'>    <view class='addmember'>+添加会员</view></navigator>
   <view class='body-bg' wx:if="{{isShowSalesList}}" bindtap='hiddenSalesList' touchstart='hiddenbg' touchmove="hiddenbg">
   <view class='list'>
     <view wx:for="{{adminList}}" wx:key="{{index}}"  @tap='changeShopList({{item.id}},{{item.user_nickname}})'>
@@ -231,6 +231,7 @@ export default class my_console_check extends wepy.page {
       //util.submitFormId(app.globalData.userId, e.detail.formId);
     },
     statusTap: function(e) {
+       this.getShenheList(this.sales_id);
       var curType = e.currentTarget.dataset.index;
       var curStatu = e.currentTarget.dataset.statu;
       this.currentType = curType;
@@ -351,6 +352,11 @@ export default class my_console_check extends wepy.page {
   }
   //审核
   async shenhe(id, type) {
+    wx.showLoading({
+      title: '审核中...', //提示的内容,
+      mask: true, //显示透明蒙层，防止触摸穿透,
+      success: res => {}
+    });
     let user_id = id;
     let suppliers_id = this.suppliers_id;
     var type = type;
@@ -362,6 +368,7 @@ export default class my_console_check extends wepy.page {
         type
       }
     });
+    wx.hideLoading();
     if (yhsh.data.code == '0') {
       this.getShenheList();
     }

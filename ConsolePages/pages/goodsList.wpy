@@ -903,34 +903,7 @@ export default class newslist extends wepy.page {
         console.log('用户点击取消');
       }
     },
-    delGoods(deleteSelectList) {
-      wepy
-        .request({
-          url: api.del_goods,
-          data: {
-            goods_id: deleteSelectList
-          },
-          method: 'POST'
-        })
-        .then(res => {
-          if (res.data.code) {
-            wx.showToast({
-              title: '删除成功',
-              icon: 'none',
-              duration: 2000
-            });
-            this.isMoreData = true;
-            this.initdata.page = 1;
-            this.getShopList(this.initdata);
-          } else {
-            wx.showToast({
-              title: res.data.message,
-              icon: 'none',
-              duration: 2000
-            });
-          }
-        });
-    },
+
     // 修改
     toGoodDetailsTap(id, name, index, e) {
       var that = this;
@@ -1030,6 +1003,34 @@ export default class newslist extends wepy.page {
   };
   events = {};
   //获取商品列表
+      delGoods(deleteSelectList) {
+      wepy
+        .request({
+          url: api.del_goods,
+          data: {
+            goods_id: deleteSelectList
+          },
+          method: 'POST'
+        })
+        .then(res => {
+          if (res.data.code) {
+            wx.showToast({
+              title: '删除成功',
+              icon: 'none',
+              duration: 2000
+            });
+            this.isMoreData = true;
+            this.initdata.page = 1;
+            this.getShopList(this.initdata);
+          } else {
+            wx.showToast({
+              title: res.data.message,
+              icon: 'none',
+              duration: 2000
+            });
+          }
+        });
+    }
   getShopList(data) {
     if (!this.suppliers_id || !this.user_id) {
       wx.showToast({

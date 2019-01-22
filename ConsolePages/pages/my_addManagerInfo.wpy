@@ -254,7 +254,7 @@ export default class my_addManagerInfo extends wepy.page {
     async addManager(e) {
       var user_id = e.currentTarget.dataset.user_id;
       var suppliers_id = this.$parent.globalData.suppliers_id;
-
+      var sales_id = this.sales_id ? this.sales_id : '';
       var modalRes = await wepy.showModal({
         title: '提示', //提示的标题,
         content: '确定要添加吗', //提示的内容,
@@ -274,13 +274,31 @@ export default class my_addManagerInfo extends wepy.page {
             url: url,
             data: {
               user_id,
-              suppliers_id
+              suppliers_id,
+              sales_id
             }
           })
           .then(res => {
             console.log('添加完成', res.data.data);
             if (res.data.code == '0') {
               if (this.type == 'member') {
+                wepy.showModal({
+                  title: '提示', //提示的标题,
+                  content: '添加会员成功', //提示的内容,
+                  showCancel: false, //是否显示取消按钮,
+                  cancelText: '取消', //取消按钮的文字，默认为取消，最多 4 个字符,
+                  cancelColor: '#000000', //取消按钮的文字颜色,
+                  confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
+                  confirmColor: '#e50012', //确定按钮的文字颜色,
+                
+                }).then(res=>{
+                 
+                    this.$parent.$pages["/ConsolePages/pages/my_console_check"].getShenheList(this.sales_id, suppliers_id);
+                    wx.navigateBack({
+                      delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+                    });
+                  
+                });
               } else if (this.type == 'salesman') {
                 wepy
                   .showModal({
@@ -362,10 +380,12 @@ export default class my_addManagerInfo extends wepy.page {
   };
   events = {};
   onLoad(options) {
-    console.log(options.type);
+    console.log(options);
     if (options.type) {
       this.type = options.type;
     }
+    if (options.sales_id && options.sales_id != '')
+      this.sales_id = options.sales_id;
   }
 }
 </script>

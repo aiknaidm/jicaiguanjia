@@ -216,8 +216,8 @@
   }
 }
 .info_list .weui_cell_hd {
-    margin-right: 0rpx;
-  }
+  margin-right: 0rpx;
+}
 </style>
 <template>
 
@@ -440,13 +440,13 @@ export default class newslist extends wepy.page {
       this.right = 0;
     },
     async changeShop(suppliers_id) {
-      this.yizhanInfo = await this.$parent.getYizhanInfo(
-        this.userId,
-        suppliers_id
-      );
+      this.suppliers_id=suppliers_id
+      this.$parent.globalData.suppliers_id=suppliers_id
+      console.log(   this.$parent.globalData.suppliers_id);
+   this.init(suppliers_id);
 
       this.right = 0;
-      this.onShow();
+
       this.$apply();
     },
     getFormId(e) {
@@ -541,14 +541,10 @@ export default class newslist extends wepy.page {
         this.yizhanInfo.user_nickname;
     }
   }
-  async onShow(option) {
-    this.userId = await this.$parent.loginInfo();
-    this.suppliers_id = this.$parent.globalData.suppliers_id
-      ? this.$parent.globalData.suppliers_id
-      : '';
-    let yizhanInfo = await this.$parent.getYizhanInfo(
+ async init(suppliers_id){
+  let yizhanInfo = await this.$parent.getYizhanInfo(
       this.userId,
-      this.suppliers_id
+      suppliers_id
     );
     this.yizhanInfo = yizhanInfo;
     this.orderNum();
@@ -556,8 +552,16 @@ export default class newslist extends wepy.page {
     this.isexpired(yizhanInfo);
     this.isSalesman();
     this.height = wx.getSystemInfoSync().windowHeight;
+     this.$apply();
+  }
+  async onShow(option) {
+    this.userId = await this.$parent.loginInfo();
+    this.suppliers_id = this.$parent.globalData.suppliers_id
+      ? this.$parent.globalData.suppliers_id
+      : '';
+    this.init(this.suppliers_id);
+  
     this.$apply();
-    console.log('yizhanInfo-----', yizhanInfo);
   }
 }
 </script>

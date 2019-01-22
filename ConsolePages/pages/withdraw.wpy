@@ -124,9 +124,7 @@ export default class withdraw extends wepy.page {
       // 	})
       // 	return;
       // }
-      wx.showLoading({
-        title: '提现中'
-      });
+    
       var res = await pay.wxpay3(userId);
       wx.hideLoading();
 

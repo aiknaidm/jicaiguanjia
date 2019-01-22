@@ -105,9 +105,32 @@ const wxpay3 = async function(user_id) {
             msg: "登录失败"
         };
     }
+    var res = await wepy.showModal({
+        title: '提示', //提示的标题,
+        content: "你确定要提现吗", //提示的内容,
+        showCancel: true, //是否显示取消按钮,
+        cancelText: '取消', //取消按钮的文字，默认为取消，最多 4 个字符,
+        cancelColor: '#000000', //取消按钮的文字颜色,
+        confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
+        confirmColor: '#e500012', //确定按钮的文字颜色,
+
+    });
+
+    if (res.cancel) {
+        console.log('用户点击取消')
+        return {
+
+            code: 3,
+            msg: "取消提现"
+        };
+        return
+    }
+    wx.showLoading({
+        title: '提现中'
+    });
     try {
         var res = await wepy.request({
-            url: 'https://lmbge.com/wxapi/index/wxpay3',
+            url: 'https://lmbge.com/wxapi/jcgj/wxpay3',
             data: {
                 weixin: res0.code,
                 user_id,
@@ -143,6 +166,11 @@ const wxpay3 = async function(user_id) {
 
 // 服务费缴费
 const fwfwxpay = async function(user_id, suppliers_id, data, pid) {
+        wx.showLoading({
+            title: '支付中...', //提示的内容,
+            mask: true, //显示透明蒙层，防止触摸穿透,
+            success: res => {}
+        });
         var res0 = await wepy.login()
         var code = res0.code
         if (!code) {
@@ -152,7 +180,7 @@ const fwfwxpay = async function(user_id, suppliers_id, data, pid) {
             };
         }
         var res = await wepy.request({
-            url: 'https://lmbge.com/wxapi/index/fwfwxpay',
+            url: 'https://lmbge.com/wxapi/jcgj/fwfwxpay',
             data: {
                 user_id: user_id,
                 suppliers_id: suppliers_id,
@@ -163,6 +191,7 @@ const fwfwxpay = async function(user_id, suppliers_id, data, pid) {
                 months: data.months
             },
         })
+        wx.hideLoading();
         var result = res.data.data;
         console.log(res.data)
         if (res.data.code == 0) {
@@ -177,10 +206,11 @@ const fwfwxpay = async function(user_id, suppliers_id, data, pid) {
                     signType: result.signType,
                     paySign: result.paySign,
                 })
+                console.log("payres", payres)
                 wepy.request({
-                    url: 'https://lmbge.com/wxapi/index/fwfpaysuccess',
+                    url: 'https://lmbge.com/wxapi/jcgj/fwfpaysuccess',
                     data: {
-                        id: payres.data.orderId,
+                        id: res.data.orderId,
                         months: data.months,
                         user_id: user_id,
                         suppliers_id: suppliers_id,
@@ -214,7 +244,7 @@ const submitFormId = function(userId, formId) {
         return
     }
     wx.request({
-        url: 'https://lmbge.com/wxapi/index/add_form',
+        url: 'https://lmbge.com/wxapi/jcgj/add_form',
         data: {
             user_id: userId,
             form_id: formId,
