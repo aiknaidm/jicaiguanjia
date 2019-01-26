@@ -63,6 +63,7 @@ const api = {
     jyjl: `${host}/jyjl`,
     del_goods: `${host}/del_goods`,
     xgbt: `${host}/xgbt`,
-    supplier_detail: `${host}/supplier_detail`
+    supplier_detail: `${host}/supplier_detail`,
+
 }
 export default api

@@ -212,7 +212,7 @@ export default class share extends wepy.page {
       .request({
         url: api.getShareImg,
         data: {
-          path: '/ConsolePage/pages/renzheng',
+          path: '/ConsolePages/pages/renzheng',
           user_id
         }
       })

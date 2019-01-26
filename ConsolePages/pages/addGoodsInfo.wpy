@@ -823,7 +823,7 @@ export default class newslist extends wepy.page {
     console.log('提交的内容', e.detail.value, this.imgSrc);
     var goods_img = this.imgUrl;
     console.log('goods_img', goods_img);
-    goods_img = this.imgSrc && this.imgSrc != '' ? await this.upImg() : '';
+    if(this.imgSrc!= '') goods_img =await this.upImg();
     console.log('goods_img', goods_img);
     var user_id = this.user_id;
     var goods_name = e.detail.value.goods_name; //商品名称
@@ -1035,9 +1035,12 @@ wx.showLoading({
                     });
                   }
                   var shop_price = max == min ? max : min + '~' + max;
+                    this.$parent.$pages['/ConsolePages/pages/goodsList'].list[
+                    this.index
+                  ].shop_price = shop_price;
                   this.$parent.$pages['/ConsolePages/pages/goodsList'].list[
                     this.index
-                  ].shop_price =min;
+                  ].original_img1 =goods_img;
                   this.$parent.$pages['/ConsolePages/pages/goodsList'].list[
                     this.index
                   ].goods_number = add;

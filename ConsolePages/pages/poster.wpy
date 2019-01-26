@@ -181,7 +181,7 @@ export default class newslist extends wepy.page {
     wx.request({
       url: api.getShareImg,
       data: {
-        path: '/pages/my-renzheng/index',
+        path: '/ConsolePages/pages/renzheng',
         user_id: userId
       },
       success: function(res) {

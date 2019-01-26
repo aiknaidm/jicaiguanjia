@@ -340,11 +340,6 @@ export default class newslist extends wepy.page {
       },
       {
         num: 0,
-        text: '售后退款',
-        url: '/orderList?order_status=3'
-      },
-      {
-        num: 0,
         text: '交易成功',
         url: 'orderList?order_status=4'
       },
@@ -440,17 +435,17 @@ export default class newslist extends wepy.page {
       this.right = 0;
     },
     async changeShop(suppliers_id) {
-      this.suppliers_id=suppliers_id
-      this.$parent.globalData.suppliers_id=suppliers_id
-      console.log(   this.$parent.globalData.suppliers_id);
-   this.init(suppliers_id);
+      this.suppliers_id = suppliers_id;
+      this.$parent.globalData.suppliers_id = suppliers_id;
+      console.log(this.$parent.globalData.suppliers_id);
+      this.init(suppliers_id);
 
       this.right = 0;
 
       this.$apply();
     },
     getFormId(e) {
-      console.log("formid",e);
+      console.log('formid', e);
       util.submitFormId(this.userId, e.detail.formId);
     }
   };
@@ -476,9 +471,9 @@ export default class newslist extends wepy.page {
     this.tabList[0].num = this.yizhanInfo.daifukuan;
     this.tabList[1].num = this.yizhanInfo.daifahuo;
     this.tabList[2].num = this.yizhanInfo.yifahuo;
-    this.tabList[3].num = this.yizhanInfo.tuikuan;
-    this.tabList[4].num = this.yizhanInfo.chenggong;
-    this.tabList[5].num = this.yizhanInfo.guanbi;
+
+    this.tabList[3].num = this.yizhanInfo.chenggong;
+    this.tabList[4].num = this.yizhanInfo.guanbi;
   }
   // 是否过期
   isexpired(yizhanInfo) {
@@ -532,6 +527,9 @@ export default class newslist extends wepy.page {
         this.userId +
         '&sales_name=' +
         this.yizhanInfo.user_nickname;
+    } else {
+      this.applicationList[1].url =
+        'my_console_check' 
     }
     if (this.yizhanInfo.is_salesman == 1) {
       this.applicationList[7].url =
@@ -539,20 +537,42 @@ export default class newslist extends wepy.page {
         this.userId +
         '&sales_name=' +
         this.yizhanInfo.user_nickname;
+    } else {
+      this.applicationList[7].url = '/pages/shoperweima';
     }
   }
- async init(suppliers_id){
-  let yizhanInfo = await this.$parent.getYizhanInfo(
+  async init(suppliers_id) {
+    let yizhanInfo = await this.$parent.getYizhanInfo(
       this.userId,
       suppliers_id
     );
+     if (yizhanInfo.user_type != 4) {
+      wx.showModal({
+        title: '提示',
+        content: "您还不是批发商，没有管理权限，赶紧去注册吧",
+        success: res => {
+          console.log(res);
+          if (res.cancel) {
+            wx.switchTab({
+              url: '/pages/my',
+            })
+          }
+          if (res.confirm) {
+            wx.navigateTo({
+              url: '/ConsolePages/pages/renzheng',
+            })
+          }
+        }
+      })
+      return
+    }
     this.yizhanInfo = yizhanInfo;
     this.orderNum();
     this.getjllist();
     this.isexpired(yizhanInfo);
     this.isSalesman();
     this.height = wx.getSystemInfoSync().windowHeight;
-     this.$apply();
+    this.$apply();
   }
   async onShow(option) {
     this.userId = await this.$parent.loginInfo();
@@ -560,7 +580,7 @@ export default class newslist extends wepy.page {
       ? this.$parent.globalData.suppliers_id
       : '';
     this.init(this.suppliers_id);
-  
+
     this.$apply();
   }
 }

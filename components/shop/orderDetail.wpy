@@ -404,6 +404,10 @@ page{
 .wuliu-btn.active{
   color: #e50012;
 }
+.row-box.row-box2{
+  display: flex;
+  justify-content: flex-end
+}
 </style>
 <template>
   <view>

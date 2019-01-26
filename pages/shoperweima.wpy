@@ -101,7 +101,7 @@ export default class shoperweima extends wepy.page {
         appId: 'wx7e302245debd521a',
         path:
           '/Shop/pages/index?suppliers_id=' +
-          this.$parent.globalData.suppliers_id+"&sales_id="+this.sales_id+"&is_sales=1",
+          this.$parent.globalData.suppliers_id+"&sales_id="+this.sales_id+"&sales_name="+  this.yizhanInfo.user_nickname,
         // extraData: {
         // 	suppliers_id: suppliers_id,
         // },
@@ -119,6 +119,7 @@ export default class shoperweima extends wepy.page {
     var userId = await this.$parent.loginInfo();
     this.eventDraw(userId);
     this.sales_id=options.sales_id?options.sales_id:0
+    this.sales_name=options.sales_name?options.sales_name:0
   }
   eventGetImage(event) {
     console.log('eventGetImage', event);
@@ -140,10 +141,12 @@ export default class shoperweima extends wepy.page {
       return;
     }
     var yizhanInfo = await this.$parent.getYizhanInfo(user_id, suppliers_id);
+    this.yizhanInfo=yizhanInfo
+
     wx.request({
       url: api.getQRCodeImg,
       data: {
-        path: '/Shop/pages/index?suppliers_id=' + suppliers_id+"&sales_id="+this.sales_id+"&is_sales=1",
+        path: '/Shop/pages/index?suppliers_id=' + suppliers_id+"&sales_id="+this.sales_id+"&sales_name="+this.sales_name,
         user_id,
         suppliers_id
       },
@@ -207,6 +210,17 @@ export default class shoperweima extends wepy.page {
               textAlign: 'center',
               bolder: false
             },
+               {
+              type: 'text',
+              content:that.sales_id==0?"":"业务员："+yizhanInfo.user_nickname,
+              fontSize: 12 * a,
+              width: 180 * a,
+              top: 360 * a,
+              left: 180 * a,
+              color: '#aaa',
+              textAlign: 'center',
+              bolder: false
+            },
             {
               type: 'text',
               content: '用微信扫描二维码',
@@ -218,6 +232,7 @@ export default class shoperweima extends wepy.page {
               textAlign: 'center',
               bolder: false
             },
+          
             {
               type: 'text',
               content: '成为我的会员',

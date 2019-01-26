@@ -270,6 +270,7 @@ wx-button[disabled]:not([type]) {
       </view>
 
     <button class='rz-submit' formType="submit" wx:if="{{!isuserDetail}}" disabled='{{issubmit}}'>提交</button>
+    <button class='rz-submit' @tap="backIndex" wx:else >回到首页</button>
     <!-- <button class='rz-submit' disabled='true' wx:if="{{userDetail.user_status=='0'}}">审核中...</button> -->
   </form>
 </view>
@@ -298,6 +299,9 @@ export default class newslist extends wepy.page {
   };
   computed = {};
   methods = {
+    backIndex(){
+      wx.switchTab({ url: '/pages/home' });
+    },
     // 免责条款
     showtext: function() {
       wx.navigateTo({
@@ -309,6 +313,7 @@ export default class newslist extends wepy.page {
       this.isAgreed = !this.isAgreed;
     },
     listenerPhoneInput(e) {
+
       console.log('输入的值', e.detail.value);
       this.phone = e.detail.value;
     },
@@ -356,13 +361,9 @@ export default class newslist extends wepy.page {
             icon: 'none'
           });
         }
+      }else{
+           this.smsCodeDisabled = false;
       }
-    },
-    /**
-     * 监听手机号输入
-     */
-    listenerPhoneInput: function(e) {
-      this.inputPhone = e.detail.value;
     },
     /**
      * 监听验证码输入
@@ -397,22 +398,21 @@ export default class newslist extends wepy.page {
     }, 1000);
   }
   // 绑定上级
-  bindSuperior(shareCode, userId) {
-    wx.request({
-      url: url.jlxx,
+ async bindSuperior(shareCode, userId) {
+  var res=await  wepy.request({
+      url: api.getYizhanInfo,
       data: {
         share_code: shareCode,
         user_id: userId
       },
-      success: res => {
-        console.log('分享码绑定成功', res);
-      }
+   
     });
+    return res.data.data
   }
   //检查输入的手机号
-  checkPhone(param) {
+  checkPhone(param="") {
     var phone = util.regexConfig().phone;
-    console.log(util);
+   
     var inputUserName = param.trim();
     if (phone.test(inputUserName)) {
       return true;
@@ -560,14 +560,13 @@ export default class newslist extends wepy.page {
   }
   async onLoad(option) {
     let userId = await this.$parent.loginInfo();
-    let suppliers_id = this.$parent.globalData.suppliers_id;
+  
     let shareCode = option.shareCode;
     this.shareCode = shareCode;
     this.userId = userId;
-    if (shareCode) this.bindSuperior(shareCode, userId);
-    let yizhanInfo = await this.$parent.getYizhanInfo(userId,suppliers_id);
-
-    console.log('易站信息', yizhanInfo);
+     if (shareCode) var yizhanInfo= await this.bindSuperior(shareCode, userId);
+     else var yizhanInfo= await this.$parent.getYizhanInfo(userId);
+  
     if (yizhanInfo.user_type == 4) {
       console.log('已注册');
         this.isuserDetail = true;
@@ -577,6 +576,7 @@ export default class newslist extends wepy.page {
       this.region[2] = yizhanInfo.qu;
       this.phone = yizhanInfo.mobile;
     } else {
+     
       console.log('开始注册');
     }
     this.$apply();
