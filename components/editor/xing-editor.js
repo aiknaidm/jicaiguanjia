@@ -23,7 +23,7 @@ Component({
                     type: String,
                     value: "",
                     observer: function observer(newVal, oldVal) {
-                        console.log(newVal, oldVal)
+                        console.log("newVal", newVal, "oldVal", oldVal)
                         if (JSON.stringify(newVal) !== JSON.stringify(oldVal) &&
                             newVal) {
                             this.start();
@@ -348,7 +348,9 @@ Component({
             }
             const node = nodeList[index];
             if (node.name === 'img' && !node.attrs._uploaded) {
+
               this.uploadImage(node).then(() => {
+
                 this.handleOutput(index + 1)
               });
             } else {

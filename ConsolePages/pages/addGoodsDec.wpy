@@ -36,8 +36,10 @@ export default class newslist extends wepy.page {
   events = {};
   async getIndexNewsList(id) {}
   async onLoad(option) {
-    var that=this
-    this.html= this.$parent.$pages['/ConsolePages/pages/addGoodsInfo'].goods_desc
+    var that=this;
+    this.html= this.$parent.$pages['/ConsolePages/pages/addGoodsInfo'].goods_desc,
+
+
 this.$apply();
 
   }

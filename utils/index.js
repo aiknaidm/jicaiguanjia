@@ -256,12 +256,43 @@ const html_decode = function(str) {
         var s = "";
         if (str.length == 0) return "";
         // s = str.replace(/&gt;/g, "&");
-        s = str.replace(/&lt;/g, "<");
+
+        s = str.replace(/&amp;/g, "&");
+        s = s.replace(/&amp;/g, "&");
+        s = s.replace(/&amp;/g, "&");
+        s = s.replace(/&lt;/g, "<");
         s = s.replace(/&gt;/g, ">");
+        s = s.replace(/\/>/g, '></img>');
+        if (s.substr(0, 1) != "<") {
+            s = "<p>" + s
+        }
+        if (s.substr(s.length - 1, 1) != ">") {
+            s = s + "</p>"
+        }
+        if (s.substr(s.length - 5, 5) == "/img>") {
+            console.log(s);
+        }
+        s = s.replace(/<img/g, '</p><img');
+        s = s.replace(/<\/img>/g, '<\/img><p>');
+
+        s = s.replace(/\/>/g, '/></p>');
+        s = s.replace(/\/><\/p>/g, '/>');
+        s = s.replace(/<\/p><\/p>/g, '</p>');
+        s = s.replace(/<p><\/p>/g, '');
+        // s = s.replace(/>\/n<p><\/p><img/g, '><img');
+        // s = s.replace(/>\/r<p><\/p><img/g, '><img');
+        // s = s.replace(/>\/r\/n<p><\/p><img/g, '><img');
+        // s = s.replace(/>\/n\/r<p><\/p><img/g, '><img');
+        s = s.replace(/<p><p/g, '<p');
+
+
         s = s.replace(/&nbsp;/g, " ");
         s = s.replace(/&#39;/g, "\'");
         s = s.replace(/&quot;/g, "\"");
         s = s.replace(/<br>/g, "\n");
+        // s = s.replace(/<p/g, '<p class="xing-p"');
+        // s = s.replace(/<img/g, '<img class="xing-img"');
+        console.log("ssssssssssssssssssss", s)
         return s;
     }
     //邮箱以及手机的正则表达式
