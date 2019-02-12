@@ -290,8 +290,8 @@ const html_decode = function(str) {
         s = s.replace(/&#39;/g, "\'");
         s = s.replace(/&quot;/g, "\"");
         s = s.replace(/<br>/g, "\n");
-        // s = s.replace(/<p/g, '<p class="xing-p"');
-        // s = s.replace(/<img/g, '<img class="xing-img"');
+        s = s.replace(/<p/g, '<p class="xing-p"');
+        s = s.replace(/<img/g, '<img class="xing-img"');
         console.log("ssssssssssssssssssss", s)
         return s;
     }
