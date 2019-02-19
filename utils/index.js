@@ -264,10 +264,7 @@ const html_decode = function(str) {
         s = s.replace(/&gt;/g, ">");
         s = s.replace(/\/>/g, '></img>');
 
-        s = "<p>" + s
-
-
-        s = s + "</p>"
+        s = "<p>" + s + "</p>"
 
         // if (s.substr(s.length - 5, 5) == "/img>") {
         //     console.log(s);
@@ -278,6 +275,10 @@ const html_decode = function(str) {
         s = s.replace(/\/>/g, '/></p>');
         s = s.replace(/\/><\/p>/g, '/>');
         s = s.replace(/<\/p><\/p>/g, '</p>');
+        s = s.replace(/<\/p>\/n<\/p>/g, '</p>');
+        s = s.replace(/<\/p>\/r<\/p>/g, '</p>');
+        s = s.replace(/<\/p>\/n\/r<\/p>/g, '</p>');
+        s = s.replace(/<\/p>\/r\/n<\/p>/g, '</p>');
         s = s.replace(/<p><\/p>/g, '');
         // s = s.replace(/>\/n<p><\/p><img/g, '><img');
         // s = s.replace(/>\/r<p><\/p><img/g, '><img');
@@ -286,13 +287,16 @@ const html_decode = function(str) {
         s = s.replace(/<p><p/g, '<p');
 
 
+
         s = s.replace(/&nbsp;/g, " ");
         s = s.replace(/&#39;/g, "\'");
         s = s.replace(/&quot;/g, "\"");
         s = s.replace(/<br>/g, "\n");
         s = s.replace(/<p/g, '<p class="xing-p"');
         s = s.replace(/<img/g, '<img class="xing-img"');
-        console.log("ssssssssssssssssssss", s)
+        s = s.replace(/src="\/images/g, 'src="http://maijia.jicaizx.com/images');
+
+        s = s.replace(/ ><\/img>/g, ' _uploaded="true"></img>');
         return s;
     }
     //邮箱以及手机的正则表达式

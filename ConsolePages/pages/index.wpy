@@ -218,6 +218,9 @@
 .info_list .weui_cell_hd {
   margin-right: 0rpx;
 }
+.order_list .weui_cell_hd{
+  width: auto
+}
 </style>
 <template>
 
@@ -249,7 +252,7 @@
       </view>
     </view>
      <form report-submit bindsubmit='getFormId'>
-    <view class="info_list" wx:if="{{yizhanInfo.is_admin==1}}">
+    <view class="info_list order_list" wx:if="{{yizhanInfo.is_admin==1}}">
         <navigator
           url="{{}}"
           open-type="navigate"
@@ -546,7 +549,9 @@ export default class newslist extends wepy.page {
       this.userId,
       suppliers_id
     );
-     if (yizhanInfo.user_type != 4) {
+    console.log(!yizhanInfo.is_admin,!yizhanInfo.is_salesman);
+    console.log("111",yizhanInfo.is_admin,yizhanInfo.is_salesman);
+     if (!yizhanInfo.is_admin&&!yizhanInfo.is_salesman) {
       wx.showModal({
         title: '提示',
         content: "您还不是批发商，没有管理权限，赶紧去注册吧",

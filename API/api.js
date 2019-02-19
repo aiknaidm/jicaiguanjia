@@ -64,6 +64,8 @@ const api = {
     del_goods: `${host}/del_goods`,
     xgbt: `${host}/xgbt`,
     supplier_detail: `${host}/supplier_detail`,
-
+    upload_goodimg: `${host}/upload_goodimg`,
+    //管理员
+    suppliers_list: `${host}/suppliers_list`
 }
 export default api

@@ -1,153 +1,180 @@
 <style lang="less">
-.ad {
-  width: 100%;
-  height: 200rpx;
-}
-.ad image {
-  width: 100%;
-  height: 100%;
-}
-.info_list {
-  border-top: 0px solid;
-}
-.info_list .weui_cell {
-  border-bottom: 1px solid #eee;
-  margin-bottom: 0
-}
+  .ad {
+    width: 100%;
+    height: 200rpx;
+  }
+  .ad image {
+    width: 100%;
+    height: 100%;
+  }
+  .info_list {
+    border-top: 0px solid;
+  }
+  .info_list .weui_cell {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center
+  }
+  .info_list .weui_cell_hd {
+    margin-bottom: 0;
+  }
 </style>
 <template>
   <view class="container">
-    <userInfo :userData.sync="userInfo"></userInfo>
-
+    <userInfo :userData.sync="userInfo" @tap="getUserInfo2"></userInfo>
     <view class="info_list">
       <repeat for="{{tabList}}" wx:key="{{index}}">
         <myList :tabItem="item"></myList>
       </repeat>
     </view>
-      <!-- <view class='ad'  @tap='toBannerDetail2' >
-    <image src='http://wsc.jicaizx.com/images/ad1.jpg'  mode='aspectFill'></image>
-  </view> -->
+    <!-- <view class='ad'  @tap='toBannerDetail2' >
+      <image src='http://wsc.jicaizx.com/images/ad1.jpg'  mode='aspectFill'></image>
+    </view> -->
     <!-- 遮罩层 -->
     <mask wx:if="{{isShowprompt}}"></mask>
     <!-- 为获取用户信息的提示 -->
     <prompt wx:if="{{isShowprompt}}" @gotUserInfo.user="getUserInfo"></prompt>
     <!-- <view class="info_list">
-      <myList :tabItem="myConsole"></myList>
-    </view>
-    <view class="info_list">
-      <myList :tabItem="myRenzheng"></myList>
-    </view>-->
+        <myList :tabItem="myConsole"></myList>
+      </view>
+      <view class="info_list">
+        <myList :tabItem="myRenzheng"></myList>
+      </view>-->
   </view>
 </template>
 
 <script>
-import wepy from 'wepy';
-import api from '../API/api';
-import userInfo from '../components/userinfo';
-import myList from '../components/myList';
-import prompt from '../components/prompt';
-
-export default class my extends wepy.page {
-  config = {
-    navigationBarTitleText: '我的'
-  };
-  components = {
-    userInfo,
-    myList,
-    prompt
-  };
-
-  data = {
-    userInfo: {},
-
-    tabList: [
-      {
-        icon: '/images/icon_normal.png',
-        text: '实名认证',
-        url: '/ConsolePages/pages/renzheng'
-      },
-      {
-        icon: '/images/console.png',
-        text: '管理工作台',
-        url: '/ConsolePages/pages/index'
-      },
-      {
-        icon: '/images/share.png',
-        text: '分享',
-        url: '/ConsolePages/pages/share'
-      }
-    ],
-    isShowprompt: false
-  };
-
-  computed = {};
-  methods = {
-    getUserInfo(e, evt) {
-      console.log(e.detail.userInfo);
-      if (e.detail.userInfo) {
-        console.log('获取用户信息成功');
-        this.userInfo = e.detail.userInfo;
-        this.upUserInfo();
+  import wepy from 'wepy';
+  import api from '../API/api';
+  import userInfo from '../components/userinfo';
+  import myList from '../components/myList';
+  import prompt from '../components/prompt';
+  export default class my extends wepy.page {
+    config = {
+      navigationBarTitleText: '我的'
+    };
+    components = {
+      userInfo,
+      myList,
+      prompt
+    };
+    data = {
+      userInfo: {},
+      tabList: [{
+          icon: '/images/icon_normal.png',
+          text: '实名认证',
+          url: '/ConsolePages/pages/renzheng'
+        },
+        {
+          icon: '/images/console.png',
+          text: '管理工作台',
+          url: '/ConsolePages/pages/index'
+        },
+        {
+          icon: '/images/share.png',
+          text: '分享',
+          url: '/ConsolePages/pages/share'
+        }
+      ],
+      isShowprompt: false
+    };
+    computed = {};
+    methods = {
+      getUserInfo2(e, evt) {
+        this.isShowprompt = true;
         this.$apply();
-      } else console.log('获取用户信息失败');
-      this.isShowprompt = false;
-      this.$apply();
-    },
-    toBannerDetail2: function() {
-      wx.navigateToMiniProgram({
-        appId: 'wxf48cdd6a7dae8c21',
-        path: 'pages/my/survey-ticket3/index',
-
-        // envVersion: 'release',
-        envVersion: 'develop',
-        success(res) {
-          // 打开成功
-        }
-      });
-    }
-  };
-  events = {};
-  upUserInfo() {
-    wepy
-      .request({
-        url: api.upUserInfo,
-        data: {
-          user_id: this.userId,
-          avatarUrl: this.userInfo.avatarUrl,
-          nickName: this.userInfo.nickName
-        }
-      })
-      .then(res => {
-        wx.showToast({
-          title: '提交信息成功', //提示的内容,
-          icon: 'none' //图标,
+      },
+      getUserInfo(e, evt) {
+        console.log(e.detail.userInfo);
+        if (e.detail.userInfo) {
+          console.log('获取用户信息成功');
+          this.userInfo = e.detail.userInfo;
+          this.upUserInfo();
+          this.$apply();
+        } else console.log('获取用户信息失败');
+        this.isShowprompt = false;
+        this.$apply();
+      },
+      toBannerDetail2: function() {
+        wx.navigateToMiniProgram({
+          appId: 'wxf48cdd6a7dae8c21',
+          path: 'pages/my/survey-ticket3/index',
+          // envVersion: 'release',
+          envVersion: 'develop',
+          success(res) {
+            // 打开成功
+          }
         });
-      });
-  }
-
-  async onLoad() {
-    // wx.showLoading({
-    //   title: '加载中...', //提示的内容,
-    //   mask: true, //显示透明蒙层，防止触摸穿透,
-    //   success: res => {}
-    // });
-    let that = this;
-    this.userId = await this.$parent.loginInfo();
-    let isSettingStatus = await this.$parent.checkSettingStatus();
-    let userInfo = await this.$parent.getUserInfo(this.userId);
-    this.userInfo = userInfo;
-    // 是否有获取用户信息的权限
-    if (isSettingStatus) {
-      console.log('已获取权限');
-      console.log('userInfo', this.userInfo);
-      this.$apply();
-    } else {
-      this.isShowprompt = true;
-      this.$apply();
-      console.log('显示获取信息的提示未获取权限');
+      }
+    };
+    events = {};
+    upUserInfo() {
+      wepy
+        .request({
+          url: api.upUserInfo,
+          data: {
+            user_id: this.userId,
+            avatarUrl: this.userInfo.avatarUrl,
+            nickName: this.userInfo.nickName
+          }
+        })
+        .then(res => {
+          wx.showToast({
+            title: '提交信息成功', //提示的内容,
+            icon: 'none' //图标,
+          });
+        });
     }
-
-    // console.log('userInfo', userInfo);
+    async onLoad() {
+      // wx.showLoading({
+      //   title: '加载中...', //提示的内容,
+      //   mask: true, //显示透明蒙层，防止触摸穿透,
+      //   success: res => {}
+      // });
+      let that = this;
+      this.userId = await this.$parent.loginInfo();
+      let isSettingStatus = await this.$parent.checkSettingStatus();
+      let userInfo = await this.$parent.getUserInfo(this.userId);
+     
+      this.userInfo = userInfo;
+      // 是否有获取用户信息的权限
+      if (isSettingStatus) {
+        console.log('已获取权限');
+        console.log('userInfo', this.userInfo);
+        this.$apply();
+      } else {
+        this.isShowprompt = true;
+        this.$apply();
+        console.log('显示获取信息的提示未获取权限');
+      }
+      // 判断身份
+      if (userInfo.user_type >= 5) {
+        console.log("管理员")
+        this.tabList = [{
+            icon: '/images/icon_normal.png',
+            text: '实名认证',
+            url: '/ConsolePages/pages/renzheng'
+          },
+          {
+            icon: '/images/console.png',
+            text: '管理工作台',
+            url: '/ConsolePages/pages/index'
+          },
+          {
+            icon: '/images/share.png',
+            text: '分享',
+            url: '/ConsolePages/pages/share'
+          },
+          {
+            icon: '/images/share.png',
+            text: '管理员界面',
+            url: '/Admin/pages/index'
+          }
+        ]
+         this.$apply();
+      }
+      // console.log('userInfo', userInfo);
+    }
   }
-}
 </script>

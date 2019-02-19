@@ -839,6 +839,7 @@ export default class newslist extends wepy.page {
         parent_id == 0 && this.currentIndex > 0
           ? this.statusid[this.currentIndex - 1]
           : parent_id;
+     this.isMoreData = true;
       this.getShopList(this.initdata);
       this.$apply();
     },

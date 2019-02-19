@@ -9,6 +9,7 @@ view {
   width: 100%;
   background-color: #fff;
   border-top: 16rpx solid #f0f0f0;
+  border-bottom: 1rpx solid #eee
 }
 
 .a-order .order-date {
@@ -63,7 +64,7 @@ view {
   justify-content: space-between;
   padding: 20rpx 30rpx;
   border-bottom: 1px solid #f0f0f0;
-  background: #f0f0f0;
+  background: #fff;
 }
 
 .img-box1 .goods-img {
@@ -157,7 +158,7 @@ button.ss-my-d {
 .address-box {
   font-size: 24rpx;
   color: #797979;
-  background-color: #f2f2f2;
+  background-color: #fff;
   padding: 20rpx 40rpx;
   display: flex;
   align-items: center;

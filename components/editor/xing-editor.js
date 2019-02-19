@@ -288,74 +288,89 @@ Component({
                  */
                 nodeListToHTML: function() {
                         return this.data.nodeList.map(node => `<${node.name} ${Object.keys(node.attrs).map(key => `${key}="${node.attrs[key]}"`).join(' ')}>${node.children ? this.htmlEncode(node.children[0].text) : ''}</${node.name}>`).join('');
-          },
+    },
 
-          /**
-           * 方法：上传图片
-           */
-          uploadImage: function (node) {
-            return new Promise(resolve => {
-              let options = {
-                filePath: node.attrs.src,
-                url: this.properties.imageUploadUrl,
-                name: this.properties.imageUploadName,
-                header: {
-                  'Accept': 'application/json'
-                },
-              }
-              console.log(options)
-              if (this.properties.imageUploadHeader) {
-                options.header = this.properties.imageUploadHeader;
-              }
-              if (this.properties.imageUploadFormData) {
-                options.formData = this.properties.imageUploadFormData;
-              }
-              options.success = res => {
-                const keyChain = this.properties.imageUploadKeyChain.split('.');
-                console.log("res", res)
-                let url = JSON.parse(res.data.trim());
-
-                // keyChain.forEach(key => {
-                //   url = url[key];
-                // })
-                console.log("url", url)
-                node.attrs.src = url.data.pic_url;
-                node.attrs._uploaded = true;
-                resolve();
-              }
-              wx.uploadFile(options);
-            })
-          },
-
-          /**
-           * 方法：处理节点，递归
-           */
-          handleOutput: function (index = 0) {
-            let nodeList = this.data.nodeList;
-            if (index >= nodeList.length) {
-              wx.hideLoading();
-              if (this.properties.outputType.toLowerCase() === 'array') {
-                this.triggerEvent('finish', {
-                  content: this.data.nodeList
-                });
-              }
-              if (this.properties.outputType.toLowerCase() === 'html') {
-                this.triggerEvent('finish', {
-                  content: this.nodeListToHTML()
-                });
-              }
-              return;
-            }
-            const node = nodeList[index];
-            if (node.name === 'img' && !node.attrs._uploaded) {
-
-              this.uploadImage(node).then(() => {
-
-                this.handleOutput(index + 1)
-              });
-            } else {
-              this.handleOutput(index + 1);
-            }
+    /**
+     * 方法：上传图片
+     */
+    uploadImage: function (node) {
+      return new Promise((resolve, reject) => {
+        let options = {
+          filePath: node.attrs.src,
+          url: this.properties.imageUploadUrl,
+          name: this.properties.imageUploadName,
+          header: {
+            'Accept': 'application/json'
           },
         }
+        if (this.properties.imageUploadHeader) {
+          options.header = this.properties.imageUploadHeader;
+        }
+        if (this.properties.imageUploadFormData) {
+          options.formData = this.properties.imageUploadFormData;
+        }
+        options.success = res => {
+          const keyChain = this.properties.imageUploadKeyChain.split('.');
+          console.log("res", res)
+          let url = JSON.parse(res.data.trim());
+
+          // keyChain.forEach(key => {
+          //   url = url[key];
+          // })
+          console.log("url", url)
+          node.attrs.src = url.data.pic_url;
+          node.attrs._uploaded = true;
+          resolve();
+        }
+        options.fail = res =>  {  console.log("error", res)
+            reject(res);
+        }
+   
+            wx.uploadFile(options); 
+     
+       
+
+
       })
+    },
+
+    /**
+     * 方法：处理节点，递归
+     */
+    handleOutput: function (index = 0) {
+        console.log("handleoutinput index",index)
+      let nodeList = this.data.nodeList;
+      if (index >= nodeList.length) {
+        wx.hideLoading();
+        if (this.properties.outputType.toLowerCase() === 'array') {
+          this.triggerEvent('finish', {
+            content: this.data.nodeList
+          });
+        }
+        if (this.properties.outputType.toLowerCase() === 'html') {
+          this.triggerEvent('finish', {
+            content: this.nodeListToHTML()
+          });
+        }
+        return;
+      }
+      const node = nodeList[index];
+      console.log(node.attrs._uploaded,!node.attrs._uploaded);
+      if (node.name === 'img' && !node.attrs._uploaded) {
+  
+          this.uploadImage(node).then(() => {
+
+            this.handleOutput(index + 1)
+          }).catch(res=>{
+            console.log("upimg catch res",res)
+              this.handleOutput(index + 1)
+             
+          });
+      
+
+      } else {
+        this.handleOutput(index + 1);
+      }
+    },
+  }
+})

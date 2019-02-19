@@ -147,6 +147,13 @@ export default class extends wepy.app {
           'pages/goodsList',
           'pages/changeGoodsInfo'
         ]
+      },
+      {
+        root: 'Admin',
+        pages: [
+          'pages/index',
+        
+        ]
       }
     ],
 
