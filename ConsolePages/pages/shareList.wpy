@@ -173,17 +173,17 @@ export default class newslist extends wepy.page {
       if (data[index].add_time)
         data[index].add_time_t = utils.formatTime(
           new Date(item.add_time * 1000),
-          'yyyy-mm-dd'
+          'yyyy-MM-dd'
         );
       if (data[index].create_time)
         data[index].create_time_t = utils.formatTime(
           new Date(item.create_time * 1000),
-          'yyyy-mm-dd'
+          'yyyy-MM-dd'
         );
       if (data[index].tixian_time)
         data[index].tixian_time_t = utils.formatTime(
           new Date(item.tixian_time * 1000),
-          'yyyy-mm-dd'
+          'yyyy-MM-dd'
         );
       // if (data[index].create_time) data[index].create_time_t = utils.formatTime(new Date(item.create_time * 1000));
     });

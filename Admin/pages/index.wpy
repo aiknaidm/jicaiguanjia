@@ -1,4 +1,7 @@
 <style lang="less">
+    .container {
+        margin-top: 100rpx;
+    }
     .suppliers-list {
         padding: 30rpx 40rpx;
         border-bottom: 10rpx solid #f0f0f0;
@@ -18,10 +21,127 @@
     .supplier-content {
         flex: 1
     }
+    /*搜索框  */
+    .ss-my {
+        display: flex;
+        background-color: #f0f0f0;
+        text-align: center;
+        width: 100%;
+        height: 92rpx;
+        position: fixed;
+        z-index: 100;
+        justify-content: center;
+        align-items: center;
+        top: 0
+    }
+    .ss-my.active {
+        display: flex;
+    }
+    .ss-my-c {
+        display: flex;
+        flex: 1;
+        margin-left: 10px;
+    }
+    .ss-my-c image {
+        width: 30rpx;
+        height: 30rpx;
+    }
+    .ss-my-c-img {
+        background-color: #fff;
+        width: 60rpx;
+        height: 60rpx;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 3px 0 0 3px;
+    }
+    .ss-my-c-ipt {
+        background-color: #fff;
+        height: 60rpx;
+        line-height: 60rpx;
+        flex: 1;
+    }
+    .ss-my-c-ipt input {
+        width: 100%;
+        height: 100%;
+        font-size: 30rpx;
+    }
+    .ss-my-c-x {
+        background-color: #fff;
+        width: 60rpx;
+        height: 60rpx;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 0px 3px 3px 0px;
+    }
+    .ss-my-d {
+        width: 100rpx;
+        height: 60rpx;
+        border: 1px solid #f0f0f0;
+        text-align: center;
+        line-height: 60rpx;
+        border-radius: 10rpx;
+        font-size: 28rpx;
+        background-color: #fff;
+        margin-left: 10rpx;
+        margin-right: 10px;
+        color: #e50012;
+    }
+    .ss-hot {
+        padding: 24rpx;
+        background-color: #fff;
+    }
+    .ss-title {
+        display: flex;
+        justify-content: space-between;
+        font-size: 30rpx;
+    }
+    .ss-title view:last-child {
+        font-size: 28rpx;
+        color: #e50112;
+    }
+    .ss-content {
+        display: flex;
+        margin-top: 24rpx;
+        flex-wrap: wrap;
+        flex: 1;
+    }
+    .ss-content view {
+        margin-right: 24rpx;
+        padding: 15rpx 20rpx;
+        background-color: #f0f0f0;
+        margin-bottom: 24rpx;
+        border-radius: 10rpx;
+        font-size: 30rpx;
+    }
+    .queding {
+        background-color: #fff;
+        color: #333;
+    }
 </style>
 <template>
     <view class="container">
-        <view class="suppliers-list" wx:for="{{suppliers_list}}" wx:key="{{index}}">
+        <!--搜索  -->
+        <!-- <form report-submit @submit='getFormId'> -->
+        <view class="ss-my {{showSearch?'active':''}}">
+            <view class='ss-my-c'>
+                <view class='ss-my-c-img'>
+                    <image src='/images/s.png'></image>
+                </view>
+                <view class='ss-my-c-ipt'>
+                    <input value='{{keyword}}' placeholder='输入关键词' @input="searchIpt"></input>
+                </view>
+                <view class='ss-my-c-x'>
+                    <text hidden='true'></text>
+                </view>
+            </view>
+            <button class="ss-my-d button-hover" @tap='buttonTap' form-type='submit'>
+                    确定
+                  </button>
+        </view>
+        <!-- </form> -->
+        <view class="suppliers-list" wx:for="{{suppliers_list}}" wx:key="{{index}}" @tap="supplierDetail({{item.suppliers_id}},{{item}})">
             <view class="supplier-img">
                 <image src="{{item.img}}" lazy-load="false">
                 </image>
@@ -57,35 +177,58 @@
             getFormId(e) {
                 console.log('formid', e);
                 util.submitFormId(this.userId, e.detail.formId);
+            },
+            searchIpt(e) {
+                this.inputValue = e.detail.value
+            },
+            buttonTap() {
+                console.log("搜索", this.searchValue)
+                this.searchValue = this.inputValue
+                this.getjllist(1, this.searchValue)
+            },
+            supplierDetail(suppliers_id = "",supplierDetail) {
+                this.$parent.globalData.suppliers_img=supplierDetail.img
+                this.$parent.globalData.end_time_new=supplierDetail.end_time_new
+                this.$parent.globalData.suppliers_id=supplierDetail.suppliers_id
+                console.log("this.$parent.globalData.suppliers_id",this.$parent.globalData);
+                console.log("this.$parent.globalData.suppliers_id",this.$parent.globalData.suppliers_id);
+                wx.navigateTo({
+                    url: "supplierDetail?suppliers_id=" + suppliers_id
+                });
             }
         };
         events = {};
         async getIndexNewsList(id) {}
         // 获取管理的易站列表
-        async getjllist(page = 1) {
+        async getjllist(page = 1, keyword) {
+            if (keyword) var data = {
+                page,
+                keyword
+            }
+            else var data = {
+                page
+            }
             wepy
                 .request({
                     url: api.suppliers_list,
-                    data: {
-                        page
-                    }
+                    data
                 })
                 .then(res => {
-                   
-                    var that=this
+                    var that = this
                     wx.hideLoading();
                     res.data.data.data.forEach(function(item, index) {
                         res.data.data.data[index].end_time_new = util.formatTime(
                             new Date(item.end_time * 1000),
-                            'yyyy-mm-dd'
+                            'yyyy-MM-dd'
                         );
-                        res.data.data.data[index].is_expire = (that.newData > item.end_time*1000)
+                        res.data.data.data[index].is_expire = (that.newData > item.end_time * 1000)
                     })
-                    this.suppliers_list.push(...res.data.data.data);
+                    if (page == 1) this.suppliers_list = res.data.data.data
+                    else this.suppliers_list.push(...res.data.data.data);
                     this.datas = res.data.data;
                     if (res.data.data.data.length == 0)
                         this.isMoreData = false
-                     console.log('管理工作台-易站列表res',  res.data.data.data);
+                    console.log('管理工作台-易站列表res', res.data.data.data);
                     this.$apply();
                 });
         }
@@ -93,10 +236,9 @@
             // this.userId = await this.$parent.loginInfo();
         }
         onLoad() {
-            this.newData=new Date().getTime();
+            this.newData = new Date().getTime();
             this.getjllist();
             this.$apply();
-           
         }
         onReachBottom() {
             if (this.isMoreData) {
@@ -106,7 +248,7 @@
                     mask: true, //显示透明蒙层，防止触摸穿透,
                     success: res => {}
                 });
-                this.getjllist(this.datas.current_page + 1);
+                this.getjllist(this.datas.current_page + 1, this.searchValue);
             }
         }
     }

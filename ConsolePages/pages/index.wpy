@@ -218,8 +218,8 @@
 .info_list .weui_cell_hd {
   margin-right: 0rpx;
 }
-.order_list .weui_cell_hd{
-  width: auto
+.order_list .weui_cell_hd {
+  width: auto;
 }
 </style>
 <template>
@@ -327,29 +327,29 @@ export default class newslist extends wepy.page {
         num: 0,
         text: '待付款',
 
-        url: 'orderList?order_status=0'
+        url: '/ConsolePages/pages/orderList?order_status=0'
       },
       {
         num: 0,
 
         text: '待发货',
-        url: 'orderList?order_status=1'
+        url: '/ConsolePages/pages/orderList?order_status=1'
       },
       {
         num: 0,
         text: '已发货',
 
-        url: 'orderList?order_status=2'
+        url: '/ConsolePages/pages/orderList?order_status=2'
       },
       {
         num: 0,
         text: '交易成功',
-        url: 'orderList?order_status=4'
+        url: '/ConsolePages/pages/orderList?order_status=4'
       },
       {
         num: 0,
         text: '交易关闭',
-        url: 'orderList?order_status=5'
+        url: '/ConsolePages/pages/orderList?order_status=5'
       }
     ],
     shopList: [
@@ -411,12 +411,22 @@ export default class newslist extends wepy.page {
         bgcolor: '#10b3b1'
       },
       {
-        icon: '/images/console/guanliyuanbd.png',
+        icon: '/images/console/ywy.png',
         text: '业务员绑定',
         url: 'my_setSalesman',
         bgcolor: '#10b3b1',
-        isadmin: 1
+        isadmin: 1,
+          isfufei:1,
       },
+      {
+        icon: '/images/console/hyk.png',
+        text: '会员卡',
+        url: 'clubCard/payCard',
+        bgcolor: '#fd7602',
+        isadmin: 1,
+        isfufei:1,
+      },
+  
       {
         icon: '/images/console/chakanmyshop.png',
         text: '查看我的店铺',
@@ -522,6 +532,28 @@ export default class newslist extends wepy.page {
       });
     }
   }
+  // 是否开通会员卡
+  ishasCard() {
+    wepy
+      .request({
+        url: api.supplier_detail, //开发者服务器接口地址",
+        data: {
+          user_id: this.userId,
+          suppliers_id: this.suppliers_id
+        } //请求的参数",
+      })
+      .then(res => {
+        console.log('res', res);
+        if(res.data.code==0&&res.data.data.is_kthy==1){
+          console.log("开通会员卡")
+          this.$parent.globalData.is_kthy=res.data.data.is_kthy
+          this.applicationList[7].url = '/ConsolePages/pages/clubCard/setCard';
+        }else{
+           this.$parent.globalData.is_kthy=res.data.data.is_kthy
+           this.applicationList[7].url = '/ConsolePages/pages/clubCard/payCard';
+        }
+      });
+  }
   // 是否是业务员
   isSalesman() {
     if (this.yizhanInfo.is_salesman == 1 && this.yizhanInfo.is_admin == 0) {
@@ -531,17 +563,16 @@ export default class newslist extends wepy.page {
         '&sales_name=' +
         this.yizhanInfo.user_nickname;
     } else {
-      this.applicationList[1].url =
-        'my_console_check' 
+      this.applicationList[1].url = 'my_console_check';
     }
     if (this.yizhanInfo.is_salesman == 1) {
-      this.applicationList[7].url =
+      this.applicationList[8].url =
         '/pages/shoperweima?sales_id=' +
         this.userId +
         '&sales_name=' +
         this.yizhanInfo.user_nickname;
     } else {
-      this.applicationList[7].url = '/pages/shoperweima';
+      this.applicationList[8].url = '/pages/shoperweima';
     }
   }
   async init(suppliers_id) {
@@ -549,33 +580,34 @@ export default class newslist extends wepy.page {
       this.userId,
       suppliers_id
     );
-    console.log(!yizhanInfo.is_admin,!yizhanInfo.is_salesman);
-    console.log("111",yizhanInfo.is_admin,yizhanInfo.is_salesman);
-     if (!yizhanInfo.is_admin&&!yizhanInfo.is_salesman) {
+
+    if (!yizhanInfo.is_admin && !yizhanInfo.is_salesman) {
       wx.showModal({
         title: '提示',
-        content: "您还不是批发商，没有管理权限，赶紧去注册吧",
+        content: '您还不是批发商，没有管理权限，赶紧去注册吧',
         success: res => {
           console.log(res);
           if (res.cancel) {
             wx.switchTab({
-              url: '/pages/my',
-            })
+              url: '/pages/my'
+            });
           }
           if (res.confirm) {
             wx.navigateTo({
-              url: '/ConsolePages/pages/renzheng',
-            })
+              url: '/ConsolePages/pages/renzheng'
+            });
           }
         }
-      })
-      return
+      });
+      return;
     }
     this.yizhanInfo = yizhanInfo;
+    this.suppliers_id=yizhanInfo.suppliers_id
     this.orderNum();
     this.getjllist();
     this.isexpired(yizhanInfo);
     this.isSalesman();
+    this.ishasCard();
     this.height = wx.getSystemInfoSync().windowHeight;
     this.$apply();
   }

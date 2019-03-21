@@ -218,7 +218,9 @@ button.ss-my-d {
         <view class="total-price">共{{goodsMap.length}}件商品 合计：<text class="red">¥ {{orderList.order_amount}}</text></view>
       </view>
         <view class="price-box price-box2" wx:if="{{item.pay_id}}">
-        <view class='name'>支付方式：{{item.pay_id==2?"线下支付 请注意核对订单":"线上支付"}}</view>
+        <view class='name' wx:if="{{item.pay_id==2}}">支付方式：线下支付 请注意核对订单</view>
+        <view class='name' wx:if="{{item.pay_id==0}}">支付方式：线上支付</view>
+        <view class='name' wx:if="{{item.pay_id==4}}">支付方式：会员卡支付</view>
         <!-- <view class="total-price">{{item.pay_id==2?"微信昵称：":"银行卡号："}}{{item.pay_note}}</view> -->
       </view>
 			 <view class="price-box" wx:if="{{item.pay_note&&item.pay_note!=''}}">

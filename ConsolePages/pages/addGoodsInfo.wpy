@@ -163,7 +163,7 @@
     background-color: #fff;
     color: #e50012;
     /* border-radius:50%;
-                wid */
+                  wid */
     width: 45rpx;
     height: 45rpx;
     text-align: center;
@@ -242,16 +242,35 @@
     right: -15rpx;
     top: -15rpx;
   }
+  .listBox2 {
+    height: auto;
+  }
+  .listBox2 textarea {
+    height: 200rpx;
+    line-height: 40rpx;
+    padding: 20rpx;
+  }
+  .listBox3 .listOption {
+    width: 300rpx;
+  }
+  .tishi {
+    background: #fff;
+    color: #888;
+    padding: 20rpx;
+    text-align: center
+  }
 </style>
+
 <template>
   <form report-submit bindsubmit='getFormId'>
     <view class="container">
+      <view class="tishi">长按品牌或分类删除</view>
       <!-- <view class="topNav">
-                    <view class="topNavL">
-                      <image src="/images/publish/close.png"/>
-                    </view>
-                    <view class="topNavR">发布商品</view>
-                  </view> -->
+                      <view class="topNavL">
+                        <image src="/images/publish/close.png"/>
+                      </view>
+                      <view class="topNavR">发布商品</view>
+                    </view> -->
       <view class="cameraBox">
         <view class="camera" wx:for="{{imgSrc}}" wx:key="{{index}}">
           <image src="{{item.img_url}}" />
@@ -270,8 +289,8 @@
           <view class="listOptionImages">
             <input placeholder='添加准确品牌方便顾客查找商品' @input='changeBrandInput'></input>
             <button bindtap='bindBrandSure'>
-                          确定
-                        </button>
+                            确定
+                          </button>
           </view>
         </view>
         <view class='list'>
@@ -286,8 +305,8 @@
           <view class="listOptionImages">
             <input placeholder='添加准确分类方便顾客查找商品' @input='changeGoodsInput' />
             <button bindtap='bindGoodsSure'>
-                          确定
-                        </button>
+                            确定
+                          </button>
           </view>
         </view>
         <view class='list'>
@@ -350,9 +369,15 @@
         <text class=' listOptionAdd iconfont icon-icon02'></text>
         <view class='listOption format'>添加规格</view>
       </view>
-      <view class="listBox">
+      <view class="listBox listBox2">
         <view class="listOption">商品活动</view>
-        <input class="shownnum" type='text' value="{{goodsdetail.goods_brief}}" name="goods_brief"></input>
+        <textarea class="shownnum" type='text' value="{{goodsdetail.goods_brief}}" name="goods_brief"></textarea>
+      </view>
+      <view class="listBox listBox3">
+        <view class="listOption">是否可用会员卡</view>
+        <view class="listOptionImages goodsDetail">
+          <switch checked="{{hdky}}" name="hdky" bindchange="switch1Change" color="#e50012" />
+        </view>
       </view>
       <view class="btnBox">
         <navigator url="addGoodsDec">
@@ -390,10 +415,14 @@
       imgSrc: [],
       goods_secondray_dec: '',
       goods_desc: '',
-      imgUrl: ''
+      imgUrl: '',
+      goodsId: "",
+      hdky:false,
     };
     computed = {};
     methods = {
+      switch1Change() {
+      },
       // 删除图片
       delImg(i) {
         this.imgSrc.splice(i, 1)
@@ -615,7 +644,7 @@
       } catch (error) {
         var imgRes = await wepy.showModal({
           title: '提示', //提示的标题,
-          content: '图片'+this.imgSrc[i].img_url+"上传失败", //提示的内容,
+          content: '图片' + this.imgSrc[i].img_url + "上传失败", //提示的内容,
           showCancel: true, //是否显示取消按钮,
           cancelText: '取消', //取消按钮的文字，默认为取消，最多 4 个字符,
           cancelColor: '#000000', //取消按钮的文字颜色,
@@ -624,7 +653,7 @@
         });
         if (imgRes.confirm) {
           console.log('用户点击确定')
-         await this.upImg(i)
+          await this.upImg(i)
         } else if (imgRes.cancel) {
           console.log('用户点击取消')
         }
@@ -830,7 +859,9 @@
       var ch_cat_id = this.ch_cat_id ? this.ch_cat_id : ''; //二级分类
       var qidingliang = e.detail.value.qidingliang;
       var goods_desc = this.goods_desc ? this.goods_desc : ''; //描述
-      var goods_brief=e.detail.value.goods_brief;
+      var goods_brief = e.detail.value.goods_brief;
+      this.hdky=e.detail.value.hdky;
+      var hdky=e.detail.value.hdky?1:0
       if (goods_name == '') {
         wx.showToast({
           title: '请输入商品标题',
@@ -978,7 +1009,6 @@
           });
           return
         }
-      
       }
       var i = 0
       for (var i = 0; i < this.imgSrc.length; i++) {
@@ -991,10 +1021,9 @@
           this.goods_imgs.push(this.imgSrc[i].img_url);
         }
       }
-        console.log("this.goods_imgs", this.goods_imgs);
+      console.log("this.goods_imgs", this.goods_imgs);
       var goods_img = this.goods_imgs[0];
       var img_url = this.goods_imgs;
-  
       var data = {
         user_id,
         suppliers_id,
@@ -1013,8 +1042,10 @@
         shop_price,
         qidingliang,
         goods_desc,
-        goods_brief //商品活动
+        goods_brief, //商品活动
+        hdky
       }
+      console.log("goods_id", goods_id);
       wepy
         .request({
           //参数    goods_img  图片地址    goods_name  商品名字   cat_id  分类ID   brand_id  品牌ID  goods_number 商品库存，没有的话传空       shop_price 商品价格，没有的话传空   goods_desc  商品详情   goods_type  类型ID，没有的话传空                                  goods_attr 是一个集合  包含 attr_id  子类型ID   attr_value 属性名   attr_price  属性价格   goods_number 属性库存
@@ -1110,14 +1141,11 @@
             var goodsInfo = res.data.data;
             this.goodsdetail = goodsInfo;
             this.goodsdetail.goods_name = goodsInfo.goods_name;
-            
-           var img=[{}]
-          img[0].img_url= goodsInfo.original_img
-              ? 'http://maijia.jicaizx.com/' + goodsInfo.original_img
-              : goodsInfo.original_img1;
-              
-              console.log("img",img)
-             this.imgSrc = goodsInfo.img_url.length==0 ?  img:goodsInfo.img_url;
+            var img = [{}]
+            img[0].img_url = goodsInfo.original_img ?
+              'http://maijia.jicaizx.com/' + goodsInfo.original_img :
+              goodsInfo.original_img1;
+            this.imgSrc = goodsInfo.img_url.length == 0 ? img : goodsInfo.img_url;
             this.goods_desc = util.html_decode(goodsInfo.goods_desc);
             this.ch_cat_id = goodsInfo.ch_cat_id;
             this.goods_secondray_dec = goodsInfo.ch_cat_name;
@@ -1125,7 +1153,7 @@
             this.brand_id = goodsInfo.brand_id;
             this.goods_attr = goodsInfo.properties;
             this.goodsId = goodsInfo.goods_id;
-            console.log('this.goods_attr', this.goods_attr);
+            this.hdky=goodsInfo.hdky
             this.$apply();
           }
         })
@@ -1136,16 +1164,29 @@
     addGoodsINFO() {}
     async onLoad(option) {
       try {
-        console.log(option);
+        console.log(option.id);
+        this.goodsId = "";
         this.user_id = await this.$parent.loginInfo();
         this.suppliers_id = this.$parent.globalData.suppliers_id ?
           this.$parent.globalData.suppliers_id :
           (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
+        this.hdky=  this.$parent.globalData.yizhanInfo.hdky == 1 ? true : false
         if (option.id) this.setGoodsInfo(option.id);
+        else {
+          this.ch_cat_id = "";
+          this.goods_secondray_dec = ""
+          this.cat_id = ""
+          this.brand_id = ""
+          this.goodsId = ""
+        }
         if (option.index) this.index = option.index;
         this.getBrandList(this.user_id, this.suppliers_id);
         this.getGoodsList(this.user_id, this.suppliers_id);
-      } catch (error) {}
+        console.log('this.goodsId', this.goodsId);
+        this.$apply();
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 </script>

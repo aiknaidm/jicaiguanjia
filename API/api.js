@@ -24,7 +24,7 @@ const api = {
     serviceList: `${host}/kefu_list`,
     addService: `${host}/kefu_add`,
     delService: `${host}/kefu_del`,
-    yhlb: `${host}/yhlb`,
+    yhlb: `${host}/yhlb`, //会员管理
     jcgx: `${host}/jcgx`,
     yhsh: `${host}/yhsh`,
     find_users: `${host}/find_users`,
@@ -66,6 +66,24 @@ const api = {
     supplier_detail: `${host}/supplier_detail`,
     upload_goodimg: `${host}/upload_goodimg`,
     //管理员
-    suppliers_list: `${host}/suppliers_list`
+    suppliers_list: `${host}/suppliers_list`,
+    kthypay: `${host}/kthypay`,
+    kthy_price: `${host}/kthy_price`,
+    kthypaysuccess: `${host}/kthypaysuccess`,
+    card_add: `${host}/card_add`,
+    card_list: `${host}/card_list`,
+    card_stop: `${host}/card_stop`,
+    card_rules: `${host}/card_rules`,
+    cardbg: `${host}/cardbg`,
+    card_bg: `${host}/card_bg`,
+    cardrules: `${host}/cardrules`,
+    hycz: `${host}/hycz`,
+    czjl: `${host}/czjl`,
+    czqr: `${host}/czqr`,
+    czdqr: `${host}/czdqr`,
+    czphb: `${host}/czphb`,
+    zcjl: `${host}/zcjl`,
+    suppliers_hdky: `${host}/suppliers_hdky`,
+    hd_goods_list: `${host}/hd_goods_list`,
 }
 export default api

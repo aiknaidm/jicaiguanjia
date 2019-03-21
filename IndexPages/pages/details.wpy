@@ -44,10 +44,10 @@ export default class details extends wepy.page {
           'yyyy-MM-dd'
         );
 
-        (this.articleDetail.post_content = this.articleDetail.post_content.replace(
+        this.articleDetail.post_content = this.articleDetail.post_content.replace(
           /\<img/gi,
           '<img style="max-width:100%;height:auto" '
-        )),
+        )
           this.$apply();
         console.log('文章详情', this.articleDetail);
       });

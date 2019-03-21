@@ -550,6 +550,8 @@ export default class my_setShopInfo extends wepy.page {
     var param = e.detail.value;
     var that = this;
     var flag = that.checkPhone(param.phone) && that.checkSmsCode(param.smscode);
+    console.log(that.checkPhone(param.phone));
+    console.log(that.checkSmsCode(param.smscode));
     if (flag) {
       if (this.inputCode == this.code) {
         var suppliers_id = this.$parent.globalData.suppliers_id;
@@ -570,6 +572,7 @@ export default class my_setShopInfo extends wepy.page {
           });
           return;
         }
+        
         if (realname == '') {
           wx.showModal({
             content: '请填写姓名',

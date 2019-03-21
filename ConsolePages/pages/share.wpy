@@ -172,7 +172,7 @@ export default class share extends wepy.page {
     },
     toShareRule() {
       wx.navigateTo({
-        url: '/pages/my-console/sharerule/index'
+        url: 'shareRule'
       });
     },
     toWithdraw: function() {

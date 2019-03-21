@@ -127,6 +127,7 @@ export default class extends wepy.app {
           'pages/orderDetail',
           'pages/renzheng',
           'pages/share',
+          'pages/shareRule',
           'pages/shareList',
           'pages/withdraw',
           'pages/poster',
@@ -145,13 +146,30 @@ export default class extends wepy.app {
           'pages/addSecondaryCat',
           'pages/addGoodsDec',
           'pages/goodsList',
-          'pages/changeGoodsInfo'
+          'pages/changeGoodsInfo',
+          'pages/clubCard/payCard',
+          'pages/clubCard/setCard',
+          'pages/clubCard/setPayType',
+          'pages/clubCard/setBackgroundImg',
+          'pages/my_console_cardPayDetail',
+          'pages/my_console_cardExpendDetail',
+          'pages/my_console_payPhb',
+          'pages/my_console_toSureList',
+          'pages/my_console_tobalanceDetail'
+          
         ]
       },
       {
         root: 'Admin',
         pages: [
           'pages/index',
+          'pages/supplierDetail',
+          'pages/goodsInfo',
+          'pages/orderInfo',
+          'pages/userInfo',
+          'pages/memberInfo',
+          
+          
         
         ]
       }

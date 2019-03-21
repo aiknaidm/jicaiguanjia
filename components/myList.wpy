@@ -49,6 +49,17 @@ button {
   line-height: 15px;
   border-radius: 50px;
 }
+.with_arrow{
+  position:absolute;
+  top: 20rpx;
+  right: 20rpx;
+  color: #e50012;
+  border-radius: 50px;
+  border: 4rpx solid #e50012;
+  padding: 0 20rpx;
+  font-size: 24rpx;
+  background: #fff
+}
 </style>
 <template>
 
@@ -61,7 +72,7 @@ button {
       <view class="weui_cell_bd_p" >{{tabItem.text}}</view>
     </view>
     <view wx:if="{{tabItem.unreadNum}}" class="badge">{{tabItem.unreadNum}}</view>
-    <view class="with_arrow"></view>
+    <view class="with_arrow" wx:if="{{tabItem.isfufei==1}}">付费</view>
   </button>
 </template>
 <script>
