@@ -1068,7 +1068,6 @@
               })
               .then(res => {
                 if (res.confirm) {
-                  console.log('用户点击确定');
                   wx.navigateBack({});
                   if (goods_id != '' && this.index) {
                     console.log('修改页面', this.index);
@@ -1078,7 +1077,10 @@
                     this.$parent.$pages['/ConsolePages/pages/goodsList'].list[
                       this.index
                     ].original_img1 = goods_img && goods_img != "" ? goods_img : "http://wsc.jicaizx.com/images/no_picture.gif";
-                    if (goods_attr.length) {
+                     this.$parent.$pages['/ConsolePages/pages/goodsList'].list[
+                        this.index
+                      ].hdky = hdky;
+                   if (goods_attr.length) {
                       var max = 0;
                       var min = goods_attr[0].attr_price;
                       var add = 0;
