@@ -1,0 +1,65 @@
+<style lang="less">
+.clear {
+  clear: both;
+}
+.itemList {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 100;
+}
+.itemList button {
+  line-height: 108rpx;
+  text-align: center;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  width: 100%;
+  border-radius: 0;
+}
+.itemList button:last-child {
+  border-bottom: 10rpx solid #f0f0f0;
+}
+</style>
+
+<template>
+  <view>
+       <mask wx:if="{{isShowItemList}}" @tap.stop="hiddenShare"></mask>
+<view class="itemList" wx:if="{{isShowItemList}}">
+  <button wx:for="{{itemList}}"  @tap="listTap({{index}})" data-index="{{index}}">
+    {{item}}
+  </button>
+</view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class itemList extends wepy.component {
+  props = {
+    isShowItemList: {
+      type: Boolean,
+      default: false,
+      twoWay: true
+    },
+    itemList: {
+      type: Array,
+      default: [],
+      twoWay: true
+    }
+  };
+
+  data = {};
+
+  events = {};
+
+  methods = {
+    listTap(index) {
+      this.$emit('listTap', index);
+    },
+    hiddenShare() {
+      this.isShowItemList = false;
+    }
+  };
+}
+</script>

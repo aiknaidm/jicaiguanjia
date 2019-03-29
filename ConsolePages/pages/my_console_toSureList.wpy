@@ -1,0 +1,198 @@
+<style lang="less">
+.container {
+  background-color: #fff;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.withdraw {
+  color: #333;
+  background-color: #fff;
+  display: flex;
+  width: 100%;
+  border-radius: 10rpx;
+  padding: 40rpx;
+  position: relative;
+  justify-content: space-between;
+}
+.withdraw .iconfont {
+  color: #aaa;
+}
+.all-withdraw {
+  flex: 1;
+  line-height: 50rpx;
+}
+
+.can-withdraw {
+  flex: 1;
+  line-height: 50rpx;
+}
+.can-withdraw .red {
+  font-size: 35rpx;
+}
+.to-withdraw {
+  position: absolute;
+  height: 66rpx;
+  right: 0;
+  top: 50%;
+  padding: 0 30rpx 0 50rpx;
+  margin-top: -33rpx;
+  line-height: 66rpx;
+  background: #e50012;
+  border-radius: 50px 0 0 50px;
+  color: #fff;
+}
+
+.control-title {
+  background-color: #e50012;
+  display: flex;
+  padding: 20rpx 40rpx 40rpx 40rpx;
+  align-items: center;
+  color: #fff;
+  position: relative;
+  height: 100rpx;
+  justify-content: center;
+  padding: 20rpx 0;
+}
+.control-title.code {
+  background: #f0f0f0;
+  padding: 30rpx 40rpx;
+}
+.control-title .yaoqingma {
+  line-height: 88rpx;
+  background-color: rgba(255, 255, 255, 1);
+  position: relative;
+  padding: 0 40rpx 0 80rpx;
+  border-radius: 50rpx 0 0 50rpx;
+  color: #333;
+}
+
+.control-title .copy {
+  padding: 0 40rpx;
+  background-color: #e50012;
+  line-height: 88rpx;
+  border-radius: 0 50rpx 50rpx 0;
+  color: #fff;
+}
+
+.control-content {
+  text-align: center;
+}
+.control-content .share-guize text {
+  color: #14c09a;
+  font-size: 40rpx;
+  line-height: 110rpx;
+}
+
+.poster-btn {
+  width: 600rpx;
+  text-align: center;
+  line-height: 88rpx;
+  color: #fff;
+  border-radius: 50px;
+  background: #e50012;
+  margin: auto;
+}
+
+.qrcode {
+}
+
+.qrcode image {
+  width: 350rpx;
+  height: 380rpx;
+  margin: 50rpx auto;
+}
+</style>
+<template>
+  <view class="container">
+    <repeat for="{{payList}}" key="index" index="index" item="item">
+      <payList type="1" :item.sync="item"></payList>
+    </repeat>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import api from '../../API/api';
+import payList from '../../components/payList';
+import util from '../../utils/index';
+export default class share extends wepy.page {
+  config = {
+    navigationBarTitleText: '待确认订单'
+  };
+  components = { payList };
+  data = {
+    payList: []
+  };
+  computed = {};
+  methods = {
+  
+  };
+  events = {};
+async  getCzdqr() {
+      wx.showLoading({
+        title: '加载中...', //提示的内容,
+        mask: true, //显示透明蒙层，防止触摸穿透,
+        success: res => {}
+      });
+       this.suppliers_id = this.$parent.globalData.suppliers_id
+      ? this.$parent.globalData.suppliers_id
+      : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
+      wepy
+        .request({
+          url: api.czdqr, //开发者服务器接口地址",
+          data: {
+            suppliers_id: this.suppliers_id,
+            page:this.page
+          }
+        })
+        .then(res => {
+          wx.hideLoading();
+          console.log('充值记录', res);   
+          var datas = res.data.data.data;
+          datas.forEach((item, index) => {
+            datas[index].add_time = util.formatTime(
+              new Date(item.add_time * 1000),
+              'yyyy-MM-dd'
+            );
+          });
+          if (this.page == 1){this.isMoreData = true;this.payList = res.data.data.data;}
+          else this.payList.push(...datas);
+          if (datas.length < 10) this.isMoreData = false;
+          this.$apply();
+        })
+        .catch(res => {
+          console.log(res);
+          wx.showToast({
+            title: '未知错误', //提示的内容,
+            icon: 'none', //图标,
+            duration: 2000, //延迟时间,
+            mask: true, //显示透明蒙层，防止触摸穿透,
+            success: res => {}
+          });
+        });
+    }
+  onReachBottom() {
+    if (this.isMoreData) {
+      wx.showLoading({
+        title: '加载中', //提示的内容,
+        mask: true, //显示透明蒙层，防止触摸穿透,
+        success: res => {}
+      });
+      this.page = this.page + 1;
+      this.getCzdqr();
+    }
+  }
+  async onLoad(option) { 
+     this.page=1;
+   
+    this.isMoreData=true;
+    this.suppliers_id = this.$parent.globalData.suppliers_id
+    this.$apply()
+  }
+  onShow(){
+    this.getCzdqr();
+  }
+}
+</script>

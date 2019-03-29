@@ -1,0 +1,379 @@
+<style lang="less">
+    .control-title {
+        background-color: #e50012;
+        display: flex;
+        padding: 20rpx 40rpx 40rpx 40rpx; // align-items: center;
+        color: #fff;
+        position: relative; // height: 100rpx;
+    }
+    .scrolllist {
+        flex: 1;
+    }
+    .control-title-img {
+        width: 110rpx;
+        height: 110rpx;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 1px solid #fff;
+        margin-right: 20rpx;
+        background-color: #fff;
+    }
+    .control-title-img image {
+        width: 100%;
+        height: 100%;
+    }
+    .control-title-txt {
+        position: relative;
+        top: 10rpx;
+    }
+    .control-title-txt .txt {
+        border: 1px solid #fff;
+        padding: 0 30rpx;
+        border-radius: 50px;
+        margin-right: 20rpx;
+    }
+    .control-title-txt .iconfont {
+        width: 60rpx;
+        height: 60rpx;
+        border: 1px solid #fff;
+        border-radius: 50%;
+        font-size: 24rpx;
+        text-align: center;
+        line-height: 50rpx;
+        padding: 5rpx;
+    }
+    .control-title-txt1 {
+        font-size: 32rpx;
+        font-weight: bold;
+        line-height: 55rpx;
+        padding-left: 10rpx;
+    }
+    /* 分享好友 */
+    .share {
+        position: absolute;
+        right: 40rpx;
+        bottom: 40rpx;
+        color: #fff;
+    }
+    .share text {
+        margin-right: 10rpx;
+        color: #14c09a;
+        font-size: 30rpx;
+    }
+    .share button {
+        color: #fff;
+    }
+    .yizhan-list2 {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 75%;
+        height: 100%;
+        /* padding: 40rpx; */
+        background: #fff;
+        /* -webkit-transform: translateY(-50%); */
+        transform: translateX(-100%);
+        -ms-transform: translateX(-100%);
+        /* IE 9 */
+        -moz-transform: translateX(-100%);
+        /* Firefox */
+        -webkit-transform: translateX(-100%);
+        /* Safari 和 Chrome */
+        -o-transform: translateX(-100%);
+        color: #000;
+        overflow: hidden;
+        transition: transform 0.3s;
+    }
+    .list {
+        transform: translateX(0);
+        -ms-transform: translateX(0);
+        /* IE 9 */
+        -moz-transform: translateX(0);
+        /* Firefox */
+        -webkit-transform: translateX(0);
+        /* Safari 和 Chrome */
+        -o-transform: translateX(0);
+        transition: transform 0.3s;
+    }
+    .list.active {
+        transform: translateX(75%);
+        -ms-transform: translateX(75%);
+        /* IE 9 */
+        -moz-transform: translateX(75%);
+        /* Firefox */
+        -webkit-transform: translateX(75%);
+        /* Safari 和 Chrome */
+        -o-transform: translateX(75%);
+        transition: transform 0.3s;
+        width: 100%;
+        height: 100%;
+        /* overflow: hidden */
+    }
+    .container.active {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+    }
+    .scroll-view {
+        height: 100%;
+    }
+    .yizhan-list2 .title {
+        text-align: center;
+        font-size: 40rpx;
+        padding: 30rpx 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .scroll-view-item {
+        line-height: 100rpx;
+        padding: 0 30rpx;
+        border-bottom: 1px solid #f0f0f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 30rpx;
+    }
+    .scroll-view-item text {
+        border: 1px solid #e50012;
+        border-radius: 50%;
+        display: inline-block;
+        width: 50rpx;
+        height: 50rpx;
+        color: #e50012;
+        text-align: center;
+        line-height: 50rpx;
+        font-size: 30rpx;
+    }
+    .weui-loading {
+        color: #333;
+    }
+    .loading {
+        padding: 20rpx 0;
+        text-align: center;
+        color: #666;
+        font-size: 26rpx;
+    }
+    .qiehuan {
+        padding: 0 10rpx;
+        margin-left: 10rpx;
+        font-size: 24rpx;
+        display: inline-block;
+        margin-top: 10rpx;
+    }
+    .info_list .weui_cell {
+        display: flex;
+        flex-direction: column;
+        /* align-items: center; */
+        border-right: 1px solid #f0f0f0;
+        border-bottom: 1px solid #f0f0f0;
+        width: 33%;
+        padding: 30rpx 0;
+    }
+    .info_list {
+        display: flex;
+        flex-wrap: wrap;
+        border-bottom: 16rpx solid #f0f0f0;
+        font-size: 28rpx;
+        .weui_cell_hd {
+            border-radius: 50%;
+            padding: 10rpx;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50rpx;
+            height: 50rpx;
+            image {
+                width: 70%;
+                height: 70%;
+                vertical-align: -2px;
+            }
+        }
+        navigator {
+            display: block;
+            width: 100%;
+            line-height: 120rpx;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #f0f0f0;
+            image {
+                height: 50rpx;
+                width: 50rpx;
+                margin-right: 10rpx;
+                margin-left: 40rpx;
+            }
+        }
+    }
+    .info_list .weui_cell_hd {
+        margin-right: 0rpx;
+    }
+    .order_list .weui_cell_hd {
+        width: auto
+    }
+</style>
+<template>
+    <view style='position:relative;' class="list {{right?'active':''}}">
+        <view class=" {{right?'mask':''}}" catchtouchmove="{{right?'stopscroll':''}}" bindtap='hiddenyizhan'></view>
+        <view class="container {{right?'active':''}}">
+            <view class='control-title'>
+                <view class='control-title-img'>
+                    <image src='{{supplierDetail.img}}'></image>
+                </view>
+                <view>
+                    <view class='control-title-txt1'>店铺名：{{supplierDetail.suppliers_desc}}</view>
+                    <view class='control-title-txt'>用户：{{supplierDetail.username}}{{supplierDetail.mobile}}</view>
+                    <view class='control-title-txt'>地区：{{supplierDetail.sheng}}-{{supplierDetail.shi}}-{{supplierDetail.qu}}</view>
+                    <view class='control-title-txt'>
+                        pc账号：{{supplierDetail.suppliers_name}}
+                    </view>
+                    <view class='control-title-txt'>
+                        商品图片模式：{{supplierDetail.is_picture==0?"无图模式":"有图模式"}}
+                    </view>
+                    <view class='control-title-txt'>
+                        代下单：{{supplierDetail.is_friend?"是":"否"}}
+                    </view>
+                    <view class='control-title-txt'>
+                        到期时间：{{supplierDetail.end_time_new}}
+                    </view>
+                    <!-- <view class='control-title-txt qiehuan' bindtap='showyizhan'>切换店铺</view> -->
+                </view>
+            </view>
+            <form report-submit bindsubmit='getFormId'>
+                <view class="info_list order_list">
+                    <navigator url="/ConsolePages/pages/dataManage" open-type="navigate" hover-class="none">
+                        <image src="/images/console/transaction-manage.png">交易管理
+                    </navigator>
+                    <repeat for="{{tabList}}" wx:key="{{index}}">
+                        <myList :tabItem="item"></myList>
+                    </repeat>
+                </view>
+                <view class="info_list">
+                    <navigator url="goodsInfo" open-type="navigate" hover-class="none">
+                        <image src="/images/console/goods-manage.png">商品管理
+                    </navigator>
+                </view>
+                <view class="info_list">
+                    <navigator url="{{}}" open-type="navigate" hover-class="none">
+                        <image src="/images/console/wdyy.png">用户管理
+                    </navigator>
+                    <repeat for="{{applicationList}}" wx:key="{{index}}">
+                        <!-- 店铺所有者 -->
+                        <myList :tabItem="item"></myList>
+                    </repeat>
+                </view>
+            </form>
+        </view>
+        <view class='yizhan-list2' catchtouchmove='' style="height: {{height}}PX;overflow: hidden">
+            <scroll-view scroll-y style="height: {{height}}PX;overflow: hidden" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
+                <view class='title'>
+                    我管理的店铺列表
+                </view>
+                <view style='height:100rpx' class="scroll-view-item bc_green" wx:for="{{yizhanlist}}" @tap='changeShop({{item.suppliers_id}})' wx:key="{{index}}">
+                    {{item.suppliers_desc}}
+                    <text class='iconfont icon-qiehuan' wx:if="{{item.suppliers_id!==userinfo.suppliers_id}}"></text>
+                </view>
+            </scroll-view>
+        </view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy';
+    import api from '../../API/api';
+    import util from '../../utils/index';
+    import myList from '../../components/myList';
+    export default class newslist extends wepy.page {
+        config = {
+            navigationBarTitleText: '管理工作台'
+        };
+        components = {
+            myList
+        };
+        data = {
+            yizhanInfo: {},
+            yizhanlist: [],
+            right: 0,
+            applicationList: [
+                {
+                    icon: '/images/console/shenheguanli.png',
+                    text: '会员',
+                    url: 'memberInfo?type=0',
+                    bgcolor: '#10b3b1',
+                    isyewuyuan: 1,
+                    isadmin: 1
+                },
+    
+                {
+                    icon: '/images/console/kefuguanli.png',
+                    text: '客服',
+                    url: 'userInfo?type=1',
+                    bgcolor: '#f7bf30',
+                    isadmin: 1
+                },
+                {
+                    icon: '/images/console/guanliyuanbd.png',
+                    text: '管理员',
+                    url: 'userInfo?type=2',
+                    bgcolor: '#10b3b1'
+                },
+                {
+                    icon: '/images/console/guanliyuanbd.png',
+                    text: '业务员',
+                    url: 'userInfo?type=3',
+                    bgcolor: '#10b3b1',
+                    isadmin: 1
+                },
+       
+            ],
+            height: 0,
+            supplierDetail: ""
+        };
+        computed = {};
+        methods = {
+            showyizhan: function() {
+                this.right = 1;
+            },
+            hiddenyizhan: function() {
+                this.right = 0;
+            },
+            getFormId(e) {
+                console.log('formid', e);
+                util.submitFormId(this.userId, e.detail.formId);
+            }
+        };
+        events = {};
+        // 订单数量
+        async orderNum() {
+            this.tabList[0].num = this.yizhanInfo.daifukuan;
+            this.tabList[1].num = this.yizhanInfo.daifahuo;
+            this.tabList[2].num = this.yizhanInfo.yifahuo;
+            this.tabList[3].num = this.yizhanInfo.chenggong;
+            this.tabList[4].num = this.yizhanInfo.guanbi;
+        }
+        async getSuppliersDetails(suppliers_id) {
+            var res = await wepy
+                .request({
+                    url: api.supplier_detail, //开发者服务器接口地址",
+                    data: {
+                        suppliers_id
+                    }, //请求的参数",
+                    method: 'GET'
+                })
+            return res.data.data;
+        }
+        async onLoad(option) {
+            console.log("suppliers_detail option", option, this.$parent.globalData.suppliers_id)
+            this.suppliers_id = option.suppliers_id;
+            this.height = wx.getSystemInfoSync().windowHeight;
+            this.user_id = await this.$parent.loginInfo();
+            this.supplierDetail = await this.getSuppliersDetails(this.suppliers_id);
+            this.supplierDetail.img = this.$parent.globalData.suppliers_img;
+            this.supplierDetail.end_time_new = this.$parent.globalData.end_time_new;
+            this.$parent.globalData.suppliers_img = "";
+            this.$parent.globalData.end_time_new = "";
+       
+       
+            this.$apply();
+        }
+    }
+</script>

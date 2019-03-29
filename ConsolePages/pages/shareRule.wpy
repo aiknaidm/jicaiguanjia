@@ -1,0 +1,53 @@
+<style lang="less">
+    .container {
+        background-color: #fff;
+        padding:  40rpx;
+    }
+</style>
+<template>
+    <view class='container'>
+        <!-- <text class='h1'>关于我们</text>  -->
+        <!-- <text class='date'>{{bgxywz.published_time}}</text> -->
+        <rich-text type="node" nodes="{{articleDetail}}" class='content'>
+        </rich-text>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy';
+    import api from '../../API/api';
+    import util from '../../utils/index'
+    export default class share extends wepy.page {
+        config = {
+            navigationBarTitleText: '分享规则'
+        };
+        components = {};
+        data = {
+            articleDetail: ""
+        };
+        computed = {};
+        methods = {
+        };
+        events = {};
+        getTxt() {
+            var that = this;
+            wepy.request({
+                url: "https://lmbge.com/wxapi/gztai/fxgz_get",
+            }).then(res => {
+                wx.hideLoading();
+                this.articleDetail = res.data.data;
+        this.articleDetail=util.html_decode(this.articleDetail)
+                this.articleDetail = this.articleDetail.replace(
+                    /\<img/gi,
+                    '<img style="max-width:100%;height:auto" '
+                )
+                this.$apply();
+                console.log('文章详情', this.articleDetail);
+            })
+        }
+        async onLoad(option) {
+            var userId = await this.$parent.loginInfo();
+            this.getTxt(userId);
+        }
+    }
+</script>

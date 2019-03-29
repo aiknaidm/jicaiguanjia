@@ -1,0 +1,280 @@
+<style lang="less">
+    .icon-shouji {
+        color: #44b8f4;
+        font-size: 35rpx;
+    }
+    .icon-youcecaidan {
+        color: #e50012;
+    }
+    .check-list {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20rpx 40rpx;
+        border-bottom: 8rpx solid #f0f0f0;
+        background: #fff;
+    }
+    .check-list-img {
+        width: 100rpx;
+        height: 100rpx;
+        margin-right: 10rpx;
+    }
+    .check-list-img image {
+        width: 100%;
+        height: 100%;
+    }
+    .check-list-content {
+        line-height: 40rpx;
+        flex: 1;
+    }
+    .check-list-btn {
+        // width: 60rpx;
+        text-align: right;
+    }
+    .check-list-btn button {
+        height: 55rpx;
+        color: #fff;
+        background-color: #e50012;
+        line-height: 55rpx;
+        font-size: 26rpx;
+        border-radius: 50px;
+        padding: 0 40rpx;
+    }
+    .status-box {
+        width: 100%;
+        height: 100rpx;
+        line-height: 100rpx;
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        border-top: 1rpx solid #eee;
+    }
+    .status-box .status-label {
+        border-right: 1px solid #f0f0f0;
+        text-align: center;
+        font-size: 30rpx;
+        padding: 0px 40rpx;
+        flex: 1;
+        border-bottom: 6rpx solid #eee;
+        position: relative;
+    }
+    .status-box .status-label.active {
+        color: #e50012;
+        border-bottom: 6rpx solid #e50012;
+    }
+    .status-box .status-label .red-dot {
+        width: 16rpx;
+        height: 16rpx;
+        position: absolute;
+        left: 116rpx;
+        top: 23rpx;
+        background-color: #f43530;
+        border-radius: 50%;
+    }
+    /* 添加会员 */
+    .checkLists {
+        padding-bottom: 80rpx;
+        background: #f0f0f0;
+    }
+    .addmember {
+        text-align: center;
+        line-height: 80rpx;
+        position: fixed;
+        width: 100%;
+        bottom: 0;
+        background: #e50012;
+        color: #fff;
+    }
+    .search-title {
+        display: flex;
+        justify-content: space-between;
+        line-height: 85rpx;
+        font-size: 30rpx;
+        align-items: center;
+        background-color: #fff;
+        width: 100%;
+        z-index: 10;
+        padding: 0 20rpx;
+    }
+    .border {
+        display: inline-block;
+        padding: 0 20rpx;
+        border-right: 1px solid #f0f0f0; // max-width: 300rpx;
+    }
+    .search {
+        text-align: right;
+        padding-right: 40rpx;
+    }
+    .body-bg {
+        background-color: rgba(0, 0, 0, 0.5);
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10;
+    }
+    .list {
+        background-color: #fff;
+        width: 60%;
+        text-align: center;
+        line-height: 88rpx;
+        font-size: 30rpx;
+        max-height: 450rpx;
+        overflow: scroll;
+    }
+    .list view {
+        border-bottom: 1px solid #f0f0f0;
+    }
+</style>
+<template>
+    <view class='container'>
+        <!-- kefu -->
+        <noOrder text="暂无用户" wx:if="{{items.length==0}}"></noOrder>
+        <view class='check-list' wx:for="{{items}}" wx:key="{{index}}" wx:if="{{type==1}}">
+            <view class='check-list-img' wx:if="{{item.avatar}}">
+                <image src='{{item.avatar}}' />
+            </view>
+            <view class='check-list-content'>
+                <view>姓名：{{item.kefu_name}}</view>
+                <view @tap.stop='tocallphone' data-phone="{{item.mobile}}">手机号码：{{item.mobile}}
+                    <text class='iconfont icon-shouji'></text>
+                </view>
+            </view>
+        
+        </view>
+         <!-- 管理员 -->
+        <view class='check-list' wx:for="{{items}}" wx:key="{{index}}" wx:if="{{type==2}}">
+            <view class='check-list-img' wx:if="{{item.avatar}}">
+                <image src='{{item.avatar}}'  wx:if="{{item.avatar}}"/>
+                <image src='https://lmbge.com/upload/avatar/weixin3.png'  wx:else/>
+            </view>
+            <view class='check-list-content'>
+                <view>姓名：{{item.user_nickname}}</view>
+                <!-- <view @tap.stop='tocallphone' data-phone="{{item.mobile}}">手机号码：{{item.mobile}}
+                    <text class='iconfont icon-shouji'></text>
+                </view> -->
+            </view>
+            <view class='check-list-btn'>
+                <form report-submit bindsubmit='getFormId'>
+                    <!-- <button @tap.stop='toShenhe' data-id="{{item.user_id}}">审核</button> -->
+                    <!-- <button @tap.stop='toShenhe' data-id="{{item.user_id}}">审核中</button> -->
+                </form>
+            </view>
+        </view>
+        <!-- 业务员 -->
+        <view class='check-list' wx:for="{{items}}" wx:key="{{index}}" wx:if="{{type==3}}">
+            <view class='check-list-img'>
+                <image src='{{item.avatar}}'  wx:if="{{item.avatar}}"/>
+                <image src='https://lmbge.com/upload/avatar/weixin3.png'  wx:else/>
+            </view>
+            <view class='check-list-content'>
+                <view>姓名：{{item.user_nickname}}</view>
+                <!-- <view @tap.stop='tocallphone' data-phone="{{item.mobile}}">手机号码：{{item.mobile}}
+                    <text class='iconfont icon-shouji'></text>
+                </view> -->
+            </view>
+            <view class='check-list-btn'>
+                <form report-submit bindsubmit='getFormId'>
+                    <!-- <button @tap.stop='toShenhe' data-id="{{item.user_id}}">审核</button> -->
+                    <!-- <button @tap.stop='toShenhe' data-id="{{item.user_id}}">审核中</button> -->
+                </form>
+            </view>
+        </view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy';
+    import api from '../../API/api';
+    import noOrder from '../../components/noOrder';
+    export default class my_console_check extends wepy.page {
+        config = {
+            navigationBarTitleText: '会员管理'
+        };
+        data = {
+            statusType: ['未审核', '已审核'],
+            statusKey: ['0', '1'],
+            currentType: 0,
+            currentStatu: '0',
+            weishenhe: [],
+            yishenhe: [],
+            sales_id: 0,
+            isShowSalesList: false,
+            adminList: [],
+            salesmanName: '选择业务员',
+            showName: false,
+            items: [],
+            type:0
+        };
+        computed = {};
+        components = {noOrder};
+        methods = {};
+        events = {};
+        // 客服信息
+        async serviceList(suppliers_id) {
+            let serviceList = await wepy.request({
+                url: api.serviceList,
+                data: {
+                    suppliers_id,
+                }
+            });
+            if (serviceList.data.code == '0') {
+                this.items = serviceList.data.data;
+                this.$apply();
+            }
+        }
+        //   管理员信息
+        async managerList(suppliers_id) {
+            let Managers = await wepy.request({
+                url: api.findManagers,
+                data: {
+                    suppliers_id
+                }
+            });
+            if (Managers.data.code == '0') {
+                this.items = Managers.data.data;
+                this.$apply();
+            }
+        }
+        //   业务员
+        async salesmanList(suppliers_id) {
+            let Salesman = await wepy.request({
+                url: api.findSalesman,
+                data: {
+                    suppliers_id
+                }
+            });
+            if (Salesman.data.code == '0') {
+                this.items = Salesman.data.data;
+                this.$apply();
+            }
+        }
+        async onLoad(option) {
+            console.log("option", option)
+            this.suppliers_id = this.$parent.globalData.suppliers_id
+            this.type=option.type;
+            switch (parseInt(option.type)) {
+                case 1:
+                    //    客服
+                    this.serviceList(this.suppliers_id)
+                    wx.setNavigationBarTitle({ title: '客服' });
+                    break;
+                case 2:
+                    //    管理员
+                    this.managerList(this.suppliers_id)
+                     wx.setNavigationBarTitle({ title: '管理员' });
+                    break;
+                case 3:
+                    //    业务员
+                    this.salesmanList(this.suppliers_id)
+                     wx.setNavigationBarTitle({ title: '业务员' });
+                    break;
+            }
+        }
+        async onShow() {}
+    }
+</script>

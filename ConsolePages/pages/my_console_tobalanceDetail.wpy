@@ -1,0 +1,475 @@
+<style lang="less">
+  .status-label {
+    background: #f0f0f0;
+    border-left: 5rpx solid #e4e4e4;
+  }
+  .icon-shouji {
+    color: #44b8f4;
+    font-size: 35rpx;
+  }
+  .icon-youcecaidan {
+    color: #e50012;
+  }
+  .green {
+    color: #10b3b1 !important;
+  }
+  .num {
+    font-size: 26rpx;
+    line-height: 35rpx;
+    padding-left: 20rpx;
+    color: #888;
+  }
+  .status-box {
+    width: 80%;
+    line-height: 60rpx;
+    font-size: 30rpx;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+  }
+  .status-box .status-label {
+    text-align: center;
+    font-size: 30rpx;
+    padding: 0px 40rpx;
+    flex: 1;
+    position: relative;
+  }
+  .status-label:first-child {
+    border-radius: 50px 0 0 50px;
+  }
+  .status-label:last-child {
+    border-radius: 0 50px 50px 0;
+  }
+  .status-box .status-label.active {
+    background-color: #e50012;
+    color: #fff;
+  }
+  .status-box .status-label .red-dot {
+    width: 16rpx;
+    height: 16rpx;
+    position: absolute;
+    left: 116rpx;
+    top: 23rpx;
+    background-color: #f43530;
+    border-radius: 50%;
+  }
+  .search-title {
+    display: flex;
+    line-height: 55rpx;
+    font-size: 28rpx;
+    align-items: center;
+    background-color: #fff;
+    z-index: 10;
+    padding: 20rpx;
+  }
+  .border {
+    display: inline-block;
+    padding: 0 20rpx;
+    background: #fff; // border-right: 1px solid #f0f0f0;
+    // max-width: 300rpx;
+  }
+  .icon-jiantou {
+    font-size: 12px;
+    margin-left: 10rpx;
+    color: #e50012;
+  }
+  .top {
+    background: #e50012;
+    padding: 40rpx;
+    text-align: center;
+    .money {
+      color: #fff;
+      .text-m {
+        font-size: 60rpx;
+        line-height: 80rpx;
+        font-weight: bold;
+      }
+      .icon-jiantou {
+        color: #fff;
+      }
+    }
+    .border2 {
+      border-left: 1px solid rgba(255, 255, 255, 0.5);
+    }
+  }
+  .body-bg {
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+  .list {
+    background-color: #fff;
+    width: 60%;
+    text-align: center;
+    line-height: 88rpx;
+    font-size: 30rpx;
+    max-height: 450rpx;
+    overflow: scroll;
+  }
+  .list view {
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .click {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .click-title {
+      line-height: 80rpx;
+      font-weight: bold;
+    }
+    .time {
+      display: flex;
+      padding-bottom: 20rpx;
+      align-items: center;
+    }
+  }
+</style>
+<template>
+  <view class="container">
+    <view class="top">
+      <view class="money" wx:if="{{currentType==0}}">
+        <view class="text-t">会员充值金额</view>
+        <view class="text-m">￥{{czmoney}}</view>
+        <!-- <view class="iconfont icon-jiantou"></view> -->
+      </view>
+       <view class="money" wx:else>
+        <view class="text-t">会员支出金额</view>
+        <view class="text-m">￥{{zcmoney}}</view>
+        <!-- <view class="iconfont icon-jiantou"></view> -->
+      </view>
+    </view>
+    <view class="click">
+      <view class="click-title">账单查询</view>
+      <view class="time">
+        <picker mode="date" value="{{start_time}}" end="{{end_time}}" bindchange="bindStartTimeChange">{{start_time}}</picker><text class="iconfont icon-xiala"></text> ——
+        <picker mode="date" value="{{end_time}}" start="{{start_time}}" end="{{now_time}}" bindchange="bindEndTimeChange">{{end_time}}</picker><text class="iconfont icon-xiala"></text>
+      </view>
+      <view class="status-box">
+        <view @tap="statusTap" class="status-label {{index == currentType ? 'active' : ''}}" wx:for-items="{{statusType}}" wx:key="{{index}}" data-index="{{index}}" data-statu="{{statusKey[index]}}">
+          {{item}}
+        </view>
+      </view>
+    </view>
+    <view class="search-title">
+      <view bindtap="salesmanNameTap" class="up">
+        <view class="border">
+          {{salesmanName}}
+          <text class="iconfont icon-jiantou green"></text>
+        </view>
+      </view>
+      <!-- <view bindtap="memberNameTap" class="up">
+            <view class="border">
+              {{memberName}}
+              <text class="iconfont icon-jiantou"></text>
+            </view>
+          </view> -->
+      <view class="up">
+        <input placeholder="会员名" @input="changeMemberName">
+      </view>
+    </view>
+    <view class="payList-box" wx:if="{{currentType==0}}">
+      <repeat for="{{payList}}" key="index" index="index" item="item">
+        <payList type="1" :item.sync="item"></payList>
+        
+      </repeat>
+      <noOrder text="暂无内容" wx:if="{{payList.length==0}}"></noOrder>
+    </view>
+    <view class="payList-box" wx:if="{{currentType==1}}">
+      <repeat for="{{balance}}" key="index" index="index" item="item">
+        <expendList type="1" :item.sync="item"></expendList>
+      </repeat>
+      <noOrder text="暂无内容" wx:if="{{balance.length==0}}"></noOrder>
+    </view>
+    <view class="body-bg" wx:if="{{isShowSalesList&&list.length>0}}" bindtap="hiddenSalesList" touchstart="hiddenbg" touchmove="hiddenbg">
+      <view class="list">
+        <view wx:for="{{list}}" wx:key="{{index}}" @tap="changeShopList({{item.id}},{{item.user_nickname}})">{{item.user_nickname}}</view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import api from '../../API/api';
+  import util from '../../utils/index';
+  import payList from '../../components/payList';
+  import expendList from '../../components/expendList';
+  import noOrder from '../../components/noOrder';
+  export default class my_console_cardPayDetail extends wepy.page {
+    config = {
+      navigationBarTitleText: '会员充值账单明细'
+    };
+    data = {
+      statusType: ['会员充值记录', '会员支出记录'],
+      statusKey: ['0', '1'],
+      currentType: 0,
+      isShowSalesList: false,
+      salesmanName: '选择业务员',
+      memberName: '选择会员',
+      showName: false,
+      payList: [],
+      balance:[],
+      list: [],
+      czmoney: 9999,
+      zcmoney: 9999,
+      end_time: 1970 - 0 - 0,
+      start_time: 1970 - 0 - 0,
+      now_time: 1970 - 0 - 0,
+      page: 1
+    };
+    computed = {};
+    components = {
+      payList,expendList,noOrder
+    };
+    methods = {
+      statusTap: function(e) {
+        // this.getShenheList(this.sales_id);
+        var curType = e.currentTarget.dataset.index;
+        this.currentType = curType;
+        this.page = 1;
+        if (this.currentType == 0) {
+          // 会员充值记录
+          this.getCzjl()
+        } else {
+          this.getZcjl();
+        }
+      },
+      tophb() {
+        wx.navigateTo({
+          url: 'my_console_payPhb'
+        });
+      },
+      getFormId: function(e) {
+        //util.submitFormId(app.globalData.userId, e.detail.formId);
+      },
+      salesmanNameTap: function() {
+        this.isShowSalesList = true;
+        this.list = this.salesmanList;
+      },
+      memberNameTap: function() {
+        this.isShowSalesList = true;
+        this.list = this.memberNameList;
+      },
+      hiddenSalesList: function() {
+        this.isShowSalesList = false;
+      },
+      changeShopList(sales_id, name) {
+        this.isShowSalesList = false;
+        this.salesmanName = name;
+        this.sales_id = sales_id;
+        this.page = 1;
+        if (this.currentType == 0) {
+          // 会员充值记录
+          this.getCzjl()
+        } else {
+          this.getZcjl();
+        }
+      },
+      bindStartTimeChange(e) {
+        this.start_time = e.detail.value;
+        this.page = 1;
+        if (this.currentType == 0) {
+          // 会员充值记录
+          this.getCzjl()
+        } else {
+          this.getZcjl();
+        }
+      },
+      bindEndTimeChange(e) {
+        this.end_time = e.detail.value;
+        this.page = 1;
+        if (this.currentType == 0) {
+          // 会员充值记录
+          this.getCzjl()
+        } else {
+          this.getZcjl();
+        }
+      },
+      // 会员名
+      changeMemberName(e) {
+        this.keyword = e.detail.value;
+        this.page = 1;
+        if (this.currentType == 0) {
+          // 会员充值记录
+          this.getCzjl()
+        } else {
+          this.getZcjl();
+        };
+      },
+    };
+    events = {};
+    async getSalesmanList() {
+      let suppliers_id = this.$parent.globalData.suppliers_id;
+      let Salesman = await wepy.request({
+        url: api.findSalesman,
+        data: {
+          suppliers_id,
+          getall: 1
+        }
+      });
+      if (Salesman.data.code == '0') {
+        this.salesmanList = Salesman.data.data;
+        this.$apply();
+      }
+    }
+    async getMemberNameList() {
+      let suppliers_id = this.$parent.globalData.suppliers_id;
+      let memberNameList = await wepy.request({
+        url: api.findmemberNameList,
+        data: {
+          suppliers_id,
+          getall: 1
+        }
+      });
+      if (memberNameList.data.code == '0') {
+        this.memberNameList = memberNameList.data.data;
+        this.$apply();
+      }
+    }
+    getZcjl() {
+      var data = this.init();
+      wx.showLoading({
+        title: '加载中...', //提示的内容,
+        mask: true, //显示透明蒙层，防止触摸穿透,
+        success: res => {}
+      });
+      wepy
+        .request({
+          url: api.zcjl, //开发者服务器接口地址",
+          data
+        })
+        .then(res => {
+          wx.hideLoading();
+          console.log('充值记录', res);
+          var datas = res.data.data.data;
+          this.yue = res.data.zonge;
+          datas.forEach((item, index) => {
+            datas[index].add_time = util.formatTime(
+              new Date(item.add_time * 1000),
+              'yyyy-MM-dd hh:mm:ss'
+            );
+          });
+          if (data.page == 1) {
+            this.isMoreData = true;
+            this.balance = res.data.data.data;
+          } else this.balance.push(...datas);
+          if (datas.length < 10) this.isMoreData = false;
+          this.zcmoney=res.data.zonge
+          this.$apply();
+        })
+        .catch(res => {
+          console.log(res);
+          wx.showToast({
+            title: '未知错误', //提示的内容,
+            icon: 'none', //图标,
+            duration: 2000, //延迟时间,
+            mask: true, //显示透明蒙层，防止触摸穿透,
+            success: res => {}
+          });
+        });
+    }
+    getCzjl() {
+      var data = this.init();
+      wx.showLoading({
+        title: '加载中...', //提示的内容,
+        mask: true, //显示透明蒙层，防止触摸穿透,
+        success: res => {}
+      });
+      wepy
+        .request({
+          url: api.czjl, //开发者服务器接口地址",
+          data
+        })
+        .then(res => {
+          wx.hideLoading();
+          console.log('充值记录', res);
+          var datas = res.data.data.data;
+          datas.forEach((item, index) => {
+            datas[index].add_time = util.formatTime(
+              new Date(item.add_time * 1000),
+              'yyyy-MM-dd hh:mm:ss'
+            );
+          });
+          if (data.page == 1) {
+            this.isMoreData = true;
+            this.payList = res.data.data.data;
+          } else this.payList.push(...datas);
+          if (datas.length < 10) this.isMoreData = false;
+           this.czmoney=res.data.zonge
+          this.$apply();
+        })
+        .catch(res => {
+          console.log(res);
+          wx.showToast({
+            title: '未知错误', //提示的内容,
+            icon: 'none', //图标,
+            duration: 2000, //延迟时间,
+            mask: true, //显示透明蒙层，防止触摸穿透,
+            success: res => {}
+          });
+        });
+    }
+    init() {
+      var data = {
+        suppliers_id: this.suppliers_id,
+        sales_id: this.sales_id,
+        keyword: this.keyword,
+        start_time: this.start_time,
+        end_time: this.end_time,
+        page: this.page
+      };
+
+      return data;
+    }
+    async onLoad(option) {
+      console.log('option', option);
+      // this.money = option.money;
+      // 业务员列表
+      this.salesmanList = [];
+      // 业务员
+      this.sales_id = '';
+      // 会员
+      this.keyword = '';
+      // 页数
+      this.page = 1;
+      // 筛选日期
+      var newDate = new Date().getTime();
+      this.end_time = util.formatTime(new Date(), 'yyyy-MM-dd');
+      this.now_time = this.end_time;
+      this.start_time = util.getStartTime();
+      this.suppliers_id = this.$parent.globalData.suppliers_id ?
+        this.$parent.globalData.suppliers_id :
+        (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
+      this.getSalesmanList();
+      this.getCzjl();
+      this.getZcjl();
+      this.$apply();
+    }
+    onReachBottom() {
+      console.log(11111111111111, this.isMoreData);
+      if (this.isMoreData) {
+        wx.showLoading({
+          title: '加载中', //提示的内容,
+          mask: true, //显示透明蒙层，防止触摸穿透,
+          success: res => {}
+        });
+        this.page = this.page + 1;
+         if (this.currentType == 0) {
+          // 会员充值记录
+          this.getCzjl()
+        } else {
+          this.getZcjl();
+        }
+      }
+    }
+    async onShow() {}
+  }
+</script>

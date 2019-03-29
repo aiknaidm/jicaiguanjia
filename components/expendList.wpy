@@ -1,0 +1,89 @@
+<style lang="less">
+.expend-list {
+    padding-top: 30rpx;
+  .expend-top,
+  .expend-bottom {
+    font-size: 26rpx;
+    color: #666;
+    padding: 20rpx 30rpx;
+    border-bottom: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
+    display: flex;
+    justify-content: space-between
+  }
+  .expend-username{
+    padding:0 30rpx 0 30rpx;
+    color: #333;
+    font-size: 28rpx;
+  }
+  .expend-center {
+    display: flex;
+    padding: 0 30rpx 30rpx 30rpx;
+    justify-content: space-between;
+    color: #333; // align-items: center;
+    .expend-img {
+      width: 160rpx;
+      height: 160rpx;
+      margin-right: 10rpx;
+    }
+    .expend-txt {
+      flex: 1;
+      font-size: 26rpx;
+      line-height: 40rpx;
+      
+      .expend-type {
+        color: #888;
+      }
+    }
+    .expend-num {
+      text-align: right;
+      font-size: 24rpx;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between
+    }
+  }
+  border-top: 8rpx solid #e5e5e5;
+}
+</style>
+<template>
+  <view class="expend-list">
+    <!-- <view class="expend-top">
+      <text>下单时间：{{item.add_time}}</text>
+      <text>单号：{{item.order_sn}}</text>
+    </view> -->
+      <view class="expend-username" wx:if="{{type!=2}}">
+        用户名：{{item.user_name}}
+      </view>
+    <view class="expend-center" @tap="toOrderDetail({{item.order_id}})">
+    
+      <view class="expend-txt">
+        <view class="expend-name">订单号：{{item.order_sn}}</view>
+        <view class="expend-type">手机号：{{item.mobile_phone}}</view>
+      </view>
+      <view class="expend-num">
+        <view class="red">-￥{{item.order_amount}}</view>
+        <view  class="expend-type">{{item.add_time}}</view>
+        
+      </view>
+    </view>
+  
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+export default class expendList extends wepy.component {
+  props = {
+    item: Object,
+    type: String
+  };
+  data = {};
+  events = {};
+  methods = {
+    toOrderDetail(order_id){
+wx.navigateTo({ url: '/ConsolePages/pages/orderDetail?id='+order_id });
+    }
+  };
+  onLoad() {}
+}
+</script>

@@ -1,0 +1,193 @@
+<style lang="less">
+  .pay-list {
+    .pay-top,
+    .pay-bottom {
+      font-size: 26rpx;
+      color: #666;
+      padding: 20rpx 30rpx;
+      border-bottom: 1px solid #e5e5e5;
+      border-top: 1px solid #e5e5e5;
+    }
+    .pay-center {
+      display: flex;
+      padding: 30rpx;
+      justify-content: space-between;
+      color: #333; // align-items: center;
+      position: relative;
+      .pay-img {
+        width: 130rpx;
+        height: 130rpx;
+        margin-right: 20rpx;
+        image {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .pay-txt {
+        flex: 1;
+        font-size: 26rpx;
+        line-height: 40rpx;
+      }
+      .pay-name {
+        // width: 150rpx;
+        font-size: 24rpx;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-align: right;
+        .pay-btn {
+          text-align: right;
+          position:absolute;
+          right: 40rpx;
+          top:60rpx;
+          text {
+            color: #fff;
+            background-color: #e50012;
+            border-radius: 50px;
+            padding: 10rpx 35rpx;
+          }
+        }
+      }
+    }
+    border-top: 8rpx solid #e5e5e5;
+  }
+  .other {
+    padding: 20rpx 30rpx;
+    .other-text {
+      font-size: 26rpx;
+      color: #888;
+    }
+    .tishi {
+      // background: #fd7602;
+      border:1px solid #888;
+      color: #888;
+      border-radius: 50px;
+      padding: 0 5px;
+      font-size: 20rpx;
+      margin-left: 20rpx
+    }
+    .other-btn{
+       color: #fff;
+            background-color: #e50012;
+            border-radius: 50px;
+            padding: 10rpx 35rpx;
+            margin-left: 20rpx;font-size: 22rpx;
+            float: right;
+    }
+  }
+</style>
+<template>
+  <view class="pay-list" @tap="toCheckDetail({{item.user_id}})">
+    <block wx:if="{{type==1}}">
+      <view class="pay-top">充值日期：{{item.add_time}}</view>
+      <view class="pay-center">
+        <view class="pay-img">
+          <image src="{{item.avatar}}" mode="scaleToFill" lazy-load="false">
+          </image>
+        </view>
+        <view class="pay-txt">
+          <view>姓名：{{item.user_name}}</view>
+          <view>手机号码：{{item.mobile_phone}}</view>
+          <!-- <view wx:if="{{item.pay_id!=0}}">会员卡余额：￥{{item.goods_price}}</view> -->
+          <view wx:if="{{item.pay_id==2&&item.pay_status==0}}">充值待确认金额：
+            <text class="red">￥{{item.goods_price}}</text>
+          </view>
+          <view>充值金额:<text class="red">￥{{item.order_amount}}</text></view>
+          <view>实际到账金额:<text class="red">￥{{item.goods_price}}</text><text style="float:right">{{item.pay_id==2?'线下支付':'微信支付'}}</text></view>
+        </view>
+        <view class="pay-name" wx:if="{{type==1}}">
+          <view></view>
+          <view class="pay-btn" wx:if="{{item.pay_id==2&&item.pay_status==0}}" @tap.stop="toSure({{item.id}},{{item.user_id}},{{item.goods_price}})">
+            <text>确认</text>
+          </view>
+        </view>
+      </view>
+      <view class="pay-bottom" wx:if="{{item.pay_note!=''}}">备注：{{item.pay_note}}</view>
+    </block>
+    <block wx:else>
+      <view class="other">
+        <view wx:if="{{item.pay_id==2&&item.pay_status==0}}">充值待确认金额：
+          <text class="red">￥{{item.order_amount}}</text>
+          <text class="tishi">到账{{item.goods_price}}</text>
+          <text class="other-btn" @tap.stop="toSure({{item.id}},{{item.user_id}},{{item.goods_price}})">确认</text>
+        
+        </view>
+   
+        <view wx:else>充值金额:<text class="red">￥{{item.order_amount}} </text> <text class="tishi">到账{{item.goods_price}}</text>
+          
+        </view>
+        <view class="other-text" wx:if="{{item.pay_note!=''}}">备注：{{item.pay_note}}</view>
+        <view class="other-text">充值日期：{{item.add_time}}</view>
+      </view>
+    </block>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy';
+  import api from '../API/api';
+  export default class payList extends wepy.component {
+    props = {
+      item: Object,
+      type: String
+    };
+    data = {};
+    events = {};
+    methods = {
+      toCheckDetail(id) {
+        //审核人的id
+  
+        wx.navigateTo({
+          url: '/ConsolePages/pages/my_console_checkDetail?id=' +
+            id +
+            '&currentStatu=1'
+        });
+      },
+      async toSure(id, user_id, goods_price) {
+        var suppliers_id = this.suppliers_id
+        var modalRes = await wepy.showModal({
+          title: '提示', //提示的标题,
+          content: '你确定已收到', //提示的内容,
+          showCancel: true, //是否显示取消按钮,
+          cancelText: '取消', //取消按钮的文字，默认为取消，最多 4 个字符,
+          cancelColor: '#000000', //取消按钮的文字颜色,
+          confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
+          confirmColor: '#3CC51F', //确定按钮的文字颜色,
+        });
+       
+        if (modalRes.confirm){
+         wx.showLoading({
+          title: '加载中...', //提示的内容,
+          mask: true, //显示透明蒙层，防止触摸穿透,
+          success: res => {}
+        });
+          wepy.request({
+            url: api.czqr, //开发者服务器接口地址",
+            data: {
+              id,
+              user_id,
+              suppliers_id,
+              goods_price,
+            }, //请求的参数",
+          }).then(res => {
+            if (res.data.code == 0) {
+             wx.hideLoading();
+              this.item.pay_id = 0
+              wx.showToast({
+                title: '确认成功', //提示的内容,
+                icon: 'none', //图标,
+                duration: 2000, //延迟时间,
+                mask: true, //显示透明蒙层，防止触摸穿透,
+                success: res => {}
+              });
+              this.$apply();
+            }
+          });}
+        // this.$emit("toSure", user_id)
+      }
+    };
+    onLoad() {
+       this.suppliers_id = this.$parent.$parent.globalData.suppliers_id
+      //  console.log(" this", this);
+    }
+  }
+</script>

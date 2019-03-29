@@ -1,0 +1,251 @@
+<style lang="less">
+  .status-label {
+    background: #f0f0f0;
+    border-left: 5rpx solid #e4e4e4
+  }
+  .icon-shouji {
+    color: #44b8f4;
+    font-size: 35rpx;
+  }
+  .icon-youcecaidan {
+    color: #e50012;
+  }
+  .green {
+    color: #10b3b1!important;
+  }
+  .num {
+    font-size: 26rpx;
+    line-height: 35rpx;
+    padding-left: 20rpx;
+    color: #888
+  }
+  .status-box {
+    width: 100%;
+    height: 100rpx;
+    line-height: 100rpx;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-top: 1rpx solid #eee;
+  }
+  .status-box .status-label {
+    border-right: 1px solid #f0f0f0;
+    text-align: center;
+    font-size: 30rpx;
+    padding: 0px 40rpx;
+    flex: 1;
+    border-bottom: 6rpx solid #eee;
+    position: relative;
+  }
+  .status-box .status-label.active {
+    color: #e50012;
+    border-bottom: 6rpx solid #e50012;
+  }
+  .status-box .status-label .red-dot {
+    width: 16rpx;
+    height: 16rpx;
+    position: absolute;
+    left: 116rpx;
+    top: 23rpx;
+    background-color: #f43530;
+    border-radius: 50%;
+  }
+  .search-title {
+    display: flex;
+    line-height: 55rpx;
+    font-size: 28rpx;
+    align-items: center;
+    background-color: #fff;
+    z-index: 10;
+    padding: 20rpx;
+
+  }
+  .border {
+    display: inline-block;
+    padding: 0 20rpx;
+    background: #fff // border-right: 1px solid #f0f0f0;
+    // max-width: 300rpx;
+  }
+  .icon-jiantou {
+    font-size: 12px;
+    margin-left: 10rpx;
+    color: #e50012
+  }
+  .top {
+    background: #e50012;
+    padding: 40rpx;
+    .money {
+      text-align: left;
+      color: #fff;
+      .text-m {
+        font-size: 45rpx;
+        line-height: 55rpx;
+        font-weight: bold
+      }
+      .icon-jiantou {
+        color: #fff
+      }
+    }
+    .border2 {
+      border-left: 1px solid rgba(255, 255, 255, 0.5)
+    }
+  }
+  .body-bg {
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+  .list {
+    background-color: #fff;
+    width: 60%;
+    text-align: center;
+    line-height: 88rpx;
+    font-size: 30rpx;
+    max-height: 450rpx;
+    overflow: scroll;
+  }
+  .list view {
+    border-bottom: 1px solid #f0f0f0;
+  }
+</style>
+<template>
+  <view class='container'>
+    <view class="top">
+      <view class="money">
+        <view class="text-t">会员支出总额</view>
+        <view class="text-m">￥56796.00</view>
+        <view>
+          <picker mode="date" value="{{start_time}}" end="{{now_time}}" bindchange="bindStartTimeChange">
+            {{start_time}}
+          </picker>
+          -
+          <picker mode="date" value="{{end_time}}" start="{{datas.start_time}}" end="{{now_time}}" bindchange="bindEndTimeChange">
+            {{end_time}}
+          </picker>
+        </view>
+        <!-- <view class="iconfont icon-jiantou"></view> -->
+      </view>
+    </view>
+    <view class='search-title '>
+      <view bindtap="salesmanNameTap" class=" up">
+        <view class='border'>{{salesmanName}}
+          <text class='iconfont icon-jiantou green'></text>
+        </view>
+      </view>
+      <view bindtap="memberNameTap" class=" up">
+        <view class='border'>{{memberName}}
+          <text class='iconfont icon-jiantou '></text>
+        </view>
+      </view>
+    </view>
+    <view class="payList-box">
+        <repeat
+            for="{{expendList}}"
+            key="index"
+            index="index"
+            item="item">
+            <expendList type="1" :data.sync="item"></expendList>
+        </repeat>
+    </view>
+    <view class='body-bg' wx:if="{{isShowSalesList&&list.length>0}}" bindtap='hiddenSalesList' touchstart='hiddenbg' touchmove="hiddenbg">
+      <view class='list'>
+        <view wx:for="{{list}}" wx:key="{{index}}" @tap='changeShopList({{item.id}},{{item.user_nickname}})'>
+          {{item.user_nickname}}
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import api from '../../API/api';
+  import expendList from '../../components/expendList';
+  export default class my_console_cardExpendDetail extends wepy.page {
+    config = {
+      navigationBarTitleText: '会员卡消费明细'
+    };
+    data = {
+      isShowSalesList: false,
+      salesmanName: '选择业务员',
+      memberName: '选择会员',
+      showName: false,
+      expendList:["11111"],
+      list:[]
+    };
+    computed = {};
+    components = {expendList};
+    methods = {
+      getFormId: function(e) {
+        //util.submitFormId(app.globalData.userId, e.detail.formId);
+      },
+
+      salesmanNameTap: function() {
+        this.isShowSalesList = true;
+        this.list=this.salesmanList;
+        
+      },
+      memberNameTap:function(){
+        this.isShowSalesList = true;
+        this.list=this.memberNameList
+      },
+      hiddenSalesList: function() {
+        this.isShowSalesList = false;
+      },
+      changeShopList: function(sales_id, name) {
+        this.isShowSalesList = false;
+        this.salesmanName = name;
+        this.sales_id = sales_id;
+        this.getShenheList(sales_id);
+      }
+    };
+    events = {};
+    //审核列表
+    async getShenheList(sales_id, suppliers_id = this.suppliers_id) {
+      let yhlb = await wepy.request({
+        url: api.yhlb,
+        data: {
+          suppliers_id,
+          sales_id
+        }
+      });
+      if (yhlb.data.code == '0') {
+        this.weishenhe = yhlb.data.data.weishenhe;
+        this.yishenhe = yhlb.data.data.yishenhe;
+        this.$apply();
+      }
+    }
+
+
+    async getSalesmanList() {
+      let suppliers_id = this.$parent.globalData.suppliers_id;
+      let Salesman = await wepy.request({
+        url: api.findSalesman,
+        data: {
+          suppliers_id,
+          getall: 1
+        }
+      });
+      if (Salesman.data.code == '0') {
+        this.salesmanList = Salesman.data.data;
+        this.$apply();
+      }
+    }
+    async onLoad(option) {
+      console.log("option", option)
+      this.suppliers_id = this.$parent.globalData.suppliers_id ?
+        this.$parent.globalData.suppliers_id :
+        (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
+    this.getSalesmanList();
+      this.$apply();
+    }
+    async onShow() {}
+  }
+</script>

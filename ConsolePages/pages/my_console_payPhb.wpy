@@ -1,0 +1,163 @@
+<style lang="less">
+  .time {
+    line-height: 80rpx;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    .icon-xiala{
+      color: #888;
+    }
+  }
+  .phb-list {
+    .phb-top,
+    .phb-bottom {
+      font-size: 26rpx;
+      color: #666;
+      padding: 20rpx 30rpx;
+      border-bottom: 1px solid #e5e5e5;
+      border-top: 1px solid #e5e5e5;
+    }
+    .phb-center {
+      display: flex;
+      padding: 30rpx;
+      justify-content: space-between;
+      color: #333; // align-items: center;
+      .num{
+        line-height: 100rpx;
+        font-size: 35rpx;
+        font-weight: bold;
+        padding-right: 20rpx;
+      }
+      .phb-img {
+        width: 100rpx;
+        height: 100rpx;
+        margin-right: 40rpx;
+        image{
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .phb-txt {
+        flex: 1;
+        font-size: 26rpx;
+        line-height: 40rpx;
+      }
+      .phb-money {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+      }
+    }
+    border-top: 8rpx solid #e5e5e5;
+  }
+</style>
+<template>
+  <view class="container">
+    <view class="time">
+      <picker mode="date" value="{{start_time}}" end="{{now_time}}" bindchange="bindStartTimeChange">{{start_time}}</picker><text class="iconfont icon-xiala"></text><text style="color:#888;padding:0 20rpx;">到</text>
+      <picker mode="date" value="{{end_time}}" start="{{datas.start_time}}" end="{{now_time}}" bindchange="bindEndTimeChange">{{end_time}}</picker><text class="iconfont icon-xiala"></text>
+    </view>
+    <view class="phb-list" wx:for="{{phbList}}" wx:key="{{index}}" @tap="toCheckDetail({{item.user_id}})">
+      <!-- <view class="phb-top">充值日期：{{item.pay_time}}</view> -->
+      <view class="phb-center">
+        <view class="num">{{index+1}}</view>
+        <view class="phb-img">
+          <image
+            src="{{item.avatar}}"
+            mode="scaleToFill"
+            lazy-load="false">
+          </image>
+        </view>
+        <view class="phb-txt">
+          <view>姓名：{{item.user_name}}</view>
+          <view>手机号码：{{item.mobile_phone}}</view>
+        </view>
+        <view class="phb-money red">￥{{item.zonge}}</view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import api from '../../API/api';
+  import util from '../../utils/index';
+  export default class my_console_cardPayDetail extends wepy.page {
+    config = {
+      navigationBarTitleText: '会员充值排行榜'
+    };
+    data = {
+      phbList: [],
+      end_time: '1970 - 01 - 01',
+      start_time: ' 1970 - 01 - 01',
+      now_time: '1970 - 01 - 01'
+    };
+    computed = {};
+    components = {};
+    methods = {
+       toCheckDetail(id) {
+        //审核人的id
+  
+        wx.navigateTo({
+          url: '/ConsolePages/pages/my_console_checkDetail?id=' +
+            id +
+            '&currentStatu=1'
+        });
+      },
+      bindStartTimeChange(e) {
+      this.start_time = e.detail.value;
+
+      this.getCzphb();
+    },
+    bindEndTimeChange(e) {
+      this.end_time = e.detail.value;
+
+      this.getCzphb();
+    },
+    };
+    getCzphb(){
+      wepy.request({
+        url: api.czphb, //开发者服务器接口地址",
+        data: {
+          suppliers_id:this.suppliers_id,
+          start_time: this.start_time,
+          end_time: this.end_time
+        }, //请求的参数",
+     
+      }).then(res=>{
+        this.phbList=res.data.data;
+    
+        this.$apply();
+      }).catch(res=>{
+        wx.showToast({
+          title: '未知错误', //提示的内容,
+          icon: 'none', //图标,
+          duration: 2000, //延迟时间,
+          mask: true, //显示透明蒙层，防止触摸穿透,
+          success: res => {}
+        });
+      });
+    }
+    async onLoad(option) {
+      console.log('option', option);
+      this.suppliers_id = this.$parent.globalData.suppliers_id ?
+        this.$parent.globalData.suppliers_id :
+        (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
+      this.end_time = util.formatTime(new Date(), 'yyyy-MM-dd');
+      this.now_time = this.end_time;
+      this.start_time = this.getStartTime();
+      this.getCzphb();
+      this.$apply();
+    }
+    getStartTime() {
+      var nowdates = new Date();
+      var year = nowdates.getFullYear()
+      var month = nowdates.getMonth() + 1
+      var date = "01"
+      if (month < 10)
+        month = "0" + month
+      return year + "-" + month + "-" + date
+    }
+    async onShow() {}
+  }
+</script>

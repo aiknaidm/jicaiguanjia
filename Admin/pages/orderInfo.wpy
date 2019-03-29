@@ -1,0 +1,233 @@
+<style lang="less">
+.container {
+  background: transparent;
+  padding-bottom: 100rpx;
+}
+
+.checkbox {
+  display: block;
+  background-color: #fff;
+  padding: 20rpx 40rpx;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+checkbox {
+  margin-right: 20rpx;
+}
+
+.btn2 {
+  display: flex;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+}
+
+.btn2 button {
+  flex: 1;
+  text-align: center;
+  line-height: 88rpx;
+  background: #e50012;
+  color: #fff;
+  border-radius: 0px 
+}
+
+.btn2 button:last-child {
+  background: #ddd;
+  color: #999;
+}
+
+.btn2 button:last-child.active {
+  background: #fd7503;
+  color: #fff;
+}
+
+/* checkbox未选中时样式 */
+
+checkbox .wx-checkbox-input {
+  border-radius: 50%;
+  height: 36rpx;
+  width: 36rpx;
+  margin-top: -4rpx;
+  /* 自定义样式.... */
+}
+
+/* checkbox选中时样式 */
+
+checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
+  font-family: 'iconfont';
+  content: '\e6c6';
+  font-size: 30rpx;
+  /* background-color: #e02e24; */ /* border: 1rpx solid #e02e24; */ /* 自定义样式.... */
+}
+</style>
+<template>
+<view class='container'>
+  <form report-submit bindsubmit='getFormId'>
+    <checkbox-group bindchange="checkboxChange">
+      <label class="checkbox" wx:for="{{items}}" wx:key="{{index}}">
+        <checkbox value="{{item.id}}" checked="{{item.checked}}" color="#e50012" />{{item.kefu_name}} 电话：{{item.mobile}}
+      </label>
+    </checkbox-group>
+    <view class='btn2'>
+      <button @tap='addServiceInfo' form-type='submit'>添加客服</button>
+      <button class="{{values.length?'active':''}}" @tap='delServiceInfo' form-type='submit'>删除客服</button>
+    </view>
+  </form>
+  <popupbox :popupdata.sync="popupdata" @formSubmit.user="formSubmit"></popupbox>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import api from '../../API/api';
+import popupbox from '../../components/popupbox';
+export default class my_setServiceInfo extends wepy.page {
+  config = {
+    navigationBarTitleText: '客服管理'
+  };
+  data = {
+    items: [],
+    values: [],
+    popupdata: {}
+  };
+  components = {
+    popupbox
+  };
+  methods = {
+    // 收集formid
+    getFormId: function(e) {
+      //util.submitFormId(app.globalData.userId, e.detail.formId);
+    },
+    formSubmit(e){
+      if (e.detail.value.name === '') {
+        wx.showToast({
+          title: '客服姓名不能为空',
+          icon: 'none'
+        });
+        return;
+      }
+      if (e.detail.value.phone === '') {
+        wx.showToast({
+          title: '客服电话不能为空',
+          icon: 'none'
+        });
+        return;
+      }
+      var suppliers_id = this.suppliers_id;
+      var kefu_name = e.detail.value.name;
+      var mobile = e.detail.value.phone;
+      wepy
+        .request({
+          url: api.addService,
+          data: {
+            suppliers_id,
+            kefu_name,
+            mobile
+          }
+        })
+        .then(res => {
+          if (res.data.code == '0') {
+            wx.showToast({
+              title: '添加成功'
+            });
+            this.popupdata.isshowpopup = false;
+            this.serviceList();
+          } else {
+            wx.showToast({
+              title: '请求超时'
+            });
+          }
+        });
+    },
+    // 选择客服
+    checkboxChange: function(e) {
+      this.values = e.detail.value;
+    },
+    // 删除客服信息
+    async delServiceInfo() {
+      if (this.values.length) {
+        var id = this.values.toString();
+        var modalRes = await wepy.showModal({
+          title: '提示', //提示的标题,
+          content: '你确定要删除吗', //提示的内容,
+          showCancel: true, //是否显示取消按钮,
+          confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
+          confirmColor: '#e50012' //确定按钮的文字颜色,
+        });
+        if (modalRes.confirm) {
+          var res = await this.delService(id);
+          if (res.data.code == 0) {
+            wx.showToast({
+              title: '删除成功'
+            });
+            this.values = [];
+            this.serviceList();
+          } else {
+            wx.showToast({
+              title: res.data.message
+            });
+          }
+        } else if (modalRes.cancel) {
+          console.log('用户点击取消');
+        }
+      } else {
+        wx.showToast({
+          title: '请选择需要删除的客服',
+          icon: 'none'
+        });
+      }
+    },
+    // 添加客服信息
+    addServiceInfo: function() {
+      this.popupdata.isshowpopup = true;
+    },
+    showpopup: function() {
+      this.addServiceInfo();
+    }
+  };
+  events = {};
+  async onLoad(option) {}
+  async onShow(option) {
+    var popupdata = {
+      isshowpopup: false,
+      title: '添加客服',
+      inputList: [
+        {
+          name: '',
+          placeholder: '请填写客服姓名',
+          inputName: 'name'
+        },
+        {
+          name: '',
+          placeholder: '请填写客服电话',
+          inputName: 'phone',
+          type: 'number'
+        }
+      ]
+    };
+    this.popupdata = popupdata;
+    this.serviceList();
+  }
+  async delService(id) {
+    return await wepy.request({
+      url: api.delService,
+      data: { id }
+    });
+  }
+
+  async serviceList() {
+   this.suppliers_id = this.$parent.globalData.suppliers_id;
+    let serviceList = await wepy.request({
+      url: api.serviceList,
+      data: {
+       suppliers_id: this.suppliers_id 
+      }
+    });
+    if (serviceList.data.code == '0') {
+      this.items = serviceList.data.data;
+      this.$apply();
+    }
+  }
+}
+</script>

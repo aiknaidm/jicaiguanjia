@@ -1,0 +1,293 @@
+<style lang="less">
+/* pages/my/my-hy/my-promotion-background/index.wxss */
+page {
+  background-color: #fff;
+}
+.container {
+  padding: 30rpx;
+}
+.shopName {
+  position: relative;
+  padding: 40rpx 30rpx;
+  border-radius: 15rpx;
+  background-color: #fd7602;
+  margin-bottom: 30rpx;
+}
+.imgBox image {
+  width: 128rpx;
+  height: 118rpx;
+  vertical-align: middle;
+  border-radius: 50%;
+}
+.nameBox {
+  margin-left: 10rpx;
+}
+.shopList {
+  background-color: transparent;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.left {
+  display: flex;
+  align-items: center;
+  flex: 4;
+}
+.toShop {
+  text-align: center;
+  background-color: #fff;
+  height: 30rpx;
+  line-height: 30rpx;
+  border-radius: 20rpx;
+  position: absolute;
+  top: 20rpx;
+  right: 20rpx;
+  font-size: 28rpx;
+  padding: 0 20rpx;
+}
+.name {
+  text-align: left;
+  font-size: 28rpx;
+  color: #fff;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  /*后面的3是设置显示几行*/
+}
+.txt .name {
+  text-align: left;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 28rpx;
+  color: #666;
+}
+.text {
+  color: #fff;
+  font-size: 36rpx;
+}
+.border {
+  font-size: 30rpx;
+  color: #fff;
+  text-align: center;
+  margin: 20rpx 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.countBox {
+  text-align: center;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.amount {
+  font-size: 38rpx;
+}
+.tips {
+  font-size: 28rpx;
+}
+.toPay {
+  border: 1px solid#fd7602;
+  color: #fd7602;
+  height: 66rpx;
+  line-height: 66rpx;
+  text-align: center;
+  width: 280rpx;
+  border-radius: 15rpx;
+}
+.dotted {
+  border-bottom: 2px dotted#fff;
+  height: 10rpx;
+  width: 250rpx;
+}
+.box {
+  display: flex;
+  justify-content: center;
+}
+.xinxi {
+  border-top: 1px solid#e4e4e4;
+  font-size: 30rpx;
+  background-color: #fff;
+}
+.xinxi view {
+  height: 80rpx;
+  line-height: 80rpx;
+  border-bottom: 1px solid#e4e4e4;
+  padding-left: 30rpx;
+}
+</style>
+<template>
+    <view class='container'>
+        <view class='shopName' style="{{bg?'background:url(' + bg + ') no-repeat;background-size:cover':'background-color:#fd7602;'}}">
+            <view class='shopList'>
+                <view class='left'>
+                    <view class="imgBox">
+                        <image mode="aspectFill" src='{{userInfo.avatar}}'></image>
+                    </view>
+                    <view class='nameBox'>
+                        <view class='name'> {{userInfo.yizhan_name}}</view>
+                        <view class='text'>
+                            <text>会员卡</text> </view>
+                    </view>
+                </view>
+                <view class='toShop'>积分：500</view>
+            </view>
+            <view class='border'>
+                <view class='dotted'></view>
+                <text class='iconfont icon-star_full'></text>
+                <view class='dotted'></view>
+            </view>
+            <view class='countBox'>
+                <view class='amount'>￥0.00</view>
+                <view class='tips'>可用余额</view>
+            </view>
+        </view>
+        <view class='box'>
+            <view class='toPay' bindtap='upbc' data-suppliers_id="{{userInfo.suppliers_id}}">
+                会员卡背景设置
+            </view>
+        </view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import api from '../../../API/api';
+import util from '../../../utils/index';
+export default class newslist extends wepy.page {
+  config = {
+    navigationBarTitleText: '会员卡背景设置'
+  };
+  components = {};
+  data = {
+    bg: 0,
+    userInfo: ''
+  };
+  computed = {};
+  methods = {
+    upbc() {
+      wepy
+        .chooseImage({
+          count: 1, // 默认9
+          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+          sourceType: ['album', 'camera'] // 可以指定来源是相册还是相机，默认二者都有
+        })
+        .then(res => {
+          console.log('本地图片地址', res);
+          // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+          var tempFilePaths = res.tempFilePaths;
+          console.log('本地图片地址', tempFilePaths);
+          wx.showLoading({
+            title: '上传中...', //提示的内容,
+            mask: true, //显示透明蒙层，防止触摸穿透,
+            success: res => {}
+          });
+          wepy
+            .uploadFile({
+              url: api.upload,
+              filePath: tempFilePaths + '',
+              name: 'file',
+              header: {
+                Accept: 'application/json'
+              }
+            })
+            .then(res => {
+              var resData = JSON.parse(res.data.trim());
+              console.log('背景图', resData);
+              if (resData.code == 0) {
+                // this.imgPath = resData.data.pic_url;
+                this.scbc(resData.data.pic_url);
+              }
+            });
+        });
+    }
+  };
+  events = {};
+  cardbg() {
+    var that = this;
+    wepy
+      .request({
+        url: api.cardbg,
+        data: {
+          user_id: this.user_id,
+          suppliers_id:this.suppliers_id
+        }
+      })
+      .then(res => {
+        wx.hideLoading();
+        if (res.data.code == 0) {
+          this.bg = res.data.data.card_img;
+        }
+      });
+  }
+  //   保存地址
+  scbc(img) {
+    var that = this;
+    wepy
+      .request({
+        url: api.card_bg,
+        data: {
+          user_id: this.user_id,
+          card_img: img,
+          suppliers_id:this.suppliers_id
+        }
+      })
+      .then(res => {
+          wx.hideLoading();
+        if (res.data.code == 0) {
+          this.bg = img;
+          this.$apply()
+        }
+      });
+  }
+  async onLoad(option) {
+    wx.showLoading({
+      title: '加载中', //提示的内容,
+      mask: true, //显示透明蒙层，防止触摸穿透,
+      success: res => {}
+    });
+    try {
+      this.user_id = await this.$parent.loginInfo();
+      this.suppliers_id = this.$parent.globalData.suppliers_id
+        ? this.$parent.globalData.suppliers_id
+        : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
+      if (this.user_id == '' || this.suppliers_id == '') {
+        wx.showToast({
+          title: '登录失败', //提示的内容,
+          icon: 'none', //图标,
+          duration: 1000, //延迟时间,
+          mask: true, //显示透明蒙层，防止触摸穿透,
+          success: res => {
+            wx.redirectTo({
+              url: '/ConsolePages/pages/index'
+            });
+          }
+        });
+      }
+    } catch (error) {
+      wx.showToast({
+        title: '登录失败', //提示的内容,
+        icon: 'none', //图标,
+        duration: 1000, //延迟时间,
+        mask: true, //显示透明蒙层，防止触摸穿透,
+        success: res => {
+          wx.redirectTo({
+            url: '/ConsolePages/pages/index'
+          });
+        }
+      });
+    }
+    this.cardbg();
+    this.userInfo = await this.$parent.getYizhanInfo(
+      this.user_id,
+      this.suppliers_id
+    );
+    this.$apply();
+  }
+}
+</script>
