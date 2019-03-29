@@ -176,11 +176,11 @@ export default class extends wepy.app {
     ],
 
     window: {
-      backgroundTextStyle: '#333',
+      backgroundTextStyle: 'light',
       navigationBarTitleText: '吉采管家',
       navigationBarBackgroundColor: '#e50012',
       backgroundColor: '#F2f2f2',
-      navigationBarTextStyle: '#fff',
+      navigationBarTextStyle: 'white',
       enablePullDownRefresh: false
     },
     tabBar: {

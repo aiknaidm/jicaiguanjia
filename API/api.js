@@ -86,5 +86,6 @@ const api = {
     suppliers_hdky: `${host}/suppliers_hdky`,
     hd_goods_list: `${host}/hd_goods_list`,
     goods_hdky: `${host}/goods_hdky`,
+    set_unionid: `${host}/set_unionid`,
 }
 export default api
