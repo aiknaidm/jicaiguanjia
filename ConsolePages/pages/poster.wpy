@@ -122,7 +122,6 @@ export default class newslist extends wepy.page {
       wx.getSetting({
         success: res => {
           var that = this;
-          // console.log(res.authSetting)
           if (
             res.authSetting['scope.writePhotosAlbum'] == undefined ||
             res.authSetting['scope.writePhotosAlbum']
@@ -130,7 +129,6 @@ export default class newslist extends wepy.page {
             wx.saveImageToPhotosAlbum({
               filePath: this.shareImage,
               success(res) {
-                // console.log(res)
                 wx.showToast({
                   title: '保存图片成功',
                   icon: 'success',
@@ -147,7 +145,6 @@ export default class newslist extends wepy.page {
                   wx.saveImageToPhotosAlbum({
                     filePath: this.shareImage,
                     success(res) {
-                      // console.log(res)
                       wx.showToast({
                         title: '保存图片成功',
                         icon: 'success',
@@ -166,7 +163,6 @@ export default class newslist extends wepy.page {
   events = {};
   async getIndexNewsList(id) {}
   async eventDraw(userId) {
-    // console.log(app.globalData.yizhanInfo.suppliers_id, app.globalData.userId);
     // var suppliers_id = app.globalData.yizhanInfo.suppliers_id;
     var that = this;
     // if (!app.globalData.yizhanInfo.suppliers_id) {
@@ -184,7 +180,6 @@ export default class newslist extends wepy.page {
       user_id: userId
     };
     let res = await newapi.getShareImg(data);
-    console.log('getqrcode', res.data);
     wx.showLoading({
       title: '绘制图片中'
     });
@@ -271,7 +266,6 @@ export default class newslist extends wepy.page {
    */
   onShareAppMessage(res) {
     if (res.from == 'button') {
-      console.log('share', res.target);
       that.setData({
         path: 'pages/my-renzheng/index?&shareCode=' + that.data.code,
         title: '分享'
@@ -289,7 +283,6 @@ export default class newslist extends wepy.page {
     };
   }
   eventGetImage(event) {
-    console.log('eventGetImage', event);
     wx.hideLoading();
     this.shareImage = event.detail.tempFilePath;
   }

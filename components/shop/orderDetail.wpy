@@ -528,7 +528,6 @@
     events = {};
     methods = {
       showFahuodan(url) {
-        console.log('img', url);
         var img = new Array();
         img[0] = url;
         wx.previewImage({

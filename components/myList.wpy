@@ -89,7 +89,6 @@ export default class myList extends wepy.component {
   methods = {
     toUrl(url, type) {
       if (type && type == 1) {
-        console.log('跳转', url);
         wx.navigateToMiniProgram({
           appId: this.tabItem.appId,
           path: url,

@@ -447,18 +447,14 @@ export default class newslist extends wepy.page {
             that.imgSrc[that.imgSrc.length - 1].img_url = item;
           });
           this.$apply();
-          console.log('tempFilePaths', tempFilePaths, this.imgSrc);
         })
         .catch(res => {
-          console.log(res);
         });
     },
     changeGoodsInput: function(e) {
-      console.log(e.detail.value);
       this.goodsKeyword = e.detail.value;
     },
     changeBrandInput: function(e) {
-      console.log(e.detail.value);
       this.brandKeyword = e.detail.value;
     },
     // 选择
@@ -482,10 +478,8 @@ export default class newslist extends wepy.page {
         })
         .then(res => {
           if (res.confirm) {
-            console.log('用户点击确定');
             this.sureDelBrand(this.user_id, id, index);
           } else if (res.cancel) {
-            console.log('用户点击取消');
           }
         })
         .catch(res => {
@@ -511,10 +505,8 @@ export default class newslist extends wepy.page {
         })
         .then(res => {
           if (res.confirm) {
-            console.log('用户点击确定');
             this.sureDelGoods(this.user_id, id, index);
           } else if (res.cancel) {
-            console.log('用户点击取消');
           }
         })
         .catch(res => {
@@ -588,7 +580,6 @@ export default class newslist extends wepy.page {
       this.touchMoveX = e.changedTouches[0].clientX;
       this.touchMoveY = e.changedTouches[0].clientY;
       if (this.touchMoveX < this.startX - 100) {
-        console.log('左划');
         this.goods_attr[index].active = true;
       } else {
         this.goods_attr[index].active = false;
@@ -611,7 +602,6 @@ export default class newslist extends wepy.page {
             this.goods_attr.splice(index, 1);
             this.$apply();
           } else if (res.cancel) {
-            console.log('用户点击取消');
           }
         });
     },
@@ -637,9 +627,7 @@ export default class newslist extends wepy.page {
       });
       wx.hideLoading();
       var datas = JSON.parse(res.data.trim());
-      console.log('图片', datas);
       if (datas.code == 0) {
-        console.log('图片上传成功~');
         return datas.data.pic_url;
       }
     } catch (error) {
@@ -653,10 +641,8 @@ export default class newslist extends wepy.page {
         confirmColor: '#3CC51F' //确定按钮的文字颜色,
       });
       if (imgRes.confirm) {
-        console.log('用户点击确定');
         await this.upImg(i);
       } else if (imgRes.cancel) {
-        console.log('用户点击取消');
       }
     }
   }
@@ -673,7 +659,6 @@ export default class newslist extends wepy.page {
     };
     let res = await newapi.brands(data);
     wx.hideLoading();
-    console.log('查找品牌', res);
     if (keyword == '') {
       this.brandList = res.data.data;
       this.$apply();
@@ -683,7 +668,6 @@ export default class newslist extends wepy.page {
         this.brandList.push(datas);
       }
       this.brand_id = datas.brand_id;
-      console.log(' this.cat_id', this.brandList);
       this.$apply();
     }
   }
@@ -700,7 +684,6 @@ export default class newslist extends wepy.page {
     };
     let res = await newapi.categorys(data);
     var ispush = true;
-    console.log('获取分类111', res);
     wx.hideLoading();
     this.goodsList = res.data.data;
     this.$apply();
@@ -711,7 +694,6 @@ export default class newslist extends wepy.page {
     wx.showLoading({
       title: '加载中'
     });
-    console.log('suppliers_id', suppliers_id);
 
     let data = {
       user_id: userId,
@@ -719,19 +701,16 @@ export default class newslist extends wepy.page {
       keyword
     };
     let res = await newapi.add_categorys(data);
-    console.log('获取分类', res);
     wx.hideLoading();
     if (res.data.data.tianjia == 1) {
       this.goodsList.push(res.data.data);
     }
     this.cat_id = res.data.data.cat_id;
-    console.log(' this.cat_id', this.cat_id);
     this.$apply();
   }
   //确定删除分类
   async sureDelGoods(user_id, id, index) {
     var that = this; //
-    console.log('确定的currentSelectIds', that.data.currentSelectIds);
     var userID = wx.getStorageSync('userId');
     let data = {
       cat_id: id,
@@ -739,7 +718,6 @@ export default class newslist extends wepy.page {
     };
     let res = await newapi.del_categorys(data);
     wx.hideLoading();
-    console.log('shanchu res is', res);
     if (res.data.code == 0) {
       this.goodsList.splice(index, 1);
     } else {
@@ -790,11 +768,8 @@ export default class newslist extends wepy.page {
     //     //批发
     //     shop_price: that.data.goods_hyShopPrice ? that.data.goods_hyShopPrice : 0,
     //     qidingliang: that.data.goods_qdl
-    // console.log('提交的内容', e.detail.value, this.imgSrc);
     // var goods_img = this.imgUrl;
-    // console.log('goods_img', goods_img);
     // if (this.imgSrc != '') goods_img = await this.upImg();
-    // console.log('goods_img', goods_img);
     var user_id = this.user_id;
     var goods_name = e.detail.value.goods_name; //商品名称
     var goods_id = this.goodsId ? this.goodsId : '';
@@ -889,8 +864,6 @@ export default class newslist extends wepy.page {
       return;
     }
     for (var i = 0; i < goods_attr.length; i++) {
-      console.log('批发价', goods_attr[i].attr_price);
-      console.log('零售价', goods_attr[i].floor_price);
       if (goods_attr[i].attr_value == '') {
         wx.showToast({
           title: '请填写商品规格',
@@ -956,7 +929,6 @@ export default class newslist extends wepy.page {
           confirmColor: '#e50012', //确定按钮的文字颜色,
           success: res => {
             if (res.confirm) {
-              console.log('用户点击确定');
             }
           }
         });
@@ -974,7 +946,6 @@ export default class newslist extends wepy.page {
         this.goods_imgs.push(this.imgSrc[i].img_url);
       }
     }
-    console.log('this.goods_imgs', this.goods_imgs);
     var goods_img = this.goods_imgs[0];
     var img_url = this.goods_imgs;
     var data = {
@@ -998,7 +969,6 @@ export default class newslist extends wepy.page {
       goods_brief, //商品活动
       hdky
     };
-    console.log('goods_id', goods_id);
     let res = await newapi.addGoodsInfo(data);
 
     if (res.data.code == 0) {
@@ -1014,7 +984,6 @@ export default class newslist extends wepy.page {
           if (res.confirm) {
             wx.navigateBack({});
             if (goods_id != '' && this.index) {
-              console.log('修改页面', this.index);
               this.$parent.$pages['/ConsolePages/pages/goodsList'].list[
                 this.index
               ].goods_name = goods_name;
@@ -1048,7 +1017,6 @@ export default class newslist extends wepy.page {
                   this.index
                 ].goods_number = add;
               } else {
-                console.log('shop_price', shop_price);
                 this.$parent.$pages['/ConsolePages/pages/goodsList'].list[
                   this.index
                 ].shop_price = shop_price;
@@ -1076,7 +1044,6 @@ export default class newslist extends wepy.page {
     let res = await newapi.goodinfo(data);
     if (res.data.code == 0) {
       wx.hideLoading();
-      console.log('商品信息', res);
       var goodsInfo = res.data.data;
       this.goodsdetail = goodsInfo;
       this.goodsdetail.goods_name = goodsInfo.goods_name;
@@ -1099,7 +1066,6 @@ export default class newslist extends wepy.page {
   addGoodsINFO() {}
   async onLoad(option) {
     try {
-      console.log(option.id);
       this.goodsId = '';
       this.user_id = await this.$parent.loginInfo();
       this.suppliers_id = this.$parent.globalData.suppliers_id
@@ -1117,10 +1083,8 @@ export default class newslist extends wepy.page {
       if (option.index) this.index = option.index;
       this.getBrandList(this.user_id, this.suppliers_id);
       this.getGoodsList(this.user_id, this.suppliers_id);
-      console.log('this.goodsId', this.goodsId);
       this.$apply();
     } catch (error) {
-      console.log(error);
     }
   }
 }

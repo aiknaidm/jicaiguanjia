@@ -179,10 +179,8 @@ export default class newslist extends wepy.page {
           sourceType: ['album', 'camera'] // 可以指定来源是相册还是相机，默认二者都有
         })
         .then(res => {
-          console.log('本地图片地址', res);
           // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
           var tempFilePaths = res.tempFilePaths;
-          console.log('本地图片地址', tempFilePaths);
           wx.showLoading({
             title: '上传中...', //提示的内容,
             mask: true, //显示透明蒙层，防止触摸穿透,
@@ -199,7 +197,6 @@ export default class newslist extends wepy.page {
             })
             .then(res => {
               var resData = JSON.parse(res.data.trim());
-              console.log('背景图', resData);
               if (resData.code == 0) {
                 // this.imgPath = resData.data.pic_url;
                 this.scbc(resData.data.pic_url);

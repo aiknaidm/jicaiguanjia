@@ -226,7 +226,6 @@ export default class newslist extends wepy.page {
       hdky
     };
     let res = await newapi.suppliers_hdky(data);
-    console.log('suppliers_hdky res', res);
     if (res.data.code == 0) {
       wx.showToast({
         title: '修改成功', //提示的内容,
@@ -258,7 +257,6 @@ export default class newslist extends wepy.page {
       page
     };
     let res = await newapi.hd_goods_list(data);
-    console.log('getGoodsList', res);
     wx.hideLoading();
     if (res.data.code == 0) {
       if (this.page == 1) {

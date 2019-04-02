@@ -262,12 +262,10 @@ export default class List extends wepy.component {
     },
     // 订单详情
     orderDetail(id) {
-      console.log('id', id);
       this.$emit('orderDetail', id);
     },
     // 去店铺页面
     toshop(id) {
-      console.log('id', id);
       wx.navigateTo({ url: '/Shop/pages/index?suppliers_id=' + id });
     }
   };

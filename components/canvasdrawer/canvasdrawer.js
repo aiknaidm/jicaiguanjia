@@ -6,7 +6,6 @@ Component({
             type: Object,
             value: { view: [] },
             observer(newVal, oldVal) {
-                // console.log(newVal, oldVal)
                 if (!this.data.isPainting) {
                     if (JSON.stringify(newVal) !== JSON.stringify(oldVal) &&
                         newVal && newVal.width && newVal.height) {
@@ -71,7 +70,6 @@ Component({
         downLoadImages(index) {
             const { imageList, tempFileList } = this.data
             if (index < imageList.length) {
-                // console.log(imageList[index])
                 this.getImageInfo(imageList[index]).then(file => {
                     tempFileList.push(file)
                     this.setData({
@@ -124,7 +122,6 @@ Component({
             this.ctx.restore()
         },
         drawText(params) {
-            // console.log("params", params);
             this.ctx.save()
             const {
                 MaxLineNumber = 1,
@@ -140,11 +137,6 @@ Component({
                     bolder = false,
                     textDecoration = 'none'
             } = params
-            // console.log("top", top);
-            // console.log("left", left);
-            // console.log("fontSize", fontSize);
-            // 	console.log("top", top);
-            // console.log("top",top);
             this.ctx.beginPath()
             this.ctx.setTextBaseline('top')
             this.ctx.setTextAlign(textAlign)
@@ -215,7 +207,6 @@ Component({
         },
         drawRect(params) {
             this.ctx.save()
-                // console.log(params)
             const { background, top = 0, left = 0, width = 0, height = 0, borderRadius = 0 } = params
             if (borderRadius) {
                 // this.ctx.setGlobalAlpha(0);
@@ -236,7 +227,6 @@ Component({
             this.ctx.restore()
         },
         getImageInfo(url) {
-            // console.log("url", url);
             return new Promise((resolve, reject) => {
                 /* 获得要在画布上绘制的图片 */
                 if (this.cache[url]) {

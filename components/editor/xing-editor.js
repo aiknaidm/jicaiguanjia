@@ -23,7 +23,6 @@ Component({
                     type: String,
                     value: "",
                     observer: function observer(newVal, oldVal) {
-                        console.log("newVal", newVal, "oldVal", oldVal)
                         if (JSON.stringify(newVal) !== JSON.stringify(oldVal) &&
                             newVal) {
                             this.start();
@@ -249,7 +248,6 @@ Component({
                  */
                 HTMLtoNodeList: function() {
                     let html = this.properties.html;
-                    console.log("html", html)
                     html = html.replace(/'/g, '"')
                     let htmlNodeList = [];
                     while (html.length > 0) {
@@ -311,18 +309,15 @@ Component({
         }
         options.success = res => {
           const keyChain = this.properties.imageUploadKeyChain.split('.');
-          console.log("res", res)
           let url = JSON.parse(res.data.trim());
 
           // keyChain.forEach(key => {
           //   url = url[key];
           // })
-          console.log("url", url)
           node.attrs.src = url.data.pic_url;
           node.attrs._uploaded = true;
           resolve();
         }
-        options.fail = res =>  {  console.log("error", res)
             reject(res);
         }
    
@@ -338,7 +333,6 @@ Component({
      * 方法：处理节点，递归
      */
     handleOutput: function (index = 0) {
-        console.log("handleoutinput index",index)
       let nodeList = this.data.nodeList;
       if (index >= nodeList.length) {
         wx.hideLoading();
@@ -355,14 +349,12 @@ Component({
         return;
       }
       const node = nodeList[index];
-      console.log(node.attrs._uploaded,!node.attrs._uploaded);
       if (node.name === 'img' && !node.attrs._uploaded) {
   
           this.uploadImage(node).then(() => {
 
             this.handleOutput(index + 1)
           }).catch(res=>{
-            console.log("upimg catch res",res)
               this.handleOutput(index + 1)
              
           });

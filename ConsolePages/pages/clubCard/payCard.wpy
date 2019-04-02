@@ -69,7 +69,6 @@ export default class newslist extends wepy.page {
   computed = {};
   methods = {
     async toPay() {
-      console.log(api.kthypay);
       var datas = {};
       datas.goods_id = this.datas.id;
       datas.user_id = this.user_id;
@@ -94,7 +93,6 @@ export default class newslist extends wepy.page {
   // 获取费用
   async getCardPrice() {
     let res = await newapi.kthy_price();
-    console.log(res);
     if (res.data.code == 0) {
       this.price = res.data.data.goods_price;
       this.datas = res.data.data;

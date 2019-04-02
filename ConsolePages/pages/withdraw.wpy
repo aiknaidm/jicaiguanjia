@@ -106,7 +106,6 @@ export default class withdraw extends wepy.page {
   computed = {};
   methods = {
     async formSubmit(e) {
-      console.log(e);
 
       var userId = await this.$parent.loginInfo();
       // var money = e.detail.value.money

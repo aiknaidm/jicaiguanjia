@@ -176,14 +176,12 @@ export default class newslist extends wepy.page {
   computed = {};
   methods = {
     getFormId(e) {
-      console.log('formid', e);
       util.submitFormId(this.userId, e.detail.formId);
     },
     searchIpt(e) {
       this.inputValue = e.detail.value;
     },
     buttonTap() {
-      console.log('搜索', this.searchValue);
       this.searchValue = this.inputValue;
       this.getjllist(1, this.searchValue);
     },
@@ -191,11 +189,9 @@ export default class newslist extends wepy.page {
       this.$parent.globalData.suppliers_img = supplierDetail.img;
       this.$parent.globalData.end_time_new = supplierDetail.end_time_new;
       this.$parent.globalData.suppliers_id = supplierDetail.suppliers_id;
-      console.log(
         'this.$parent.globalData.suppliers_id',
         this.$parent.globalData
       );
-      console.log(
         'this.$parent.globalData.suppliers_id',
         this.$parent.globalData.suppliers_id
       );
@@ -232,7 +228,6 @@ export default class newslist extends wepy.page {
     else this.suppliers_list.push(...res.data.data.data);
     this.datas = res.data.data;
     if (res.data.data.data.length == 0) this.isMoreData = false;
-    console.log('管理工作台-易站列表res', res.data.data.data);
     this.$apply();
   }
   async onShow() {
@@ -245,7 +240,6 @@ export default class newslist extends wepy.page {
   }
   onReachBottom() {
     if (this.isMoreData) {
-      console.log('下拉刷新');
       wx.showLoading({
         title: '加载中', //提示的内容,
         mask: true, //显示透明蒙层，防止触摸穿透,

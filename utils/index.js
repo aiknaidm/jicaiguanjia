@@ -56,7 +56,6 @@ const wxpay1 = async function(orderId) {
             },
         })
         var result = res.data.data;
-        console.log(res.data)
         if (res.data.code == 0) {
             //  通知用
             var prepay_id = result.package.replace("prepay_id=", "");
@@ -89,7 +88,6 @@ const wxpay1 = async function(orderId) {
 
             } catch (err) {
                 // 取消支付 
-                console.log("取消支付")
                 return {
                     code: 2,
                     msg: "取消支付"
@@ -126,7 +124,6 @@ const wxpay3 = async function(user_id) {
     });
 
     if (res.cancel) {
-        console.log('用户点击取消')
         return {
 
             code: 3,
@@ -147,7 +144,6 @@ const wxpay3 = async function(user_id) {
             },
         })
         var result = res.data.data;
-        console.log(res.data)
         if (res.data.code == 0) {
 
             return {
@@ -202,7 +198,6 @@ const fwfwxpay = async function(user_id, suppliers_id, data, pid) {
     })
     wx.hideLoading();
     var result = res.data.data;
-    console.log(res.data)
     if (res.data.code == 0) {
         //  通知用
         var prepay_id = result.package.replace("prepay_id=", "");
@@ -215,7 +210,6 @@ const fwfwxpay = async function(user_id, suppliers_id, data, pid) {
                 signType: result.signType,
                 paySign: result.paySign,
             })
-            console.log("payres", payres)
             wepy.request({
                 url: 'https://lmbge.com/wxapi/jcgj/fwfpaysuccess',
                 data: {
@@ -233,7 +227,6 @@ const fwfwxpay = async function(user_id, suppliers_id, data, pid) {
 
         } catch (err) {
             // 取消支付 
-            console.log("取消支付")
             return {
                 code: 2,
                 msg: "取消支付"
@@ -279,14 +272,12 @@ const pay = async function(data, data2, url, sucessUrl) {
 
         } catch (err) {
             // 取消支付 
-            console.log("取消支付")
             return {
                 code: 2,
                 msg: "取消支付"
             };
 
         }
-        console.log("payres", payres)
         wepy.request({
             url: sucessUrl,
             data: data2,
@@ -332,7 +323,6 @@ const html_decode = function(str) {
         s = "<p>" + s + "</p>"
 
         // if (s.substr(s.length - 5, 5) == "/img>") {
-        //     console.log(s);
         // }
         s = s.replace(/<img/g, '</p><img');
         s = s.replace(/<\/img>/g, '<\/img><p>');

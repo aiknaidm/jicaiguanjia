@@ -56,7 +56,6 @@ export default class shoperweima extends wepy.page {
       wx.getSetting({
         success: res => {
           var that = this;
-          // console.log(res.authSetting)
           if (
             res.authSetting['scope.writePhotosAlbum'] == undefined ||
             res.authSetting['scope.writePhotosAlbum']
@@ -64,7 +63,6 @@ export default class shoperweima extends wepy.page {
             wx.saveImageToPhotosAlbum({
               filePath: this.shareImage,
               success(res) {
-                // console.log(res)
                 wx.showToast({
                   title: '保存图片成功',
                   icon: 'success',
@@ -81,7 +79,6 @@ export default class shoperweima extends wepy.page {
                   wx.saveImageToPhotosAlbum({
                     filePath: this.shareImage,
                     success(res) {
-                      // console.log(res)
                       wx.showToast({
                         title: '保存图片成功',
                         icon: 'success',
@@ -97,7 +94,6 @@ export default class shoperweima extends wepy.page {
       });
     },
     toshop() {
-      console.log(this.$parent.globalData.suppliers_id);
       wx.navigateToMiniProgram({
         appId: 'wx7e302245debd521a',
         path:
@@ -120,20 +116,17 @@ export default class shoperweima extends wepy.page {
   };
   events = {};
   async onLoad(options) {
-    console.log(options);
     var userId = await this.$parent.loginInfo();
     this.eventDraw(userId);
     this.sales_id = options.sales_id ? options.sales_id : 0;
     this.sales_name = options.sales_name ? options.sales_name : 0;
   }
   eventGetImage(event) {
-    console.log('eventGetImage', event);
     wx.hideLoading();
     this.shareImage = event.detail.tempFilePath;
   }
 
   async eventDraw(userId) {
-    console.log(this.$parent.globalData.yizhanInfo, userId);
     var suppliers_id = this.$parent.globalData.suppliers_id;
     var user_id = userId;
     var that = this;
@@ -163,7 +156,6 @@ export default class shoperweima extends wepy.page {
     var a = wx.getSystemInfoSync().windowWidth / 375;
     var height = wx.getSystemInfoSync().windowHeight;
     var width = wx.getSystemInfoSync().windowWidth;
-    console.log('getqrcode', res.data);
     wx.showLoading({ title: '绘制图片中' });
     that.data.painting = {
       width: 375 * a,

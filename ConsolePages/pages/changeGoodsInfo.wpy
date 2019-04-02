@@ -235,7 +235,6 @@ export default class newslist extends wepy.page {
           datas[i].goods_number = goods_number;
         }
       }
-      console.log(value);
     },
     async quedingChange(e) {
       // 修改价格
@@ -276,8 +275,6 @@ export default class newslist extends wepy.page {
       }
 
       for (var i = 0; i < goods_attr.length; i++) {
-        console.log('批发价', goods_attr[i].attr_price);
-        console.log('零售价', goods_attr[i].floor_price);
         if (goods_attr[i].attr_value == '') {
           wx.showToast({
             title: '请填写商品规格',
@@ -324,7 +321,6 @@ export default class newslist extends wepy.page {
           return;
         }
       }
-      console.log('规格修改', this.properties);
       if (this.xiugaitype == 'jiage') {
         if (this.properties.length > 0) {
           var data = {
@@ -339,7 +335,6 @@ export default class newslist extends wepy.page {
           };
         }
         let res = await newapi.changePrice(data);
-        console.log('修改', res);
         if (res.data.code == 0) {
           wx.showToast({
             title: '修改成功',
@@ -455,7 +450,6 @@ export default class newslist extends wepy.page {
   async getGoodsDetail(goods_id) {
     let data = { goods_id };
     let res = await newapi.goodinfo(data);
-    console.log('商品详情-->', res.data.data);
     if (res.data.code == 0) {
       var datas = res.data.data;
 

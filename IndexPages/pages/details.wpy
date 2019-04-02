@@ -44,10 +44,8 @@ export default class details extends wepy.page {
       '<img style="max-width:100%;height:auto" '
     );
     this.$apply();
-    console.log('文章详情', this.articleDetail);
   }
   async onLoad(option) {
-    console.log('id', option.id);
     this.getArticleDetail(option.id);
   }
 }

@@ -292,10 +292,8 @@ export default class my_console_checkDetail extends wepy.page {
       wx.showActionSheet({
         itemList: ['解除关系'],
         success: function(res) {
-          console.log(res.tapIndex);
         },
         fail: function(res) {
-          console.log(res.errMsg);
         }
       });
     },
@@ -349,7 +347,6 @@ export default class my_console_checkDetail extends wepy.page {
     });
     let res = await newapi.czjl(data);
     wx.hideLoading();
-    console.log('充值记录', res);
     var datas = res.data.data.data;
     this.money = res.data.zonge;
     datas.forEach((item, index) => {
@@ -373,7 +370,6 @@ export default class my_console_checkDetail extends wepy.page {
     });
     let res = await newapi.zcjl(data);
     wx.hideLoading();
-    console.log('充值记录', res);
     var datas = res.data.data.data;
     this.zhichu = res.data.zonge;
     datas.forEach((item, index) => {
@@ -433,7 +429,6 @@ export default class my_console_checkDetail extends wepy.page {
       this.getZcjl(data2);
       this.$apply();
     } catch (error) {
-      console.log(error);
       wx.showToast({
         title: '登录失败', //提示的内容,
         icon: 'none', //图标,

@@ -43,7 +43,6 @@ import newapi from '../../API/newapi';
                     '<img style="max-width:100%;height:auto" '
                 )
                 this.$apply();
-                console.log('文章详情', this.articleDetail);
             })
         }
         async onLoad(option) {

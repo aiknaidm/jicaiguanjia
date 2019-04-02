@@ -314,13 +314,11 @@ export default class newslist extends wepy.page {
       this.isAgreed = !this.isAgreed;
     },
     listenerPhoneInput(e) {
-      console.log('输入的值', e.detail.value);
       this.phone = e.detail.value;
     },
     //联网获取验证码
     async getSmsCode() {
       this.smsCodeDisabled = true;
-      console.log('输入的电话号码', this.phone);
       //点击了获取验证码先在本地验证手机号的合法性
       if (this.checkPhone(this.phone)) {
         try {
@@ -329,7 +327,6 @@ export default class newslist extends wepy.page {
           };
           let res = await newapi.yzm(data);
           if (res.data.code == 0) {
-            console.log('点击了获取验证码' + res.data.data);
             //将获取的验证码赋值
             this.code = res.data.data;
             wx.showModal({
@@ -367,7 +364,6 @@ export default class newslist extends wepy.page {
     },
     // 选择的地区
     bindRegionChange(e) {
-      console.log('picker发送选择改变，携带值为', e.detail.value);
       this.region = e.detail.value;
     }
   };
@@ -445,7 +441,6 @@ export default class newslist extends wepy.page {
         var pcusername = e.detail.value.pcusername;
         var password = '123456';
         var share_code = e.detail.value.shareCode;
-        console.log('邀请码', share_code);
         if (this.userId == '-1') {
           wx.showModal({
             content: '登录失败请稍后再试',
@@ -510,7 +505,6 @@ export default class newslist extends wepy.page {
           share_code: share_code
         };
         let res = await newapi.renzheng(data);
-        console.log('认证', res);
         wx.hideLoading();
         if (res.data.code == 0) {
           wx.redirectTo({
@@ -550,7 +544,6 @@ export default class newslist extends wepy.page {
     else var yizhanInfo = await this.$parent.getYizhanInfo(userId);
 
     if (yizhanInfo.user_type == 4) {
-      console.log('已注册');
       this.isuserDetail = true;
       this.userDetail = yizhanInfo;
       this.region[0] = yizhanInfo.sheng;
@@ -558,7 +551,6 @@ export default class newslist extends wepy.page {
       this.region[2] = yizhanInfo.qu;
       this.phone = yizhanInfo.mobile;
     } else {
-      console.log('开始注册');
     }
     this.$apply();
   }

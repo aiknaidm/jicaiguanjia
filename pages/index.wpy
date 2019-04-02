@@ -87,7 +87,6 @@
   import Toast from 'wepy-com-toast'
   import testMixin from '../mixins/test'
 
-  console.log('moduleA ignored: ', moduleA) // => moduleA ignored: {}
 
 
   export default class Index extends wepy.page {
@@ -177,14 +176,11 @@
         })
 
         promise.then((d) => {
-          console.log('toast done')
         })
       },
       tap () {
-        console.log('do noting from ' + this.$name)
       },
       communicate () {
-        console.log(this.$name + ' tap')
 
         this.$invoke('counter2', 'minus', 45, 6)
         this.$invoke('counter1', 'plus', 45, 6)
@@ -206,16 +202,13 @@
         }
       },
       counterEmit (...args) {
-        console.log(args);
         let $event = args[args.length - 1]
-        console.log(`${this.$name} receive ${$event.name} from ${$event.source.$name}`)
       }
     }
 
     events = {
       'index-emit': (...args) => {
         let $event = args[args.length - 1]
-        console.log(`${this.$name} receive ${$event.name} from ${$event.source.$name}`)
       }
     }
 

@@ -138,7 +138,6 @@ export default class orderlist extends wepy.page {
         title: '加载中', //提示的内容,
         mask: true //显示透明蒙层，防止触摸穿透,
       });
-      console.log('index', index);
       this.thisindex = index;
       this.page = 1;
       this.isMoreData = true;
@@ -146,7 +145,6 @@ export default class orderlist extends wepy.page {
     },
     // 订单详情
     orderDetail(id, evt) {
-      console.log('orderDetail?id=' + id);
       wx.navigateTo({
         url: 'orderDetail?id=' + id
       });
@@ -216,14 +214,12 @@ export default class orderlist extends wepy.page {
       this.isMoreData = false;
     }
     this.$apply();
-    console.log('订单列表', this.orderList);
   }
   async onLoad(option) {
     wx.showLoading({
       title: '加载中', //提示的内容,
       mask: true //显示透明蒙层，防止触摸穿透,
     });
-    console.log('option', option);
     this.userId = await this.$parent.loginInfo();
     this.suppliers_id = option.suppliers_id
       ? option.suppliers_id

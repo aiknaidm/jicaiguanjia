@@ -113,11 +113,9 @@ export default class HTMLParser extends wepy.component {
      * 5.imagePadding为当图片自适应是左右的单一padding(默认为0,可选)
      */
     //       try {
-    //         console.log( this.parserContent);
     //         let htmlContent = WxParse.wxParse(this.parserName, this.parserType, this.parserContent || this.props.parserContent.default, this, this.parserPadding)
     // //        this.htmlParserTpl = this[this.parserName];
     //         this.htmlParserTpl = htmlContent[this.parserName]
-    //         console.log(this.htmlParserTpl.nodes)
     //         this.$apply()
     //       } catch (e) {
     //         console.warn('kinerHtmlParser:', '没有任何内容需要转换', e)

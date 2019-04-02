@@ -284,11 +284,9 @@ export default class extends wepy.app {
         // });
         // if (confirm.confirm) {
         //   var status = await wepy.openSetting();
-        //   console.log(status);
         // } else {
         //   return false;
         // }
-        console.log('没有获取用户信息的权限');
         return false;
       } else {
         return true;
@@ -317,7 +315,6 @@ export default class extends wepy.app {
     };
     let res = await newapi.login(data);
     this.globalData.userId = res.data.data.user_id;
-    console.log('res.data.data.user_id', res.data.data.user_id);
     wx.setStorageSync('userId', res.data.data.user_id);
     return res.data.data.user_id;
   }

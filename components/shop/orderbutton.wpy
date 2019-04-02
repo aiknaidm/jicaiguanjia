@@ -92,7 +92,6 @@ export default class orderbutton extends wepy.component {
     },
     // 马上付款
     async toPayTap(id) {
-      console.log('id', id);
       wx.showLoading({
         title: '支付中...', //提示的内容,
         mask: true //显示透明蒙层，防止触摸穿透,
@@ -103,7 +102,6 @@ export default class orderbutton extends wepy.component {
         '/Shop/pages/orderList?order_status=1'
       );
       wx.hideLoading();
-      console.log(res);
       wx.showToast({
         title: res.msg, //提示的内容,
         icon: 'none', //图标,
@@ -125,7 +123,6 @@ export default class orderbutton extends wepy.component {
     this.$emit('toPayTap');
   }
   async onLoad() {
-    console.log(wxpay1);
   }
 }
 </script>

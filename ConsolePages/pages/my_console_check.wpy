@@ -351,7 +351,6 @@ export default class my_console_check extends wepy.page {
           }
         },
         fail: function(res) {
-          //console.log(res.errMsg)
         }
       });
     },
@@ -360,7 +359,6 @@ export default class my_console_check extends wepy.page {
       var that = this;
       //审核人的id
       var id = e.currentTarget.dataset.id;
-      console.log(id);
       wx.showActionSheet({
         itemList: ['解除关系'],
         success: function(res) {
@@ -369,7 +367,6 @@ export default class my_console_check extends wepy.page {
           }
         },
         fail: function(res) {
-          //console.log(res.errMsg)
         }
       });
     },
@@ -496,10 +493,8 @@ export default class my_console_check extends wepy.page {
     let res = await newapi.hycz(data);
     this.money = res.data.data;
     this.$apply();
-    console.log(res);
   }
   async onLoad(option) {
-    console.log('option', option);
     this.is_kthy = this.$parent.globalData.is_kthy;
     this.suppliers_id = this.$parent.globalData.suppliers_id
       ? this.$parent.globalData.suppliers_id

@@ -473,7 +473,6 @@ export default class newslist extends wepy.page {
     // 上传规则
     async submitTap(e) {
       var that = this;
-      console.log(e);
       if (!e.detail.value.rules) {
         wx.showToast({
           title: '请输入规则',
@@ -515,12 +514,10 @@ export default class newslist extends wepy.page {
       this.money = e.detail.value;
     },
     bindDateChange(e) {
-      console.log('picker发送选择改变，携带值为', e.detail.value);
       this.date = e.detail.value;
       this.date2 = e.detail.value;
     },
     bindDateChange2(e) {
-      console.log('picker发送选择改变，携带值为', e.detail.value);
       this.date2 = e.detail.value;
     },
     //表单数据提交
@@ -557,13 +554,6 @@ export default class newslist extends wepy.page {
       //   })
       //   return
       // }
-      console.log('youhuiname:', youhuiname);
-      console.log('moneyman:', moneyman);
-      console.log('moneyfan:', moneyfan);
-      console.log('timestart:', that.data.date);
-      console.log('timeend:', that.data.date2);
-      // console.log("ifyouhui:", that.data.ifyouhui)
-      // console.log("choose_good_id:", that.data.choose_good_id)
       //获取bgid,然后网络提交
       let data = {
         user_id: this.user_id,
@@ -616,9 +606,7 @@ export default class newslist extends wepy.page {
   }
   // 获取费用
   async getCardPrice() {
-    console.log('api', api);
     let res = await newapi.kthy_price(data);
-    console.log(res);
     if (res.data.code == 0) {
       this.price = res.data.data.goods_price;
       this.datas = res.data.data;
@@ -651,13 +639,11 @@ export default class newslist extends wepy.page {
     this.$apply();
     var newDate = new Date().getTime();
     that.activitylist = this.setState(newDate, datas).datas;
-    console.log('that.activitylist', datas);
     that.$apply();
     t1 = setInterval(res => {
       var { datas, stop } = this.setState(newDate, that.activitylist);
       if (stop) {
         clearInterval(t1);
-        console.log('所有的券都过期了');
       }
       that.activitylist = datas;
       that.$apply();

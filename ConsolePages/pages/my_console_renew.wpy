@@ -150,7 +150,6 @@ export default class my_console_renew extends wepy.page {
       var index = e.currentTarget.dataset.index;
       var data = this.renewList[index];
       data.isHasShareCode = this.isHasShareCode;
-      // console.log(data);
       util.fwfwxpay(this.user_id, this.suppliers_id, data, this.shareCode);
     },
     toRenewRecord: function() {
@@ -175,7 +174,6 @@ export default class my_console_renew extends wepy.page {
       newDate.setTime(yizhanInfo.end_time * 1000);
       yizhanInfo.end_time = util.formatTime(newDate, 'yyyy-MM-dd');
     } else {
-      console.log(yizhanInfo.end_time);
     }
 
     this.yizhanInfo = yizhanInfo;

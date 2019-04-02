@@ -25,7 +25,6 @@ export default class newslist extends wepy.page {
   computed = {};
   methods = {
     finish: function(e) {
-      console.log(e.detail.content);
       this.$parent.$pages['/ConsolePages/pages/addGoodsInfo'].goods_desc =
         e.detail.content;
         wx.navigateBack({

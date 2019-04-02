@@ -830,10 +830,8 @@ export default class newslist extends wepy.page {
         this.statusid[this.currentIndex] = parent_id;
       }
 
-      console.log('fenlei', this.statusid);
       this.ishowfenlei = false;
       this.initdata.page = 1;
-      console.log(parent_id == 0 && this.currentIndex > 0, this.fenleiLists);
       this.initdata.cat_id =
         parent_id == 0 && this.currentIndex > 0
           ? this.statusid[this.currentIndex - 1]
@@ -853,7 +851,6 @@ export default class newslist extends wepy.page {
       });
       this.del = this.isallSelect;
       this.$apply();
-      console.log(this.list);
     },
     // 选择
     selectTap: function(index) {
@@ -900,7 +897,6 @@ export default class newslist extends wepy.page {
       if (res.confirm) {
         this.delGoods(deleteSelectList);
       } else if (res.cancel) {
-        console.log('用户点击取消');
       }
     },
 
@@ -913,11 +909,9 @@ export default class newslist extends wepy.page {
       this.goods_id = id;
       this.index = index;
       this.$parent.globalData.goodsInfo = this.list[index];
-      console.log('点击的商品的id', id, name, index, e);
       wx.showActionSheet({
         itemList: ['改标题', '改价格', '改库存', '改全部'],
         success: function(res) {
-          //console.log(res.tapIndex)
           switch (res.tapIndex) {
             case 0:
               // 改标题
@@ -957,13 +951,11 @@ export default class newslist extends wepy.page {
           }
         },
         fail: function(res) {
-          console.log(res.errMsg);
         }
       });
     },
     // 修改标题
     async tapSure(value) {
-      console.log(value);
       var that = this;
       if (!value || value == '') {
         wx.showToast({
@@ -1039,7 +1031,6 @@ export default class newslist extends wepy.page {
       })
       .then(res => {
         wx.hideLoading();
-        console.log('商品列表-->', res.data.data);
         if (res.data.code == 0) {
           if (this.initdata.page == 1) this.list = res.data.data;
           else this.list.push(...res.data.data);
@@ -1050,7 +1041,6 @@ export default class newslist extends wepy.page {
         }
       })
       .catch(res => {
-        console.log('错误信息', res);
         wx.navigateBack({
           delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
         });
@@ -1083,7 +1073,6 @@ export default class newslist extends wepy.page {
   async onLoad(option) {
     try {
       this.user_id = await this.$parent.loginInfo();
-      console.log(this.$parent.globalData.suppliers_id);
       this.suppliers_id = this.$parent.globalData.suppliers_id
         ? this.$parent.globalData.suppliers_id
         : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
@@ -1095,13 +1084,11 @@ export default class newslist extends wepy.page {
       this.fenleiLists.push(this.fenleilist);
       this.statusType[0] = this.fenleilist[0].cat_name;
 
-      console.log('cat_name', this.statusType, this.fenleiLists);
       this.$apply();
     } catch (error) {}
   }
   onReachBottom() {
     if (this.isMoreData) {
-      console.log('下拉刷新');
       wx.showLoading({
         title: '加载中', //提示的内容,
         mask: true, //显示透明蒙层，防止触摸穿透,

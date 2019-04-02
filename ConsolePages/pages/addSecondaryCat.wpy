@@ -162,7 +162,6 @@ export default class newslist extends wepy.page {
       );
     },
     changeGoodsInput(e) {
-      console.log(e.detail.value);
       this.goodsKeyword = e.detail.value;
     },
     bindGoodsList(item) {
@@ -187,10 +186,8 @@ export default class newslist extends wepy.page {
         })
         .then(res => {
           if (res.confirm) {
-            console.log('用户点击确定');
             this.sureDelGoods(this.user_id, id, index);
           } else if (res.cancel) {
-            console.log('用户点击取消');
           }
         })
         .catch(res => {
@@ -205,7 +202,6 @@ export default class newslist extends wepy.page {
     },
     changeSecondary() {
       try {
-        console.log(this);
         this.$parent.$pages[
           '/ConsolePages/pages/addGoodsInfo'
         ].ch_cat_id = this.cat_id;
@@ -216,7 +212,6 @@ export default class newslist extends wepy.page {
           delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
         });
       } catch (error) {
-        console.log(error);
       }
     }
   };
@@ -224,7 +219,6 @@ export default class newslist extends wepy.page {
   //确定删除分类
   async sureDelGoods(user_id, id, index) {
     var that = this; //
-    console.log('确定的currentSelectIds', that.data.currentSelectIds);
     var userID = wx.getStorageSync('userId');
 
     let data = {
@@ -233,7 +227,6 @@ export default class newslist extends wepy.page {
     };
     let res = await newapi.del_categorys(data);
     wx.hideLoading();
-    console.log('shanchu res is', res);
     if (res.data.code == 0) {
       this.goodsList.splice(index, 1);
     } else {
@@ -260,7 +253,6 @@ export default class newslist extends wepy.page {
     };
     let res = await newapi.categorys(data);
     var ispush = true;
-    console.log('获取分类222', res);
     wx.hideLoading();
     this.goodsList = res.data.data;
     this.$apply();
@@ -271,7 +263,6 @@ export default class newslist extends wepy.page {
     wx.showLoading({
       title: '加载中'
     });
-    console.log('suppliers_id', suppliers_id);
     let data = {
       user_id: userId,
       suppliers_id: suppliers_id,
@@ -279,18 +270,15 @@ export default class newslist extends wepy.page {
       parent_id
     };
     let res = await newapi.add_categorys(data);
-    console.log('获取分类', res);
     wx.hideLoading();
     if (res.data.data.tianjia == 1) {
       this.goodsList.push(res.data.data);
     }
     this.cat_id = res.data.data.cat_id;
     this.cat_name = res.data.data.cat_name;
-    console.log(' this.cat_id', this.cat_id);
     this.$apply();
   }
   async onLoad(option) {
-    console.log(option);
     try {
       this.parent_id = option.cat_id; //上一级分类
       this.user_id = await this.$parent.loginInfo();
@@ -305,7 +293,6 @@ export default class newslist extends wepy.page {
         : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
       this.getGoodsList(this.user_id, this.suppliers_id, '', this.parent_id);
     } catch (error) {
-      console.log(error);
 
       var log = wx.getStorageSync('log');
       wx.setStorageSync('log', log + '/n' + error);

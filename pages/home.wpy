@@ -408,7 +408,6 @@ export default class Index extends wepy.page {
   async getCarousel() {
     let res = await newapi.carousel();
     this.carousel = res.data.data;
-    console.log('carousel', this.carousel);
     this.$apply();
   }
   computed = {};
@@ -458,8 +457,6 @@ export default class Index extends wepy.page {
     // var userInfo = await this.$parent.getUserInfo(userId);
     this.getMessage();
     this.getCarousel();
-    console.log('userId', userId);
-    // console.log('userInfo', userInfo);
   }
 }
 </script>

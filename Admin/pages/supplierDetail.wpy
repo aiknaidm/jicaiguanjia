@@ -337,7 +337,6 @@ export default class newslist extends wepy.page {
       this.right = 0;
     },
     getFormId(e) {
-      console.log('formid', e);
       util.submitFormId(this.userId, e.detail.formId);
     }
   };
@@ -356,7 +355,6 @@ export default class newslist extends wepy.page {
     return res.data.data;
   }
   async onLoad(option) {
-    console.log(
       'suppliers_detail option',
       option,
       this.$parent.globalData.suppliers_id

@@ -49,7 +49,6 @@ export default class orderDetails extends wepy.page {
   computed = {};
   methods = {
     fahuoSubmit: function(e) {
-      console.log(e);
       var fahuo = e.detail.value.fahuo;
       wepy
         .showModal({
@@ -68,7 +67,6 @@ export default class orderDetails extends wepy.page {
           }
         })
         .catch(res => {
-          console.log(res);
         });
     }
   };
@@ -108,7 +106,6 @@ export default class orderDetails extends wepy.page {
             }
           })
           .then(res => {
-            console.log('上传成功', res);
             var datas = JSON.parse(res.data.trim());
             if (datas.code == 0) {
               this.orderDetail.shipping_status = 1;
@@ -173,7 +170,6 @@ export default class orderDetails extends wepy.page {
       'yyyy-MM-dd hh:mm:ss'
     );
     this.$apply();
-    console.log('订单详情', this.orderDetail);
   }
 
   async onLoad(option) {

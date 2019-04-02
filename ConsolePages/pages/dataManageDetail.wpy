@@ -500,13 +500,11 @@ export default class newslist extends wepy.page {
   computed = {};
   methods = {
     orderDetail(id, evt) {
-      console.log('orderDetail?id=' + id);
       wx.navigateTo({
         url: 'orderDetail?id=' + id
       });
     },
     bindStartTimeChange(e) {
-      console.log('picker发送选择改变，携带值为', e.detail.value);
       this.datas.start_time = e.detail.value;
       this.start_time = e.detail.value;
       this.datas.page = 1;
@@ -514,7 +512,6 @@ export default class newslist extends wepy.page {
       this.getMoneyData(this.datas);
     },
     bindEndTimeChange(e) {
-      console.log('picker发送选择改变，携带值为', e.detail.value);
       this.datas.end_time = e.detail.value;
       this.end_time = e.detail.value;
       this.datas.page = 1;
@@ -523,10 +520,8 @@ export default class newslist extends wepy.page {
       this.getMoneyData(this.datas);
     },
     bindPickerChange(e) {
-      console.log('picker发送选择改变，携带值为', e.detail.value);
       this.orderStatusIndex = e.detail.value;
       this.datas.type = this.orderStatus[this.orderStatusIndex].value;
-      console.log(
         'this.orderStatus[this.orderStatusIndex].value',
         this.orderStatus[this.orderStatusIndex].value
       );
@@ -536,7 +531,6 @@ export default class newslist extends wepy.page {
       this.getMoneyData(this.datas);
     },
     radioChange(e) {
-      console.log(
         'radio发生change事件，携带value值为：',
         e.detail.value,
         e.detail.value[0]
@@ -581,7 +575,6 @@ export default class newslist extends wepy.page {
     //   }
     // },
     formSubmit(e) {
-      console.log('this.currentCheckVal', this.currentCheckVal);
       if (e.detail.value.name === '') {
         wx.showToast({
           title: '不能为空',
@@ -614,7 +607,6 @@ export default class newslist extends wepy.page {
     var that = this;
     //交易列表
     let res = await newapi.jyjl(data);
-    console.log('jyjl', res.data.data);
     var datas = res.data.data;
     this.zonge = res.data.data.zonge;
     // for (var i = 0; i < datas.length; i++) {
@@ -656,8 +648,6 @@ export default class newslist extends wepy.page {
 
     if (nowDate < 10) nowDate = '0' + nowDate;
 
-    console.log('结束时间', nowYear + '-' + nowMoth + '-' + nowDate);
-    console.log('开始时间', nowYear + '-' + nowMoth + '-' + '01');
     datas.start_time = nowYear + '-' + nowMoth + '-' + '01';
     datas.end_time = nowYear + '-' + nowMoth + '-' + nowDate;
 
@@ -674,7 +664,6 @@ export default class newslist extends wepy.page {
     this.start_time = this.datas.start_time;
   }
   onReachBottom() {
-    console.log('page');
     if (this.isMoreData) {
       wx.showLoading({
         title: '加载中', //提示的内容,

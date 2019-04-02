@@ -188,7 +188,6 @@ export default class payList extends wepy.component {
   };
   onLoad() {
     this.suppliers_id = this.$parent.$parent.globalData.suppliers_id;
-    //  console.log(" this", this);
   }
 }
 </script>

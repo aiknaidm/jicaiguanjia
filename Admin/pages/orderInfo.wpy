@@ -165,7 +165,6 @@ export default class my_setServiceInfo extends wepy.page {
             });
           }
         } else if (modalRes.cancel) {
-          console.log('用户点击取消');
         }
       } else {
         wx.showToast({

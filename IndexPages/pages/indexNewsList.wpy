@@ -27,7 +27,6 @@ export default class newslist extends wepy.page {
   computed = {};
   methods = {
     toDetail(id) {
-      console.log('id', id);
       wx.navigateTo({ url: 'details?id=' + id });
     }
   };
@@ -44,7 +43,6 @@ export default class newslist extends wepy.page {
       );
     });
     this.$apply();
-    console.log('新闻列表', id, this.newsList);
   }
 
   async onLoad(option) {

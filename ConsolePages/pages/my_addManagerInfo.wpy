@@ -241,7 +241,6 @@ export default class my_addManagerInfo extends wepy.page {
   components = { noorder };
   methods = {
     searchIpt: function(e) {
-      console.log(e.detail.value);
       this.keyword = e.detail.value;
     },
     buttonTap: function() {
@@ -255,7 +254,6 @@ export default class my_addManagerInfo extends wepy.page {
           }
         })
         .then(res => {
-          console.log('搜索结果', res.data.data);
           this.adminList = res.data.data;
           this.text = '您搜索的昵称不存在，请更换关键词试试。';
           this.$apply();
@@ -289,7 +287,6 @@ export default class my_addManagerInfo extends wepy.page {
             }
           })
           .then(res => {
-            console.log('添加完成', res.data.data);
             if (res.data.code == '0') {
               if (this.type == 'member') {
                 wepy.showModal({
@@ -390,7 +387,6 @@ export default class my_addManagerInfo extends wepy.page {
   };
   events = {};
   onLoad(options) {
-    console.log(options);
     if (options.type) {
       this.type = options.type;
     }

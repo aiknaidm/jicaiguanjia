@@ -144,7 +144,6 @@ export default class share extends wepy.page {
     };
     let res = await newapi.czdqr(data);
     wx.hideLoading();
-    console.log('充值记录', res);
     var datas = res.data.data.data;
     datas.forEach((item, index) => {
       datas[index].add_time = util.formatTime(

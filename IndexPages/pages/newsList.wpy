@@ -34,7 +34,6 @@ export default class newslist extends wepy.page {
       this.getNewsList(this.newKind[index].id);
     },
     toDetail(id) {
-      console.log('id', id);
       wx.navigateTo({ url: 'details?id=' + id });
     }
   };
@@ -48,7 +47,6 @@ export default class newslist extends wepy.page {
     });
     this.getNewsList(this.newKind[0].id);
     this.$apply();
-    console.log('新闻分类tab', this.statusType);
   }
   async getNewsList(id) {
     var that = this;
@@ -62,7 +60,6 @@ export default class newslist extends wepy.page {
       );
     });
     this.$apply();
-    console.log('新闻列表', id, this.newsList);
   }
 
   async onLoad(option) {

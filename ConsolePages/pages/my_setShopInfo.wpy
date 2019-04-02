@@ -405,7 +405,6 @@ export default class my_setShopInfo extends wepy.page {
       //util.submitFormId(app.globalData.userId, e.detail.formId);
     },
     listenerPhoneInput(e) {
-      console.log('输入的值', e.detail.value);
       this.phone = e.detail.value;
       this.userDetail.mobile = e.detail.value;
       this.$apply();
@@ -413,7 +412,6 @@ export default class my_setShopInfo extends wepy.page {
     //联网获取验证码
     async getSmsCode(phone) {
       this.smsCodeDisabled = true;
-      console.log('输入的电话号码', phone);
       //点击了获取验证码先在本地验证手机号的合法性
       if (this.checkPhone(phone)) {
         try {
@@ -422,7 +420,6 @@ export default class my_setShopInfo extends wepy.page {
           };
           let res = await newapi.yzm(data);
           if (res.data.code == 0) {
-            console.log('点击了获取验证码' + res.data.data);
             //将获取的验证码赋值
             this.code = res.data.data;
             wx.showModal({
@@ -460,7 +457,6 @@ export default class my_setShopInfo extends wepy.page {
     },
     // 选择的地区
     bindRegionChange(e) {
-      console.log('picker发送选择改变，携带值为', e.detail.value);
       this.region = e.detail.value;
     }
   };
@@ -471,7 +467,6 @@ export default class my_setShopInfo extends wepy.page {
       ? this.$parent.globalData.suppliers_id
       : (await this.$parent.getYizhanInfo(userId, suppliers_id)).suppliers_id;
     this.userDetail = await this.getSuppliersDetails(userId, suppliers_id);
-    console.log('店铺信息', this.userDetail);
     this.region[0] = this.userDetail.sheng;
     this.region[1] = this.userDetail.shi;
     this.region[2] = this.userDetail.qu;
@@ -507,7 +502,6 @@ export default class my_setShopInfo extends wepy.page {
   //检查输入的手机号
   checkPhone(param) {
     var phone = util.regexConfig().phone;
-    console.log(util);
     var inputUserName = param.trim();
     if (phone.test(inputUserName)) {
       return true;
@@ -540,8 +534,6 @@ export default class my_setShopInfo extends wepy.page {
     var param = e.detail.value;
     var that = this;
     var flag = that.checkPhone(param.phone) && that.checkSmsCode(param.smscode);
-    console.log(that.checkPhone(param.phone));
-    console.log(that.checkSmsCode(param.smscode));
     if (flag) {
       if (this.inputCode == this.code) {
         var suppliers_id = this.$parent.globalData.suppliers_id;

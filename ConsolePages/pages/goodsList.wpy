@@ -771,7 +771,6 @@ export default class newslist extends wepy.page {
       });
       this.del = this.isallSelect;
       this.$apply();
-      console.log(this.list);
     },
     // 选择
     selectTap: function(index) {
@@ -816,7 +815,6 @@ export default class newslist extends wepy.page {
       if (res.confirm) {
         this.delGoods(deleteSelectList);
       } else if (res.cancel) {
-        console.log('用户点击取消');
       }
     },
     clickbtn() {
@@ -824,7 +822,6 @@ export default class newslist extends wepy.page {
         itemList: ['设置为不可用会员卡购买', '设置为可用会员卡购买'], //按钮的文字数组，数组长度最大为6个,
         itemColor: '#000000', //按钮的文字颜色,
         success: res => {
-          console.log(res);
           this.setSelected(res.tapIndex);
         }
       });
@@ -838,11 +835,9 @@ export default class newslist extends wepy.page {
       this.goods_id = id;
       this.index = index;
       this.$parent.globalData.goodsInfo = this.list[index];
-      console.log('点击的商品的id', id, name, index, e);
       wx.showActionSheet({
         itemList: ['改标题', '改价格', '改库存', '改全部'],
         success: function(res) {
-          //console.log(res.tapIndex)
           switch (res.tapIndex) {
             case 0:
               // 改标题
@@ -881,13 +876,11 @@ export default class newslist extends wepy.page {
           }
         },
         fail: function(res) {
-          console.log(res.errMsg);
         }
       });
     },
     // 修改标题
     async tapSure(value) {
-      console.log(value);
       var that = this;
       if (!value || value == '') {
         wx.showToast({
@@ -948,7 +941,6 @@ export default class newslist extends wepy.page {
       hdky
     };
     let res = await newapi.goods_hdky(data);
-    console.log('设置会员卡', res);
     if (res.data.code == 0) {
       wx.showToast({
         title: '设置会员卡成功', //提示的内容,
@@ -1009,7 +1001,6 @@ export default class newslist extends wepy.page {
         that.$apply();
       });
     } else if (res.cancel) {
-      console.log('用户点击取消');
     }
   }
   getShopList(data) {
@@ -1035,7 +1026,6 @@ export default class newslist extends wepy.page {
       })
       .then(res => {
         wx.hideLoading();
-        console.log('商品列表-->', res.data.data);
         if (res.data.code == 0) {
           res.data.data.forEach((item, index) => {
             res.data.data[index].active = this.isallSelect;
@@ -1049,7 +1039,6 @@ export default class newslist extends wepy.page {
         }
       })
       .catch(res => {
-        console.log('错误信息', res);
         wx.navigateBack({
           delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
         });
@@ -1082,7 +1071,6 @@ export default class newslist extends wepy.page {
   async onLoad(option) {
     try {
       this.user_id = await this.$parent.loginInfo();
-      console.log(this.$parent.globalData.suppliers_id);
       this.suppliers_id = this.$parent.globalData.suppliers_id
         ? this.$parent.globalData.suppliers_id
         : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
