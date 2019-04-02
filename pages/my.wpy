@@ -47,6 +47,7 @@
 <script>
 import wepy from 'wepy';
 import api from '../API/api';
+import newapi from '../API/newapi';
 import userInfo from '../components/userinfo';
 import myList from '../components/myList';
 import prompt from '../components/prompt';
@@ -110,22 +111,17 @@ export default class my extends wepy.page {
     }
   };
   events = {};
-  upUserInfo() {
-    wepy
-      .request({
-        url: api.upUserInfo,
-        data: {
-          user_id: this.userId,
-          avatarUrl: this.userInfo.avatarUrl,
-          nickName: this.userInfo.nickName
-        }
-      })
-      .then(res => {
-        wx.showToast({
-          title: '提交信息成功', //提示的内容,
-          icon: 'none' //图标,
-        });
-      });
+  async upUserInfo() {
+    let data = {
+      user_id: this.userId,
+      avatarUrl: this.userInfo.avatarUrl,
+      nickName: this.userInfo.nickName
+    };
+    await newapi.upUserInfo(data);
+    wx.showToast({
+      title: '提交信息成功', //提示的内容,
+      icon: 'none' //图标,
+    });
   }
   async onLoad() {
     // wx.showLoading({
@@ -147,14 +143,12 @@ export default class my extends wepy.page {
           success(res) {
             var encryptedData = res.encryptedData;
             var iv = res.iv;
-            wepy.request({
-              url: api.set_unionid,
-              data: {
-                weixin: code.code,
-                encryptedData,
-                iv
-              }
-            });
+            let data = {
+              weixin: code.code,
+              encryptedData,
+              iv
+            };
+            newapi.set_unionid(data);
           }
         });
       }

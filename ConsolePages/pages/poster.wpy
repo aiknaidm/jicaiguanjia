@@ -105,6 +105,7 @@ canvas {
 <script>
 import wepy from 'wepy';
 import api from '../../API/api';
+import newapi from '../../API/newapi';
 
 export default class newslist extends wepy.page {
   config = {
@@ -164,7 +165,7 @@ export default class newslist extends wepy.page {
   };
   events = {};
   async getIndexNewsList(id) {}
-  eventDraw(userId) {
+  async eventDraw(userId) {
     // console.log(app.globalData.yizhanInfo.suppliers_id, app.globalData.userId);
     // var suppliers_id = app.globalData.yizhanInfo.suppliers_id;
     var that = this;
@@ -178,95 +179,91 @@ export default class newslist extends wepy.page {
     //   })
     //   return;
     // }
-    wx.request({
-      url: api.getShareImg,
-      data: {
-        path: '/ConsolePages/pages/renzheng',
-        user_id: userId
-      },
-      success: function(res) {
-        console.log('getqrcode', res.data);
-        wx.showLoading({
-          title: '绘制图片中'
-        });
-        var a = wx.getSystemInfoSync().windowWidth / 375;
-        var height = wx.getSystemInfoSync().windowHeight;
-        var width = wx.getSystemInfoSync().windowWidth;
-        var canvasHeight = height - 105 * a;
-        that.data.painting = {
+    let data = {
+      path: '/ConsolePages/pages/renzheng',
+      user_id: userId
+    };
+    var res = await newapi.getShareImg(data);
+    console.log('getqrcode', res.data);
+    wx.showLoading({
+      title: '绘制图片中'
+    });
+    var a = wx.getSystemInfoSync().windowWidth / 375;
+    var height = wx.getSystemInfoSync().windowHeight;
+    var width = wx.getSystemInfoSync().windowWidth;
+    var canvasHeight = height - 105 * a;
+    that.data.painting = {
+      width: canvasHeight / 1.77,
+      height: canvasHeight,
+      clear: false,
+      views: [
+        {
+          type: 'image',
+          //url: 'https://d.funcodeit.com/test/onepayqrcode_template.jpg',
+          url: 'https://lmbge.com/qrcode/bg.jpg',
+          top: 0,
+          left: 0,
           width: canvasHeight / 1.77,
-          height: canvasHeight,
-          clear: false,
-          views: [
-            {
-              type: 'image',
-              //url: 'https://d.funcodeit.com/test/onepayqrcode_template.jpg',
-              url: 'https://lmbge.com/qrcode/bg.jpg',
-              top: 0,
-              left: 0,
-              width: canvasHeight / 1.77,
-              height: canvasHeight
-            },
-            // {
-            //   type: 'image',
-            //   //url: 'https://d.funcodeit.com/test/mplogo-430.jpg',
-            //   url: e.data.data.qrcode2,
-            //   top: 50,
-            //   left: (width - width * 0.5) / 2,
-            //   width: width * 0.5,
-            //   height: width * 0.5 + 15 * a,
-            //   // borderRadius:90,
-            // },
-            // {
-            //   type: 'image',
-            //   url: '',
-            //   top: 140,
-            //   left: 145,
-            //   width: 80,
-            //   height: 80,
-            //   borderRadius:40,
-            // },
-            {
-              type: 'image',
-              //url: 'https://d.funcodeit.com/test/mplogo-430.jpg',
-              url: res.data.data.qrcode2,
-              top: canvasHeight - 0.4 * ((height - 50 * a) / 1.77) - 52 * a,
-              left: 0.6 * (canvasHeight / 1.77) / 2,
-              width: 0.4 * (canvasHeight / 1.77),
-              height: 0.4 * ((height - 50 * a) / 1.77)
-            },
-            {
-              type: 'text',
-              content: '—— 邀请码 ——',
-              fontSize: 15 * a,
-              width: 180,
-              height: 15 * a,
-              top: canvasHeight - 45 * a,
-              left: canvasHeight / 1.77 / 2,
-              color: '#000',
-              textAlign: 'center',
-              bolder: false
-            },
+          height: canvasHeight
+        },
+        // {
+        //   type: 'image',
+        //   //url: 'https://d.funcodeit.com/test/mplogo-430.jpg',
+        //   url: e.data.data.qrcode2,
+        //   top: 50,
+        //   left: (width - width * 0.5) / 2,
+        //   width: width * 0.5,
+        //   height: width * 0.5 + 15 * a,
+        //   // borderRadius:90,
+        // },
+        // {
+        //   type: 'image',
+        //   url: '',
+        //   top: 140,
+        //   left: 145,
+        //   width: 80,
+        //   height: 80,
+        //   borderRadius:40,
+        // },
+        {
+          type: 'image',
+          //url: 'https://d.funcodeit.com/test/mplogo-430.jpg',
+          url: res.data.data.qrcode2,
+          top: canvasHeight - 0.4 * ((height - 50 * a) / 1.77) - 52 * a,
+          left: 0.6 * (canvasHeight / 1.77) / 2,
+          width: 0.4 * (canvasHeight / 1.77),
+          height: 0.4 * ((height - 50 * a) / 1.77)
+        },
+        {
+          type: 'text',
+          content: '—— 邀请码 ——',
+          fontSize: 15 * a,
+          width: 180,
+          height: 15 * a,
+          top: canvasHeight - 45 * a,
+          left: canvasHeight / 1.77 / 2,
+          color: '#000',
+          textAlign: 'center',
+          bolder: false
+        },
 
-            {
-              type: 'text',
-              content: res.data.data.share_code,
-              fontSize: 15 * a,
-              width: 180,
-              height: 15 * a,
-              top: canvasHeight - 25 * a,
-              left: canvasHeight / 1.77 / 2,
-              color: '#000',
-              textAlign: 'center',
-              bolder: false
-            }
-          ]
-        };
-        that.setData({
-          painting: that.data.painting,
-          code: res.data.data.share_code
-        });
-      }
+        {
+          type: 'text',
+          content: res.data.data.share_code,
+          fontSize: 15 * a,
+          width: 180,
+          height: 15 * a,
+          top: canvasHeight - 25 * a,
+          left: canvasHeight / 1.77 / 2,
+          color: '#000',
+          textAlign: 'center',
+          bolder: false
+        }
+      ]
+    };
+    that.setData({
+      painting: that.data.painting,
+      code: res.data.data.share_code
     });
   }
   /**

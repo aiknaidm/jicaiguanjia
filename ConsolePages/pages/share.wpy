@@ -147,6 +147,7 @@
 <script>
 import wepy from 'wepy';
 import api from '../../API/api';
+import newapi from '../../API/newapi';
 export default class share extends wepy.page {
   config = {
     navigationBarTitleText: '分享'
@@ -203,34 +204,26 @@ export default class share extends wepy.page {
   };
   events = {};
 
-  getCode(user_id) {
+  async getCode(user_id) {
     wx.showLoading({
       title: '加载中'
     });
 
-    wepy
-      .request({
-        url: api.getShareImg,
-        data: {
-          path: '/ConsolePages/pages/renzheng',
-          user_id
-        }
-      })
-      .then(res => {
-        if (res.data.code == '0') {
-          wx.hideLoading();
-          this.qrcode = res.data.data;
-        } else {
-          wx.hideLoading();
-          wx.showToast({
-            title: '获取邀请码失败'
-          });
-        }
-        this.$apply();
+    let data = {
+      path: '/ConsolePages/pages/renzheng',
+      user_id
+    };
+    var res = await newapi.getShareImg(data);
+    if (res.data.code == '0') {
+      wx.hideLoading();
+      this.qrcode = res.data.data;
+    } else {
+      wx.hideLoading();
+      wx.showToast({
+        title: '获取邀请码失败'
       });
-    // .catch(function(res) {
-    //   console.log('失败：' + res);
-    // });
+    }
+    this.$apply();
   }
   async onLoad(option) {
     var userId = await this.$parent.loginInfo();

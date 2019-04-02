@@ -1,195 +1,195 @@
 <style lang="less">
-  .status-label {
-    background: #f0f0f0;
-    border-left: 5rpx solid #e4e4e4
-  }
-  .icon-shouji {
-    color: #44b8f4;
-    font-size: 35rpx;
-  }
-  .icon-youcecaidan {
-    color: #e50012;
-  }
-  .green {
-    color: #10b3b1;
-  }
-  .num {
-    font-size: 26rpx;
-    line-height: 35rpx;
-    padding-left: 20rpx;
-    color: #888
-  }
-  .check-list {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20rpx 40rpx;
-    border-top: 8rpx solid #f0f0f0;
-    background: #fff;
-  }
-  .check-list-img {
-    width: 100rpx;
-    height: 100rpx;
-    margin-right: 10rpx;
-  }
-  .check-list-img image {
-    width: 100%;
-    height: 100%;
-  }
-  .check-list-content {
-    line-height: 40rpx;
-    flex: 1;
-  }
-  .check-list-btn {
-    // width: 60rpx;
-    text-align: right;
-  }
-  .check-list-btn button {
-    height: 55rpx;
-    color: #fff;
-    background-color: #e50012;
-    line-height: 55rpx;
-    font-size: 26rpx;
+.status-label {
+  background: #f0f0f0;
+  border-left: 5rpx solid #e4e4e4;
+}
+.icon-shouji {
+  color: #44b8f4;
+  font-size: 35rpx;
+}
+.icon-youcecaidan {
+  color: #e50012;
+}
+.green {
+  color: #10b3b1;
+}
+.num {
+  font-size: 26rpx;
+  line-height: 35rpx;
+  padding-left: 20rpx;
+  color: #888;
+}
+.check-list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 40rpx;
+  border-top: 8rpx solid #f0f0f0;
+  background: #fff;
+}
+.check-list-img {
+  width: 100rpx;
+  height: 100rpx;
+  margin-right: 10rpx;
+}
+.check-list-img image {
+  width: 100%;
+  height: 100%;
+}
+.check-list-content {
+  line-height: 40rpx;
+  flex: 1;
+}
+.check-list-btn {
+  // width: 60rpx;
+  text-align: right;
+}
+.check-list-btn button {
+  height: 55rpx;
+  color: #fff;
+  background-color: #e50012;
+  line-height: 55rpx;
+  font-size: 26rpx;
+  border-radius: 50px;
+  padding: 0 40rpx;
+}
+.status-box {
+  width: 100%;
+  height: 100rpx;
+  line-height: 100rpx;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-top: 1rpx solid #eee;
+}
+.status-box .status-label {
+  border-right: 1px solid #f0f0f0;
+  text-align: center;
+  font-size: 30rpx;
+  padding: 0px 40rpx;
+  flex: 1;
+  border-bottom: 6rpx solid #eee;
+  position: relative;
+}
+.status-box .status-label.active {
+  color: #e50012;
+  border-bottom: 6rpx solid #e50012;
+}
+.status-box .status-label .red-dot {
+  width: 16rpx;
+  height: 16rpx;
+  position: absolute;
+  left: 116rpx;
+  top: 23rpx;
+  background-color: #f43530;
+  border-radius: 50%;
+}
+/* 添加会员 */
+.checkLists {
+  padding-bottom: 80rpx;
+  background: #f0f0f0;
+}
+.addmember {
+  text-align: center;
+  line-height: 80rpx;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  background: #e50012;
+  color: #fff;
+}
+.search-title {
+  display: flex;
+  justify-content: space-between;
+  line-height: 55rpx;
+  font-size: 28rpx;
+  align-items: center;
+  background-color: #fff;
+  z-index: 10;
+  padding: 20rpx;
+  .sure-btn {
     border-radius: 50px;
-    padding: 0 40rpx;
-  }
-  .status-box {
-    width: 100%;
-    height: 100rpx;
-    line-height: 100rpx;
-    display: flex;
-    align-items: center;
-    background-color: #fff;
-    border-top: 1rpx solid #eee;
-  }
-  .status-box .status-label {
-    border-right: 1px solid #f0f0f0;
-    text-align: center;
-    font-size: 30rpx;
-    padding: 0px 40rpx;
-    flex: 1;
-    border-bottom: 6rpx solid #eee;
-    position: relative;
-  }
-  .status-box .status-label.active {
-    color: #e50012;
-    border-bottom: 6rpx solid #e50012;
-  }
-  .status-box .status-label .red-dot {
-    width: 16rpx;
-    height: 16rpx;
-    position: absolute;
-    left: 116rpx;
-    top: 23rpx;
-    background-color: #f43530;
-    border-radius: 50%;
-  }
-  /* 添加会员 */
-  .checkLists {
-    padding-bottom: 80rpx;
-    background: #f0f0f0;
-  }
-  .addmember {
-    text-align: center;
-    line-height: 80rpx;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-    background: #e50012;
-    color: #fff;
-  }
-  .search-title {
-    display: flex;
-    justify-content: space-between;
-    line-height: 55rpx;
-    font-size: 28rpx;
-    align-items: center;
-    background-color: #fff;
-    z-index: 10;
-    padding: 20rpx;
-    .sure-btn {
-      border-radius: 50px;
-      padding: 0 20rpx;
-      border: 1px solid #e50012;
-      color: #e50012;
-      font-size: 26rpx
-    }
-    .sure-btn2{
-      border: 1px solid #aaa;
-      color: #aaa;
-    }
-  }
-  .border {
-    display: inline-block;
     padding: 0 20rpx;
-    background: #fff // border-right: 1px solid #f0f0f0;
-    // max-width: 300rpx;
+    border: 1px solid #e50012;
+    color: #e50012;
+    font-size: 26rpx;
   }
-  .search {
-    text-align: right;
-    padding-right: 40rpx;
+  .sure-btn2 {
+    border: 1px solid #aaa;
+    color: #aaa;
   }
-  .body-bg {
-    background-color: rgba(0, 0, 0, 0.5);
-    height: 100%;
-    width: 100%;
-    position: fixed;
-    left: 0px;
-    top: 0px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 10;
-  }
-  .list {
-    background-color: #fff;
-    width: 60%;
+}
+.border {
+  display: inline-block;
+  padding: 0 20rpx;
+  background: #fff; // border-right: 1px solid #f0f0f0;
+  // max-width: 300rpx;
+}
+.search {
+  text-align: right;
+  padding-right: 40rpx;
+}
+.body-bg {
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+.list {
+  background-color: #fff;
+  width: 60%;
+  text-align: center;
+  line-height: 88rpx;
+  font-size: 30rpx;
+  max-height: 450rpx;
+  overflow: scroll;
+}
+.list view {
+  border-bottom: 1px solid #f0f0f0;
+}
+.icon-jiantou {
+  font-size: 12px;
+  margin-left: 10rpx;
+  color: #e50012;
+}
+.top {
+  background: #e50012;
+  .money {
     text-align: center;
-    line-height: 88rpx;
-    font-size: 30rpx;
-    max-height: 450rpx;
-    overflow: scroll;
-  }
-  .list view {
-    border-bottom: 1px solid #f0f0f0;
-  }
-  .icon-jiantou {
-    font-size: 12px;
-    margin-left: 10rpx;
-    color: #e50012
-  }
-  .top {
-    background: #e50012;
-    .money {
-      text-align: center;
+    color: #fff;
+    .text-m {
+      font-size: 45rpx;
+      line-height: 55rpx;
+      font-weight: bold;
+    }
+    .icon-jiantou {
       color: #fff;
-      .text-m {
-        font-size: 45rpx;
-        line-height: 55rpx;
-        font-weight: bold
-      }
-      .icon-jiantou {
-        color: #fff
-      }
-    }
-    .border2 {
-      border-left: 1px solid rgba(255, 255, 255, 0.5)
-    }
-    .money-list {
-      display: flex;
-      justify-content: space-around;
-      padding: 20rpx 40rpx;
-       font-size: 28rpx;
-      .money {
-        flex: 1;
-      }
-      .text-m {
-        font-weight: bold;
-        font-size: 35rpx;
-        line-height: 35rpx
-      }
     }
   }
+  .border2 {
+    border-left: 1px solid rgba(255, 255, 255, 0.5);
+  }
+  .money-list {
+    display: flex;
+    justify-content: space-around;
+    padding: 20rpx 40rpx;
+    font-size: 28rpx;
+    .money {
+      flex: 1;
+    }
+    .text-m {
+      font-weight: bold;
+      font-size: 35rpx;
+      line-height: 35rpx;
+    }
+  }
+}
 </style>
 <template>
   <view class='container'>
@@ -279,251 +279,242 @@
 </template>
 
 <script>
-  import wepy from 'wepy';
-  import api from '../../API/api';
-  export default class my_console_check extends wepy.page {
-    config = {
-      navigationBarTitleText: '会员管理'
-    };
-    data = {
-      statusType: ['未审核', '已审核'],
-      statusKey: ['0', '1'],
-      currentType: 0,
-      currentStatu: '0',
-      weishenhe: [],
-      yishenhe: [],
-      sales_id: 0,
-      isShowSalesList: false,
-      adminList: [],
-      salesmanName: '选择业务员',
-      showName: false,
-      num: 0,
-      money: {},
-      is_kthy: 0,
-      qurenNum:0
-    };
-    computed = {};
-    components = {};
-    methods = {
-      toSureList() {
-        wx.navigateTo({
-          url: 'my_console_toSureList'
-        });
-      },
-      toExpendDetails() {
-        wx.navigateTo({
-          url: 'my_console_cardExpendDetail?money=' + this.money.zhichu
-        });
-      },
-      tobalanceDetail() {
-        wx.navigateTo({
-          url: 'my_console_tobalanceDetail?money=' + this.money.yue
-        })
-      },
-      toPayDetails() {
-        wx.navigateTo({
-          url: 'my_console_cardPayDetail?money=' + this.money.zong
-        });
-      },
-      getFormId: function(e) {
-        //util.submitFormId(app.globalData.userId, e.detail.formId);
-      },
-      statusTap: function(e) {
-        this.getShenheList(this.sales_id);
-        var curType = e.currentTarget.dataset.index;
-        var curStatu = e.currentTarget.dataset.statu;
-        this.currentType = curType;
-        this.currentStatu = curStatu;
-      },
-      //需要审核提示
-      toShenhe: function(e) {
-        var that = this;
-        //审核人的id
-        var id = e.currentTarget.dataset.id;
-        wx.showActionSheet({
-          itemList: ['通过', '拒绝'],
-          success: function(res) {
-            if (res.tapIndex == 0) {
-              that.shenhe(id, 'tongguo');
-            } else if (res.tapIndex == 1) {
-              that.shenhe(id, 'jujue');
-            }
-          },
-          fail: function(res) {
-            //console.log(res.errMsg)
-          }
-        });
-      },
-      //解除关系提示
-      toJiechu: function(money, e) {
-        var that = this;
-        //审核人的id
-        var id = e.currentTarget.dataset.id;
-        console.log(id);
-        wx.showActionSheet({
-          itemList: ['解除关系'],
-          success: function(res) {
-            if (res.tapIndex == 0) {
-              that.jiechu(id, money);
-            }
-          },
-          fail: function(res) {
-            //console.log(res.errMsg)
-          }
-        });
-      },
-      tocallphone: function(e) {
-        var phone = e.currentTarget.dataset.phone;
-        wx.makePhoneCall({
-          phoneNumber: phone
-        });
-      },
-      toCheckDetail: function(e) {
-        //审核人的id
-        var id = e.currentTarget.dataset.id;
-        var currentStatu = this.currentStatu;
-        wx.navigateTo({
-          url: '/ConsolePages/pages/my_console_checkDetail?id=' +
-            id +
-            '&currentStatu=' +
-            currentStatu
-        });
-      },
-      buttonTap: function() {
-        this.isShowSalesList = true;
-      },
-      hiddenSalesList: function() {
-        this.isShowSalesList = false;
-      },
-      changeShopList: function(sales_id, name) {
-        this.isShowSalesList = false;
-        this.salesmanName = name;
-        this.sales_id = sales_id;
-        this.getShenheList(sales_id);
-      }
-    };
-    events = {};
-    //审核列表
-    async getShenheList(sales_id, suppliers_id = this.suppliers_id) {
-      let yhlb = await wepy.request({
-        url: api.yhlb,
-        data: {
-          suppliers_id,
-          sales_id,
-        }
+import wepy from 'wepy';
+import api from '../../API/api';
+import newapi from '../../API/newapi';
+export default class my_console_check extends wepy.page {
+  config = {
+    navigationBarTitleText: '会员管理'
+  };
+  data = {
+    statusType: ['未审核', '已审核'],
+    statusKey: ['0', '1'],
+    currentType: 0,
+    currentStatu: '0',
+    weishenhe: [],
+    yishenhe: [],
+    sales_id: 0,
+    isShowSalesList: false,
+    adminList: [],
+    salesmanName: '选择业务员',
+    showName: false,
+    num: 0,
+    money: {},
+    is_kthy: 0,
+    qurenNum: 0
+  };
+  computed = {};
+  components = {};
+  methods = {
+    toSureList() {
+      wx.navigateTo({
+        url: 'my_console_toSureList'
       });
-      if (yhlb.data.code == '0') {
-        this.weishenhe = yhlb.data.data.weishenhe;
-        this.yishenhe = yhlb.data.data.yishenhe;
-        this.num = yhlb.data.data.num
-        this.qurenNum = yhlb.data.data.num1
-        this.$apply();
-      }
-    }
-    //解除关系
-    async jiechu(id, money) {
-      let user_id = id;
-      let suppliers_id = this.$parent.globalData.suppliers_id;
-      if (money > 0) {
-        wx.showModal({
-          title: '提示', //提示的标题,
-          content: '此会员是充值用户，暂不能解除会员关系', //提示的内容,
-          showCancel: false, //是否显示取消按钮,
-          confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-          confirmColor: '#e50012', //确定按钮的文字颜色,
-          success: res => {}
-        });
-        return
-      }
-      let jcgx = await wepy.request({
-        url: api.jcgx,
-        data: {
-          user_id,
-          suppliers_id
-        }
+    },
+    toExpendDetails() {
+      wx.navigateTo({
+        url: 'my_console_cardExpendDetail?money=' + this.money.zhichu
       });
-      if (jcgx.data.code == '0') {
-        wx.showToast({
-          title: '解除关系成功',
-          icon: 'success',
-          duration: 2000
-        });
-        this.getShenheList(this.sales_id);
-      } else {
-        wx.showToast({
-          title: res.data.message,
-          icon: 'success',
-          duration: 2000
-        });
-      }
-    }
-    //审核
-    async shenhe(id, type) {
-      wx.showLoading({
-        title: '审核中...', //提示的内容,
-        mask: true, //显示透明蒙层，防止触摸穿透,
-        success: res => {}
+    },
+    tobalanceDetail() {
+      wx.navigateTo({
+        url: 'my_console_tobalanceDetail?money=' + this.money.yue
       });
-      let user_id = id;
-      let suppliers_id = this.suppliers_id;
-      var type = type;
-      let yhsh = await wepy.request({
-        url: api.yhsh,
-        data: {
-          user_id,
-          suppliers_id,
-          type
-        }
+    },
+    toPayDetails() {
+      wx.navigateTo({
+        url: 'my_console_cardPayDetail?money=' + this.money.zong
       });
-      wx.hideLoading();
-      if (yhsh.data.code == '0') {
-        this.getShenheList();
-      }
-    }
-    async salesmanList() {
-      let suppliers_id = this.$parent.globalData.suppliers_id;
-      let Salesman = await wepy.request({
-        url: api.findSalesman,
-        data: {
-          suppliers_id,
-          getall: 1
-        }
-      });
-      if (Salesman.data.code == '0') {
-        this.adminList = Salesman.data.data;
-        this.$apply();
-      }
-    }
-    // 会员充值信息
-    getPaycardMsg() {
-      wepy.request({
-        url: api.hycz, //开发者服务器接口地址",
-        data: {
-          suppliers_id: this.suppliers_id
-        }, //请求的参数",
-      }).then(res => {
-        this.money = res.data.data
-        this.$apply()
-        console.log(res);
-      });
-    }
-    async onLoad(option) {
-      console.log("option", option)
-      this.is_kthy = this.$parent.globalData.is_kthy
-      this.suppliers_id = this.$parent.globalData.suppliers_id ?
-        this.$parent.globalData.suppliers_id :
-        (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
-      if (option.sales_id) {
-        this.sales_id = option.sales_id;
-        this.salesmanName = option.sales_name;
-        this.showName = true
-      } else this.salesmanList();
+    },
+    getFormId: function(e) {
+      //util.submitFormId(app.globalData.userId, e.detail.formId);
+    },
+    statusTap: function(e) {
       this.getShenheList(this.sales_id);
-
+      var curType = e.currentTarget.dataset.index;
+      var curStatu = e.currentTarget.dataset.statu;
+      this.currentType = curType;
+      this.currentStatu = curStatu;
+    },
+    //需要审核提示
+    toShenhe: function(e) {
+      var that = this;
+      //审核人的id
+      var id = e.currentTarget.dataset.id;
+      wx.showActionSheet({
+        itemList: ['通过', '拒绝'],
+        success: function(res) {
+          if (res.tapIndex == 0) {
+            that.shenhe(id, 'tongguo');
+          } else if (res.tapIndex == 1) {
+            that.shenhe(id, 'jujue');
+          }
+        },
+        fail: function(res) {
+          //console.log(res.errMsg)
+        }
+      });
+    },
+    //解除关系提示
+    toJiechu: function(money, e) {
+      var that = this;
+      //审核人的id
+      var id = e.currentTarget.dataset.id;
+      console.log(id);
+      wx.showActionSheet({
+        itemList: ['解除关系'],
+        success: function(res) {
+          if (res.tapIndex == 0) {
+            that.jiechu(id, money);
+          }
+        },
+        fail: function(res) {
+          //console.log(res.errMsg)
+        }
+      });
+    },
+    tocallphone: function(e) {
+      var phone = e.currentTarget.dataset.phone;
+      wx.makePhoneCall({
+        phoneNumber: phone
+      });
+    },
+    toCheckDetail: function(e) {
+      //审核人的id
+      var id = e.currentTarget.dataset.id;
+      var currentStatu = this.currentStatu;
+      wx.navigateTo({
+        url:
+          '/ConsolePages/pages/my_console_checkDetail?id=' +
+          id +
+          '&currentStatu=' +
+          currentStatu
+      });
+    },
+    buttonTap: function() {
+      this.isShowSalesList = true;
+    },
+    hiddenSalesList: function() {
+      this.isShowSalesList = false;
+    },
+    changeShopList: function(sales_id, name) {
+      this.isShowSalesList = false;
+      this.salesmanName = name;
+      this.sales_id = sales_id;
+      this.getShenheList(sales_id);
+    }
+  };
+  events = {};
+  //审核列表
+  async getShenheList(sales_id, suppliers_id = this.suppliers_id) {
+    let data = {
+      suppliers_id,
+      sales_id
+    };
+    var res = await newapi.yhlb(data);
+    if (res.data.code == '0') {
+      this.weishenhe = res.data.data.weishenhe;
+      this.yishenhe = res.data.data.yishenhe;
+      this.num = res.data.data.num;
+      this.qurenNum = res.data.data.num1;
       this.$apply();
     }
-    async onShow() {
-            this.getPaycardMsg();
+  }
+  //解除关系
+  async jiechu(id, money) {
+    let user_id = id;
+    let suppliers_id = this.$parent.globalData.suppliers_id;
+    if (money > 0) {
+      wx.showModal({
+        title: '提示', //提示的标题,
+        content: '此会员是充值用户，暂不能解除会员关系', //提示的内容,
+        showCancel: false, //是否显示取消按钮,
+        confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
+        confirmColor: '#e50012', //确定按钮的文字颜色,
+        success: res => {}
+      });
+      return;
+    }
+    let data = {
+      user_id,
+      suppliers_id
+    };
+    var res = await newapi.jcgx(data);
+    if (res.data.code == '0') {
+      wx.showToast({
+        title: '解除关系成功',
+        icon: 'success',
+        duration: 2000
+      });
+      this.getShenheList(this.sales_id);
+    } else {
+      wx.showToast({
+        title: res.data.message,
+        icon: 'success',
+        duration: 2000
+      });
     }
   }
+  //审核
+  async shenhe(id, type) {
+    wx.showLoading({
+      title: '审核中...', //提示的内容,
+      mask: true, //显示透明蒙层，防止触摸穿透,
+      success: res => {}
+    });
+    let user_id = id;
+    let suppliers_id = this.suppliers_id;
+    var type = type;
+    let data = {
+      user_id,
+      suppliers_id,
+      type
+    };
+    var res = await newapi.yhsh(data);
+    wx.hideLoading();
+    if (yhsh.data.code == '0') {
+      this.getShenheList();
+    }
+  }
+  async salesmanList() {
+    let suppliers_id = this.$parent.globalData.suppliers_id;
+    let data = {
+      suppliers_id,
+      getall: 1
+    };
+    var res = await newapi.findSalesman(data);
+    if (res.data.code == '0') {
+      this.adminList = res.data.data;
+      this.$apply();
+    }
+  }
+  // 会员充值信息
+  async getPaycardMsg() {
+    let data = {
+      suppliers_id: this.suppliers_id
+    };
+    var res = await newapi.hycz(data);
+    this.money = res.data.data;
+    this.$apply();
+    console.log(res);
+  }
+  async onLoad(option) {
+    console.log('option', option);
+    this.is_kthy = this.$parent.globalData.is_kthy;
+    this.suppliers_id = this.$parent.globalData.suppliers_id
+      ? this.$parent.globalData.suppliers_id
+      : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
+    if (option.sales_id) {
+      this.sales_id = option.sales_id;
+      this.salesmanName = option.sales_name;
+      this.showName = true;
+    } else this.salesmanList();
+    this.getShenheList(this.sales_id);
+
+    this.$apply();
+  }
+  async onShow() {
+    this.getPaycardMsg();
+  }
+}
 </script>

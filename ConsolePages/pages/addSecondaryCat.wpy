@@ -132,6 +132,7 @@ button {
 <script>
 import wepy from 'wepy';
 import api from '../../API/api';
+import newapi from '../../API/newapi';
 
 export default class newslist extends wepy.page {
   config = {
@@ -221,99 +222,72 @@ export default class newslist extends wepy.page {
   };
   events = {};
   //确定删除分类
-  sureDelGoods(user_id, id, index) {
+  async sureDelGoods(user_id, id, index) {
     var that = this; //
     console.log('确定的currentSelectIds', that.data.currentSelectIds);
     var userID = wx.getStorageSync('userId');
 
-    wepy
-      .request({
-        //
-        url: api.del_categorys,
-        method: 'GET',
-        data: {
-          cat_id: id,
-          user_id
-        },
-        header: {
-          Accept: 'application/json'
-        }
-      })
-      .then(res => {
-        wx.hideLoading();
-        console.log('shanchu res is', res);
-        if (res.data.code == 0) {
-          this.goodsList.splice(index, 1);
-        } else {
-          wx.showToast({
-            title: res.data.message + '，删除失败', //提示的内容,
-            icon: 'none', //图标,
-            duration: 2000, //延迟时间,
-            mask: true //显示透明蒙层，防止触摸穿透,
-          });
-        }
-
-        this.$apply();
-      })
-      .catch(res => {
-        console.log(res);
-        var log = wx.getStorageSync('log');
-        wx.setStorageSync('log', log + '/n' + res);
-      }); //
+    let data = {
+      cat_id: id,
+      user_id
+    };
+    var res = await newapi.del_categorys(data);
+    wx.hideLoading();
+    console.log('shanchu res is', res);
+    if (res.data.code == 0) {
+      this.goodsList.splice(index, 1);
+    } else {
+      wx.showToast({
+        title: res.data.message + '，删除失败', //提示的内容,
+        icon: 'none', //图标,
+        duration: 2000, //延迟时间,
+        mask: true //显示透明蒙层，防止触摸穿透,
+      });
+    }
+    this.$apply();
   }
   // 分类列表 用户id 店铺id 有keyword时添加查找商品
-  getGoodsList(userId, suppliers_id, keyword = '', parent_id) {
+  async getGoodsList(userId, suppliers_id, keyword = '', parent_id) {
     var that = this;
     wx.showLoading({
       title: '加载中'
     });
-    wepy
-      .request({
-        url: api.categorys,
-        data: {
-          user_id: userId,
-          suppliers_id: suppliers_id,
-          keyword: keyword,
-          parent_id
-        }
-      })
-      .then(res => {
-        var ispush = true;
-        console.log('获取分类222', res);
-        wx.hideLoading();
-        this.goodsList = res.data.data;
-        this.$apply();
-      })
-      .catch(res => {});
+    let data = {
+      user_id: userId,
+      suppliers_id: suppliers_id,
+      keyword: keyword,
+      parent_id
+    };
+    var res = await newapi.categorys(data);
+    var ispush = true;
+    console.log('获取分类222', res);
+    wx.hideLoading();
+    this.goodsList = res.data.data;
+    this.$apply();
   }
   // 添加分类
-  addGoodsList(userId, suppliers_id, keyword = '', parent_id) {
+  async addGoodsList(userId, suppliers_id, keyword = '', parent_id) {
     var that = this;
     wx.showLoading({
       title: '加载中'
     });
     console.log('suppliers_id', suppliers_id);
-    wepy
-      .request({
-        url: api.add_categorys,
-        data: {
-          user_id: userId,
-          suppliers_id: suppliers_id,
-          keyword,
-          parent_id
-        }
-      })
-      .then(res => {
-        console.log('获取分类', res);
-        wx.hideLoading();
-        if (res.data.data.tianjia == 1) {
-          this.goodsList.push(res.data.data);
-        }
-        this.cat_id = res.data.data.cat_id;
-        this.cat_name = res.data.data.cat_name;
-        console.log(' this.cat_id', this.cat_id);
-        this.$apply();
-      });
+    let data = {
+      user_id: userId,
+      suppliers_id: suppliers_id,
+      keyword,
+      parent_id
+    };
+    var res = await newapi.add_categorys(data);
+    console.log('获取分类', res);
+    wx.hideLoading();
+    if (res.data.data.tianjia == 1) {
+      this.goodsList.push(res.data.data);
+    }
+    this.cat_id = res.data.data.cat_id;
+    this.cat_name = res.data.data.cat_name;
+    console.log(' this.cat_id', this.cat_id);
+    this.$apply();
   }
   async onLoad(option) {
     console.log(option);

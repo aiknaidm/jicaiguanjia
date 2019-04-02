@@ -35,6 +35,7 @@
 <script>
 import wepy from 'wepy';
 import api from '../../API/api';
+import newapi from '../../API/newapi';
 import util from '../../utils/index';
 export default class my_console_renewRecord extends wepy.page {
   config = {
@@ -48,35 +49,30 @@ export default class my_console_renewRecord extends wepy.page {
   async onShow() {
     let user_id = await this.$parent.loginInfo();
     let suppliers_id = this.$parent.globalData.suppliers_id;
-    wepy
-      .request({
-        url: api.fwfpaylist,
-        data: {
-          user_id,
-          suppliers_id
-        }
-      })
-      .then(res => {
-        var fwfpaylist = res.data.data;
+    let data = {
+      user_id,
+      suppliers_id
+    };
+    var res = await newapi.fwfpaylist(data);
+    var fwfpaylist = res.data.data;
 
-        fwfpaylist.forEach((item, index) => {
-          var newDate = new Date();
-          var newDate2 = new Date();
+    fwfpaylist.forEach((item, index) => {
+      var newDate = new Date();
+      var newDate2 = new Date();
 
-          newDate.setTime(item.pay_time * 1000);
-          newDate2.setTime(item.end_time * 1000);
-          fwfpaylist[index].pay_time = util.formatTime(
-            newDate,
-            'yyyy-MM-dd hh:mm:ss'
-          );
-          fwfpaylist[index].end_time = util.formatTime(
-            newDate2,
-            'yyyy-MM-dd hh:mm:ss'
-          );
-        });
-        this.fwfpaylist = fwfpaylist;
-        this.$apply();
-      });
+      newDate.setTime(item.pay_time * 1000);
+      newDate2.setTime(item.end_time * 1000);
+      fwfpaylist[index].pay_time = util.formatTime(
+        newDate,
+        'yyyy-MM-dd hh:mm:ss'
+      );
+      fwfpaylist[index].end_time = util.formatTime(
+        newDate2,
+        'yyyy-MM-dd hh:mm:ss'
+      );
+    });
+    this.fwfpaylist = fwfpaylist;
+    this.$apply();
   }
 }
 </script>

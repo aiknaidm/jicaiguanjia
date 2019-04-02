@@ -13,6 +13,7 @@
 <script>
 import wepy from 'wepy';
 import api from '../../API/api';
+import newapi from '../../API/newapi';
 import statusTap from '../../components/statusTap';
 import noOrder from '../../components/noOrder';
 import newsList from '../../components/newsList';
@@ -40,23 +41,19 @@ export default class newslist extends wepy.page {
   events = {};
   async getNewsKind() {
     var that = this;
-    wepy
-      .request({
-        url: api.newsKind
-      })
-      .then(res => {
-        this.newKind = res.data.data;
-        this.newKind.forEach(function(item, index) {
-          that.statusType.push(item.name);
-        });
-        this.getNewsList(this.newKind[0].id);
-        this.$apply();
-        console.log('新闻分类tab', this.statusType);
-      });
+    var res = await newapi.newsKind();
+    this.newKind = res.data.data;
+    this.newKind.forEach(function(item, index) {
+      that.statusType.push(item.name);
+    });
+    this.getNewsList(this.newKind[0].id);
+    this.$apply();
+    console.log('新闻分类tab', this.statusType);
   }
   async getNewsList(id) {
     var that = this;
-    var res = await wepy.request({ url: api.newsList, data: { id: id } });
+    let data = { id };
+    var res = await newapi.newsList(data);
     this.newsList = res.data.data;
     this.newsList.forEach(function(item, index) {
       that.newsList[index].published_time = util.formatTime(

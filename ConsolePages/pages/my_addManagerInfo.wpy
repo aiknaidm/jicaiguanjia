@@ -224,6 +224,7 @@ white-space: nowrap;
 <script>
 import wepy from 'wepy';
 import api from '../../API/api';
+import newapi from '../../API/newapi';
 import noorder from '../../components/noOrder';
 export default class my_addManagerInfo extends wepy.page {
   config = {

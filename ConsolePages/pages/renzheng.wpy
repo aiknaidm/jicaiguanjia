@@ -279,6 +279,7 @@ wx-button[disabled]:not([type]) {
 <script>
 import wepy from 'wepy';
 import api from '../../API/api';
+import newapi from '../../API/newapi';
 import util from '../../utils/index';
 export default class newslist extends wepy.page {
   config = {
@@ -299,7 +300,7 @@ export default class newslist extends wepy.page {
   };
   computed = {};
   methods = {
-    backIndex(){
+    backIndex() {
       wx.switchTab({ url: '/pages/home' });
     },
     // 免责条款
@@ -313,7 +314,6 @@ export default class newslist extends wepy.page {
       this.isAgreed = !this.isAgreed;
     },
     listenerPhoneInput(e) {
-
       console.log('输入的值', e.detail.value);
       this.phone = e.detail.value;
     },
@@ -324,16 +324,10 @@ export default class newslist extends wepy.page {
       //点击了获取验证码先在本地验证手机号的合法性
       if (this.checkPhone(this.phone)) {
         try {
-          var res = await wepy.request({
-            url: api.yzm,
-            mothod: 'GET',
-            data: {
-              mobile: this.phone
-            },
-            header: {
-              'content-type': 'application/json' // 默认值
-            }
-          });
+          let data = {
+            mobile: this.phone
+          };
+          var res = await newapi.yzm(data);
           if (res.data.code == 0) {
             console.log('点击了获取验证码' + res.data.data);
             //将获取的验证码赋值
@@ -361,8 +355,8 @@ export default class newslist extends wepy.page {
             icon: 'none'
           });
         }
-      }else{
-           this.smsCodeDisabled = false;
+      } else {
+        this.smsCodeDisabled = false;
       }
     },
     /**
@@ -398,21 +392,18 @@ export default class newslist extends wepy.page {
     }, 1000);
   }
   // 绑定上级
- async bindSuperior(shareCode, userId) {
-  var res=await  wepy.request({
-      url: api.getYizhanInfo,
-      data: {
-        share_code: shareCode,
-        user_id: userId
-      },
-   
-    });
-    return res.data.data
+  async bindSuperior(shareCode, userId) {
+    let data = {
+      share_code: shareCode,
+      user_id: userId
+    };
+    var res = await newapi.getYizhanInfo(data);
+    return res.data.data;
   }
   //检查输入的手机号
-  checkPhone(param="") {
+  checkPhone(param = '') {
     var phone = util.regexConfig().phone;
-   
+
     var inputUserName = param.trim();
     if (phone.test(inputUserName)) {
       return true;
@@ -441,7 +432,7 @@ export default class newslist extends wepy.page {
     }
   }
   //表单数据提交
-  formSubmit(e) {
+  async formSubmit(e) {
     var param = e.detail.value;
     var that = this;
     var flag = that.checkPhone(param.phone) && that.checkSmsCode(param.smscode);
@@ -506,50 +497,41 @@ export default class newslist extends wepy.page {
           mask: true, //显示透明蒙层，防止触摸穿透,
           success: res => {}
         });
-        wepy
-          .request({
-            url: api.renzheng,
-            method: 'POST',
-            data: {
-              user_id: this.userId,
-              mobile: phone,
-              realname: realname,
-              sheng,
-              shi,
-              qu,
-              suppliers_name: pcusername,
-              password,
-              suppliers_desc: storename,
-              share_code: share_code
-            },
-            header: {
-              Accept: 'application/json'
-            }
-          })
-          .then(res => {
-            console.log('认证', res);
-            wx.hideLoading();
-            if (res.data.code == 0) {
-              wx.redirectTo({
-                url: '/pages/my-console/index'
-              });
-              wx.showToast({
-                title: '注册成功'
-              });
-              this.isuserDetail = true;
-            } else {
-              this.issubmit = false;
-              wx.showModal({
-                content: res.data.message,
-                success: function(res) {
-                  if (res.confirm) {
-                  } else if (res.cancel) {
-                  }
-                }
-              });
-            }
-            this.$apply();
+        let data = {
+          user_id: this.userId,
+          mobile: phone,
+          realname: realname,
+          sheng,
+          shi,
+          qu,
+          suppliers_name: pcusername,
+          password,
+          suppliers_desc: storename,
+          share_code: share_code
+        };
+        var res = await newapi.renzheng(data);
+        console.log('认证', res);
+        wx.hideLoading();
+        if (res.data.code == 0) {
+          wx.redirectTo({
+            url: '/pages/my-console/index'
           });
+          wx.showToast({
+            title: '注册成功'
+          });
+          this.isuserDetail = true;
+        } else {
+          this.issubmit = false;
+          wx.showModal({
+            content: res.data.message,
+            success: function(res) {
+              if (res.confirm) {
+              } else if (res.cancel) {
+              }
+            }
+          });
+        }
+        this.$apply();
       } else {
         wx.showModal({
           showCancel: false,
@@ -560,23 +542,22 @@ export default class newslist extends wepy.page {
   }
   async onLoad(option) {
     let userId = await this.$parent.loginInfo();
-  
+
     let shareCode = option.shareCode;
     this.shareCode = shareCode;
     this.userId = userId;
-     if (shareCode) var yizhanInfo= await this.bindSuperior(shareCode, userId);
-     else var yizhanInfo= await this.$parent.getYizhanInfo(userId);
-  
+    if (shareCode) var yizhanInfo = await this.bindSuperior(shareCode, userId);
+    else var yizhanInfo = await this.$parent.getYizhanInfo(userId);
+
     if (yizhanInfo.user_type == 4) {
       console.log('已注册');
-        this.isuserDetail = true;
+      this.isuserDetail = true;
       this.userDetail = yizhanInfo;
       this.region[0] = yizhanInfo.sheng;
       this.region[1] = yizhanInfo.shi;
       this.region[2] = yizhanInfo.qu;
       this.phone = yizhanInfo.mobile;
     } else {
-     
       console.log('开始注册');
     }
     this.$apply();

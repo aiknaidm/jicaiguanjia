@@ -311,6 +311,7 @@
 <script>
 import wepy from 'wepy';
 import api from '../../API/api';
+import newapi from '../../API/newapi';
 import util from '../../utils/index';
 import myList from '../../components/myList';
 export default class newslist extends wepy.page {
@@ -416,7 +417,7 @@ export default class newslist extends wepy.page {
         url: 'my_setSalesman',
         bgcolor: '#10b3b1',
         isadmin: 1,
-          isfufei:1,
+        isfufei: 1
       },
       {
         icon: '/images/console/hyk.png',
@@ -424,9 +425,9 @@ export default class newslist extends wepy.page {
         url: 'clubCard/payCard',
         bgcolor: '#fd7602',
         isadmin: 1,
-        isfufei:1,
+        isfufei: 1
       },
-  
+
       {
         icon: '/images/console/chakanmyshop.png',
         text: '查看我的店铺',
@@ -466,18 +467,13 @@ export default class newslist extends wepy.page {
   async getIndexNewsList(id) {}
   // 获取管理的易站列表
   async getjllist() {
-    wepy
-      .request({
-        url: api.jlList,
-        data: {
-          user_id: this.userId
-        }
-      })
-      .then(res => {
-        console.log('管理工作台-易站列表res', res);
-        this.yizhanlist = res.data.data;
-        this.$apply();
-      });
+    let data = {
+      user_id: this.userId
+    };
+    var res = await newapi.jlList(data);
+    console.log('管理工作台-易站列表res', res);
+    this.yizhanlist = res.data.data;
+    this.$apply();
   }
   // 订单数量
   async orderNum() {
@@ -533,26 +529,21 @@ export default class newslist extends wepy.page {
     }
   }
   // 是否开通会员卡
-  ishasCard() {
-    wepy
-      .request({
-        url: api.supplier_detail, //开发者服务器接口地址",
-        data: {
-          user_id: this.userId,
-          suppliers_id: this.suppliers_id
-        } //请求的参数",
-      })
-      .then(res => {
-        console.log('res', res);
-        if(res.data.code==0&&res.data.data.is_kthy==1){
-          console.log("开通会员卡")
-          this.$parent.globalData.is_kthy=res.data.data.is_kthy
-          this.applicationList[7].url = '/ConsolePages/pages/clubCard/setCard';
-        }else{
-           this.$parent.globalData.is_kthy=res.data.data.is_kthy
-           this.applicationList[7].url = '/ConsolePages/pages/clubCard/payCard';
-        }
-      });
+  async ishasCard() {
+    let data = {
+      user_id: this.userId,
+      suppliers_id: this.suppliers_id
+    };
+    var res = await newapi.supplier_detail(data);
+    console.log('res', res);
+    if (res.data.code == 0 && res.data.data.is_kthy == 1) {
+      console.log('开通会员卡');
+      this.$parent.globalData.is_kthy = res.data.data.is_kthy;
+      this.applicationList[7].url = '/ConsolePages/pages/clubCard/setCard';
+    } else {
+      this.$parent.globalData.is_kthy = res.data.data.is_kthy;
+      this.applicationList[7].url = '/ConsolePages/pages/clubCard/payCard';
+    }
   }
   // 是否是业务员
   isSalesman() {
@@ -602,7 +593,7 @@ export default class newslist extends wepy.page {
       return;
     }
     this.yizhanInfo = yizhanInfo;
-    this.suppliers_id=yizhanInfo.suppliers_id
+    this.suppliers_id = yizhanInfo.suppliers_id;
     this.orderNum();
     this.getjllist();
     this.isexpired(yizhanInfo);

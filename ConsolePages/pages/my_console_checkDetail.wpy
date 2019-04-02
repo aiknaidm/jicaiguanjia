@@ -1,141 +1,141 @@
 <style lang="less">
-  .status-box {
+.status-box {
+  height: 100rpx;
+  line-height: 100rpx;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-top: 1rpx solid #eee;
+}
+.status-box .status-label {
+  text-align: center;
+  font-size: 30rpx;
+  padding: 0px 40rpx;
+  border-bottom: 6rpx solid #eee;
+  position: relative;
+  width: 200rpx;
+}
+.status-box .status-label.active {
+  color: #e50012;
+  border-bottom: 6rpx solid #e50012;
+}
+.icon-shouji {
+  color: #44b8f4;
+  font-size: 35rpx;
+}
+.icon-jiantou {
+  color: #e50012;
+  /* margin-left: 10rpx; */
+}
+.jiantou {
+  display: inline-block;
+  transition: transform 0.3s;
+}
+.jiantou.active {
+  transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  /* IE 9 */
+  -moz-transform: rotate(180deg);
+  /* Firefox */
+  -webkit-transform: rotate(180deg);
+  /* Safari 和 Chrome */
+  -o-transform: rotate(180deg);
+}
+.title {
+  line-height: 88rpx;
+  border-bottom: 8rpx solid #f0f0f0;
+  padding: 0 40rpx;
+  font-weight: bold;
+}
+.content {
+  line-height: 45rpx;
+  padding: 30rpx;
+}
+.yizhan {
+  display: flex;
+}
+.yizhan view {
+  border: 0px solid;
+  padding: 0;
+  margin-left: 10rpx;
+}
+.yizhan-list {
+  height: 0px;
+  overflow: hidden;
+  transition: height 0.5s;
+}
+.yizhan-list-title {
+  text-align: center;
+  font-weight: bold;
+}
+.yizhan-list-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.yizhan-list.active {
+  height: auto;
+  padding: 40rpx;
+  border: 1px solid #f0f0f0;
+  line-height: 68rpx;
+  padding-top: 20rpx;
+}
+.btn {
+  // margin-top: 200rpx;
+  display: flex;
+  padding-bottom: 50rpx;
+  justify-content: space-around;
+}
+.btn button {
+  background-color: #e50012;
+  color: #ffffff;
+  font-size: 28rpx;
+  padding: 0 90rpx;
+  height: 68rpx;
+  line-height: 68rpx;
+  border-radius: 50px;
+}
+.btn .refuse {
+  background-color: #14c09a;
+}
+.content {
+  display: flex;
+  .img {
+    width: 100rpx;
     height: 100rpx;
-    line-height: 100rpx;
-    display: flex;
-    align-items: center;
-    background-color: #fff;
-    border-top: 1rpx solid #eee;
+    margin-right: 20rpx;
+    image {
+      width: 100%;
+      height: 100%;
+    }
   }
-  .status-box .status-label {
+}
+.card {
+  .money {
     text-align: center;
-    font-size: 30rpx;
-    padding: 0px 40rpx;
-    border-bottom: 6rpx solid #eee;
-    position: relative;
-    width:200rpx;
+    padding-bottom: 20rpx;
   }
-  .status-box .status-label.active {
-    color: #e50012;
-    border-bottom: 6rpx solid #e50012;
-  }
-  .icon-shouji {
-    color: #44b8f4;
-    font-size: 35rpx;
-  }
-  .icon-jiantou {
-    color: #e50012;
-    /* margin-left: 10rpx; */
-  }
-  .jiantou {
-    display: inline-block;
-    transition: transform 0.3s;
-  }
-  .jiantou.active {
-    transform: rotate(180deg);
-    -ms-transform: rotate(180deg);
-    /* IE 9 */
-    -moz-transform: rotate(180deg);
-    /* Firefox */
-    -webkit-transform: rotate(180deg);
-    /* Safari 和 Chrome */
-    -o-transform: rotate(180deg);
-  }
-  .title {
-    line-height: 88rpx;
-    border-bottom: 8rpx solid #f0f0f0;
-    padding: 0 40rpx;
-    font-weight: bold;
-  }
-  .content {
-    line-height: 45rpx;
+  .card-title {
     padding: 30rpx;
-  }
-  .yizhan {
-    display: flex;
-  }
-  .yizhan view {
-    border: 0px solid;
-    padding: 0;
-    margin-left: 10rpx;
-  }
-  .yizhan-list {
-    height: 0px;
-    overflow: hidden;
-    transition: height 0.5s;
-  }
-  .yizhan-list-title {
-    text-align: center;
-    font-weight: bold;
-  }
-  .yizhan-list-content {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-  .yizhan-list.active {
-    height: auto;
-    padding: 40rpx;
-    border: 1px solid #f0f0f0;
-    line-height: 68rpx;
-    padding-top: 20rpx;
-  }
-  .btn {
-    // margin-top: 200rpx;
-    display: flex;
-    padding-bottom: 50rpx;
-    justify-content: space-around;
-  }
-  .btn button {
-    background-color: #e50012;
-    color: #ffffff;
-    font-size: 28rpx;
-    padding: 0 90rpx;
-    height: 68rpx;
-    line-height: 68rpx;
-    border-radius: 50px;
-  }
-  .btn .refuse {
-    background-color: #14c09a;
-  }
-  .content {
-    display: flex;
-    .img {
-      width: 100rpx;
-      height: 100rpx;
-      margin-right: 20rpx;
-      image{
-        width: 100%;
-        height: 100%;
-      }
+    border-top: 5rpx solid #f0f0f0;
+    border-bottom: 5rpx solid #f0f0f0;
+    .card-title-name {
+      font-size: 28rpx;
+      font-weight: bold;
+    }
+    .card-title-money {
+      font-size: 50rpx;
+      color: #e50012;
+      font-weight: bold;
     }
   }
-  .card {
-    .money {
-      text-align: center;
-      padding-bottom: 20rpx;
-    }
-    .card-title {
-      padding: 30rpx;
-      border-top: 5rpx solid #f0f0f0;
-      border-bottom: 5rpx solid #f0f0f0;
-      .card-title-name {
-        font-size: 28rpx;
-        font-weight: bold;
-      }
-      .card-title-money {
-        font-size: 50rpx;
-        color: #e50012;
-        font-weight: bold;
-      }
-    }
-  }
-  .time {
-    display: flex;
-    justify-content: center;
-    padding: 20rpx 0;
-    align-items: center;
-  }
+}
+.time {
+  display: flex;
+  justify-content: center;
+  padding: 20rpx 0;
+  align-items: center;
+}
 </style>
 <template>
   <view class="container">
@@ -220,311 +220,270 @@
 </template>
 
 <script>
-  import wepy from 'wepy';
-  import api from '../../API/api';
-  import util from '../../utils/index';
-  import payList from '../../components/payList';
-  import expendList from '../../components/expendList';
-  import noOrder from '../../components/noOrder';
-  export default class my_console_checkDetail extends wepy.page {
-    config = {
-      navigationBarTitleText: '审核管理'
-    };
-    data = {
-      iscilck: false,
-      id: '',
-      currentStatu: '',
-      info: [],
-      yizhan: [],
-      isclick: false,
-      statusType: ['会员充值记录', '会员支出记录'],
-      statusKey: ['0', '1'],
-      currentType: 0,
-      payList: [],
-      expendList: [],
-      is_kthy: 0,
-      end_time: '1970 - 01 - 01',
-      start_time: ' 1970 - 01 - 01',
-      now_time: '1970 - 01 - 01',
-      money: 0,
-      zhichu: 0
-    };
-    computed = {};
-    components = {
-      payList,
-      expendList,
-      noOrder
-    };
-    methods = {
-      statusTap: function(e) {
-        // this.getShenheList(this.sales_id);
-        var curType = e.currentTarget.dataset.index;
-        this.currentType = curType;
-      },
-      //通过
-      tongguo: function(e) {
-        var that = this;
-        wx.showModal({
-          content: '通过该用户的审核请求',
-          success: function(res) {
-            if (res.confirm) {
-              that.shenhe(that.id, 'tongguo');
-            } else if (res.cancel) {}
+import wepy from 'wepy';
+import api from '../../API/api';
+import newapi from '../../API/newapi';
+import util from '../../utils/index';
+import payList from '../../components/payList';
+import expendList from '../../components/expendList';
+import noOrder from '../../components/noOrder';
+export default class my_console_checkDetail extends wepy.page {
+  config = {
+    navigationBarTitleText: '审核管理'
+  };
+  data = {
+    iscilck: false,
+    id: '',
+    currentStatu: '',
+    info: [],
+    yizhan: [],
+    isclick: false,
+    statusType: ['会员充值记录', '会员支出记录'],
+    statusKey: ['0', '1'],
+    currentType: 0,
+    payList: [],
+    expendList: [],
+    is_kthy: 0,
+    end_time: '1970 - 01 - 01',
+    start_time: ' 1970 - 01 - 01',
+    now_time: '1970 - 01 - 01',
+    money: 0,
+    zhichu: 0
+  };
+  computed = {};
+  components = {
+    payList,
+    expendList,
+    noOrder
+  };
+  methods = {
+    statusTap: function(e) {
+      // this.getShenheList(this.sales_id);
+      var curType = e.currentTarget.dataset.index;
+      this.currentType = curType;
+    },
+    //通过
+    tongguo: function(e) {
+      var that = this;
+      wx.showModal({
+        content: '通过该用户的审核请求',
+        success: function(res) {
+          if (res.confirm) {
+            that.shenhe(that.id, 'tongguo');
+          } else if (res.cancel) {
           }
-        });
-      },
-      //拒绝
-      jujue: function(e) {
-        var that = this;
-        wx.showModal({
-          content: '拒绝该用户的审核请求',
-          success: function(res) {
-            if (res.confirm) {
-              that.shenhe(that.id, 'jujue');
-            } else if (res.cancel) {}
+        }
+      });
+    },
+    //拒绝
+    jujue: function(e) {
+      var that = this;
+      wx.showModal({
+        content: '拒绝该用户的审核请求',
+        success: function(res) {
+          if (res.confirm) {
+            that.shenhe(that.id, 'jujue');
+          } else if (res.cancel) {
           }
-        });
-      },
-      changeCheckStatus: function() {
-        wx.showActionSheet({
-          itemList: ['解除关系'],
-          success: function(res) {
-            console.log(res.tapIndex);
-          },
-          fail: function(res) {
-            console.log(res.errMsg);
-          }
-        });
-      },
-      changeisclick: function() {
-        this.isclick = !this.isclick;
-      },
-      tocallphone: function(e) {
-        var phone = e.currentTarget.dataset.phone;
-        wx.makePhoneCall({
-          phoneNumber: phone
-        });
-      },
-      bindStartTimeChange(e) {
-        this.start_time = e.detail.value;
-        this.isMoreData1=true;
-        this.isMoreData2=true;
-     
-          this.page1 = 1;
-          var data = this.init(this.page1);
-          this.getCzjl(data);
-           this.getZcjl(data);
-        
-      },
-      bindEndTimeChange(e) {
-        this.end_time = e.detail.value;
-         this.isMoreData1=true;
-        this.isMoreData2=true;
-      
-          this.page1 = 1
-          var data = this.init(this.page1);
-          this.getCzjl(data);
-          this.getZcjl(data);
-        
-      },
-    };
-    events = {};
+        }
+      });
+    },
+    changeCheckStatus: function() {
+      wx.showActionSheet({
+        itemList: ['解除关系'],
+        success: function(res) {
+          console.log(res.tapIndex);
+        },
+        fail: function(res) {
+          console.log(res.errMsg);
+        }
+      });
+    },
+    changeisclick: function() {
+      this.isclick = !this.isclick;
+    },
+    tocallphone: function(e) {
+      var phone = e.currentTarget.dataset.phone;
+      wx.makePhoneCall({
+        phoneNumber: phone
+      });
+    },
+    bindStartTimeChange(e) {
+      this.start_time = e.detail.value;
+      this.isMoreData1 = true;
+      this.isMoreData2 = true;
 
-    getStartTime() {
-      var nowdates = new Date();
-      var year = nowdates.getFullYear()
-      var month = nowdates.getMonth() + 1
-      var date = "01"
-      if (month < 10)
-        month = "0" + month
-      return year + "-" + month + "-" + date
+      this.page1 = 1;
+      var data = this.init(this.page1);
+      this.getCzjl(data);
+      this.getZcjl(data);
+    },
+    bindEndTimeChange(e) {
+      this.end_time = e.detail.value;
+      this.isMoreData1 = true;
+      this.isMoreData2 = true;
+
+      this.page1 = 1;
+      var data = this.init(this.page1);
+      this.getCzjl(data);
+      this.getZcjl(data);
     }
-    // 会员充值记录
-    getCzjl(data) {
-      data.dqr = 1;
-      wx.showLoading({
-        title: '加载中...', //提示的内容,
+  };
+  events = {};
+
+  getStartTime() {
+    var nowdates = new Date();
+    var year = nowdates.getFullYear();
+    var month = nowdates.getMonth() + 1;
+    var date = '01';
+    if (month < 10) month = '0' + month;
+    return year + '-' + month + '-' + date;
+  }
+  // 会员充值记录
+  async getCzjl(data) {
+    data.dqr = 1;
+    wx.showLoading({
+      title: '加载中...', //提示的内容,
+      mask: true, //显示透明蒙层，防止触摸穿透,
+      success: res => {}
+    });
+    var res = await newapi.czjl(data);
+    wx.hideLoading();
+    console.log('充值记录', res);
+    var datas = res.data.data.data;
+    this.money = res.data.zonge;
+    datas.forEach((item, index) => {
+      datas[index].add_time = util.formatTime(
+        new Date(item.add_time * 1000),
+        'yyyy-MM-dd hh:mm:ss'
+      );
+    });
+    if (data.page == 1) {
+      this.isMoreData1 = true;
+      this.payList = res.data.data.data;
+    } else this.payList.push(...datas);
+    if (datas.length < 10) this.isMoreData1 = false;
+    this.$apply();
+  }
+  async getZcjl(data) {
+    wx.showLoading({
+      title: '加载中...', //提示的内容,
+      mask: true, //显示透明蒙层，防止触摸穿透,
+      success: res => {}
+    });
+    var res = await newapi.zcjl(data);
+    wx.hideLoading();
+    console.log('充值记录', res);
+    var datas = res.data.data.data;
+    this.zhichu = res.data.zonge;
+    datas.forEach((item, index) => {
+      datas[index].add_time = util.formatTime(
+        new Date(item.add_time * 1000),
+        'yyyy-MM-dd hh:mm:ss'
+      );
+    });
+    if (data.page == 1) {
+      this.isMoreData2 = true;
+      this.expendList = res.data.data.data;
+    } else this.expendList.push(...datas);
+    if (datas.length < 10) this.isMoreData2 = false;
+    this.$apply();
+  }
+  init(page) {
+    var data = {
+      suppliers_id: this.suppliers_id,
+      user_id: this.pay_user_id,
+      start_time: this.start_time,
+      end_time: this.end_time,
+      page: page
+    };
+    return data;
+  }
+  //个人信息
+  async getInfo(id) {
+    var user_id = id;
+    let data = {
+      user_id,
+      suppliers_id: this.suppliers_id
+    };
+    var res = await newapi.yhxq(data);
+    this.info = res.data.data;
+    this.yizhan = res.data.data.jiameng;
+    this.$apply();
+  }
+  async onLoad(options) {
+    try {
+      this.is_kthy = this.$parent.globalData.is_kthy;
+      this.pay_user_id = options.id;
+      this.currentStatu = options.currentStatu;
+      this.id = options.id;
+      this.suppliers_id = this.$parent.globalData.suppliers_id;
+      this.getInfo(this.pay_user_id);
+
+      this.end_time = util.formatTime(new Date(), 'yyyy-MM-dd');
+      this.now_time = this.end_time;
+      this.start_time = this.getStartTime();
+      this.isMoreData1 = true;
+      this.isMoreData2 = true;
+      this.page1 = 1;
+      this.page2 = 1;
+      var data1 = this.init(this.page1);
+      var data2 = this.init(this.page2);
+      this.getCzjl(data1);
+      this.getZcjl(data2);
+      this.$apply();
+    } catch (error) {
+      console.log(error);
+      wx.showToast({
+        title: '登录失败', //提示的内容,
+        icon: 'none', //图标,
+        duration: 2000, //延迟时间,
         mask: true, //显示透明蒙层，防止触摸穿透,
         success: res => {}
       });
-      wepy
-        .request({
-          url: api.czjl, //开发者服务器接口地址",
-          data
-        })
-        .then(res => {
-          wx.hideLoading();
-          console.log('充值记录', res);
-          var datas = res.data.data.data;
-          this.money = res.data.zonge;
-          datas.forEach((item, index) => {
-            datas[index].add_time = util.formatTime(
-              new Date(item.add_time * 1000),
-              'yyyy-MM-dd hh:mm:ss'
-            );
-          });
-          if (data.page == 1) {
-            this.isMoreData1 = true;
-            this.payList = res.data.data.data;
-          } else this.payList.push(...datas);
-          if (datas.length < 10) this.isMoreData1 = false;
-          this.$apply();
-        })
-        .catch(res => {
-      
-          wx.showToast({
-            title: '未知错误', //提示的内容,
-            icon: 'none', //图标,
-            duration: 2000, //延迟时间,
-            mask: true, //显示透明蒙层，防止触摸穿透,
-            success: res => {}
-          });
-        });
     }
-    getZcjl(data) {
-      wx.showLoading({
-        title: '加载中...', //提示的内容,
-        mask: true, //显示透明蒙层，防止触摸穿透,
-        success: res => {}
-      });
-      wepy
-        .request({
-          url: api.zcjl, //开发者服务器接口地址",
-          data
-        })
-        .then(res => {
-          wx.hideLoading();
-          console.log('充值记录', res);
-          var datas = res.data.data.data;
-          this.zhichu = res.data.zonge;
-          datas.forEach((item, index) => {
-            datas[index].add_time = util.formatTime(
-              new Date(item.add_time * 1000),
-              'yyyy-MM-dd hh:mm:ss'
-            );
-          });
-          if (data.page == 1) {
-            this.isMoreData2 = true;
-            this.expendList = res.data.data.data;
-          } else this.expendList.push(...datas);
-          if (datas.length < 10) this.isMoreData2 = false;
-          this.$apply();
-        })
-        .catch(res => {
-          console.log(res);
-          wx.showToast({
-            title: '未知错误', //提示的内容,
-            icon: 'none', //图标,
-            duration: 2000, //延迟时间,
-            mask: true, //显示透明蒙层，防止触摸穿透,
-            success: res => {}
-          });
-        });
-    }
-    init(page) {
-      var data = {
-        suppliers_id: this.suppliers_id,
-        user_id: this.pay_user_id,
-        start_time: this.start_time,
-        end_time: this.end_time,
-        page: page
-      };
-      return data;
-    }
-    //个人信息
-    async getInfo(id) {
-      var user_id = id;
-      wepy
-        .request({
-          url: api.yhxq,
-          data: {
-            user_id,
-            suppliers_id:this.suppliers_id
-          }
-        })
-        .then(res => {
-          this.info = res.data.data;
-          this.yizhan = res.data.data.jiameng;
-          this.$apply();
-        });
-    }
-        async onLoad(options) {
-      try {
-        this.is_kthy = this.$parent.globalData.is_kthy
-        this.pay_user_id = options.id;
-        this.currentStatu = options.currentStatu;
-        this.id= options.id;
-        this.suppliers_id = this.$parent.globalData.suppliers_id;
-        this.getInfo(this.pay_user_id);
-
-        this.end_time = util.formatTime(new Date(), 'yyyy-MM-dd');
-        this.now_time = this.end_time;
-        this.start_time = this.getStartTime();
-        this.isMoreData1=true;
-        this.isMoreData2=true;
-        this.page1 = 1;
-        this.page2 = 1;
-        var data1 = this.init(this.page1);
-        var data2 = this.init(this.page2);
-        this.getCzjl(data1);
-        this.getZcjl(data2);
-        this.$apply();
-      } catch (error) {
-        console.log(error)
-        wx.showToast({
-          title: '登录失败', //提示的内容,
-          icon: 'none', //图标,
-          duration: 2000, //延迟时间,
-          mask: true, //显示透明蒙层，防止触摸穿透,
-          success: res => {}
-        });
-      }
-    }
-    // 下拉刷新
-    onReachBottom() {
-    if (this.currentType==0&&this.isMoreData1) {
+  }
+  // 下拉刷新
+  onReachBottom() {
+    if (this.currentType == 0 && this.isMoreData1) {
       wx.showLoading({
         title: '加载中', //提示的内容,
         mask: true, //显示透明蒙层，防止触摸穿透,
         success: res => {}
       });
-     var data = this.init(++this.page1);
-      
-      this.getCzjl(data);
-    }
-    else if(this.currentType==1&&this.isMoreData2){
+      var data = this.init(++this.page1);
 
-       var data = this.init(++this.page2);
-     
-    this.getZcjl(data);
+      this.getCzjl(data);
+    } else if (this.currentType == 1 && this.isMoreData2) {
+      var data = this.init(++this.page2);
+
+      this.getZcjl(data);
     }
   }
-    async shenhe(id, type) {
-      let user_id = id;
-      let suppliers_id = this.$parent.globalData.suppliers_id;
-      var type = type;
-      let yhsh = await wepy.request({
-        url: api.yhsh,
-        data: {
-          user_id,
-          suppliers_id,
-          type
-        }
+  async shenhe(id, type) {
+    let user_id = id;
+    let suppliers_id = this.$parent.globalData.suppliers_id;
+    var type = type;
+    let data = {
+      user_id,
+      suppliers_id,
+      type
+    };
+    var res = await newapi.yhsh(data);
+    if (res.data.code == '0') {
+      wx.showToast({
+        title: '操作成功',
+        icon: 'success',
+        duration: 2000
       });
-      if (yhsh.data.code == '0') {
-        wx.showToast({
-          title: '操作成功',
-          icon: 'success',
-          duration: 2000
-        });
-        this.currentStatu=0
-      } else {
-        wx.showToast({
-          title: '操作失败',
-          icon: 'success',
-          duration: 2000
-        });
-      }
+      this.currentStatu = 0;
+    } else {
+      wx.showToast({
+        title: '操作失败',
+        icon: 'success',
+        duration: 2000
+      });
     }
   }
+}
 </script>

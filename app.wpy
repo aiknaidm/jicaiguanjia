@@ -102,6 +102,7 @@ import 'wepy-async-function';
 // import { setStore } from 'wepy-redux';
 // import configStore from './store';
 import api from './API/api';
+import newapi from './API/newapi';
 
 // const store = configStore();
 // setStore(store);
@@ -156,7 +157,6 @@ export default class extends wepy.app {
           'pages/my_console_payPhb',
           'pages/my_console_toSureList',
           'pages/my_console_tobalanceDetail'
-          
         ]
       },
       {
@@ -167,10 +167,7 @@ export default class extends wepy.app {
           'pages/goodsInfo',
           'pages/orderInfo',
           'pages/userInfo',
-          'pages/memberInfo',
-          
-          
-        
+          'pages/memberInfo'
         ]
       }
     ],
@@ -313,33 +310,23 @@ export default class extends wepy.app {
       return userId;
     }
     let code = await wepy.login();
-    let loginInfo = await wepy.request({
-      url: api.login,
-      data: {
-        weixin: code.code,
-        sex: '未知',
-        avatar: 'https://lmbge.com/upload/avatar/weixin1.png'
-      }
-    });
-    this.globalData.userId = loginInfo.data.data.user_id;
-    console.log('loginInfo.data.data.user_id', loginInfo.data.data.user_id);
-    wx.setStorageSync('userId', loginInfo.data.data.user_id);
-
-    // wx.setStorage({
-    //   key: 'userId',
-    //   value: loginInfo.data.data.user_id
-    // });
-
-    return loginInfo.data.data.user_id;
+    let data = {
+      weixin: code.code,
+      sex: '未知',
+      avatar: 'https://lmbge.com/upload/avatar/weixin1.png'
+    };
+    var res = await newapi.login(data);
+    this.globalData.userId = res.data.data.user_id;
+    console.log('res.data.data.user_id', res.data.data.user_id);
+    wx.setStorageSync('userId', res.data.data.user_id);
+    return res.data.data.user_id;
   }
   async getUserInfo(userId) {
-    let userInfo = await wepy.request({
-      url: api.getUserInfo,
-      data: {
-        user_id: userId
-      }
-    });
-    if (userInfo.data.code == '0') return userInfo.data.data;
+    let data = {
+      user_id: userId
+    };
+    var res = await newapi.getUserInfo(data);
+    if (res.data.code == '0') return res.data.data;
     else
       wx.showToast({
         title: '获取用户信息失败', //提示的内容,
@@ -350,17 +337,15 @@ export default class extends wepy.app {
     return 0;
   }
   async getYizhanInfo(user_id, suppliers_id = '') {
-    let userInfo = await wepy.request({
-      url: api.getYizhanInfo,
-      data: {
-        user_id,
-        suppliers_id
-      }
-    });
-    if (userInfo.data.code == '0') {
-      this.globalData.yizhanInfo = userInfo.data.data;
-      this.globalData.suppliers_id = userInfo.data.data.suppliers_id;
-      return userInfo.data.data;
+    let data = {
+      user_id,
+      suppliers_id
+    };
+    var res = await newapi.getYizhanInfo(data);
+    if (res.data.code == '0') {
+      this.globalData.yizhanInfo = res.data.data;
+      this.globalData.suppliers_id = res.data.data.suppliers_id;
+      return res.data.data;
     } else
       wx.showToast({
         title: '获取易站信息失败', //提示的内容,

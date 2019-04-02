@@ -115,6 +115,7 @@
 <script>
 import wepy from 'wepy';
 import api from '../../API/api';
+import newapi from '../../API/newapi';
 import util from '../../utils/index';
 export default class my_console_renew extends wepy.page {
   config = {
@@ -129,23 +130,18 @@ export default class my_console_renew extends wepy.page {
   computed = {};
   components = {};
   methods = {
-    changeInput: function(e) {
+    async changeInput(e) {
       var shareCode = e.detail.value;
       if (shareCode.length == 6) {
-        wepy
-          .request({
-            url: api.verifyCode,
-            data: {
-              share_code: shareCode
-            }
-          })
-          .then(res => {
-            if (res.data.code == '0') {
-              this.isHasShareCode = res.data.data;
-              this.shareCode = shareCode;
-              this.$apply();
-            }
-          });
+        let data = {
+          share_code: shareCode
+        };
+        var res = await newapi.verifyCode(data);
+        if (res.data.code == '0') {
+          this.isHasShareCode = res.data.data;
+          this.shareCode = shareCode;
+          this.$apply();
+        }
       } else {
         this.isHasShareCode = 0;
       }
@@ -189,15 +185,9 @@ export default class my_console_renew extends wepy.page {
     this.getrenewList();
   }
   async getrenewList() {
-    wepy
-      .request({
-        url: api.renewList,
-        data: {}
-      })
-      .then(res => {
-        this.renewList = res.data.data;
-        this.$apply();
-      });
+    var res = await newapi.renewList();
+    this.renewList = res.data.data;
+    this.$apply();
   }
 }
 </script>

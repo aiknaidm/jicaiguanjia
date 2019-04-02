@@ -31,6 +31,7 @@
 <script>
 import wepy from 'wepy';
 import api from '../../API/api';
+import newapi from '../../API/newapi';
 import orderDetail from '../../components/shop/orderDetail';
 import util from '../../utils/index';
 
@@ -132,61 +133,47 @@ export default class orderDetails extends wepy.page {
   }
   // 发货
 
-  fahuo(orderId) {
+  async fahuo(orderId) {
     var that = this;
-    wx.request({
-      url: api.fahuo,
-      data: {
-        order_id: orderId
-      },
-      success: res => {
-        if (res.data.code == 0) {
-          this.orderDetail.shipping_status = 1;
-          var order_status = this.$parent.$pages[
-            '/ConsolePages/pages/orderList'
-          ].thisindex;
-          this.$parent.$pages['/ConsolePages/pages/orderList'].getOrderList(
-            order_status,
-            1
-          );
-          this.$apply();
-        }
-      }
-    });
+    let data = {
+      order_id: orderId
+    };
+    var res = await newapi.fahuo(data);
+    if (res.data.code == 0) {
+      this.orderDetail.shipping_status = 1;
+      var order_status = this.$parent.$pages['/ConsolePages/pages/orderList']
+        .thisindex;
+      this.$parent.$pages['/ConsolePages/pages/orderList'].getOrderList(
+        order_status,
+        1
+      );
+      this.$apply();
+    }
   }
   async getOrderDetail(id) {
-    wepy
-      .request({
-        url: api.orderDetail,
-        data: {
-          user_id: this.user_id,
-          order_id: id,
-          suppliers_id: this.suppliers_id
-        }
-      })
-      .then(res => {
-        wx.hideLoading();
-        this.orderDetail = res.data.data.orderList;
-        this.goodsMap = res.data.data.goodsMap;
-        this.orderDetail.add_time = util.formatTime(
-          new Date(this.orderDetail.add_time * 1000),
-          'yyyy-MM-dd hh:mm:ss'
-        );
-        this.orderDetail.pay_time = util.formatTime(
-          new Date(this.orderDetail.pay_time * 1000),
-          'yyyy-MM-dd hh:mm:ss'
-        );
-        this.orderDetail.confirm_time = util.formatTime(
-          new Date(this.orderDetail.confirm_time * 1000),
-          'yyyy-MM-dd hh:mm:ss'
-        );
-        this.$apply();
-        console.log('订单详情', this.orderDetail);
-      })
-      .catch(res => {
-        wx.hideLoading();
-        console.log(res);
-      });
+    let data = {
+      user_id: this.user_id,
+      order_id: id,
+      suppliers_id: this.suppliers_id
+    };
+    var res = await newapi.orderDetail(data);
+    wx.hideLoading();
+    this.orderDetail = res.data.data.orderList;
+    this.goodsMap = res.data.data.goodsMap;
+    this.orderDetail.add_time = util.formatTime(
+      new Date(this.orderDetail.add_time * 1000),
+      'yyyy-MM-dd hh:mm:ss'
+    );
+    this.orderDetail.pay_time = util.formatTime(
+      new Date(this.orderDetail.pay_time * 1000),
+      'yyyy-MM-dd hh:mm:ss'
+    );
+    this.orderDetail.confirm_time = util.formatTime(
+      new Date(this.orderDetail.confirm_time * 1000),
+      'yyyy-MM-dd hh:mm:ss'
+    );
+    this.$apply();
+    console.log('订单详情', this.orderDetail);
   }
 
   async onLoad(option) {

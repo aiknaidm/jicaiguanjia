@@ -86,6 +86,7 @@
 import wepy from 'wepy';
 import statusTap from '../../components/statusTap';
 import api from '../../API/api';
+import newapi from '../../API/newapi';
 import utils from '../../utils/index';
 import popup from '../../components/popup';
 export default class newslist extends wepy.page {
@@ -110,59 +111,40 @@ export default class newslist extends wepy.page {
       this.getShareList(this.userId, index);
     },
     // 详情
-    toShareDetails: function(id) {
+    async toShareDetails(id) {
       console.log('点击的是', this.list, id);
-      wepy
-        .request({
-          url: api.fxfxDetail,
-          data: {
-            id
-          }
-        })
-        .then(res => {
-          this.isshowdetails = true;
-          var shareDetail = [];
-          shareDetail[0] = res.data.data;
-          shareDetail = this.dataForEach(shareDetail);
-          this.shareDetail=shareDetail[0]
-          console.log('分享订单详情', this.shareDetail);
-          this.$apply();
-        });
+      let data = { id };
+      var res = await newapi.fxfxDetail(data);
+      this.isshowdetails = true;
+      var shareDetail = [];
+      shareDetail[0] = res.data.data;
+      shareDetail = this.dataForEach(shareDetail);
+      this.shareDetail = shareDetail[0];
+      console.log('分享订单详情', this.shareDetail);
+      this.$apply();
     }
   };
   events = {};
   async getIndexNewsList(id) {}
   // 分享列表
-  getShareList(userId, status) {
-    wepy
-      .request({
-        url: api.fxfxList,
-        data: {
-          user_id: userId
-        }
-      })
-      .then(res => {
-        console.log('分享列表', res);
-        if (res.data.code == '0') {
-          var shareList = res.data.data;
-          shareList.ketx = this.dataForEach(shareList.ketx);
-          shareList.zong = this.dataForEach(shareList.zong);
-          this.shareList = shareList;
-          this.list = status == '0' ? shareList.zong : shareList.ketx;
-          this.$apply();
-        } else {
-          wx.showToast({
-            title: res.data.message
-          });
-        }
-      })
-      .catch(res => {
-        console.log(res);
-        wx.showToast({
-          title: res.TypeError,
-          icon: 'none'
-        });
+  async getShareList(userId, status) {
+    let data = {
+      user_id: userId
+    };
+    var res = await newapi.fxfxList(data);
+    console.log('分享列表', res);
+    if (res.data.code == '0') {
+      var shareList = res.data.data;
+      shareList.ketx = this.dataForEach(shareList.ketx);
+      shareList.zong = this.dataForEach(shareList.zong);
+      this.shareList = shareList;
+      this.list = status == '0' ? shareList.zong : shareList.ketx;
+      this.$apply();
+    } else {
+      wx.showToast({
+        title: res.data.message
       });
+    }
   }
   dataForEach(data) {
     console.log(data.length);

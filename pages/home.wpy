@@ -350,6 +350,7 @@ button::after {
 <script>
 import wepy from 'wepy';
 import api from '../API/api';
+import newapi from '../API/newapi';
 export default class Index extends wepy.page {
   config = {
     navigationBarTitleText: '吉采易站'
@@ -398,18 +399,14 @@ export default class Index extends wepy.page {
   };
   // 资讯
   async getMessage() {
-    var res = await wepy.request({
-      url: api.message
-    });
+    var res = await newapi.message();
     this.message = res.data.data;
     wx.hideLoading();
     this.$apply();
   }
   // 轮播
   async getCarousel() {
-    var res = await wepy.request({
-      url: api.carousel
-    });
+    var res = await newapi.carousel();
     this.carousel = res.data.data;
     console.log('carousel', this.carousel);
     this.$apply();
@@ -429,7 +426,6 @@ export default class Index extends wepy.page {
       });
     },
     toBannerDetail: function(url) {
-
       if (url != '0') {
         wx.navigateTo({
           url: '/IndexPages/pages/details?id=' + url

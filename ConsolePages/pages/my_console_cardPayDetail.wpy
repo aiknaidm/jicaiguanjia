@@ -199,6 +199,7 @@
 <script>
 import wepy from 'wepy';
 import api from '../../API/api';
+import newapi from '../../API/newapi';
 import util from '../../utils/index';
 import payList from '../../components/payList';
 export default class my_console_cardPayDetail extends wepy.page {
@@ -223,7 +224,6 @@ export default class my_console_cardPayDetail extends wepy.page {
     payList
   };
   methods = {
-   
     tophb() {
       wx.navigateTo({
         url: 'my_console_payPhb'
@@ -248,7 +248,7 @@ export default class my_console_cardPayDetail extends wepy.page {
       this.salesmanName = name;
       this.sales_id = sales_id;
       this.page = 1;
-  
+
       var data = this.init();
       this.getCzjl(data);
     },
@@ -262,84 +262,66 @@ export default class my_console_cardPayDetail extends wepy.page {
     bindEndTimeChange(e) {
       this.end_time = e.detail.value;
       this.page = 1;
-      
+
       var data = this.init();
       this.getCzjl(data);
     },
-     // 会员名
-    changeMemberName(e){
-      this.keyword=e.detail.value;
-      this.page = 1;  
+    // 会员名
+    changeMemberName(e) {
+      this.keyword = e.detail.value;
+      this.page = 1;
       var data = this.init();
       this.getCzjl(data);
-    },
+    }
   };
   events = {};
   async getSalesmanList() {
     let suppliers_id = this.$parent.globalData.suppliers_id;
-    let Salesman = await wepy.request({
-      url: api.findSalesman,
-      data: {
-        suppliers_id,
-        getall: 1
-      }
-    });
-    if (Salesman.data.code == '0') {
-      this.salesmanList = Salesman.data.data;
+    let data = {
+      suppliers_id,
+      getall: 1
+    };
+    var res = await newapi.findSalesman(data);
+    if (res.data.code == '0') {
+      this.salesmanList = res.data.data;
       this.$apply();
     }
   }
   async getMemberNameList() {
     let suppliers_id = this.$parent.globalData.suppliers_id;
-    let memberNameList = await wepy.request({
-      url: api.findmemberNameList,
-      data: {
-        suppliers_id,
-        getall: 1
-      }
-    });
-    if (memberNameList.data.code == '0') {
-      this.memberNameList = memberNameList.data.data;
+    let data = {
+      suppliers_id,
+      getall: 1
+    };
+    var res = await newapi.findmemberNameList(data);
+    if (res.data.code == '0') {
+      this.memberNameList = res.data.data;
       this.$apply();
     }
   }
-  getCzjl(data) {
+  async getCzjl(data) {
     wx.showLoading({
       title: '加载中...', //提示的内容,
       mask: true, //显示透明蒙层，防止触摸穿透,
       success: res => {}
     });
-    wepy
-      .request({
-        url: api.czjl, //开发者服务器接口地址",
-        data
-      })
-      .then(res => {
-        wx.hideLoading();
-        console.log('充值记录', res);
-        var datas = res.data.data.data;
-        this.money=res.data.zonge;
-        datas.forEach((item, index) => {
-          datas[index].add_time = util.formatTime(
-            new Date(item.add_time * 1000),
-            'yyyy-MM-dd hh:mm:ss'
-          );
-        });
-        if (data.page == 1){this.isMoreData = true;this.payList = res.data.data.data;} 
-        else this.payList.push(...datas);
-        if (datas.length < 10) this.isMoreData = false;
-        this.$apply();
-      })
-      .catch(res => {
-        console.log(res);
-        wx.showToast({
-          title: '未知错误', //提示的内容,
-          icon: 'none', //图标,
-          duration: 2000, //延迟时间,
-          mask: true, //显示透明蒙层，防止触摸穿透,
-          success: res => {}
-        });
-      });
+    var res = await newapi.czjl(data);
+    wx.hideLoading();
+    console.log('充值记录', res);
+    var datas = res.data.data.data;
+    this.money = res.data.zonge;
+    datas.forEach((item, index) => {
+      datas[index].add_time = util.formatTime(
+        new Date(item.add_time * 1000),
+        'yyyy-MM-dd hh:mm:ss'
+      );
+    });
+    if (data.page == 1) {
+      this.isMoreData = true;
+      this.payList = res.data.data.data;
+    } else this.payList.push(...datas);
+    if (datas.length < 10) this.isMoreData = false;
+    this.$apply();
   }
   init() {
     var data = {
@@ -364,8 +346,8 @@ export default class my_console_cardPayDetail extends wepy.page {
     var newDate = new Date().getTime();
     this.end_time = util.formatTime(new Date(), 'yyyy-MM-dd');
     this.now_time = this.end_time;
-    this.start_time =this.getStartTime();
-    
+    this.start_time = this.getStartTime();
+
     this.suppliers_id = this.$parent.globalData.suppliers_id
       ? this.$parent.globalData.suppliers_id
       : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
@@ -386,17 +368,15 @@ export default class my_console_cardPayDetail extends wepy.page {
       this.getCzjl(data);
     }
   }
-  getStartTime(){
-    var nowdates=new Date();
+  getStartTime() {
+    var nowdates = new Date();
 
-var year=nowdates.getFullYear()
-var month=nowdates.getMonth()+1
-var date="01"
-if(month<10)
-        month="0"+month
+    var year = nowdates.getFullYear();
+    var month = nowdates.getMonth() + 1;
+    var date = '01';
+    if (month < 10) month = '0' + month;
 
-  return year+"-"+month+"-"+date
-
+    return year + '-' + month + '-' + date;
   }
   async onShow() {}
 }

@@ -27,6 +27,7 @@
 <script>
 import wepy from 'wepy';
 import api from '../../API/api';
+import newapi from '../../API/newapi';
 import wxpay1 from '../../utils/index';
 export default class orderbutton extends wepy.component {
   props = {
@@ -112,17 +113,13 @@ export default class orderbutton extends wepy.component {
   };
   // 取消订单
   async toCancelOrder(id) {
-    return await wepy.request({
-      url: api.cancelOrder, //开发者服务器接口地址",
-      data: { id } //请求的参数",
-    });
+    let data = { id };
+    return await newapi.cancelOrder(data);
   }
   // 确认收货
   async toConfirmBtn(id) {
-    return await wepy.request({
-      url: api.confirmOrder, //开发者服务器接口地址",
-      data: { id } //请求的参数",
-    });
+    let data = { id };
+    return await newapi.confirmOrder(data);
   }
   toPayTap() {
     this.$emit('toPayTap');

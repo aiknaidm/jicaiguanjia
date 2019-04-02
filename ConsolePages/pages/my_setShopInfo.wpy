@@ -339,6 +339,7 @@ wx-button[disabled]:not([type]) {
 <script>
 import wepy from 'wepy';
 import api from '../../API/api';
+import newapi from '../../API/newapi';
 import util from '../../utils/index';
 export default class my_setShopInfo extends wepy.page {
   config = {
@@ -406,8 +407,8 @@ export default class my_setShopInfo extends wepy.page {
     listenerPhoneInput(e) {
       console.log('输入的值', e.detail.value);
       this.phone = e.detail.value;
-      this.userDetail.mobile=e.detail.value;
-      this.$apply()
+      this.userDetail.mobile = e.detail.value;
+      this.$apply();
     },
     //联网获取验证码
     async getSmsCode(phone) {
@@ -416,16 +417,10 @@ export default class my_setShopInfo extends wepy.page {
       //点击了获取验证码先在本地验证手机号的合法性
       if (this.checkPhone(phone)) {
         try {
-          var res = await wepy.request({
-            url: api.yzm,
-            mothod: 'GET',
-            data: {
-              mobile: phone
-            },
-            header: {
-              'content-type': 'application/json' // 默认值
-            }
-          });
+          let data = {
+            mobile: phone
+          };
+          var res = await newapi.yzm(data);
           if (res.data.code == 0) {
             console.log('点击了获取验证码' + res.data.data);
             //将获取的验证码赋值
@@ -453,7 +448,7 @@ export default class my_setShopInfo extends wepy.page {
             icon: 'none'
           });
         }
-      }else{
+      } else {
         this.smsCodeDisabled = false;
       }
     },
@@ -475,25 +470,20 @@ export default class my_setShopInfo extends wepy.page {
     let suppliers_id = this.$parent.globalData.suppliers_id
       ? this.$parent.globalData.suppliers_id
       : (await this.$parent.getYizhanInfo(userId, suppliers_id)).suppliers_id;
-    this.userDetail=await this.getSuppliersDetails(userId, suppliers_id);
-    console.log("店铺信息", this.userDetail)
-    this.region[0] =  this.userDetail.sheng;
-    this.region[1] =  this.userDetail.shi;
-    this.region[2] =  this.userDetail.qu;
+    this.userDetail = await this.getSuppliersDetails(userId, suppliers_id);
+    console.log('店铺信息', this.userDetail);
+    this.region[0] = this.userDetail.sheng;
+    this.region[1] = this.userDetail.shi;
+    this.region[2] = this.userDetail.qu;
     this.$apply();
   }
   async getSuppliersDetails(user_id, suppliers_id) {
-   var res=await wepy
-      .request({
-        url: api.supplier_detail, //开发者服务器接口地址",
-        data: {
-          user_id,
-          suppliers_id
-        }, //请求的参数",
-        method: 'GET'
-      })
+    let data = {
+      user_id,
+      suppliers_id
+    };
+    var res = await newapi.supplier_detail(data);
     return res.data.data;
-     
   }
   setTime(count) {
     var count = count;
@@ -546,7 +536,7 @@ export default class my_setShopInfo extends wepy.page {
     }
   }
   //表单数据提交
-  formSubmit(e) {
+  async formSubmit(e) {
     var param = e.detail.value;
     var that = this;
     var flag = that.checkPhone(param.phone) && that.checkSmsCode(param.smscode);
@@ -564,7 +554,7 @@ export default class my_setShopInfo extends wepy.page {
         // var share_code = param.shareCode;
         var is_picture = param.is_picture ? 0 : 1;
         var is_friend = param.is_friend ? 1 : 0;
-   
+
         if (this.userId == '-1') {
           wx.showModal({
             content: '登录失败请稍后再试',
@@ -572,7 +562,7 @@ export default class my_setShopInfo extends wepy.page {
           });
           return;
         }
-        
+
         if (realname == '') {
           wx.showModal({
             content: '请填写姓名',
@@ -610,48 +600,37 @@ export default class my_setShopInfo extends wepy.page {
           mask: true, //显示透明蒙层，防止触摸穿透,
           success: res => {}
         });
-        wepy
-          .request({
-            url: api.supplier_upd,
-            method: 'POST',
-            data: {
-              suppliers_id,
-              user_id: this.userId,
-              mobile: phone,
-              realname: realname,
-              sheng,
-              shi,
-              qu,
-              suppliers_name: pcusername,
-              password,
-              suppliers_desc: storename,
-    
-              is_picture,
-              is_friend
-            },
-            header: {
-              Accept: 'application/json'
+        let data = {
+          suppliers_id,
+          user_id: this.userId,
+          mobile: phone,
+          realname: realname,
+          sheng,
+          shi,
+          qu,
+          suppliers_name: pcusername,
+          password,
+          suppliers_desc: storename,
+          is_picture,
+          is_friend
+        };
+        var res = await newapi.supplier_upd(data);
+        wx.hideLoading();
+        if (res.data.code == 0) {
+          wx.navigateBack({});
+          //this.isuserDetail = true;
+        } else {
+          this.issubmit = false;
+          wx.showModal({
+            content: res.data.message,
+            success: function(res) {
+              if (res.confirm) {
+              } else if (res.cancel) {
+              }
             }
-          })
-          .then(res => {
-            wx.hideLoading();
-            if (res.data.code == 0) {
-              wx.navigateBack({});
-              //this.isuserDetail = true;
-            } else {
-              this.issubmit = false;
-              wx.showModal({
-                content: res.data.message,
-                success: function(res) {
-                  if (res.confirm) {
-                  } else if (res.cancel) {
-                  }
-                }
-              });
-            }
-
-            this.$apply();
           });
+        }
+        this.$apply();
       } else {
         wx.showModal({
           showCancel: false,

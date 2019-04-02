@@ -276,7 +276,7 @@ picker {
   padding: 30rpx;
   display: flex;
   justify-content: space-around;
-  border-bottom: 8rpx solid #f0f0f0
+  border-bottom: 8rpx solid #f0f0f0;
 }
 
 .top {
@@ -433,6 +433,7 @@ picker {
 var t1;
 import wepy from 'wepy';
 import api from '../../../API/api';
+import newapi from '../../../API/newapi';
 import util from '../../../utils/index';
 export default class newslist extends wepy.page {
   config = {
@@ -459,8 +460,8 @@ export default class newslist extends wepy.page {
   };
   computed = {};
   methods = {
-    toSetPayType(){
-       wx.navigateTo({
+    toSetPayType() {
+      wx.navigateTo({
         url: 'setPayType'
       });
     },
@@ -470,7 +471,7 @@ export default class newslist extends wepy.page {
       });
     },
     // 上传规则
-    submitTap: function(e) {
+    async submitTap(e) {
       var that = this;
       console.log(e);
       if (!e.detail.value.rules) {
@@ -480,24 +481,19 @@ export default class newslist extends wepy.page {
         });
         return;
       }
-      wepy
-        .request({
-          url: api.card_rules,
-          data: {
-            user_id: this.user_id,
-            card_rules: e.detail.value.rules,
-            suppliers_id:this.suppliers_id
-          }
-        })
-        .then(res => {
-          if (res.data.code == 0) {
-            this.rules = e.detail.value.rules;
-            this.$apply();
-            wx.showToast({
-              title: '上传成功'
-            });
-          }
+      let data = {
+        user_id: this.user_id,
+        card_rules: e.detail.value.rules,
+        suppliers_id: this.suppliers_id
+      };
+      var res = await newapi.card_rules(data);
+      if (res.data.code == 0) {
+        this.rules = e.detail.value.rules;
+        this.$apply();
+        wx.showToast({
+          title: '上传成功'
         });
+      }
     },
     //终止活动
     async cancleTap(e) {
@@ -528,7 +524,7 @@ export default class newslist extends wepy.page {
       this.date2 = e.detail.value;
     },
     //表单数据提交
-    formSubmit(e) {
+    async formSubmit(e) {
       var that = this;
       var youhuiname = e.detail.value.youhuiname;
       var moneyman = Number(e.detail.value.moneyman);
@@ -569,139 +565,108 @@ export default class newslist extends wepy.page {
       // console.log("ifyouhui:", that.data.ifyouhui)
       // console.log("choose_good_id:", that.data.choose_good_id)
       //获取bgid,然后网络提交
-      wepy
-        .request({
-          url: api.card_add,
-          method: 'POST',
-          data: {
-            user_id: this.user_id,
-            card_name: youhuiname,
-            // buy_goods: that.data.choose_good_id,
-            card_fee: moneyman,
-            free_money: moneyfan,
-            start_time: that.data.date,
-            end_time: that.data.date2,
-            suppliers_id:this.suppliers_id
-          },
-          header: {
-            Accept: 'application/json'
-          }
-        })
-        .then(res => {
-          if (res.data.code == 0) {
-            wepy
-              .showModal({
-                title: '提示', //提示的标题,
-                content: '创建成功', //提示的内容,
-                showCancel: false, //是否显示取消按钮,
-                confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-                confirmColor: '#e50012' //确定按钮的文字颜色,
-              })
-              .then(res => {
-                this.getActivityList();
-                this.currentType = 1;
-                this.currentStatu = 1;
-                this.$apply();
-              });
-          }
-        });
+      let data = {
+        user_id: this.user_id,
+        card_name: youhuiname,
+        // buy_goods: that.data.choose_good_id,
+        card_fee: moneyman,
+        free_money: moneyfan,
+        start_time: that.data.date,
+        end_time: that.data.date2,
+        suppliers_id: this.suppliers_id
+      };
+      var res = await newapi.card_add(data);
+      if (res.data.code == 0) {
+        wepy
+          .showModal({
+            title: '提示', //提示的标题,
+            content: '创建成功', //提示的内容,
+            showCancel: false, //是否显示取消按钮,
+            confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
+            confirmColor: '#e50012' //确定按钮的文字颜色,
+          })
+          .then(res => {
+            this.getActivityList();
+            this.currentType = 1;
+            this.currentStatu = 1;
+            this.$apply();
+          });
+      }
     }
   };
   events = {};
   // 活动规则
-  getCardrules() {
-    wepy
-      .request({
-        url: api.cardrules, //开发者服务器接口地址",
-        data: {
-          user_id: this.user_id,
-          suppliers_id:this.suppliers_id
-        }, //请求的参数",
-        method: 'GET'
-      })
-      .then(res => {
-        this.rules = res.data.data.card_rules;
-        this.$apply();
-      });
+  async getCardrules() {
+    let data = {
+      user_id: this.user_id,
+      suppliers_id: this.suppliers_id
+    };
+    var res = await newapi.cardrules(data);
+    this.rules = res.data.data.card_rules;
+    this.$apply();
   }
   // 终止活动
-  cancleActivity(promotion_id) {
+  async cancleActivity(promotion_id) {
     var that = this;
-    wx.request({
-      url: api.card_stop,
-      data: {
-        card_id: promotion_id
-      },
-      success: function(res) {
-        that.getActivityList();
-      }
-    });
+    let data = {
+      card_id: promotion_id
+    };
+    await newapi.card_stop(data);
+    that.getActivityList();
   }
   // 获取费用
-  getCardPrice() {
+  async getCardPrice() {
     console.log('api', api);
-    wepy
-      .request({
-        url: api.kthy_price //开发者服务器接口地址",
-      })
-      .then(res => {
-        console.log(res);
-        if (res.data.code == 0) {
-          this.price = res.data.data.goods_price;
-          this.datas = res.data.data;
-        }
-        this.$apply();
-      });
+    var res = await newapi.kthy_price(data);
+    console.log(res);
+    if (res.data.code == 0) {
+      this.price = res.data.data.goods_price;
+      this.datas = res.data.data;
+    }
+    this.$apply();
   }
   //已添加的活动列表
-  getActivityList() {
+  async getActivityList() {
     var that = this;
     clearInterval(t1);
-    wepy
-      .request({
-        url: api.card_list,
-        data: {
-          user_id: this.user_id,
-          suppliers_id:this.suppliers_id
-        }
-      })
-      .then(res => {
-        var datas = res.data.data;
-        for (var i = 0; i < datas.length; i++) {
-          datas[i].start_time_t = util.formatTime(
-            new Date(datas[i].start_time * 1000),
-            'yyyy-MM-dd'
-          );
-          datas[i].end_time_t = util.formatTime(
-            new Date(datas[i].end_time * 1000),
-            'yyyy-MM-dd'
-          );
-          datas[i].yj_money =
-            parseFloat(datas[i].card_fee) + parseFloat(datas[i].free_money);
-        }
-        this.activitylist = datas;
-        this.$apply();
-        var newDate = new Date().getTime();
-        that.activitylist= this.setState(newDate, datas).datas;
-   console.log("that.activitylist",datas);
-        that.$apply();
-        t1 = setInterval(res => {
-          var { datas, stop } = this.setState(newDate, that.activitylist);
-          if (stop) {
-            clearInterval(t1);
-            console.log('所有的券都过期了');
-          }
-          that.activitylist = datas;
-          that.$apply();
-        }, 1000);
-      });
+    let data = {
+      user_id: this.user_id,
+      suppliers_id: this.suppliers_id
+    };
+    var res = await newapi.card_list(data);
+    var datas = res.data.data;
+    for (var i = 0; i < datas.length; i++) {
+      datas[i].start_time_t = util.formatTime(
+        new Date(datas[i].start_time * 1000),
+        'yyyy-MM-dd'
+      );
+      datas[i].end_time_t = util.formatTime(
+        new Date(datas[i].end_time * 1000),
+        'yyyy-MM-dd'
+      );
+      datas[i].yj_money =
+        parseFloat(datas[i].card_fee) + parseFloat(datas[i].free_money);
+    }
+    this.activitylist = datas;
+    this.$apply();
+    var newDate = new Date().getTime();
+    that.activitylist = this.setState(newDate, datas).datas;
+    console.log('that.activitylist', datas);
+    that.$apply();
+    t1 = setInterval(res => {
+      var { datas, stop } = this.setState(newDate, that.activitylist);
+      if (stop) {
+        clearInterval(t1);
+        console.log('所有的券都过期了');
+      }
+      that.activitylist = datas;
+      that.$apply();
+    }, 1000);
   }
   setState(newDate, datas) {
-
     var stop = true;
     newDate = newDate + 1000;
     for (var i = 0; i < datas.length; i++) {
-
       if (newDate > datas[i].end_time * 1000 || datas[i].state == 2) {
         datas[i].state = 2;
       } else {

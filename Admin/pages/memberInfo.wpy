@@ -210,6 +210,7 @@
 <script>
 import wepy from 'wepy';
 import api from '../../API/api';
+import newapi from '../../API/newapi';
 export default class my_console_check extends wepy.page {
   config = {
     navigationBarTitleText: '会员'
@@ -225,7 +226,7 @@ export default class my_console_check extends wepy.page {
     isShowSalesList: false,
     adminList: [],
     salesmanName: '选择业务员',
-    showName:false
+    showName: false
   };
   computed = {};
   components = {};
@@ -234,7 +235,7 @@ export default class my_console_check extends wepy.page {
       //util.submitFormId(app.globalData.userId, e.detail.formId);
     },
     statusTap: function(e) {
-       this.getShenheList(this.sales_id);
+      this.getShenheList(this.sales_id);
       var curType = e.currentTarget.dataset.index;
       var curStatu = e.currentTarget.dataset.statu;
       this.currentType = curType;
@@ -314,16 +315,14 @@ export default class my_console_check extends wepy.page {
 
   //审核列表
   async getShenheList(sales_id, suppliers_id = this.suppliers_id) {
-    let yhlb = await wepy.request({
-      url: api.yhlb,
-      data: {
-        suppliers_id,
-        sales_id
-      }
-    });
-    if (yhlb.data.code == '0') {
-      this.weishenhe = yhlb.data.data.weishenhe;
-      this.yishenhe = yhlb.data.data.yishenhe;
+    let data = {
+      suppliers_id,
+      sales_id
+    };
+    var res = await newapi.yhlb(data);
+    if (res.data.code == '0') {
+      this.weishenhe = res.data.data.weishenhe;
+      this.yishenhe = res.data.data.yishenhe;
       this.$apply();
     }
   }
@@ -331,14 +330,12 @@ export default class my_console_check extends wepy.page {
   async jiechu(id) {
     let user_id = id;
     let suppliers_id = this.$parent.globalData.suppliers_id;
-    let jcgx = await wepy.request({
-      url: api.jcgx,
-      data: {
-        user_id,
-        suppliers_id
-      }
-    });
-    if (jcgx.data.code == '0') {
+    let data = {
+      user_id,
+      suppliers_id
+    };
+    var res = await newapi.jcgx(data);
+    if (res.data.code == '0') {
       wx.showToast({
         title: '解除关系成功',
         icon: 'success',
@@ -363,36 +360,32 @@ export default class my_console_check extends wepy.page {
     let user_id = id;
     let suppliers_id = this.suppliers_id;
     var type = type;
-    let yhsh = await wepy.request({
-      url: api.yhsh,
-      data: {
-        user_id,
-        suppliers_id,
-        type
-      }
-    });
+    let data = {
+      user_id,
+      suppliers_id,
+      type
+    };
+    var res = await newapi.yhsh(data);
     wx.hideLoading();
-    if (yhsh.data.code == '0') {
+    if (res.data.code == '0') {
       this.getShenheList();
     }
   }
 
   async salesmanList() {
     let suppliers_id = this.$parent.globalData.suppliers_id;
-    let Salesman = await wepy.request({
-      url: api.findSalesman,
-      data: {
+    let data = {
         suppliers_id,
         getall: 1
-      }
-    });
-    if (Salesman.data.code == '0') {
-      this.adminList = Salesman.data.data;
+      };
+    var res = await newapi.findSalesman(data);
+    if (res.data.code == '0') {
+      this.adminList = res.data.data;
       this.$apply();
     }
   }
   async onLoad(option) {
-    console.log("option",option)
+    console.log('option', option);
     this.suppliers_id = this.$parent.globalData.suppliers_id
       ? this.$parent.globalData.suppliers_id
       : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
@@ -400,7 +393,7 @@ export default class my_console_check extends wepy.page {
     if (option.sales_id) {
       this.sales_id = option.sales_id;
       this.salesmanName = option.sales_name;
-      this.showName=true
+      this.showName = true;
     } else this.salesmanList();
 
     this.getShenheList(this.sales_id);

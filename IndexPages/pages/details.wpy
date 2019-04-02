@@ -10,6 +10,7 @@
 import wepy from 'wepy';
 import htmlParser from '../../components/htmlParser';
 import api from '../../API/api';
+import newapi from '../../API/newapi';
 import util from '../../utils/index';
 export default class details extends wepy.page {
   config = {
@@ -29,28 +30,21 @@ export default class details extends wepy.page {
       title: '加载中...', //提示的内容,
       mask: true //显示透明蒙层，防止触摸穿透,
     });
-    wepy
-      .request({
-        url: api.articleDetail,
-        data: {
-          id: id
-        }
-      })
-      .then(res => {
-        wx.hideLoading();
-        this.articleDetail = res.data.data;
-        this.articleDetail.published_time = util.formatTime(
-          new Date(this.articleDetail.published_time * 1000),
-          'yyyy-MM-dd'
-        );
+    let data = { id };
+    var res = await newapi.articleDetail(data);
+    wx.hideLoading();
+    this.articleDetail = res.data.data;
+    this.articleDetail.published_time = util.formatTime(
+      new Date(this.articleDetail.published_time * 1000),
+      'yyyy-MM-dd'
+    );
 
-        this.articleDetail.post_content = this.articleDetail.post_content.replace(
-          /\<img/gi,
-          '<img style="max-width:100%;height:auto" '
-        )
-          this.$apply();
-        console.log('文章详情', this.articleDetail);
-      });
+    this.articleDetail.post_content = this.articleDetail.post_content.replace(
+      /\<img/gi,
+      '<img style="max-width:100%;height:auto" '
+    );
+    this.$apply();
+    console.log('文章详情', this.articleDetail);
   }
   async onLoad(option) {
     console.log('id', option.id);

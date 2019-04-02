@@ -1,43 +1,43 @@
 <style lang="less">
-    .container {
-        font-size: 28rpx;
-        line-height: 45rpx;
-        padding: 40rpx 0;
-    }
-    .title {
-        font-size: 36rpx;
-        line-height: 85rpx;
-        font-weight: bold;
-        padding: 0 40rpx;
-    }
-    .content {
-        padding: 0 40rpx;
-    }
-    .price {
-        border-top: 1px solid #eee;
-        border-bottom: 1px solid #eee;
-        line-height: 80rpx;
-        padding: 0 40rpx;
-        margin-bottom: 80rpx;
-    }
-    .num {
-        font-size: 24rpx;
-        color: #aaa;
-        line-height: 80rpx;
-        padding: 0 40rpx;
-    }
-    button {
-        background: #e50012;
-        color: #fff;
-        width: 60%;
-        line-height: 80rpx;
-        display: block;
-        margin: auto;
-    }
-    .price text{
-        color: #e50012;
-        font-size: 36rpx;
-    }
+.container {
+  font-size: 28rpx;
+  line-height: 45rpx;
+  padding: 40rpx 0;
+}
+.title {
+  font-size: 36rpx;
+  line-height: 85rpx;
+  font-weight: bold;
+  padding: 0 40rpx;
+}
+.content {
+  padding: 0 40rpx;
+}
+.price {
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  line-height: 80rpx;
+  padding: 0 40rpx;
+  margin-bottom: 80rpx;
+}
+.num {
+  font-size: 24rpx;
+  color: #aaa;
+  line-height: 80rpx;
+  padding: 0 40rpx;
+}
+button {
+  background: #e50012;
+  color: #fff;
+  width: 60%;
+  line-height: 80rpx;
+  display: block;
+  margin: auto;
+}
+.price text {
+  color: #e50012;
+  font-size: 36rpx;
+}
 </style>
 <template>
     <view class="container">
@@ -54,90 +54,87 @@
 </template>
 
 <script>
-    import wepy from 'wepy';
-    import api from '../../../API/api';
-    import util from '../../../utils/index';
-    export default class newslist extends wepy.page {
-        config = {
-            navigationBarTitleText: '开通会员卡'
-        };
-        components = {};
-        data = {
-            price:0
-        };
-        computed = {};
-        methods = {
-            async toPay() {
-                console.log(api.kthypay)
-                var datas={};
-                datas.goods_id=this.datas.id;
-                datas.user_id=this.user_id;
-                datas.suppliers_id=this.suppliers_id;
-                datas.goods_name=this.datas.goods_name;
-                datas.goods_price=this.datas.goods_price;
-                var datas2={}
-                datas2.suppliers_id=this.suppliers_id
-                var res = await util.pay(datas,datas2, api.kthypay,api.kthypaysuccess);
-                wx.showToast({
-                    title: res.msg, //提示的内容,
-                    icon: 'none', //图标,
-                    duration: 1000, //延迟时间,
-                });
-                if (res.code == 1) wx.navigateTo({
-                    url: 'setCard'
-                });
-            },
-        };
-        events = {};
-        // 获取费用
-        getCardPrice(){
-            console.log("api",api)
-            wepy.request({
-              url: api.kthy_price, //开发者服务器接口地址",
-
-            }).then(res=>{
-                console.log(res)
-                if(res.data.code==0){
-                    this.price=res.data.data.goods_price
-                    this.datas=res.data.data
-                }
-                
-                this.$apply();
-            });
-        }
-        async onLoad(option) {
-            // wx.showModal({
-            //   title: '提示', //提示的标题,
-            //   content: '敬请期待', //提示的内容,
-            //   showCancel: false, //是否显示取消按钮,
-       
-            //   confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-            //   confirmColor: '#e50012', //确定按钮的文字颜色,
-            //   success: res => {
-            //     wx.navigateBack({
-            //       delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
-            //     });
-            //   }
-            // });
-           this.getCardPrice();
-            try {
-                this.user_id = await this.$parent.loginInfo();
-                this.suppliers_id = this.$parent.globalData.suppliers_id?this.$parent.globalData.suppliers_id:(await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
-            } catch (error) {
-                wx.showToast({
-                    title: '登录失败', //提示的内容,
-                    icon: 'none', //图标,
-                    duration: 1000, //延迟时间,
-                    mask: true, //显示透明蒙层，防止触摸穿透,
-                    success: res => {
-                        wx.redirectTo({
-                            url: '/ConsolePages/pages/index'
-                        });
-                    }
-                });
-            }
-             // 获取费用
-            
-        }
+import wepy from 'wepy';
+import api from '../../../API/api';
+import newapi from '../../../API/newapi';
+import util from '../../../utils/index';
+export default class newslist extends wepy.page {
+  config = {
+    navigationBarTitleText: '开通会员卡'
+  };
+  components = {};
+  data = {
+    price: 0
+  };
+  computed = {};
+  methods = {
+    async toPay() {
+      console.log(api.kthypay);
+      var datas = {};
+      datas.goods_id = this.datas.id;
+      datas.user_id = this.user_id;
+      datas.suppliers_id = this.suppliers_id;
+      datas.goods_name = this.datas.goods_name;
+      datas.goods_price = this.datas.goods_price;
+      var datas2 = {};
+      datas2.suppliers_id = this.suppliers_id;
+      var res = await util.pay(datas, datas2, api.kthypay, api.kthypaysuccess);
+      wx.showToast({
+        title: res.msg, //提示的内容,
+        icon: 'none', //图标,
+        duration: 1000 //延迟时间,
+      });
+      if (res.code == 1)
+        wx.navigateTo({
+          url: 'setCard'
+        });
     }
+  };
+  events = {};
+  // 获取费用
+  async getCardPrice() {
+    var res = await newapi.kthy_price();
+    console.log(res);
+    if (res.data.code == 0) {
+      this.price = res.data.data.goods_price;
+      this.datas = res.data.data;
+    }
+    this.$apply();
+  }
+  async onLoad(option) {
+    // wx.showModal({
+    //   title: '提示', //提示的标题,
+    //   content: '敬请期待', //提示的内容,
+    //   showCancel: false, //是否显示取消按钮,
+
+    //   confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
+    //   confirmColor: '#e50012', //确定按钮的文字颜色,
+    //   success: res => {
+    //     wx.navigateBack({
+    //       delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+    //     });
+    //   }
+    // });
+    this.getCardPrice();
+    try {
+      this.user_id = await this.$parent.loginInfo();
+      this.suppliers_id = this.$parent.globalData.suppliers_id
+        ? this.$parent.globalData.suppliers_id
+        : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
+    } catch (error) {
+      wx.showToast({
+        title: '登录失败', //提示的内容,
+        icon: 'none', //图标,
+        duration: 1000, //延迟时间,
+        mask: true, //显示透明蒙层，防止触摸穿透,
+        success: res => {
+          wx.redirectTo({
+            url: '/ConsolePages/pages/index'
+          });
+        }
+      });
+    }
+    // 获取费用
+  }
+}
 </script>

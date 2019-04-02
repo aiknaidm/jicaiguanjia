@@ -158,6 +158,7 @@ page {
 <script>
 import wepy from 'wepy';
 import api from '../../../API/api';
+import newapi from '../../../API/newapi';
 import util from '../../../utils/index';
 export default class newslist extends wepy.page {
   config = {
@@ -208,42 +209,30 @@ export default class newslist extends wepy.page {
     }
   };
   events = {};
-  cardbg() {
-    var that = this;
-    wepy
-      .request({
-        url: api.cardbg,
-        data: {
-          user_id: this.user_id,
-          suppliers_id:this.suppliers_id
-        }
-      })
-      .then(res => {
-        wx.hideLoading();
-        if (res.data.code == 0) {
-          this.bg = res.data.data.card_img;
-        }
-      });
+  async cardbg() {
+    let data = {
+      user_id: this.user_id,
+      suppliers_id: this.suppliers_id
+    };
+    var res = await newapi.cardbg(data);
+    wx.hideLoading();
+    if (res.data.code == 0) {
+      this.bg = res.data.data.card_img;
+    }
   }
   //   保存地址
-  scbc(img) {
-    var that = this;
-    wepy
-      .request({
-        url: api.card_bg,
-        data: {
-          user_id: this.user_id,
-          card_img: img,
-          suppliers_id:this.suppliers_id
-        }
-      })
-      .then(res => {
-          wx.hideLoading();
-        if (res.data.code == 0) {
-          this.bg = img;
-          this.$apply()
-        }
-      });
+  async scbc(img) {
+    let data = {
+      user_id: this.user_id,
+      card_img: img,
+      suppliers_id: this.suppliers_id
+    };
+    var res = await newapi.card_bg(data);
+    wx.hideLoading();
+    if (res.data.code == 0) {
+      this.bg = img;
+      this.$apply();
+    }
   }
   async onLoad(option) {
     wx.showLoading({

@@ -84,6 +84,7 @@
 <script>
 import wepy from 'wepy';
 import api from '../../API/api';
+import newapi from '../../API/newapi';
 
 export default class data extends wepy.page {
   config = {
@@ -148,33 +149,24 @@ export default class data extends wepy.page {
       mask: true, //显示透明蒙层，防止触摸穿透,
       success: res => {}
     });
-    wepy
-      .request({
-        url: api.shuju,
-        method: 'GET',
-        data: {
-          user_id,
-          suppliers_id
-        },
-        header: {
-          Accept: 'application/json'
-        }
-      })
-      .then(res => {
-        console.log('数据管理', res.data);
-        var datas = res.data.data;
-        wx.hideLoading();
-        if (res.data.code == 0) {
-          this.tabList[0].num = datas.jinridingdanshu;
-          this.tabList[1].num = datas.jinrichengjiaoe;
-          this.tabList[2].num = datas.jinrifangke;
-          this.tabList[3].num = datas.zongdingdanshu;
-          this.tabList[4].num = datas.zuorichengjiaoe;
-          this.tabList[5].num = datas.zuorifangke;
-          this.num = datas.zongchengjiaoe;
-          this.$apply();
-        }
-      });
+    let data = {
+      user_id,
+      suppliers_id
+    };
+    var res = await newapi.shuju(data);
+    console.log('数据管理', res.data);
+    var datas = res.data.data;
+    wx.hideLoading();
+    if (res.data.code == 0) {
+      this.tabList[0].num = datas.jinridingdanshu;
+      this.tabList[1].num = datas.jinrichengjiaoe;
+      this.tabList[2].num = datas.jinrifangke;
+      this.tabList[3].num = datas.zongdingdanshu;
+      this.tabList[4].num = datas.zuorichengjiaoe;
+      this.tabList[5].num = datas.zuorifangke;
+      this.num = datas.zongchengjiaoe;
+      this.$apply();
+    }
   }
   async onLoad(option) {
     this.user_id = await this.$parent.loginInfo();

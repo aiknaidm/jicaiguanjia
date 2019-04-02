@@ -46,20 +46,18 @@ button::after {
   margin: 20rpx;
   width: 164rpx;
   display: inline-block;
-
 }
 .topay-btn {
   background-color: #e50012;
   color: #fff;
 }
-.price-box{
+.price-box {
   border-bottom: 1px solid #f0f0f0;
-  
 }
-.price-box .name, .price-box .total-price{
-  padding-bottom:10rpx
+.price-box .name,
+.price-box .total-price {
+  padding-bottom: 10rpx;
 }
-
 </style>
 <template>
   <view class="container">
@@ -91,6 +89,7 @@ button::after {
 <script>
 import wepy from 'wepy';
 import api from '../../API/api';
+import newapi from '../../API/newapi';
 import statusTap from '../../components/statusTap';
 import noorder from '../../components/noOrder';
 import orderList from '../../components/shop/orderList';
@@ -123,13 +122,13 @@ export default class orderlist extends wepy.page {
     cancelOrderTap: res => {
       this.page = 1;
       this.isMoreData = true;
-      this.getOrderList( this.thisindex, 1);
+      this.getOrderList(this.thisindex, 1);
     },
     // 确认订单
     confirmBtnTap: res => {
       this.page = 1;
       this.isMoreData = true;
-      this.getOrderList( this.thisindex, 1);
+      this.getOrderList(this.thisindex, 1);
     }
   };
   methods = {
@@ -143,7 +142,7 @@ export default class orderlist extends wepy.page {
       this.thisindex = index;
       this.page = 1;
       this.isMoreData = true;
-      this.getOrderList( this.thisindex, this.page);
+      this.getOrderList(this.thisindex, this.page);
     },
     // 订单详情
     orderDetail(id, evt) {
@@ -155,10 +154,9 @@ export default class orderlist extends wepy.page {
   };
   //  订单列表
   async getOrderList(
- 
     order_status = '0',
     page = 1,
-       user_id=this.userId,
+    user_id = this.userId,
     suppliers_id = this.suppliers_id
   ) {
     wx.showLoading({
@@ -190,57 +188,51 @@ export default class orderlist extends wepy.page {
         var type = 'daifukuan';
         break;
     }
-    wepy
-      .request({
-        url: api.orderList,
-        data: {
-          user_id,
-          type,
-          page,
-          suppliers_id
-        }
-      })
-      .then(res => {
-        wx.hideLoading();
-        var orderList = res.data.data.orderList;
-        var goodsMap = res.data.data.goodsMap;
+    let data = {
+      user_id,
+      type,
+      page,
+      suppliers_id
+    };
+    var res = await newapi.orderList(data);
+    wx.hideLoading();
+    var orderList = res.data.data.orderList;
+    var goodsMap = res.data.data.goodsMap;
 
-        orderList.forEach((item, index) => {
-          orderList[index].add_time = util.formatTime(
-            new Date(item.add_time * 1000),
-            'yyyy-MM-dd'
-          );
-        });
-        if (page == 1) {
-          this.orderList = orderList;
-          this.goodsMap = goodsMap;
-        } else {
-          this.orderList.push(...orderList);
-          this.goodsMap.push(...goodsMap);
-        }
-        if (orderList.length < 10) {
-          this.isMoreData = false;
-        }
-        this.$apply();
-        console.log('订单列表', this.orderList);
-      });
+    orderList.forEach((item, index) => {
+      orderList[index].add_time = util.formatTime(
+        new Date(item.add_time * 1000),
+        'yyyy-MM-dd'
+      );
+    });
+    if (page == 1) {
+      this.orderList = orderList;
+      this.goodsMap = goodsMap;
+    } else {
+      this.orderList.push(...orderList);
+      this.goodsMap.push(...goodsMap);
+    }
+    if (orderList.length < 10) {
+      this.isMoreData = false;
+    }
+    this.$apply();
+    console.log('订单列表', this.orderList);
   }
   async onLoad(option) {
     wx.showLoading({
       title: '加载中', //提示的内容,
       mask: true //显示透明蒙层，防止触摸穿透,
     });
-console.log("option",option);
+    console.log('option', option);
     this.userId = await this.$parent.loginInfo();
-    this.suppliers_id =option.suppliers_id?option.suppliers_id: this.$parent.globalData.suppliers_id;
+    this.suppliers_id = option.suppliers_id
+      ? option.suppliers_id
+      : this.$parent.globalData.suppliers_id;
     this.currentType = option.order_status;
     this.thisindex = option.order_status;
     this.isMoreData = true;
     this.page = 1;
-    this.getOrderList(
-      option.order_status,
-      this.page
-    );
+    this.getOrderList(option.order_status, this.page);
   }
   onReachBottom() {
     if (this.isMoreData) {
@@ -250,10 +242,7 @@ console.log("option",option);
         success: res => {}
       });
       this.page = this.page + 1;
-      this.getOrderList(
-        this.thisindex,
-        this.page
-      );
+      this.getOrderList(this.thisindex, this.page);
     }
   }
 }

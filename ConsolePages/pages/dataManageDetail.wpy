@@ -340,13 +340,13 @@ page {
   line-height: 50rpx;
   padding-left: 40rpx;
 }
-.jy-top-left{
- padding: 0 40rpx 40rpx 40rpx;
-  background: #f2f2f2
+.jy-top-left {
+  padding: 0 40rpx 40rpx 40rpx;
+  background: #f2f2f2;
 }
 .jy-top-left picker {
   display: inline-block;
- padding: 0 10rpx;
+  padding: 0 10rpx;
 }
 .jy-top-money {
   padding-left: 10rpx;
@@ -444,6 +444,7 @@ page {
 <script>
 import wepy from 'wepy';
 import api from '../../API/api';
+import newapi from '../../API/newapi';
 import util from '../../utils/index';
 import itemList from '../../components/itemList';
 import popupbox from '../../components/popupbox';
@@ -463,9 +464,9 @@ export default class newslist extends wepy.page {
     zonge: 0,
     orderList: [],
     goodsMap: [],
-    start_time:"",
-    end_time:"",
-    now_time:"",
+    start_time: '',
+    end_time: '',
+    now_time: '',
     orderStatus: [
       {
         value: '',
@@ -498,7 +499,7 @@ export default class newslist extends wepy.page {
   };
   computed = {};
   methods = {
-     orderDetail(id, evt) {
+    orderDetail(id, evt) {
       console.log('orderDetail?id=' + id);
       wx.navigateTo({
         url: 'orderDetail?id=' + id
@@ -506,19 +507,19 @@ export default class newslist extends wepy.page {
     },
     bindStartTimeChange(e) {
       console.log('picker发送选择改变，携带值为', e.detail.value);
-      this.datas.start_time=e.detail.value;
-      this.start_time=e.detail.value
+      this.datas.start_time = e.detail.value;
+      this.start_time = e.detail.value;
       this.datas.page = 1;
       this.datas.keyword = '';
       this.getMoneyData(this.datas);
     },
     bindEndTimeChange(e) {
       console.log('picker发送选择改变，携带值为', e.detail.value);
-      this.datas.end_time=e.detail.value
-      this.end_time=e.detail.value
+      this.datas.end_time = e.detail.value;
+      this.end_time = e.detail.value;
       this.datas.page = 1;
       this.datas.keyword = '';
-     
+
       this.getMoneyData(this.datas);
     },
     bindPickerChange(e) {
@@ -531,7 +532,7 @@ export default class newslist extends wepy.page {
       );
       this.datas.page = 1;
       this.datas.keyword = '';
-   
+
       this.getMoneyData(this.datas);
     },
     radioChange(e) {
@@ -589,7 +590,7 @@ export default class newslist extends wepy.page {
         return;
       }
       if (this.currentCheckVal) {
-       this.datas.start_time = this.start_time;
+        this.datas.start_time = this.start_time;
         this.datas.end_time = this.end_time;
       } else {
         this.datas.start_time = '';
@@ -612,76 +613,53 @@ export default class newslist extends wepy.page {
   async getMoneyData(data) {
     var that = this;
     //交易列表
-    wepy
-      .request({
-        url: api.jyjl, //res.data
-        method: 'GET',
-        data,
-        header: {
-          Accept: 'application/json'
-        }
-      })
-      .then(res => {
-        console.log('jyjl', res.data.data);
-        var datas = res.data.data;
-        this.zonge = res.data.data.zonge;
-        // for (var i = 0; i < datas.length; i++) {
-        //   datas[i].pay_time = util.formatTime(
-        //     new Date(datas[i].pay_time * 1000),
-        //     'yyyy-MM-dd hh:mm:ss             '
-        //   );
-        // }
-        if (this.datas.page == 1) {
-          this.orderList = datas.orderList;
-          this.goodsMap = datas.goodsMap;
-        } else {
-          this.orderList.push(...datas.orderList);
-          this.goodsMap.push(...datas.goodsMap);
-        }
-        if (res.data.data.length == 0) {
-          this.isMoreData = false;
-        } else {
-          this.isMoreData = true;
-        }
-        this.$apply();
-      })
-      .catch(res => {
-        console.log(res);
-        wx.showToast({
-          title: '出错了！', //提示的内容,
-          icon: 'none', //图标,
-          duration: 2000, //延迟时间,
-          mask: true, //显示透明蒙层，防止触摸穿透,
-          success: res => {}
-        });
-      });
+    var res = await newapi.jyjl(data);
+    console.log('jyjl', res.data.data);
+    var datas = res.data.data;
+    this.zonge = res.data.data.zonge;
+    // for (var i = 0; i < datas.length; i++) {
+    //   datas[i].pay_time = util.formatTime(
+    //     new Date(datas[i].pay_time * 1000),
+    //     'yyyy-MM-dd hh:mm:ss             '
+    //   );
+    // }
+    if (this.datas.page == 1) {
+      this.orderList = datas.orderList;
+      this.goodsMap = datas.goodsMap;
+    } else {
+      this.orderList.push(...datas.orderList);
+      this.goodsMap.push(...datas.goodsMap);
+    }
+    if (res.data.data.length == 0) {
+      this.isMoreData = false;
+    } else {
+      this.isMoreData = true;
+    }
+    this.$apply();
   }
   init(suppliers_id) {
     var datas = {
       shijian: '',
       keyword: '',
-      end_time:'',
-      start_time:'',
+      end_time: '',
+      start_time: '',
       type: '',
       page: 1,
       suppliers_id
     };
-      var nowdate= new Date();
-      var nowTime= nowdate.getTime();
-      var nowMoth=nowdate.getMonth()+1;
-      var nowYear=nowdate.getFullYear();
-      var nowDate=nowdate.getDate();
-      if(nowMoth<10)
-        nowMoth="0"+nowMoth
-      
-      if(nowDate<10)
-        nowDate="0"+nowDate
-      
-      console.log("结束时间",nowYear+"-"+nowMoth+"-"+nowDate)
-      console.log("开始时间",nowYear+"-"+nowMoth+"-"+"01")
-    datas.start_time=nowYear+"-"+nowMoth+"-"+"01"
-    datas.end_time=nowYear+"-"+nowMoth+"-"+nowDate
-   
+    var nowdate = new Date();
+    var nowTime = nowdate.getTime();
+    var nowMoth = nowdate.getMonth() + 1;
+    var nowYear = nowdate.getFullYear();
+    var nowDate = nowdate.getDate();
+    if (nowMoth < 10) nowMoth = '0' + nowMoth;
+
+    if (nowDate < 10) nowDate = '0' + nowDate;
+
+    console.log('结束时间', nowYear + '-' + nowMoth + '-' + nowDate);
+    console.log('开始时间', nowYear + '-' + nowMoth + '-' + '01');
+    datas.start_time = nowYear + '-' + nowMoth + '-' + '01';
+    datas.end_time = nowYear + '-' + nowMoth + '-' + nowDate;
 
     return datas;
   }
@@ -691,9 +669,9 @@ export default class newslist extends wepy.page {
     this.suppliers_id = this.$parent.globalData.suppliers_id;
     this.datas = this.init(this.suppliers_id);
     this.getMoneyData(this.datas);
-    this.now_time=this.datas.end_time;
-    this.end_time=this.datas.end_time;
-    this.start_time=this.datas.start_time;
+    this.now_time = this.datas.end_time;
+    this.end_time = this.datas.end_time;
+    this.start_time = this.datas.start_time;
   }
   onReachBottom() {
     console.log('page');

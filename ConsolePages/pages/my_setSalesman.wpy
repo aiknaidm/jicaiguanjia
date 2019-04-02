@@ -1,7 +1,7 @@
 <style lang="less">
 .container {
   /* padding: 30rpx; */
-min-height: 100%;
+  min-height: 100%;
   padding-left: 10rpx;
   flex-wrap: wrap;
 }
@@ -12,12 +12,12 @@ min-height: 100%;
 }
 .headPortrait {
   /* background: #e50012; */ /* vertical-align: middle; */
-   margin: 20rpx 0;
+  margin: 20rpx 0;
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;width:180rpx;
-
+  align-items: center;
+  width: 180rpx;
 }
 .headPortrait .img {
   border-radius: 50%;
@@ -31,10 +31,9 @@ min-height: 100%;
 .headPortrait .text {
   text-align: center;
   width: 180rpx;
-overflow: hidden;
-text-overflow:ellipsis;
-white-space: nowrap;
-
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .headPortrait text.icon-close {
   position: absolute;
@@ -100,6 +99,7 @@ white-space: nowrap;
 <script>
 import wepy from 'wepy';
 import api from '../../API/api';
+import newapi from '../../API/newapi';
 export default class my_setSalesman extends wepy.page {
   config = {
     navigationBarTitleText: '业务员绑定'
@@ -114,14 +114,12 @@ export default class my_setSalesman extends wepy.page {
     async delSalesman(e) {
       let user_id = e.currentTarget.dataset.user_id;
       let suppliers_id = this.$parent.globalData.suppliers_id;
-      let delSalesman = await wepy.request({
-        url: api.delSalesman,
-        data: {
-          user_id,
-          suppliers_id
-        }
-      });
-      if (delSalesman.data.code == '0') {
+      let data = {
+        user_id,
+        suppliers_id
+      };
+      var res = await newapi.delSalesman(data);
+      if (res.data.code == '0') {
         wx.showToast({
           title: '删除成功',
           icon: 'success',
@@ -130,7 +128,7 @@ export default class my_setSalesman extends wepy.page {
         this.salesmanList();
       } else {
         wx.showToast({
-          title: delSalesman.data.message,
+          title: res.data.message,
           icon: 'success',
           duration: 2000
         });
@@ -154,14 +152,10 @@ export default class my_setSalesman extends wepy.page {
   }
   async salesmanList() {
     let suppliers_id = this.$parent.globalData.suppliers_id;
-    let Salesman = await wepy.request({
-      url: api.findSalesman,
-      data: {
-        suppliers_id
-      }
-    });
-    if (Salesman.data.code == '0') {
-      this.adminList = Salesman.data.data;
+    let data = { suppliers_id };
+    var res = await newapi.findSalesman(data);
+    if (res.data.code == '0') {
+      this.adminList = res.data.data;
       this.$apply();
     }
   }
