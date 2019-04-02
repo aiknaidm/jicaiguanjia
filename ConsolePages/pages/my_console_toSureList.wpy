@@ -114,7 +114,6 @@
 
 <script>
 import wepy from 'wepy';
-import api from '../../API/api';
 import newapi from '../../API/newapi';
 import payList from '../../components/payList';
 import util from '../../utils/index';

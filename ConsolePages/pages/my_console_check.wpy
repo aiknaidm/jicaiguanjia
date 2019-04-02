@@ -280,7 +280,6 @@
 
 <script>
 import wepy from 'wepy';
-import api from '../../API/api';
 import newapi from '../../API/newapi';
 export default class my_console_check extends wepy.page {
   config = {

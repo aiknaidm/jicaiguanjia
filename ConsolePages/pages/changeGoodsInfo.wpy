@@ -161,7 +161,6 @@ picker {
 <script>
 import wepy from 'wepy';
 import popupbox from '../../components/popupbox';
-import api from '../../API/api';
 import newapi from '../../API/newapi';
 export default class newslist extends wepy.page {
   config = {

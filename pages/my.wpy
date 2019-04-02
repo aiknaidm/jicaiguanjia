@@ -46,7 +46,6 @@
 
 <script>
 import wepy from 'wepy';
-import api from '../API/api';
 import newapi from '../API/newapi';
 import userInfo from '../components/userinfo';
 import myList from '../components/myList';
@@ -92,6 +91,7 @@ export default class my extends wepy.page {
         this.userInfo = e.detail.userInfo;
         this.upUserInfo();
         this.$apply();
+      }
       this.isShowprompt = false;
       this.$apply();
     },

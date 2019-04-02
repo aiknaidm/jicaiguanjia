@@ -432,7 +432,6 @@ picker {
 <script>
 var t1;
 import wepy from 'wepy';
-import api from '../../../API/api';
 import newapi from '../../../API/newapi';
 import util from '../../../utils/index';
 export default class newslist extends wepy.page {

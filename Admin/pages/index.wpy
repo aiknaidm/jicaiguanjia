@@ -158,7 +158,6 @@
 
 <script>
 import wepy from 'wepy';
-import api from '../../API/api';
 import newapi from '../../API/newapi';
 import util from '../../utils/index';
 import myList from '../../components/myList';
@@ -189,12 +188,6 @@ export default class newslist extends wepy.page {
       this.$parent.globalData.suppliers_img = supplierDetail.img;
       this.$parent.globalData.end_time_new = supplierDetail.end_time_new;
       this.$parent.globalData.suppliers_id = supplierDetail.suppliers_id;
-        'this.$parent.globalData.suppliers_id',
-        this.$parent.globalData
-      );
-        'this.$parent.globalData.suppliers_id',
-        this.$parent.globalData.suppliers_id
-      );
       wx.navigateTo({
         url: 'supplierDetail?suppliers_id=' + suppliers_id
       });

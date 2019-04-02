@@ -189,7 +189,6 @@
 
 <script>
 import wepy from 'wepy';
-import api from '../../API/api';
 import newapi from '../../API/newapi';
 import noOrder from '../../components/noOrder';
 export default class my_console_check extends wepy.page {

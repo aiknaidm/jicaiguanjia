@@ -9,7 +9,6 @@
 <script>
 import wepy from 'wepy';
 import htmlParser from '../../components/htmlParser';
-import api from '../../API/api';
 import newapi from '../../API/newapi';
 import util from '../../utils/index';
 export default class details extends wepy.page {

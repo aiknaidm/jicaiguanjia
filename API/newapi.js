@@ -88,6 +88,7 @@ const newapi = {
   hd_goods_list: (data) => fetch(`${host}/hd_goods_list`, 'GET', data),
   goods_hdky: (data) => fetch(`${host}/goods_hdky`, 'POST', data),
   set_unionid: (data) => fetch(`${host}/set_unionid`, 'GET', data),
+  fxgz_get: () => fetch(`${host}/fxgz_get`, 'GET'),
 }
 const fetch = async function (url, method, data) {
   let ret = await wepy.request({

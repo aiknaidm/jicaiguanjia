@@ -34,7 +34,6 @@
 
 <script>
 import wepy from 'wepy';
-import api from '../../API/api';
 import newapi from '../../API/newapi';
 import util from '../../utils/index';
 export default class my_console_renewRecord extends wepy.page {

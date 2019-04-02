@@ -443,7 +443,6 @@ page {
 
 <script>
 import wepy from 'wepy';
-import api from '../../API/api';
 import newapi from '../../API/newapi';
 import util from '../../utils/index';
 import itemList from '../../components/itemList';
@@ -522,19 +521,12 @@ export default class newslist extends wepy.page {
     bindPickerChange(e) {
       this.orderStatusIndex = e.detail.value;
       this.datas.type = this.orderStatus[this.orderStatusIndex].value;
-        'this.orderStatus[this.orderStatusIndex].value',
-        this.orderStatus[this.orderStatusIndex].value
-      );
       this.datas.page = 1;
       this.datas.keyword = '';
 
       this.getMoneyData(this.datas);
     },
     radioChange(e) {
-        'radio发生change事件，携带value值为：',
-        e.detail.value,
-        e.detail.value[0]
-      );
       this.currentCheckVal = this.currentCheckVal == 1 ? 0 : 1;
       this.$apply();
     },

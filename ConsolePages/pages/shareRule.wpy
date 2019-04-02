@@ -1,8 +1,8 @@
 <style lang="less">
-    .container {
-        background-color: #fff;
-        padding:  40rpx;
-    }
+.container {
+  background-color: #fff;
+  padding: 40rpx;
+}
 </style>
 <template>
     <view class='container'>
@@ -14,40 +14,35 @@
 </template>
 
 <script>
-    import wepy from 'wepy';
-    import api from '../../API/api';
+import wepy from 'wepy';
 import newapi from '../../API/newapi';
-    import util from '../../utils/index'
-    export default class share extends wepy.page {
-        config = {
-            navigationBarTitleText: '分享规则'
-        };
-        components = {};
-        data = {
-            articleDetail: ""
-        };
-        computed = {};
-        methods = {
-        };
-        events = {};
-        getTxt() {
-            var that = this;
-            wepy.request({
-                url: "https://lmbge.com/wxapi/gztai/fxgz_get",
-            }).then(res => {
-                wx.hideLoading();
-                this.articleDetail = res.data.data;
-        this.articleDetail=util.html_decode(this.articleDetail)
-                this.articleDetail = this.articleDetail.replace(
-                    /\<img/gi,
-                    '<img style="max-width:100%;height:auto" '
-                )
-                this.$apply();
-            })
-        }
-        async onLoad(option) {
-            var userId = await this.$parent.loginInfo();
-            this.getTxt(userId);
-        }
-    }
+import util from '../../utils/index';
+export default class share extends wepy.page {
+  config = {
+    navigationBarTitleText: '分享规则'
+  };
+  components = {};
+  data = {
+    articleDetail: ''
+  };
+  computed = {};
+  methods = {};
+  events = {};
+  async getTxt() {
+    var that = this;
+    var res = await newapi.fxgz_get();
+    wx.hideLoading();
+    this.articleDetail = res.data.data;
+    this.articleDetail = util.html_decode(this.articleDetail);
+    this.articleDetail = this.articleDetail.replace(
+      /\<img/gi,
+      '<img style="max-width:100%;height:auto" '
+    );
+    this.$apply();
+  }
+  async onLoad(option) {
+    var userId = await this.$parent.loginInfo();
+    this.getTxt(userId);
+  }
+}
 </script>

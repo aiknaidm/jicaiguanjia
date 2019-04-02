@@ -85,7 +85,6 @@
 <script>
 import wepy from 'wepy';
 import statusTap from '../../components/statusTap';
-import api from '../../API/api';
 import newapi from '../../API/newapi';
 import utils from '../../utils/index';
 import popup from '../../components/popup';

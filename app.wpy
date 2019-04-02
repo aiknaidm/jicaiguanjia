@@ -101,7 +101,6 @@ import wepy from 'wepy';
 import 'wepy-async-function';
 // import { setStore } from 'wepy-redux';
 // import configStore from './store';
-import api from './API/api';
 import newapi from './API/newapi';
 
 // const store = configStore();

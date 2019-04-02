@@ -279,7 +279,6 @@
 
 <script>
 import wepy from 'wepy';
-import api from '../../API/api';
 import newapi from '../../API/newapi';
 import util from '../../utils/index';
 import myList from '../../components/myList';
@@ -355,10 +354,6 @@ export default class newslist extends wepy.page {
     return res.data.data;
   }
   async onLoad(option) {
-      'suppliers_detail option',
-      option,
-      this.$parent.globalData.suppliers_id
-    );
     this.suppliers_id = option.suppliers_id;
     this.height = wx.getSystemInfoSync().windowHeight;
     this.user_id = await this.$parent.loginInfo();
