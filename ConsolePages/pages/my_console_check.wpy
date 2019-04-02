@@ -411,7 +411,7 @@ export default class my_console_check extends wepy.page {
       suppliers_id,
       sales_id
     };
-    var res = await newapi.yhlb(data);
+    let res = await newapi.yhlb(data);
     if (res.data.code == '0') {
       this.weishenhe = res.data.data.weishenhe;
       this.yishenhe = res.data.data.yishenhe;
@@ -439,7 +439,7 @@ export default class my_console_check extends wepy.page {
       user_id,
       suppliers_id
     };
-    var res = await newapi.jcgx(data);
+    let res = await newapi.jcgx(data);
     if (res.data.code == '0') {
       wx.showToast({
         title: '解除关系成功',
@@ -470,7 +470,7 @@ export default class my_console_check extends wepy.page {
       suppliers_id,
       type
     };
-    var res = await newapi.yhsh(data);
+    let res = await newapi.yhsh(data);
     wx.hideLoading();
     if (yhsh.data.code == '0') {
       this.getShenheList();
@@ -482,7 +482,7 @@ export default class my_console_check extends wepy.page {
       suppliers_id,
       getall: 1
     };
-    var res = await newapi.findSalesman(data);
+    let res = await newapi.findSalesman(data);
     if (res.data.code == '0') {
       this.adminList = res.data.data;
       this.$apply();
@@ -493,7 +493,7 @@ export default class my_console_check extends wepy.page {
     let data = {
       suppliers_id: this.suppliers_id
     };
-    var res = await newapi.hycz(data);
+    let res = await newapi.hycz(data);
     this.money = res.data.data;
     this.$apply();
     console.log(res);

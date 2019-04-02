@@ -352,7 +352,7 @@ export default class newslist extends wepy.page {
   }
   async getSuppliersDetails(suppliers_id) {
     let data = { suppliers_id };
-    var res = await newapi.supplier_detail(data);
+    let res = await newapi.supplier_detail(data);
     return res.data.data;
   }
   async onLoad(option) {

@@ -35,7 +35,7 @@ export default class newslist extends wepy.page {
   async getIndexNewsList(id) {
     var that = this;
     let data = { id };
-    var res = await newapi.newsList(data);
+    let res = await newapi.newsList(data);
     this.newsList = res.data.data;
     this.newsList.forEach(function(item, index) {
       that.newsList[index].published_time = util.formatTime(

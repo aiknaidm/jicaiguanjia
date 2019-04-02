@@ -338,7 +338,7 @@ export default class newslist extends wepy.page {
             floor_price: e.detail.value.floor_price
           };
         }
-        var res = await newapi.changePrice(data);
+        let res = await newapi.changePrice(data);
         console.log('修改', res);
         if (res.data.code == 0) {
           wx.showToast({
@@ -385,7 +385,7 @@ export default class newslist extends wepy.page {
             goods_number: e.detail.value.goods_number
           };
         }
-        var res = await newapi.changeNum(data);
+        let res = await newapi.changeNum(data);
         if (res.data.code == 0) {
           wx.showToast({
             title: '修改成功',
@@ -454,7 +454,7 @@ export default class newslist extends wepy.page {
   async getIndexNewsList(id) {}
   async getGoodsDetail(goods_id) {
     let data = { goods_id };
-    var res = await newapi.goodinfo(data);
+    let res = await newapi.goodinfo(data);
     console.log('商品详情-->', res.data.data);
     if (res.data.code == 0) {
       var datas = res.data.data;

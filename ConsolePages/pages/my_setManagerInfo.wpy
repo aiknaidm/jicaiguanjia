@@ -120,7 +120,7 @@ export default class my_setManagerInfo extends wepy.page {
         user_id,
         suppliers_id
       };
-      var res = await newapi.delManager(data);
+      let res = await newapi.delManager(data);
       if (res.data.code == '0') {
         wx.showToast({
           title: '删除成功',
@@ -155,7 +155,7 @@ export default class my_setManagerInfo extends wepy.page {
   async managerList() {
     let suppliers_id = this.$parent.globalData.suppliers_id;
     let data = { suppliers_id };
-    var res = await newapi.findManagers(data);
+    let res = await newapi.findManagers(data);
     if (res.data.code == '0') {
       this.adminList = res.data.data;
       this.$apply();

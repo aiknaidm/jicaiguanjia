@@ -231,7 +231,7 @@ export default class newslist extends wepy.page {
       cat_id: id,
       user_id
     };
-    var res = await newapi.del_categorys(data);
+    let res = await newapi.del_categorys(data);
     wx.hideLoading();
     console.log('shanchu res is', res);
     if (res.data.code == 0) {
@@ -258,7 +258,7 @@ export default class newslist extends wepy.page {
       keyword: keyword,
       parent_id
     };
-    var res = await newapi.categorys(data);
+    let res = await newapi.categorys(data);
     var ispush = true;
     console.log('获取分类222', res);
     wx.hideLoading();
@@ -278,7 +278,7 @@ export default class newslist extends wepy.page {
       keyword,
       parent_id
     };
-    var res = await newapi.add_categorys(data);
+    let res = await newapi.add_categorys(data);
     console.log('获取分类', res);
     wx.hideLoading();
     if (res.data.data.tianjia == 1) {

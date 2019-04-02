@@ -118,7 +118,7 @@ export default class my_setSalesman extends wepy.page {
         user_id,
         suppliers_id
       };
-      var res = await newapi.delSalesman(data);
+      let res = await newapi.delSalesman(data);
       if (res.data.code == '0') {
         wx.showToast({
           title: '删除成功',
@@ -153,7 +153,7 @@ export default class my_setSalesman extends wepy.page {
   async salesmanList() {
     let suppliers_id = this.$parent.globalData.suppliers_id;
     let data = { suppliers_id };
-    var res = await newapi.findSalesman(data);
+    let res = await newapi.findSalesman(data);
     if (res.data.code == '0') {
       this.adminList = res.data.data;
       this.$apply();

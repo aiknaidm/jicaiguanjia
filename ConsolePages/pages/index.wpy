@@ -470,7 +470,7 @@ export default class newslist extends wepy.page {
     let data = {
       user_id: this.userId
     };
-    var res = await newapi.jlList(data);
+    let res = await newapi.jlList(data);
     console.log('管理工作台-易站列表res', res);
     this.yizhanlist = res.data.data;
     this.$apply();
@@ -534,7 +534,7 @@ export default class newslist extends wepy.page {
       user_id: this.userId,
       suppliers_id: this.suppliers_id
     };
-    var res = await newapi.supplier_detail(data);
+    let res = await newapi.supplier_detail(data);
     console.log('res', res);
     if (res.data.code == 0 && res.data.data.is_kthy == 1) {
       console.log('开通会员卡');

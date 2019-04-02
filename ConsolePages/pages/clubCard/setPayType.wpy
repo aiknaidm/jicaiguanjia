@@ -225,7 +225,7 @@ export default class newslist extends wepy.page {
       suppliers_id,
       hdky
     };
-    var res = await newapi.suppliers_hdky(data);
+    let res = await newapi.suppliers_hdky(data);
     console.log('suppliers_hdky res', res);
     if (res.data.code == 0) {
       wx.showToast({
@@ -257,7 +257,7 @@ export default class newslist extends wepy.page {
       hdky,
       page
     };
-    var res = await newapi.hd_goods_list(data);
+    let res = await newapi.hd_goods_list(data);
     console.log('getGoodsList', res);
     wx.hideLoading();
     if (res.data.code == 0) {

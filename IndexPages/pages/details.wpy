@@ -31,7 +31,7 @@ export default class details extends wepy.page {
       mask: true //显示透明蒙层，防止触摸穿透,
     });
     let data = { id };
-    var res = await newapi.articleDetail(data);
+    let res = await newapi.articleDetail(data);
     wx.hideLoading();
     this.articleDetail = res.data.data;
     this.articleDetail.published_time = util.formatTime(

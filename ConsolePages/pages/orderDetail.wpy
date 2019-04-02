@@ -138,7 +138,7 @@ export default class orderDetails extends wepy.page {
     let data = {
       order_id: orderId
     };
-    var res = await newapi.fahuo(data);
+    let res = await newapi.fahuo(data);
     if (res.data.code == 0) {
       this.orderDetail.shipping_status = 1;
       var order_status = this.$parent.$pages['/ConsolePages/pages/orderList']
@@ -156,7 +156,7 @@ export default class orderDetails extends wepy.page {
       order_id: id,
       suppliers_id: this.suppliers_id
     };
-    var res = await newapi.orderDetail(data);
+    let res = await newapi.orderDetail(data);
     wx.hideLoading();
     this.orderDetail = res.data.data.orderList;
     this.goodsMap = res.data.data.goodsMap;

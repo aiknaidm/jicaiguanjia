@@ -123,7 +123,7 @@ export default class my_console_cardPayDetail extends wepy.page {
       start_time: this.start_time,
       end_time: this.end_time
     };
-    var res = await newapi.czphb(data);
+    let res = await newapi.czphb(data);
     this.phbList = res.data.data;
     this.$apply();
   }

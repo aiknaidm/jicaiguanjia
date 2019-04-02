@@ -980,7 +980,7 @@ export default class newslist extends wepy.page {
         goods_id: this.goods_id,
         goods_name: value
       };
-      var res = await newapi.xgbt(data);
+      let res = await newapi.xgbt(data);
       if (res.data.code == 0) {
         wx.showToast({
           title: '修改成功',
@@ -998,7 +998,7 @@ export default class newslist extends wepy.page {
     let data = {
       goods_id: deleteSelectList
     };
-    var res = await newapi.del_goods(data);
+    let res = await newapi.del_goods(data);
     if (res.data.code) {
       wx.showToast({
         title: '删除成功',
@@ -1063,7 +1063,7 @@ export default class newslist extends wepy.page {
         user_id: this.user_id,
         parent_id
       };
-    var res = await newapi.allcats(data);
+    let res = await newapi.allcats(data);
     var datas = res.data.data;
     if (res.data.code == 0) {
       return datas;

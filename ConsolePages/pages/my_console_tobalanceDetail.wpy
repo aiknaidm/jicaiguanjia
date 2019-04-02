@@ -315,7 +315,7 @@ export default class my_console_cardPayDetail extends wepy.page {
       suppliers_id,
       getall: 1
     };
-    var res = await newapi.findSalesman(data);
+    let res = await newapi.findSalesman(data);
     if (res.data.code == '0') {
       this.salesmanList = res.data.data;
       this.$apply();
@@ -327,7 +327,7 @@ export default class my_console_cardPayDetail extends wepy.page {
       suppliers_id,
       getall: 1
     };
-    var res = await newapi.findmemberNameList(data);
+    let res = await newapi.findmemberNameList(data);
     if (res.data.code == '0') {
       this.memberNameList = res.data.data;
       this.$apply();
@@ -340,7 +340,7 @@ export default class my_console_cardPayDetail extends wepy.page {
       mask: true, //显示透明蒙层，防止触摸穿透,
       success: res => {}
     });
-    var res = await newapi.zcjl(data);
+    let res = await newapi.zcjl(data);
     wx.hideLoading();
     console.log('充值记录', res);
     var datas = res.data.data.data;
@@ -366,7 +366,7 @@ export default class my_console_cardPayDetail extends wepy.page {
       mask: true, //显示透明蒙层，防止触摸穿透,
       success: res => {}
     });
-    var res = await newapi.czjl(data);
+    let res = await newapi.czjl(data);
     wx.hideLoading();
     console.log('充值记录', res);
     var datas = res.data.data.data;

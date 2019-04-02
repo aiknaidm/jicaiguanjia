@@ -213,7 +213,7 @@ export default class share extends wepy.page {
       path: '/ConsolePages/pages/renzheng',
       user_id
     };
-    var res = await newapi.getShareImg(data);
+    let res = await newapi.getShareImg(data);
     if (res.data.code == '0') {
       wx.hideLoading();
       this.qrcode = res.data.data;

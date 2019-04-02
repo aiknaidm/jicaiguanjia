@@ -671,7 +671,7 @@ export default class newslist extends wepy.page {
       suppliers_id: suppliers_id,
       keyword: keyword
     };
-    var res = await newapi.brands(data);
+    let res = await newapi.brands(data);
     wx.hideLoading();
     console.log('查找品牌', res);
     if (keyword == '') {
@@ -698,7 +698,7 @@ export default class newslist extends wepy.page {
       suppliers_id: suppliers_id,
       keyword: keyword
     };
-    var res = await newapi.categorys(data);
+    let res = await newapi.categorys(data);
     var ispush = true;
     console.log('获取分类111', res);
     wx.hideLoading();
@@ -718,7 +718,7 @@ export default class newslist extends wepy.page {
       suppliers_id: suppliers_id,
       keyword
     };
-    var res = await newapi.add_categorys(data);
+    let res = await newapi.add_categorys(data);
     console.log('获取分类', res);
     wx.hideLoading();
     if (res.data.data.tianjia == 1) {
@@ -737,7 +737,7 @@ export default class newslist extends wepy.page {
       cat_id: id,
       user_id
     };
-    var res = await newapi.del_categorys(data);
+    let res = await newapi.del_categorys(data);
     wx.hideLoading();
     console.log('shanchu res is', res);
     if (res.data.code == 0) {
@@ -758,7 +758,7 @@ export default class newslist extends wepy.page {
       user_id,
       brand_id: id
     };
-    var res = await newapi.del_brands(data);
+    let res = await newapi.del_brands(data);
     if (res.data.code == 0) {
       this.brandList.splice(index, 1);
     } else {
@@ -999,7 +999,7 @@ export default class newslist extends wepy.page {
       hdky
     };
     console.log('goods_id', goods_id);
-    var res = await newapi.addGoodsInfo(data);
+    let res = await newapi.addGoodsInfo(data);
 
     if (res.data.code == 0) {
       // that.clearGoodInfo();
@@ -1073,7 +1073,7 @@ export default class newslist extends wepy.page {
       title: '修改商品'
     });
     let data = { goods_id };
-    var res = await newapi.goodinfo(data);
+    let res = await newapi.goodinfo(data);
     if (res.data.code == 0) {
       wx.hideLoading();
       console.log('商品信息', res);

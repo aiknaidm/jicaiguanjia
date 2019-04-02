@@ -142,7 +142,7 @@ export default class share extends wepy.page {
       suppliers_id: this.suppliers_id,
       page: this.page
     };
-    var res = await newapi.czdqr(data);
+    let res = await newapi.czdqr(data);
     wx.hideLoading();
     console.log('充值记录', res);
     var datas = res.data.data.data;

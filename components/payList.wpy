@@ -169,7 +169,7 @@ export default class payList extends wepy.component {
           suppliers_id,
           goods_price
         };
-        var res = await newapi.czqr(data);
+        let res = await newapi.czqr(data);
         if (res.data.code == 0) {
           wx.hideLoading();
           this.item.pay_id = 0;

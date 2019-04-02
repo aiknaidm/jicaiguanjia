@@ -399,14 +399,14 @@ export default class Index extends wepy.page {
   };
   // 资讯
   async getMessage() {
-    var res = await newapi.message();
+    let res = await newapi.message();
     this.message = res.data.data;
     wx.hideLoading();
     this.$apply();
   }
   // 轮播
   async getCarousel() {
-    var res = await newapi.carousel();
+    let res = await newapi.carousel();
     this.carousel = res.data.data;
     console.log('carousel', this.carousel);
     this.$apply();

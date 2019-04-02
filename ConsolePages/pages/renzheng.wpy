@@ -327,7 +327,7 @@ export default class newslist extends wepy.page {
           let data = {
             mobile: this.phone
           };
-          var res = await newapi.yzm(data);
+          let res = await newapi.yzm(data);
           if (res.data.code == 0) {
             console.log('点击了获取验证码' + res.data.data);
             //将获取的验证码赋值
@@ -397,7 +397,7 @@ export default class newslist extends wepy.page {
       share_code: shareCode,
       user_id: userId
     };
-    var res = await newapi.getYizhanInfo(data);
+    let res = await newapi.getYizhanInfo(data);
     return res.data.data;
   }
   //检查输入的手机号
@@ -509,7 +509,7 @@ export default class newslist extends wepy.page {
           suppliers_desc: storename,
           share_code: share_code
         };
-        var res = await newapi.renzheng(data);
+        let res = await newapi.renzheng(data);
         console.log('认证', res);
         wx.hideLoading();
         if (res.data.code == 0) {

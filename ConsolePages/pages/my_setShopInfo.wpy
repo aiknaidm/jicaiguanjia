@@ -420,7 +420,7 @@ export default class my_setShopInfo extends wepy.page {
           let data = {
             mobile: phone
           };
-          var res = await newapi.yzm(data);
+          let res = await newapi.yzm(data);
           if (res.data.code == 0) {
             console.log('点击了获取验证码' + res.data.data);
             //将获取的验证码赋值
@@ -482,7 +482,7 @@ export default class my_setShopInfo extends wepy.page {
       user_id,
       suppliers_id
     };
-    var res = await newapi.supplier_detail(data);
+    let res = await newapi.supplier_detail(data);
     return res.data.data;
   }
   setTime(count) {
@@ -614,7 +614,7 @@ export default class my_setShopInfo extends wepy.page {
           is_picture,
           is_friend
         };
-        var res = await newapi.supplier_upd(data);
+        let res = await newapi.supplier_upd(data);
         wx.hideLoading();
         if (res.data.code == 0) {
           wx.navigateBack({});

@@ -123,7 +123,7 @@ export default class my_setServiceInfo extends wepy.page {
         kefu_name,
         mobile
       };
-      var res = await newapi.addService(data);
+      let res = await newapi.addService(data);
       if (res.data.code == '0') {
         wx.showToast({
           title: '添加成功'
@@ -207,7 +207,7 @@ export default class my_setServiceInfo extends wepy.page {
   }
   async delService(id) {
     let data = { id };
-    var res = await newapi.delService(data);
+    let res = await newapi.delService(data);
   }
 
   async serviceList() {
@@ -215,7 +215,7 @@ export default class my_setServiceInfo extends wepy.page {
     let data = {
       suppliers_id: this.suppliers_id
     };
-    var res = await newapi.serviceList(data);
+    let res = await newapi.serviceList(data);
     if (res.data.code == '0') {
       this.items = res.data.data;
       this.$apply();

@@ -212,7 +212,7 @@ export default class my_console_cardExpendDetail extends wepy.page {
       suppliers_id,
       sales_id
     };
-    var res = await newapi.yhlb(data);
+    let res = await newapi.yhlb(data);
     if (res.data.code == '0') {
       this.weishenhe = res.data.data.weishenhe;
       this.yishenhe = res.data.data.yishenhe;
@@ -226,7 +226,7 @@ export default class my_console_cardExpendDetail extends wepy.page {
       suppliers_id,
       getall: 1
     };
-    var res = await newapi.findSalesman(data);
+    let res = await newapi.findSalesman(data);
     if (res.data.code == '0') {
       this.salesmanList = res.data.data;
       this.$apply();

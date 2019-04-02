@@ -93,7 +93,7 @@ export default class newslist extends wepy.page {
   events = {};
   // 获取费用
   async getCardPrice() {
-    var res = await newapi.kthy_price();
+    let res = await newapi.kthy_price();
     console.log(res);
     if (res.data.code == 0) {
       this.price = res.data.data.goods_price;

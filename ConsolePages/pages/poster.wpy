@@ -183,7 +183,7 @@ export default class newslist extends wepy.page {
       path: '/ConsolePages/pages/renzheng',
       user_id: userId
     };
-    var res = await newapi.getShareImg(data);
+    let res = await newapi.getShareImg(data);
     console.log('getqrcode', res.data);
     wx.showLoading({
       title: '绘制图片中'

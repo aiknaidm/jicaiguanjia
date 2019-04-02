@@ -159,7 +159,7 @@ export default class shoperweima extends wepy.page {
       user_id,
       suppliers_id
     };
-    var res = await newapi.getQRCodeImg(data);
+    let res = await newapi.getQRCodeImg(data);
     var a = wx.getSystemInfoSync().windowWidth / 375;
     var height = wx.getSystemInfoSync().windowHeight;
     var width = wx.getSystemInfoSync().windowWidth;

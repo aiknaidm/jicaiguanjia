@@ -214,7 +214,7 @@ export default class newslist extends wepy.page {
       user_id: this.user_id,
       suppliers_id: this.suppliers_id
     };
-    var res = await newapi.cardbg(data);
+    let res = await newapi.cardbg(data);
     wx.hideLoading();
     if (res.data.code == 0) {
       this.bg = res.data.data.card_img;
@@ -227,7 +227,7 @@ export default class newslist extends wepy.page {
       card_img: img,
       suppliers_id: this.suppliers_id
     };
-    var res = await newapi.card_bg(data);
+    let res = await newapi.card_bg(data);
     wx.hideLoading();
     if (res.data.code == 0) {
       this.bg = img;

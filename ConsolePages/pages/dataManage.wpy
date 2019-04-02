@@ -153,7 +153,7 @@ export default class data extends wepy.page {
       user_id,
       suppliers_id
     };
-    var res = await newapi.shuju(data);
+    let res = await newapi.shuju(data);
     console.log('数据管理', res.data);
     var datas = res.data.data;
     wx.hideLoading();

@@ -53,7 +53,7 @@ export default class my_console_renewRecord extends wepy.page {
       user_id,
       suppliers_id
     };
-    var res = await newapi.fwfpaylist(data);
+    let res = await newapi.fwfpaylist(data);
     var fwfpaylist = res.data.data;
 
     fwfpaylist.forEach((item, index) => {

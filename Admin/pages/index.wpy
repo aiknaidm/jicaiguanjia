@@ -218,7 +218,7 @@ export default class newslist extends wepy.page {
         page
       };
 
-    var res = await newapi.suppliers_list(data);
+    let res = await newapi.suppliers_list(data);
     var that = this;
     wx.hideLoading();
     res.data.data.data.forEach(function(item, index) {

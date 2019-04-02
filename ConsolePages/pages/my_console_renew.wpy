@@ -136,7 +136,7 @@ export default class my_console_renew extends wepy.page {
         let data = {
           share_code: shareCode
         };
-        var res = await newapi.verifyCode(data);
+        let res = await newapi.verifyCode(data);
         if (res.data.code == '0') {
           this.isHasShareCode = res.data.data;
           this.shareCode = shareCode;
@@ -185,7 +185,7 @@ export default class my_console_renew extends wepy.page {
     this.getrenewList();
   }
   async getrenewList() {
-    var res = await newapi.renewList();
+    let res = await newapi.renewList();
     this.renewList = res.data.data;
     this.$apply();
   }

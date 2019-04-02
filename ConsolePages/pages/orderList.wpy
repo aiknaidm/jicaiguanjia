@@ -194,7 +194,7 @@ export default class orderlist extends wepy.page {
       page,
       suppliers_id
     };
-    var res = await newapi.orderList(data);
+    let res = await newapi.orderList(data);
     wx.hideLoading();
     var orderList = res.data.data.orderList;
     var goodsMap = res.data.data.goodsMap;

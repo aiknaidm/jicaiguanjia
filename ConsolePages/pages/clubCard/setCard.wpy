@@ -486,7 +486,7 @@ export default class newslist extends wepy.page {
         card_rules: e.detail.value.rules,
         suppliers_id: this.suppliers_id
       };
-      var res = await newapi.card_rules(data);
+      let res = await newapi.card_rules(data);
       if (res.data.code == 0) {
         this.rules = e.detail.value.rules;
         this.$apply();
@@ -575,7 +575,7 @@ export default class newslist extends wepy.page {
         end_time: that.data.date2,
         suppliers_id: this.suppliers_id
       };
-      var res = await newapi.card_add(data);
+      let res = await newapi.card_add(data);
       if (res.data.code == 0) {
         wepy
           .showModal({
@@ -601,7 +601,7 @@ export default class newslist extends wepy.page {
       user_id: this.user_id,
       suppliers_id: this.suppliers_id
     };
-    var res = await newapi.cardrules(data);
+    let res = await newapi.cardrules(data);
     this.rules = res.data.data.card_rules;
     this.$apply();
   }
@@ -617,7 +617,7 @@ export default class newslist extends wepy.page {
   // 获取费用
   async getCardPrice() {
     console.log('api', api);
-    var res = await newapi.kthy_price(data);
+    let res = await newapi.kthy_price(data);
     console.log(res);
     if (res.data.code == 0) {
       this.price = res.data.data.goods_price;
@@ -633,7 +633,7 @@ export default class newslist extends wepy.page {
       user_id: this.user_id,
       suppliers_id: this.suppliers_id
     };
-    var res = await newapi.card_list(data);
+    let res = await newapi.card_list(data);
     var datas = res.data.data;
     for (var i = 0; i < datas.length; i++) {
       datas[i].start_time_t = util.formatTime(

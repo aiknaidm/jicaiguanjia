@@ -315,7 +315,7 @@ export default class extends wepy.app {
       sex: '未知',
       avatar: 'https://lmbge.com/upload/avatar/weixin1.png'
     };
-    var res = await newapi.login(data);
+    let res = await newapi.login(data);
     this.globalData.userId = res.data.data.user_id;
     console.log('res.data.data.user_id', res.data.data.user_id);
     wx.setStorageSync('userId', res.data.data.user_id);
@@ -325,7 +325,7 @@ export default class extends wepy.app {
     let data = {
       user_id: userId
     };
-    var res = await newapi.getUserInfo(data);
+    let res = await newapi.getUserInfo(data);
     if (res.data.code == '0') return res.data.data;
     else
       wx.showToast({
@@ -341,7 +341,7 @@ export default class extends wepy.app {
       user_id,
       suppliers_id
     };
-    var res = await newapi.getYizhanInfo(data);
+    let res = await newapi.getYizhanInfo(data);
     if (res.data.code == '0') {
       this.globalData.yizhanInfo = res.data.data;
       this.globalData.suppliers_id = res.data.data.suppliers_id;
