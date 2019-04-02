@@ -875,8 +875,7 @@ export default class newslist extends wepy.page {
             default:
           }
         },
-        fail: function(res) {
-        }
+        fail: function(res) {}
       });
     },
     // 修改标题
@@ -1003,7 +1002,7 @@ export default class newslist extends wepy.page {
     } else if (res.cancel) {
     }
   }
-  getShopList(data) {
+  async getShopList(data) {
     if (!this.suppliers_id || !this.user_id) {
       wx.showToast({
         title: '获取店铺信息失败，请稍后再试',
@@ -1015,42 +1014,31 @@ export default class newslist extends wepy.page {
       mask: true, //显示透明蒙层，防止触摸穿透,
       success: res => {}
     });
-    wepy
-      .request({
-        url: api.search,
-        method: 'GET',
-        data,
-        header: {
-          Accept: 'application/json'
-        }
-      })
-      .then(res => {
-        wx.hideLoading();
-        if (res.data.code == 0) {
-          res.data.data.forEach((item, index) => {
-            res.data.data[index].active = this.isallSelect;
-          });
-          if (this.initdata.page == 1) this.list = res.data.data;
-          else this.list.push(...res.data.data);
-          if (res.data.data.length < 10) {
-            this.isMoreData = false;
-          }
-          this.$apply();
-        }
-      })
-      .catch(res => {
-        wx.navigateBack({
-          delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
-        });
+    let res = await newapi.search(data);
+    wx.hideLoading();
+    if (res.data.code == 0) {
+      res.data.data.forEach((item, index) => {
+        res.data.data[index].active = this.isallSelect;
       });
+      if (this.initdata.page == 1) this.list = res.data.data;
+      else this.list.push(...res.data.data);
+      if (res.data.data.length < 10) {
+        this.isMoreData = false;
+      }
+      this.$apply();
+    } else {
+      wx.navigateBack({
+        delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+      });
+    }
   }
   //   商品分类
   async getFenLei(parent_id = '') {
     let data = {
-        suppliers_id: this.suppliers_id,
-        user_id: this.user_id,
-        parent_id
-      };
+      suppliers_id: this.suppliers_id,
+      user_id: this.user_id,
+      parent_id
+    };
     let res = await newapi.allcats(data);
     var datas = res.data.data;
     if (res.data.code == 0) {
