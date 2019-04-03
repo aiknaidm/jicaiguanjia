@@ -811,17 +811,15 @@ export default class newslist extends wepy.page {
       } else if (mRes.cancel) {
       }
     },
-    clickbtn() {
-      wx.showActionSheet({
-        itemList: ['设置为不可用会员卡购买', '设置为可用会员卡购买'], //按钮的文字数组，数组长度最大为6个,
-        itemColor: '#000000', //按钮的文字颜色,
-        success: res => {
-          this.setSelected(res.tapIndex);
-        }
-      });
+    async clickbtn() {
+      let mRes = await util.showActionSheet([
+        '设置为不可用会员卡购买',
+        '设置为可用会员卡购买'
+      ]);
+      this.setSelected(mRes.tapIndex);
     },
     // 修改
-    toGoodDetailsTap(id, name, index, e) {
+    async toGoodDetailsTap(id, name, index, e) {
       var that = this;
       // wx.navigateTo({
       // 	url: '/pages/my-console/publish/index?id=' + id,
@@ -829,48 +827,40 @@ export default class newslist extends wepy.page {
       this.goods_id = id;
       this.index = index;
       this.$parent.globalData.goodsInfo = this.list[index];
-      wx.showActionSheet({
-        itemList: ['改标题', '改价格', '改库存', '改全部'],
-        success: function(res) {
-          switch (res.tapIndex) {
-            case 0:
-              // 改标题
-              that.isshowBox = true;
-              that.title = '改标题';
-              that.placeholder = '请输入需要修改的内容';
-              that.$apply();
-              break;
-            case 1:
-              // 改价格
-              wx.navigateTo({
-                url:
-                  'changeGoodsInfo?id=' +
-                  id +
-                  '&xiugaitype=jiage&index=' +
-                  index
-              });
-              break;
-            case 2:
-              // 改库存
-              wx.navigateTo({
-                url:
-                  'changeGoodsInfo?id=' +
-                  id +
-                  '&xiugaitype=kucun&index=' +
-                  index
-              });
-              break;
-            case 3:
-              // 改全部
-              wx.navigateTo({
-                url: 'addGoodsInfo?id=' + id + '&index=' + index
-              });
-              break;
-            default:
-          }
-        },
-        fail: function(res) {}
-      });
+      let mRes = await util.showActionSheet([
+        '改标题',
+        '改价格',
+        '改库存',
+        '改全部'
+      ]);
+      switch (mRes.tapIndex) {
+        case 0:
+          // 改标题
+          that.isshowBox = true;
+          that.title = '改标题';
+          that.placeholder = '请输入需要修改的内容';
+          that.$apply();
+          break;
+        case 1:
+          // 改价格
+          wx.navigateTo({
+            url: 'changeGoodsInfo?id=' + id + '&xiugaitype=jiage&index=' + index
+          });
+          break;
+        case 2:
+          // 改库存
+          wx.navigateTo({
+            url: 'changeGoodsInfo?id=' + id + '&xiugaitype=kucun&index=' + index
+          });
+          break;
+        case 3:
+          // 改全部
+          wx.navigateTo({
+            url: 'addGoodsInfo?id=' + id + '&index=' + index
+          });
+          break;
+        default:
+      }
     },
     // 修改标题
     async tapSure(value) {

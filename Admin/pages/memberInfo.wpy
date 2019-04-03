@@ -242,36 +242,26 @@ export default class my_console_check extends wepy.page {
       this.currentStatu = curStatu;
     },
     //需要审核提示
-    toShenhe: function(e) {
+    async toShenhe(e) {
       var that = this;
       //审核人的id
       var id = e.currentTarget.dataset.id;
-      wx.showActionSheet({
-        itemList: ['通过', '拒绝'],
-        success: function(res) {
-          if (res.tapIndex == 0) {
-            that.shenhe(id, 'tongguo');
-          } else if (res.tapIndex == 1) {
-            that.shenhe(id, 'jujue');
-          }
-        },
-        fail: function(res) {}
-      });
+      let mRes = await util.showActionSheet(['通过', '拒绝']);
+      if (mRes.tapIndex == 0) {
+        that.shenhe(id, 'tongguo');
+      } else if (mRes.tapIndex == 1) {
+        that.shenhe(id, 'jujue');
+      }
     },
     //解除关系提示
-    toJiechu: function(e) {
+    async toJiechu(e) {
       var that = this;
       //审核人的id
       var id = e.currentTarget.dataset.id;
-      wx.showActionSheet({
-        itemList: ['解除关系'],
-        success: function(res) {
-          if (res.tapIndex == 0) {
-            that.jiechu(id);
-          }
-        },
-        fail: function(res) {}
-      });
+      let mRes = await util.showActionSheet(['解除关系']);
+      if (mRes.tapIndex == 0) {
+        that.jiechu(id);
+      }
     },
     tocallphone: function(e) {
       var phone = e.currentTarget.dataset.phone;

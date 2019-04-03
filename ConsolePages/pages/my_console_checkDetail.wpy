@@ -279,13 +279,6 @@ export default class my_console_checkDetail extends wepy.page {
       } else if (mRes.cancel) {
       }
     },
-    changeCheckStatus: function() {
-      wx.showActionSheet({
-        itemList: ['解除关系'],
-        success: function(res) {},
-        fail: function(res) {}
-      });
-    },
     changeisclick: function() {
       this.isclick = !this.isclick;
     },

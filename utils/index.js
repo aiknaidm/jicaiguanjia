@@ -401,6 +401,19 @@ const showModalBig = async function (content, title = '提示') {
   });
   return res;
 }
+const showActionSheet = async function (itemList) {
+  return new Promise((resolve, reject) => {
+    wx.showActionSheet({
+      itemList: itemList,
+      success: function (res) {
+        resolve(res);
+      },
+      fail: function (res) {
+        console.log('用户取消');
+      }
+    });
+  })
+}
 export default {
   formatTime,
   wxpay1,
@@ -416,4 +429,5 @@ export default {
   showToast,
   showModal,
   showModalBig,
+  showActionSheet,
 }
