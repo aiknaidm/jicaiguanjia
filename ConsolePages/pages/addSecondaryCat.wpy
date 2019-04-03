@@ -132,6 +132,7 @@ button {
 <script>
 import wepy from 'wepy';
 import newapi from '../../API/newapi';
+import util from '../../utils/index';
 
 export default class newslist extends wepy.page {
   config = {
@@ -146,10 +147,7 @@ export default class newslist extends wepy.page {
   methods = {
     bindGoodsSure() {
       if (!this.goodsKeyword || this.goodsKeyword == '') {
-        wx.showToast({
-          title: '请输入查找的商品分类',
-          icon: 'none'
-        });
+        util.showToast('请输入查找的商品分类');
         return;
       }
       // this.initKind();
@@ -172,32 +170,12 @@ export default class newslist extends wepy.page {
         this.cat_name = item.cat_name;
       }
     },
-    longtabGoods(name, id, index) {
-      wepy
-        .showModal({
-          title: '提示', //提示的标题,
-          content: '你确定要删除"' + name + '"分类吗', //提示的内容,
-          showCancel: true, //是否显示取消按钮,
-          cancelText: '取消', //取消按钮的文字，默认为取消，最多 4 个字符,
-          cancelColor: '#000000', //取消按钮的文字颜色,
-          confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-          confirmColor: '#e50012' //确定按钮的文字颜色,
-        })
-        .then(res => {
-          if (res.confirm) {
-            this.sureDelGoods(this.user_id, id, index);
-          } else if (res.cancel) {
-          }
-        })
-        .catch(res => {
-          wx.showToast({
-            title: '出错了', //提示的内容,
-            icon: 'none', //图标,
-            duration: 2000, //延迟时间,
-            mask: true, //显示透明蒙层，防止触摸穿透,
-            success: res => {}
-          });
-        });
+    async longtabGoods(name, id, index) {
+      let mRes = await util.showModalBig('你确定要删除"' + name + '"分类吗');
+      if (mRes.confirm) {
+        this.sureDelGoods(this.user_id, id, index);
+      } else if (mRes.cancel) {
+      }
     },
     changeSecondary() {
       try {
@@ -210,8 +188,7 @@ export default class newslist extends wepy.page {
         wx.navigateBack({
           delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
         });
-      } catch (error) {
-      }
+      } catch (error) {}
     }
   };
   events = {};
@@ -229,21 +206,14 @@ export default class newslist extends wepy.page {
     if (res.data.code == 0) {
       this.goodsList.splice(index, 1);
     } else {
-      wx.showToast({
-        title: res.data.message + '，删除失败', //提示的内容,
-        icon: 'none', //图标,
-        duration: 2000, //延迟时间,
-        mask: true //显示透明蒙层，防止触摸穿透,
-      });
+      util.showToast(res.data.message + '，删除失败');
     }
     this.$apply();
   }
   // 分类列表 用户id 店铺id 有keyword时添加查找商品
   async getGoodsList(userId, suppliers_id, keyword = '', parent_id) {
     var that = this;
-    wx.showLoading({
-      title: '加载中'
-    });
+    util.showLoading();
     let data = {
       user_id: userId,
       suppliers_id: suppliers_id,
@@ -259,9 +229,7 @@ export default class newslist extends wepy.page {
   // 添加分类
   async addGoodsList(userId, suppliers_id, keyword = '', parent_id) {
     var that = this;
-    wx.showLoading({
-      title: '加载中'
-    });
+    util.showLoading();
     let data = {
       user_id: userId,
       suppliers_id: suppliers_id,
@@ -292,7 +260,6 @@ export default class newslist extends wepy.page {
         : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
       this.getGoodsList(this.user_id, this.suppliers_id, '', this.parent_id);
     } catch (error) {
-
       var log = wx.getStorageSync('log');
       wx.setStorageSync('log', log + '/n' + error);
     }

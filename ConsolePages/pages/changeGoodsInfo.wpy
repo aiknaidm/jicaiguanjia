@@ -162,6 +162,7 @@ picker {
 import wepy from 'wepy';
 import popupbox from '../../components/popupbox';
 import newapi from '../../API/newapi';
+import util from '../../utils/index';
 export default class newslist extends wepy.page {
   config = {
     navigationBarTitleText: '修改'
@@ -242,81 +243,51 @@ export default class newslist extends wepy.page {
       var goods_attr = this.goodsdetail.properties;
       var goods_number = this.goodsdetail.goods_number;
       if (goods_number.length == 0 && goods_attr.length == 0) {
-        wx.showToast({
-          title: '请填写商品数量',
-          icon: 'none'
-        });
+        util.showToast('请填写商品数量');
         return;
       }
       if (
         parseFloat(shop_price) > parseFloat(floor_price) &&
         goods_attr.length == 0
       ) {
-        wx.showToast({
-          title: '批发价不能大于零售价',
-          icon: 'none'
-        });
+        util.showToast('批发价不能大于零售价');
         return;
       }
       if (floor_price <= 0 && goods_attr.length == 0) {
-        wx.showToast({
-          title: '零售价格不能为0',
-          icon: 'none'
-        });
+        util.showToast('零售价格不能为0');
         return;
       }
       if (shop_price <= 0 && goods_attr.length == 0) {
-        wx.showToast({
-          title: '批发价格不能为0',
-          icon: 'none'
-        });
+        util.showToast('批发价格不能为0');
         return;
       }
 
       for (var i = 0; i < goods_attr.length; i++) {
         if (goods_attr[i].attr_value == '') {
-          wx.showToast({
-            title: '请填写商品规格',
-            icon: 'none'
-          });
+          util.showToast('请填写商品规格');
           return;
         }
         if (goods_attr[i].attr_price == '') {
-          wx.showToast({
-            title: '请填写商品批发价',
-            icon: 'none'
-          });
+          util.showToast('请填写商品批发价');
           return;
         }
         if (goods_attr[i].floor_price == '') {
-          wx.showToast({
-            title: '请填写商品零售价',
-            icon: 'none'
-          });
+          util.showToast('请填写商品零售价');
           return;
         }
         if (
           parseFloat(goods_attr[i].floor_price) <
           parseFloat(goods_attr[i].attr_price)
         ) {
-          wx.showToast({
-            title: '批发价不能大于零售价',
-            icon: 'none'
-          });
+          util.showToast('批发价不能大于零售价');
           return;
         }
         if (goods_attr[i].floor_price <= 0 || goods_attr[i].attr_price <= 0) {
-          wx.showToast({
-            title: '商品价格不能为0',
-            icon: 'none'
-          });
+          util.showToast('商品价格不能为0');
           return;
         }
         if (goods_attr[i].goods_number == '') {
-          wx.showToast({
-            title: '请填写商品数量',
-            icon: 'none'
-          });
+          util.showToast('请填写商品数量');
           return;
         }
       }
@@ -335,11 +306,7 @@ export default class newslist extends wepy.page {
         }
         let res = await newapi.changePrice(data);
         if (res.data.code == 0) {
-          wx.showToast({
-            title: '修改成功',
-            icon: 'success',
-            duration: 2000
-          });
+          util.showToast('修改成功');
           if (this.properties.length > 0) {
             var max = 0;
             var min = this.properties[0].attr_price;
@@ -361,11 +328,7 @@ export default class newslist extends wepy.page {
             ].shop_price =
               e.detail.value.shop_price;
         } else {
-          wx.showToast({
-            title: '修改失败',
-            icon: 'none',
-            duration: 2000
-          });
+          util.showToast('修改失败');
         }
       } else {
         if (this.properties.length > 0) {
@@ -381,11 +344,7 @@ export default class newslist extends wepy.page {
         }
         let res = await newapi.changeNum(data);
         if (res.data.code == 0) {
-          wx.showToast({
-            title: '修改成功',
-            icon: 'success',
-            duration: 2000
-          });
+          util.showToast('修改成功');
           if (this.properties.length > 0) {
             var add = 0;
             this.properties.forEach(function(item, index) {
@@ -400,11 +359,7 @@ export default class newslist extends wepy.page {
             ].goods_number =
               e.detail.value.goods_number;
         } else {
-          wx.showToast({
-            title: '修改失败',
-            icon: 'none',
-            duration: 2000
-          });
+          util.showToast('修改失败');
         }
       }
       this.goodsdetail.goods_number = e.detail.value.goods_number;

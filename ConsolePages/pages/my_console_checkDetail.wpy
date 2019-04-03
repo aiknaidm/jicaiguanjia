@@ -262,38 +262,28 @@ export default class my_console_checkDetail extends wepy.page {
       this.currentType = curType;
     },
     //通过
-    tongguo: function(e) {
+    async tongguo(e) {
       var that = this;
-      wx.showModal({
-        content: '通过该用户的审核请求',
-        success: function(res) {
-          if (res.confirm) {
-            that.shenhe(that.id, 'tongguo');
-          } else if (res.cancel) {
-          }
-        }
-      });
+      let mRes = await util.showModalBig('通过该用户的审核请求');
+      if (mRes.confirm) {
+        that.shenhe(that.id, 'tongguo');
+      } else if (mRes.cancel) {
+      }
     },
     //拒绝
-    jujue: function(e) {
+    async jujue(e) {
       var that = this;
-      wx.showModal({
-        content: '拒绝该用户的审核请求',
-        success: function(res) {
-          if (res.confirm) {
-            that.shenhe(that.id, 'jujue');
-          } else if (res.cancel) {
-          }
-        }
-      });
+      let mRes = await util.showModalBig('拒绝该用户的审核请求');
+      if (mRes.confirm) {
+        that.shenhe(that.id, 'jujue');
+      } else if (mRes.cancel) {
+      }
     },
     changeCheckStatus: function() {
       wx.showActionSheet({
         itemList: ['解除关系'],
-        success: function(res) {
-        },
-        fail: function(res) {
-        }
+        success: function(res) {},
+        fail: function(res) {}
       });
     },
     changeisclick: function() {
@@ -339,11 +329,7 @@ export default class my_console_checkDetail extends wepy.page {
   // 会员充值记录
   async getCzjl(data) {
     data.dqr = 1;
-    wx.showLoading({
-      title: '加载中...', //提示的内容,
-      mask: true, //显示透明蒙层，防止触摸穿透,
-      success: res => {}
-    });
+    util.showLoading();
     let res = await newapi.czjl(data);
     wx.hideLoading();
     var datas = res.data.data.data;
@@ -362,11 +348,7 @@ export default class my_console_checkDetail extends wepy.page {
     this.$apply();
   }
   async getZcjl(data) {
-    wx.showLoading({
-      title: '加载中...', //提示的内容,
-      mask: true, //显示透明蒙层，防止触摸穿透,
-      success: res => {}
-    });
+    util.showLoading();
     let res = await newapi.zcjl(data);
     wx.hideLoading();
     var datas = res.data.data.data;
@@ -428,23 +410,13 @@ export default class my_console_checkDetail extends wepy.page {
       this.getZcjl(data2);
       this.$apply();
     } catch (error) {
-      wx.showToast({
-        title: '登录失败', //提示的内容,
-        icon: 'none', //图标,
-        duration: 2000, //延迟时间,
-        mask: true, //显示透明蒙层，防止触摸穿透,
-        success: res => {}
-      });
+      util.showToast('登录失败');
     }
   }
   // 下拉刷新
   onReachBottom() {
     if (this.currentType == 0 && this.isMoreData1) {
-      wx.showLoading({
-        title: '加载中', //提示的内容,
-        mask: true, //显示透明蒙层，防止触摸穿透,
-        success: res => {}
-      });
+      util.showLoading();
       var data = this.init(++this.page1);
 
       this.getCzjl(data);
@@ -465,18 +437,10 @@ export default class my_console_checkDetail extends wepy.page {
     };
     let res = await newapi.yhsh(data);
     if (res.data.code == '0') {
-      wx.showToast({
-        title: '操作成功',
-        icon: 'success',
-        duration: 2000
-      });
+      util.showToast('操作成功');
       this.currentStatu = 0;
     } else {
-      wx.showToast({
-        title: '操作失败',
-        icon: 'success',
-        duration: 2000
-      });
+      util.showToast('操作失败');
     }
   }
 }

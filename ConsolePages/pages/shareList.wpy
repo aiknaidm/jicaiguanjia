@@ -86,7 +86,7 @@
 import wepy from 'wepy';
 import statusTap from '../../components/statusTap';
 import newapi from '../../API/newapi';
-import utils from '../../utils/index';
+import util from '../../utils/index';
 import popup from '../../components/popup';
 export default class newslist extends wepy.page {
   config = {
@@ -136,29 +136,27 @@ export default class newslist extends wepy.page {
       this.list = status == '0' ? shareList.zong : shareList.ketx;
       this.$apply();
     } else {
-      wx.showToast({
-        title: res.data.message
-      });
+      util.showToast(res.data.message);
     }
   }
   dataForEach(data) {
     data.forEach(function(item, index) {
       if (data[index].add_time)
-        data[index].add_time_t = utils.formatTime(
+        data[index].add_time_t = util.formatTime(
           new Date(item.add_time * 1000),
           'yyyy-MM-dd'
         );
       if (data[index].create_time)
-        data[index].create_time_t = utils.formatTime(
+        data[index].create_time_t = util.formatTime(
           new Date(item.create_time * 1000),
           'yyyy-MM-dd'
         );
       if (data[index].tixian_time)
-        data[index].tixian_time_t = utils.formatTime(
+        data[index].tixian_time_t = util.formatTime(
           new Date(item.tixian_time * 1000),
           'yyyy-MM-dd'
         );
-      // if (data[index].create_time) data[index].create_time_t = utils.formatTime(new Date(item.create_time * 1000));
+      // if (data[index].create_time) data[index].create_time_t = util.formatTime(new Date(item.create_time * 1000));
     });
 
     return data;

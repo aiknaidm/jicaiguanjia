@@ -181,11 +181,7 @@ export default class newslist extends wepy.page {
         .then(res => {
           // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
           var tempFilePaths = res.tempFilePaths;
-          wx.showLoading({
-            title: '上传中...', //提示的内容,
-            mask: true, //显示透明蒙层，防止触摸穿透,
-            success: res => {}
-          });
+          util.showLoading('上传中...');
           wepy
             .uploadFile({
               url: api.upload,
@@ -232,40 +228,22 @@ export default class newslist extends wepy.page {
     }
   }
   async onLoad(option) {
-    wx.showLoading({
-      title: '加载中', //提示的内容,
-      mask: true, //显示透明蒙层，防止触摸穿透,
-      success: res => {}
-    });
+    util.showLoading();
     try {
       this.user_id = await this.$parent.loginInfo();
       this.suppliers_id = this.$parent.globalData.suppliers_id
         ? this.$parent.globalData.suppliers_id
         : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
       if (this.user_id == '' || this.suppliers_id == '') {
-        wx.showToast({
-          title: '登录失败', //提示的内容,
-          icon: 'none', //图标,
-          duration: 1000, //延迟时间,
-          mask: true, //显示透明蒙层，防止触摸穿透,
-          success: res => {
-            wx.redirectTo({
-              url: '/ConsolePages/pages/index'
-            });
-          }
+        await util.showToast('登录失败');
+        wx.redirectTo({
+          url: '/ConsolePages/pages/index'
         });
       }
     } catch (error) {
-      wx.showToast({
-        title: '登录失败', //提示的内容,
-        icon: 'none', //图标,
-        duration: 1000, //延迟时间,
-        mask: true, //显示透明蒙层，防止触摸穿透,
-        success: res => {
-          wx.redirectTo({
-            url: '/ConsolePages/pages/index'
-          });
-        }
+      await util.showToast('登录失败');
+      wx.redirectTo({
+        url: '/ConsolePages/pages/index'
       });
     }
     this.cardbg();

@@ -91,15 +91,33 @@ const newapi = {
   fxgz_get: () => fetch(`${host}/fxgz_get`, 'GET'),
 }
 const fetch = async function (url, method, data) {
-  let ret = await wepy.request({
-    url,
-    method,
-    data,
-    header: {
-      'content-type': 'application/json',
-      'Token': 'waiting_for_set',
-    },
+  return new Promise((resolve, reject) => {
+    wx.request({
+      url,
+      method,
+      data,
+      header: {
+        'content-type': 'application/json',
+        'Token': 'waiting_for_set',
+      },
+      success(res) {
+        if (res.statusCode < 400) {
+          resolve(res);
+        } else {
+          wx.showModal({
+            title: '提示', //提示的标题,
+            content: '未知错误', //提示的内容,
+          });
+          resolve(null);
+        }
+      },
+      complete(res) {
+        if (res.statusCode != 200) {
+          reject(res.statusCode);
+        }
+      }
+
+    });
   });
-  return ret;
 }
 export default newapi

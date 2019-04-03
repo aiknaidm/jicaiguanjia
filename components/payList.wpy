@@ -126,6 +126,7 @@
 <script>
 import wepy from 'wepy';
 import newapi from '../API/newapi';
+import util from '../utils/index';
 export default class payList extends wepy.component {
   props = {
     item: Object,
@@ -146,22 +147,9 @@ export default class payList extends wepy.component {
     },
     async toSure(id, user_id, goods_price) {
       var suppliers_id = this.suppliers_id;
-      var modalRes = await wepy.showModal({
-        title: '提示', //提示的标题,
-        content: '你确定已收到', //提示的内容,
-        showCancel: true, //是否显示取消按钮,
-        cancelText: '取消', //取消按钮的文字，默认为取消，最多 4 个字符,
-        cancelColor: '#000000', //取消按钮的文字颜色,
-        confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-        confirmColor: '#3CC51F' //确定按钮的文字颜色,
-      });
-
-      if (modalRes.confirm) {
-        wx.showLoading({
-          title: '加载中...', //提示的内容,
-          mask: true, //显示透明蒙层，防止触摸穿透,
-          success: res => {}
-        });
+      let mRes = await util.showModalBig('你确定已收到');
+      if (mRes.confirm) {
+        util.showLoading();
         let data = {
           id,
           user_id,
@@ -172,13 +160,7 @@ export default class payList extends wepy.component {
         if (res.data.code == 0) {
           wx.hideLoading();
           this.item.pay_id = 0;
-          wx.showToast({
-            title: '确认成功', //提示的内容,
-            icon: 'none', //图标,
-            duration: 2000, //延迟时间,
-            mask: true, //显示透明蒙层，防止触摸穿透,
-            success: res => {}
-          });
+          util.showToast('确认成功');
           this.$apply();
         }
       }

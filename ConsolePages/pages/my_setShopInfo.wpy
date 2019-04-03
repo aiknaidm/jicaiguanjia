@@ -421,28 +421,16 @@ export default class my_setShopInfo extends wepy.page {
           if (res.data.code == 0) {
             //将获取的验证码赋值
             this.code = res.data.data;
-            wx.showModal({
-              title: '提示', //提示的标题,
-              content: '验证码发送成功', //提示的内容,
-              showCancel: false, //是否显示取消按钮,
-              confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-              confirmColor: '#e50012' //确定按钮的文字颜色,
-            });
+            util.showModal('验证码发送成功');
           } else {
-            wx.showToast({
-              title: res.data.message + '',
-              icon: 'none'
-            });
+            util.showToast(res.data.message);
             this.smsCodeDisabled = false;
           }
           var count = 120;
           this.setTime(count);
         } catch (error) {
           this.smsCodeDisabled = false;
-          wx.showToast({
-            title: '链接超时',
-            icon: 'none'
-          });
+          util.showToast('链接超时');
         }
       } else {
         this.smsCodeDisabled = false;
@@ -505,11 +493,7 @@ export default class my_setShopInfo extends wepy.page {
     if (phone.test(inputUserName)) {
       return true;
     } else {
-      wx.showModal({
-        title: '提示',
-        showCancel: false,
-        content: '请输入正确的手机号码'
-      });
+      util.showModal('请输入正确的手机号码');
       return false;
     }
   }
@@ -518,11 +502,7 @@ export default class my_setShopInfo extends wepy.page {
     var smsCode = param.trim();
 
     if (smsCode.length < 4) {
-      wx.showModal({
-        title: '提示',
-        showCancel: false,
-        content: '请输入4位短信验证码'
-      });
+      util.showModal('请输入4位短信验证码');
       return false;
     } else {
       return true;
@@ -547,50 +527,31 @@ export default class my_setShopInfo extends wepy.page {
         var is_friend = param.is_friend ? 1 : 0;
 
         if (this.userId == '-1') {
-          wx.showModal({
-            content: '登录失败请稍后再试',
-            showCancel: false
-          });
+          util.showModal('登录失败请稍后再试');
           return;
         }
 
         if (realname == '') {
-          wx.showModal({
-            content: '请填写姓名',
-            showCancel: false
-          });
+          util.showModal('请填写姓名');
           return;
         }
         if (storename == '') {
-          wx.showModal({
-            content: '请填写店铺名',
-            showCancel: false
-          });
+          util.showModal('请填写店铺名');
           return;
         }
         if (pcusername == '') {
-          wx.showModal({
-            content: '请填写后台用户名',
-            showCancel: false
-          });
+          util.showModal('请填写后台用户名');
           return;
         }
         if (this.region.length == 0) {
-          wx.showModal({
-            content: '请填写地区',
-            showCancel: false
-          });
+          util.showModal('请填写地区');
           return;
         }
         var sheng = this.region[0];
         var shi = this.region[1];
         var qu = this.region[2];
 
-        wx.showLoading({
-          title: 'Loading...', //提示的内容,
-          mask: true, //显示透明蒙层，防止触摸穿透,
-          success: res => {}
-        });
+        util.showLoading();
         let data = {
           suppliers_id,
           user_id: this.userId,
@@ -612,21 +573,11 @@ export default class my_setShopInfo extends wepy.page {
           //this.isuserDetail = true;
         } else {
           this.issubmit = false;
-          wx.showModal({
-            content: res.data.message,
-            success: function(res) {
-              if (res.confirm) {
-              } else if (res.cancel) {
-              }
-            }
-          });
+          util.showModal(res.data.message);
         }
         this.$apply();
       } else {
-        wx.showModal({
-          showCancel: false,
-          content: '输入的验证码有误'
-        });
+        util.showModal('输入的验证码有误');
       }
     }
   }

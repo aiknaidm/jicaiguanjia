@@ -481,7 +481,7 @@ export default class newslist extends wepy.page {
     this.tabList[4].num = this.yizhanInfo.guanbi;
   }
   // 是否过期
-  isexpired(yizhanInfo) {
+  async isexpired(yizhanInfo) {
     var new_time = new Date().getTime();
     var shiyong_time = 7 * 24 * 3600 * 1000;
     var end_time = yizhanInfo.end_time * 1000;
@@ -489,37 +489,19 @@ export default class newslist extends wepy.page {
       return;
     }
     if (new_time > end_time) {
-      wx.showModal({
-        title: '提示', //提示的标题,
-        content: '您的小程序已到期', //提示的内容,
-        showCancel: false, //是否显示取消按钮,
-        cancelColor: '#000000', //取消按钮的文字颜色,
-        confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-        confirmColor: '#e50012', //确定按钮的文字颜色,
-        success: res => {
-          wx.navigateTo({ url: '/ConsolePages/pages/my_console_renew' });
-        }
-      });
+      await util.showModal('您的小程序已到期');
+      wx.navigateTo({ url: '/ConsolePages/pages/my_console_renew' });
     } else if (new_time + shiyong_time > end_time) {
       var time = Math.floor((end_time - new_time) / 1000 / 3600 / 24);
-      wx.showModal({
-        title: '提示', //提示的标题,
-        content:
-          '您的小程序将在' +
+      let mRes = await util.showModalBig(
+        '您的小程序将在' +
           time +
-          '天以后到期，请及时续费，以免到期系统自动关闭，影响您的正常使用。', //提示的内容,
-        showCancel: true, //是否显示取消按钮,
-        cancelText: '取消', //取消按钮的文字，默认为取消，最多 4 个字符,
-        cancelColor: '#000000', //取消按钮的文字颜色,
-        confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-        confirmColor: '#3CC51F', //确定按钮的文字颜色,
-        success: res => {
-          if (res.confirm) {
-            wx.navigateTo({ url: '/ConsolePages/pages/my_console_renew' });
-          } else if (res.cancel) {
-          }
-        }
-      });
+          '天以后到期，请及时续费，以免到期系统自动关闭，影响您的正常使用。'
+      );
+      if (mRes.confirm) {
+        wx.navigateTo({ url: '/ConsolePages/pages/my_console_renew' });
+      } else if (mRes.cancel) {
+      }
     }
   }
   // 是否开通会员卡
@@ -565,22 +547,19 @@ export default class newslist extends wepy.page {
     );
 
     if (!yizhanInfo.is_admin && !yizhanInfo.is_salesman) {
-      wx.showModal({
-        title: '提示',
-        content: '您还不是批发商，没有管理权限，赶紧去注册吧',
-        success: res => {
-          if (res.cancel) {
-            wx.switchTab({
-              url: '/pages/my'
-            });
-          }
-          if (res.confirm) {
-            wx.navigateTo({
-              url: '/ConsolePages/pages/renzheng'
-            });
-          }
-        }
-      });
+      let mRes = await util.showModalBig(
+        '您还不是批发商，没有管理权限，赶紧去注册吧'
+      );
+      if (mRes.cancel) {
+        wx.switchTab({
+          url: '/pages/my'
+        });
+      }
+      if (mRes.confirm) {
+        wx.navigateTo({
+          url: '/ConsolePages/pages/renzheng'
+        });
+      }
       return;
     }
     this.yizhanInfo = yizhanInfo;

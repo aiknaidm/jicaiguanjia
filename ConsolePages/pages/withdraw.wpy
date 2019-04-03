@@ -93,7 +93,7 @@ page {
 
 <script>
 import wepy from 'wepy';
-import pay from '../../utils/index';
+import util from '../../utils/index';
 
 export default class withdraw extends wepy.page {
   config = {
@@ -106,46 +106,18 @@ export default class withdraw extends wepy.page {
   computed = {};
   methods = {
     async formSubmit(e) {
-
       var userId = await this.$parent.loginInfo();
-      // var money = e.detail.value.money
-      // if (money==""){
-      // 	wx.showToast({
-      // 		title: '提现金额不能为空',
-      // 		icon:"none"
-      // 	})
-      // 	return;
-      // }
-      // if (money > that.data.ketx) {
-      // 	wx.showToast({
-      // 		title: '提现金额不能大于当前余额',
-      // 		icon: "none"
-      // 	})
-      // 	return;
-      // }
-    
-      var res = await pay.wxpay3(userId);
+      var res = await util.wxpay3(userId);
       wx.hideLoading();
 
-      wx.showToast({
-        title: res.msg, //提示的内容,
-        icon: 'none', //图标,
-        duration: 2000, //延迟时间,
-        mask: true, //显示透明蒙层，防止触摸穿透,
-        success: res => {}
-      });
+      util.showToast(res.msg);
       if (res.code == 0) {
         this.ketx = 0;
-      var Mres=await  wepy.showModal({
-          title: '提示', //提示的标题,
-          content: '提现成功', //提示的内容,
-          showCancel: false, //是否显示取消按钮,
-       
-          confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-          confirmColor: '#e50012', //确定按钮的文字颜色,
-        
-        });
-        this.$parent.$pages["ConsolePages/pages/share"].getShareList(this.userId,0);
+        await util.showModal('提现成功');
+        this.$parent.$pages['ConsolePages/pages/share'].getShareList(
+          this.userId,
+          0
+        );
         wx.navigateBack({
           delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
         });

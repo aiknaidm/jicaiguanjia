@@ -25,10 +25,7 @@ export default class details extends wepy.page {
   methods = {};
   events = {};
   async getArticleDetail(id) {
-    wx.showLoading({
-      title: '加载中...', //提示的内容,
-      mask: true //显示透明蒙层，防止触摸穿透,
-    });
+    util.showLoading();
     let data = { id };
     let res = await newapi.articleDetail(data);
     wx.hideLoading();

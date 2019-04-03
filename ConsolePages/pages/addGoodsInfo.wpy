@@ -448,8 +448,7 @@ export default class newslist extends wepy.page {
           });
           this.$apply();
         })
-        .catch(res => {
-        });
+        .catch(res => {});
     },
     changeGoodsInput: function(e) {
       this.goodsKeyword = e.detail.value;
@@ -465,67 +464,24 @@ export default class newslist extends wepy.page {
       this.cat_id = id;
     },
     //长按
-    longtabBrand(name, id, index) {
-      wepy
-        .showModal({
-          title: '提示', //提示的标题,
-          content: '你确定要删除"' + name + '"品牌吗', //提示的内容,
-          showCancel: true, //是否显示取消按钮,
-          cancelText: '取消', //取消按钮的文字，默认为取消，最多 4 个字符,
-          cancelColor: '#000000', //取消按钮的文字颜色,
-          confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-          confirmColor: '#e50012' //确定按钮的文字颜色,
-        })
-        .then(res => {
-          if (res.confirm) {
-            this.sureDelBrand(this.user_id, id, index);
-          } else if (res.cancel) {
-          }
-        })
-        .catch(res => {
-          wx.showToast({
-            title: '出错了', //提示的内容,
-            icon: 'none', //图标,
-            duration: 2000, //延迟时间,
-            mask: true, //显示透明蒙层，防止触摸穿透,
-            success: res => {}
-          });
-        });
+    async longtabBrand(name, id, index) {
+      let mRes = await util.showModalBig('你确定要删除"' + name + '"品牌吗');
+      if (mRes.confirm) {
+        this.sureDelBrand(this.user_id, id, index);
+      } else if (mRes.cancel) {
+      }
     },
-    longtabGoods(name, id, index) {
-      wepy
-        .showModal({
-          title: '提示', //提示的标题,
-          content: '你确定要删除"' + name + '"分类吗', //提示的内容,
-          showCancel: true, //是否显示取消按钮,
-          cancelText: '取消', //取消按钮的文字，默认为取消，最多 4 个字符,
-          cancelColor: '#000000', //取消按钮的文字颜色,
-          confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-          confirmColor: '#e50012' //确定按钮的文字颜色,
-        })
-        .then(res => {
-          if (res.confirm) {
-            this.sureDelGoods(this.user_id, id, index);
-          } else if (res.cancel) {
-          }
-        })
-        .catch(res => {
-          wx.showToast({
-            title: '出错了', //提示的内容,
-            icon: 'none', //图标,
-            duration: 2000, //延迟时间,
-            mask: true, //显示透明蒙层，防止触摸穿透,
-            success: res => {}
-          });
-        });
+    async longtabGoods(name, id, index) {
+      let mRes = await util.showModalBig('你确定要删除"' + name + '"分类吗');
+      if (mRes.confirm) {
+        this.sureDelGoods(this.user_id, id, index);
+      } else if (mRes.cancel) {
+      }
     },
     bindGoodsSure() {
       var goodsList = this.goodsList;
       if (this.goodsKeyword.length == 0 || this.goodsKeyword == '') {
-        wx.showToast({
-          title: '请输入查找的商品分类',
-          icon: 'none'
-        });
+        util.showToast('请输入查找的商品分类');
         return;
       }
       // this.initKind();
@@ -534,10 +490,7 @@ export default class newslist extends wepy.page {
     bindBrandSure() {
       var brandList = this.brandList;
       if (this.brandKeyword.length == 0 || this.brandKeyword == '') {
-        wx.showToast({
-          title: '请输入查找的商品品牌',
-          icon: 'none'
-        });
+        util.showToast('请输入查找的商品品牌');
         return;
       }
       this.getBrandList(this.user_id, this.suppliers_id, this.brandKeyword);
@@ -586,24 +539,13 @@ export default class newslist extends wepy.page {
       }
     },
     // 删除
-    delAttr(index) {
-      wepy
-        .showModal({
-          title: '提示', //提示的标题,
-          content: '你确定要删除吗', //提示的内容,
-          showCancel: true, //是否显示取消按钮,
-          cancelText: '取消', //取消按钮的文字，默认为取消，最多 4 个字符,
-          cancelColor: '#000000', //取消按钮的文字颜色,
-          confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-          confirmColor: '#e50012' //确定按钮的文字颜色,
-        })
-        .then(res => {
-          if (res.confirm) {
-            this.goods_attr.splice(index, 1);
-            this.$apply();
-          } else if (res.cancel) {
-          }
-        });
+    async delAttr(index) {
+      let mRes = await util.showModalBig('你确定要删除吗');
+      if (mRes.confirm) {
+        this.goods_attr.splice(index, 1);
+        this.$apply();
+      } else if (mRes.cancel) {
+      }
     },
     getFormId(e) {
       util.submitFormId(this.user_id, e.detail.formId);
@@ -613,9 +555,7 @@ export default class newslist extends wepy.page {
   events = {};
   async getIndexNewsList(id) {}
   async upImg(i = 0) {
-    wx.showLoading({
-      title: '上传中'
-    });
+    util.showLoading('上传中');
     try {
       var res = await wepy.uploadFile({
         url: api.upload,
@@ -631,27 +571,19 @@ export default class newslist extends wepy.page {
         return datas.data.pic_url;
       }
     } catch (error) {
-      var imgRes = await wepy.showModal({
-        title: '提示', //提示的标题,
-        content: '图片' + this.imgSrc[i].img_url + '上传失败', //提示的内容,
-        showCancel: true, //是否显示取消按钮,
-        cancelText: '取消', //取消按钮的文字，默认为取消，最多 4 个字符,
-        cancelColor: '#000000', //取消按钮的文字颜色,
-        confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-        confirmColor: '#3CC51F' //确定按钮的文字颜色,
-      });
-      if (imgRes.confirm) {
+      let mRes = await util.showModalBig(
+        '图片' + this.imgSrc[i].img_url + '上传失败'
+      );
+      if (mRes.confirm) {
         await this.upImg(i);
-      } else if (imgRes.cancel) {
+      } else if (mRes.cancel) {
       }
     }
   }
   // 品牌列表 用户id 店铺id 有keyword时添加查找商品
   async getBrandList(userId, suppliers_id, keyword = '') {
     var that = this;
-    wx.showLoading({
-      title: '加载中'
-    });
+    util.showLoading();
     let data = {
       user_id: userId,
       suppliers_id: suppliers_id,
@@ -674,9 +606,7 @@ export default class newslist extends wepy.page {
   // 分类列表 用户id 店铺id 有keyword时添加查找商品
   async getGoodsList(userId, suppliers_id, keyword = '') {
     var that = this;
-    wx.showLoading({
-      title: '加载中'
-    });
+    util.showLoading();
     let data = {
       user_id: userId,
       suppliers_id: suppliers_id,
@@ -691,9 +621,7 @@ export default class newslist extends wepy.page {
   // 添加分类
   async addGoodsList(userId, suppliers_id, keyword = '') {
     var that = this;
-    wx.showLoading({
-      title: '加载中'
-    });
+    util.showLoading();
 
     let data = {
       user_id: userId,
@@ -721,12 +649,7 @@ export default class newslist extends wepy.page {
     if (res.data.code == 0) {
       this.goodsList.splice(index, 1);
     } else {
-      wx.showToast({
-        title: res.data.message + '，删除失败', //提示的内容,
-        icon: 'none', //图标,
-        duration: 2000, //延迟时间,
-        mask: true //显示透明蒙层，防止触摸穿透,
-      });
+      util.showToast(res.data.message + '，删除失败');
     }
     this.$apply();
   }
@@ -740,12 +663,7 @@ export default class newslist extends wepy.page {
     if (res.data.code == 0) {
       this.brandList.splice(index, 1);
     } else {
-      wx.showToast({
-        title: res.data.message + '，删除失败', //提示的内容,
-        icon: 'none', //图标,
-        duration: 2000, //延迟时间,
-        mask: true //显示透明蒙层，防止触摸穿透,
-      });
+      util.showToast(res.data.message + '，删除失败');
     }
     this.$apply();
   }
@@ -791,147 +709,83 @@ export default class newslist extends wepy.page {
     this.hdky = e.detail.value.hdky;
     var hdky = e.detail.value.hdky ? 1 : 0;
     if (goods_name == '') {
-      wx.showToast({
-        title: '请输入商品标题',
-        icon: 'none'
-      });
+      util.showToast('请输入商品标题');
       return;
     }
     if (!cat_id || cat_id.length == 0) {
-      wx.showToast({
-        title: '请选择商品分类',
-        icon: 'none'
-      });
+      util.showToast('请选择商品分类');
       return;
     }
     if (!brand_id || brand_id.length == 0) {
-      wx.showToast({
-        title: '请选择商品品牌',
-        icon: 'none'
-      });
+      util.showToast('请选择商品品牌');
       return;
     }
     if (!qidingliang || qidingliang.length == 0 || parseInt(qidingliang) <= 0) {
-      wx.showToast({
-        title: '请输入起订量',
-        icon: 'none'
-      });
+      util.showToast('请输入起订量');
       return;
     }
     if (floor_price.length == 0 && goods_attr.length == 0) {
-      wx.showToast({
-        title: '请填写零售价格',
-        icon: 'none'
-      });
+      util.showToast('请填写零售价格');
       return;
     }
     if (shop_price.length == 0 && goods_attr.length == 0) {
-      wx.showToast({
-        title: '请填写批发价格',
-        icon: 'none'
-      });
+      util.showToast('请填写批发价格');
       return;
     }
     if (goods_number.length == 0 && goods_attr.length == 0) {
-      wx.showToast({
-        title: '请填写商品数量',
-        icon: 'none'
-      });
+      util.showToast('请填写商品数量');
       return;
     }
     if (
       parseFloat(shop_price) > parseFloat(floor_price) &&
       goods_attr.length == 0
     ) {
-      wx.showToast({
-        title: '批发价不能大于零售价',
-        icon: 'none'
-      });
+      util.showToast('批发价不能大于零售价');
       return;
     }
     if (floor_price <= 0 && goods_attr.length == 0) {
-      wx.showToast({
-        title: '零售价格不能为0',
-        icon: 'none'
-      });
+      util.showToast('零售价格不能为0');
       return;
     }
     if (shop_price <= 0 && goods_attr.length == 0) {
-      wx.showToast({
-        title: '批发价格不能为0',
-        icon: 'none'
-      });
+      util.showToast('批发价格不能为0');
       return;
     }
     for (var i = 0; i < goods_attr.length; i++) {
       if (goods_attr[i].attr_value == '') {
-        wx.showToast({
-          title: '请填写商品规格',
-          icon: 'none'
-        });
+        util.showToast('请填写商品规格');
         return;
       }
       if (goods_attr[i].attr_price == '') {
-        wx.showToast({
-          title: '请填写商品批发价',
-          icon: 'none'
-        });
+        util.showToast('请填写商品批发价');
         return;
       }
       if (goods_attr[i].floor_price == '') {
-        wx.showToast({
-          title: '请填写商品零售价',
-          icon: 'none'
-        });
+        util.showToast('请填写商品零售价');
         return;
       }
       if (
         parseFloat(goods_attr[i].floor_price) <
         parseFloat(goods_attr[i].attr_price)
       ) {
-        wx.showToast({
-          title: '批发价不能大于零售价',
-          icon: 'none'
-        });
+        util.showToast('批发价不能大于零售价');
         return;
       }
       if (goods_attr[i].floor_price <= 0 || goods_attr[i].attr_price <= 0) {
-        wx.showToast({
-          title: '商品价格不能为0',
-          icon: 'none'
-        });
+        util.showToast('商品价格不能为0');
         return;
       }
       if (goods_attr[i].goods_number == '') {
-        wx.showToast({
-          title: '请填写商品数量',
-          icon: 'none'
-        });
+        util.showToast('请填写商品数量');
         return;
       }
     }
-    wx.showLoading({
-      title: '上传中', //提示的内容,
-      mask: true, //显示透明蒙层，防止触摸穿透,
-      success: res => {}
-    });
+    util.showLoading('上传中');
     // 上传图片
     this.goods_imgs = [];
     if (this.imgSrc != '') {
       if (this.imgSrc.length > 5) {
-        wx.showModal({
-          title: '提示', //提示的标题,
-          content: '上传图片不能大于五张', //提示的内容,
-          showCancel: false, //是否显示取消按钮,
-          cancelText: '取消', //取消按钮的文字，默认为取消，最多 4 个字符,
-          cancelColor: '#000000', //取消按钮的文字颜色,
-          confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-          confirmColor: '#e50012', //确定按钮的文字颜色,
-          success: res => {
-            if (res.confirm) {
-            }
-          }
-        });
+        util.showModal('上传图片不能大于五张');
         return;
       }
     }
@@ -974,69 +828,57 @@ export default class newslist extends wepy.page {
     if (res.data.code == 0) {
       // that.clearGoodInfo();
       wx.hideLoading();
-      wepy
-        .showModal({
-          title: '提示',
-          content: '上传商品成功',
-          showCancel: false
-        })
-        .then(res => {
-          if (res.confirm) {
-            wx.navigateBack({});
-            if (goods_id != '' && this.index) {
-              this.$parent.$pages['/ConsolePages/pages/goodsList'].list[
-                this.index
-              ].goods_name = goods_name;
-              this.$parent.$pages['/ConsolePages/pages/goodsList'].list[
-                this.index
-              ].original_img1 =
-                goods_img && goods_img != ''
-                  ? goods_img
-                  : 'http://wsc.jicaizx.com/images/no_picture.gif';
-              this.$parent.$pages['/ConsolePages/pages/goodsList'].list[
-                this.index
-              ].hdky = hdky;
-              if (goods_attr.length) {
-                var max = 0;
-                var min = goods_attr[0].attr_price;
-                var add = 0;
-                goods_attr.forEach(function(item, index) {
-                  if (item.attr_price > max) {
-                    max = item.attr_price;
-                  }
-                  if (item.attr_price < min) {
-                    min = item.attr_price;
-                  }
-                  add = add + parseInt(item.goods_number);
-                });
-                var price = max == min ? max : min + '~' + max;
-                this.$parent.$pages['/ConsolePages/pages/goodsList'].list[
-                  this.index
-                ].shop_price = price;
-                this.$parent.$pages['/ConsolePages/pages/goodsList'].list[
-                  this.index
-                ].goods_number = add;
-              } else {
-                this.$parent.$pages['/ConsolePages/pages/goodsList'].list[
-                  this.index
-                ].shop_price = shop_price;
-                this.$parent.$pages['/ConsolePages/pages/goodsList'].list[
-                  this.index
-                ].goods_number = goods_number;
-              }
+      await util.showModal('上传商品成功');
+
+      wx.navigateBack({});
+      if (goods_id != '' && this.index) {
+        this.$parent.$pages['/ConsolePages/pages/goodsList'].list[
+          this.index
+        ].goods_name = goods_name;
+        this.$parent.$pages['/ConsolePages/pages/goodsList'].list[
+          this.index
+        ].original_img1 =
+          goods_img && goods_img != ''
+            ? goods_img
+            : 'http://wsc.jicaizx.com/images/no_picture.gif';
+        this.$parent.$pages['/ConsolePages/pages/goodsList'].list[
+          this.index
+        ].hdky = hdky;
+        if (goods_attr.length) {
+          var max = 0;
+          var min = goods_attr[0].attr_price;
+          var add = 0;
+          goods_attr.forEach(function(item, index) {
+            if (item.attr_price > max) {
+              max = item.attr_price;
             }
-          }
-        });
+            if (item.attr_price < min) {
+              min = item.attr_price;
+            }
+            add = add + parseInt(item.goods_number);
+          });
+          var price = max == min ? max : min + '~' + max;
+          this.$parent.$pages['/ConsolePages/pages/goodsList'].list[
+            this.index
+          ].shop_price = price;
+          this.$parent.$pages['/ConsolePages/pages/goodsList'].list[
+            this.index
+          ].goods_number = add;
+        } else {
+          this.$parent.$pages['/ConsolePages/pages/goodsList'].list[
+            this.index
+          ].shop_price = shop_price;
+          this.$parent.$pages['/ConsolePages/pages/goodsList'].list[
+            this.index
+          ].goods_number = goods_number;
+        }
+      }
     }
   }
   // 修改商品 获取初始信息
   async setGoodsInfo(goods_id) {
     var that = this;
-    wx.showLoading({
-      title: 'Loading...', //提示的内容,
-      mask: true, //显示透明蒙层，防止触摸穿透,
-      success: res => {}
-    });
+    util.showLoading();
     wx.setNavigationBarTitle({
       title: '修改商品'
     });
@@ -1084,8 +926,7 @@ export default class newslist extends wepy.page {
       this.getBrandList(this.user_id, this.suppliers_id);
       this.getGoodsList(this.user_id, this.suppliers_id);
       this.$apply();
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 }
 </script>

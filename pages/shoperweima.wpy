@@ -40,6 +40,7 @@ page {
 <script>
 import wepy from 'wepy';
 import newapi from '../API/newapi';
+import util from '../utils/index';
 export default class shoperweima extends wepy.page {
   config = {
     navigationBarTitleText: '我的',
@@ -62,11 +63,7 @@ export default class shoperweima extends wepy.page {
             wx.saveImageToPhotosAlbum({
               filePath: this.shareImage,
               success(res) {
-                wx.showToast({
-                  title: '保存图片成功',
-                  icon: 'success',
-                  duration: 2000
-                });
+                util.showToast('保存图片成功');
               }
             });
             return;
@@ -78,11 +75,7 @@ export default class shoperweima extends wepy.page {
                   wx.saveImageToPhotosAlbum({
                     filePath: this.shareImage,
                     success(res) {
-                      wx.showToast({
-                        title: '保存图片成功',
-                        icon: 'success',
-                        duration: 2000
-                      });
+                      util.showToast('保存图片成功');
                     }
                   });
                 }
@@ -130,10 +123,7 @@ export default class shoperweima extends wepy.page {
     var user_id = userId;
     var that = this;
     if (!suppliers_id) {
-      wx.showToast({
-        title: '没有店铺信息',
-        icon: 'none'
-      });
+      await util.showToast('没有店铺信息');
       wx.navigateBack({});
       return;
     }
@@ -155,7 +145,7 @@ export default class shoperweima extends wepy.page {
     var a = wx.getSystemInfoSync().windowWidth / 375;
     var height = wx.getSystemInfoSync().windowHeight;
     var width = wx.getSystemInfoSync().windowWidth;
-    wx.showLoading({ title: '绘制图片中' });
+    util.showLoading('绘制图片中');
     that.data.painting = {
       width: 375 * a,
       height: 474 * a,

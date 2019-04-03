@@ -101,6 +101,7 @@
 <script>
 import wepy from 'wepy';
 import newapi from '../../API/newapi';
+import util from '../../utils/index';
 export default class my_setManagerInfo extends wepy.page {
   config = {
     navigationBarTitleText: '管理员绑定'
@@ -121,18 +122,10 @@ export default class my_setManagerInfo extends wepy.page {
       };
       let res = await newapi.delManager(data);
       if (res.data.code == '0') {
-        wx.showToast({
-          title: '删除成功',
-          icon: 'success',
-          duration: 2000
-        });
+        util.showToast('删除成功');
         this.managerList();
       } else {
-        wx.showToast({
-          title: res.data.message,
-          icon: 'success',
-          duration: 2000
-        });
+        util.showToast(res.data.message);
       }
     },
     addManager: function() {

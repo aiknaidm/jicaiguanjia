@@ -78,11 +78,7 @@ export default class newslist extends wepy.page {
       var datas2 = {};
       datas2.suppliers_id = this.suppliers_id;
       var res = await util.pay(datas, datas2, api.kthypay, api.kthypaysuccess);
-      wx.showToast({
-        title: res.msg, //提示的内容,
-        icon: 'none', //图标,
-        duration: 1000 //延迟时间,
-      });
+      util.showToast(res.msg);
       if (res.code == 1)
         wx.navigateTo({
           url: 'setCard'
@@ -100,19 +96,6 @@ export default class newslist extends wepy.page {
     this.$apply();
   }
   async onLoad(option) {
-    // wx.showModal({
-    //   title: '提示', //提示的标题,
-    //   content: '敬请期待', //提示的内容,
-    //   showCancel: false, //是否显示取消按钮,
-
-    //   confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-    //   confirmColor: '#e50012', //确定按钮的文字颜色,
-    //   success: res => {
-    //     wx.navigateBack({
-    //       delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
-    //     });
-    //   }
-    // });
     this.getCardPrice();
     try {
       this.user_id = await this.$parent.loginInfo();
@@ -120,16 +103,9 @@ export default class newslist extends wepy.page {
         ? this.$parent.globalData.suppliers_id
         : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
     } catch (error) {
-      wx.showToast({
-        title: '登录失败', //提示的内容,
-        icon: 'none', //图标,
-        duration: 1000, //延迟时间,
-        mask: true, //显示透明蒙层，防止触摸穿透,
-        success: res => {
-          wx.redirectTo({
-            url: '/ConsolePages/pages/index'
-          });
-        }
+      await util.showToast('登录失败');
+      wx.redirectTo({
+        url: '/ConsolePages/pages/index'
       });
     }
     // 获取费用

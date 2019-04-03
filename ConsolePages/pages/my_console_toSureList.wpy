@@ -129,11 +129,7 @@ export default class share extends wepy.page {
   methods = {};
   events = {};
   async getCzdqr() {
-    wx.showLoading({
-      title: '加载中...', //提示的内容,
-      mask: true, //显示透明蒙层，防止触摸穿透,
-      success: res => {}
-    });
+    util.showLoading();
     this.suppliers_id = this.$parent.globalData.suppliers_id
       ? this.$parent.globalData.suppliers_id
       : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
@@ -159,11 +155,7 @@ export default class share extends wepy.page {
   }
   onReachBottom() {
     if (this.isMoreData) {
-      wx.showLoading({
-        title: '加载中', //提示的内容,
-        mask: true, //显示透明蒙层，防止触摸穿透,
-        success: res => {}
-      });
+      util.showLoading();
       this.page = this.page + 1;
       this.getCzdqr();
     }

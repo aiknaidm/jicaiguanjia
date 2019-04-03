@@ -147,6 +147,7 @@
 <script>
 import wepy from 'wepy';
 import newapi from '../../API/newapi';
+import util from '../../utils/index';
 export default class share extends wepy.page {
   config = {
     navigationBarTitleText: '分享'
@@ -163,8 +164,7 @@ export default class share extends wepy.page {
         data: share_code,
         success(res) {
           wx.getClipboardData({
-            success(res) {
-            }
+            success(res) {}
           });
         }
       });
@@ -176,11 +176,7 @@ export default class share extends wepy.page {
     },
     toWithdraw: function() {
       if (this.qrcode && this.qrcode.ketx == 0) {
-        wx.showModal({
-          title: '提示',
-          content: '你还没有可以提现的金额，去分享试试',
-          showCancel: false
-        });
+        util.showModal('你还没有可以提现的金额，去分享试试');
       } else {
         wx.navigateTo({
           url: 'withdraw?ketx=' + this.qrcode.ketx
@@ -203,9 +199,7 @@ export default class share extends wepy.page {
   events = {};
 
   async getCode(user_id) {
-    wx.showLoading({
-      title: '加载中'
-    });
+    util.showLoading();
 
     let data = {
       path: '/ConsolePages/pages/renzheng',
@@ -217,9 +211,7 @@ export default class share extends wepy.page {
       this.qrcode = res.data.data;
     } else {
       wx.hideLoading();
-      wx.showToast({
-        title: '获取邀请码失败'
-      });
+      util.showToast('获取邀请码失败');
     }
     this.$apply();
   }

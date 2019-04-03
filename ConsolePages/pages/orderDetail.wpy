@@ -48,26 +48,13 @@ export default class orderDetails extends wepy.page {
 
   computed = {};
   methods = {
-    fahuoSubmit: function(e) {
+    async fahuoSubmit(e) {
       var fahuo = e.detail.value.fahuo;
-      wepy
-        .showModal({
-          title: '提示', //提示的标题,
-          content: '你确定要发货吗', //提示的内容,
-          showCancel: true, //是否显示取消按钮,
-          cancelText: '取消', //取消按钮的文字，默认为取消，最多 4 个字符,
-          cancelColor: '#000000', //取消按钮的文字颜色,
-          confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-          confirmColor: '#e50012' //确定按钮的文字颜色,
-        })
-        .then(res => {
-          if (res.confirm) {
-            if (fahuo == 1) this.upfahuoimg(this.id);
-            else this.fahuo(this.id);
-          }
-        })
-        .catch(res => {
-        });
+      let mRes = await util.showModalBig('你确定要发货吗');
+      if (mRes.confirm) {
+        if (fahuo == 1) this.upfahuoimg(this.id);
+        else this.fahuo(this.id);
+      }
     }
   };
   events = {
@@ -121,10 +108,7 @@ export default class orderDetails extends wepy.page {
             }
           })
           .catch(res => {
-            wepy.showToast({
-              title: res.errMsg, //提示的内容,
-              icon: none //图标,
-            });
+            util.showToast(res.errMsg);
           });
       });
   }
@@ -180,9 +164,7 @@ export default class orderDetails extends wepy.page {
       : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
 
     this.getOrderDetail(this.id);
-    wx.showLoading({
-      title: '加载中...' //提示的内容,
-    });
+    util.showLoading();
   }
 }
 </script>

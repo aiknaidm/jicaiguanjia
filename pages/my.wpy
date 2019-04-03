@@ -47,6 +47,7 @@
 <script>
 import wepy from 'wepy';
 import newapi from '../API/newapi';
+import util from '../utils/index';
 import userInfo from '../components/userinfo';
 import myList from '../components/myList';
 import prompt from '../components/prompt';
@@ -115,17 +116,9 @@ export default class my extends wepy.page {
       nickName: this.userInfo.nickName
     };
     await newapi.upUserInfo(data);
-    wx.showToast({
-      title: '提交信息成功', //提示的内容,
-      icon: 'none' //图标,
-    });
+    util.showToast('提交信息成功');
   }
   async onLoad() {
-    // wx.showLoading({
-    //   title: '加载中...', //提示的内容,
-    //   mask: true, //显示透明蒙层，防止触摸穿透,
-    //   success: res => {}
-    // });
     let that = this;
     this.userId = await this.$parent.loginInfo();
     let isSettingStatus = await this.$parent.checkSettingStatus();

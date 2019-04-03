@@ -885,18 +885,10 @@ export default class newslist extends wepy.page {
         }
       });
 
-      var res = await wepy.showModal({
-        title: '提示', //提示的标题,
-        content: '你确定要删除' + deleteSelectName + '吗', //提示的内容,
-        showCancel: true, //是否显示取消按钮,
-        cancelText: '取消', //取消按钮的文字，默认为取消，最多 4 个字符,
-        cancelColor: '#000000', //取消按钮的文字颜色,
-        confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-        confirmColor: '#e50012' //确定按钮的文字颜色,
-      });
-      if (res.confirm) {
+      let mRes = await util.showModalBig('你确定要删除' + deleteSelectName + '吗');
+      if (mRes.confirm) {
         this.delGoods(deleteSelectList);
-      } else if (res.cancel) {
+      } else if (mRes.cancel) {
       }
     },
 
@@ -957,13 +949,7 @@ export default class newslist extends wepy.page {
     async tapSure(value) {
       var that = this;
       if (!value || value == '') {
-        wx.showToast({
-          title: '请填写标题', //提示的内容,
-          icon: 'none', //图标,
-          duration: 2000, //延迟时间,
-          mask: true, //显示透明蒙层，防止触摸穿透,
-          success: res => {}
-        });
+        util.showToast('请填写标题');
         return;
       }
       this.isshowBox = false;
@@ -973,11 +959,7 @@ export default class newslist extends wepy.page {
       };
       let res = await newapi.xgbt(data);
       if (res.data.code == 0) {
-        wx.showToast({
-          title: '修改成功',
-          icon: 'success',
-          duration: 2000
-        });
+        util.showToast('修改成功');
         this.list[this.index].goods_name = value;
         this.$apply();
       }
@@ -991,34 +973,19 @@ export default class newslist extends wepy.page {
     };
     let res = await newapi.del_goods(data);
     if (res.data.code) {
-      wx.showToast({
-        title: '删除成功',
-        icon: 'none',
-        duration: 2000
-      });
+      util.showToast('删除成功');
       this.isMoreData = true;
       this.initdata.page = 1;
       this.getShopList(this.initdata);
     } else {
-      wx.showToast({
-        title: res.data.message,
-        icon: 'none',
-        duration: 2000
-      });
+      util.showToast(res.data.message);
     }
   }
   async getShopList(data) {
     if (!this.suppliers_id || !this.user_id) {
-      wx.showToast({
-        title: '获取店铺信息失败，请稍后再试',
-        icon: 'none'
-      });
+      util.showToast('获取店铺信息失败，请稍后再试');
     }
-    wx.showLoading({
-      title: '加载中', //提示的内容,
-      mask: true, //显示透明蒙层，防止触摸穿透,
-      success: res => {}
-    });
+    util.showLoading();
     let res = await newapi.search(data);
     wx.hideLoading();
     if (res.data.code == 0) {
@@ -1077,11 +1044,7 @@ export default class newslist extends wepy.page {
   }
   onReachBottom() {
     if (this.isMoreData) {
-      wx.showLoading({
-        title: '加载中', //提示的内容,
-        mask: true, //显示透明蒙层，防止触摸穿透,
-        success: res => {}
-      });
+      util.showLoading();
       this.initdata.page = this.initdata.page + 1;
       this.getShopList(this.initdata);
     }

@@ -105,6 +105,7 @@ canvas {
 <script>
 import wepy from 'wepy';
 import newapi from '../../API/newapi';
+import util from '../../utils/index';
 
 export default class newslist extends wepy.page {
   config = {
@@ -128,11 +129,7 @@ export default class newslist extends wepy.page {
             wx.saveImageToPhotosAlbum({
               filePath: this.shareImage,
               success(res) {
-                wx.showToast({
-                  title: '保存图片成功',
-                  icon: 'success',
-                  duration: 2000
-                });
+                util.showToast('保存图片成功');
               }
             });
             return;
@@ -144,11 +141,7 @@ export default class newslist extends wepy.page {
                   wx.saveImageToPhotosAlbum({
                     filePath: this.shareImage,
                     success(res) {
-                      wx.showToast({
-                        title: '保存图片成功',
-                        icon: 'success',
-                        duration: 2000
-                      });
+                      util.showToast('保存图片成功');
                     }
                   });
                 }
@@ -164,24 +157,12 @@ export default class newslist extends wepy.page {
   async eventDraw(userId) {
     // var suppliers_id = app.globalData.yizhanInfo.suppliers_id;
     var that = this;
-    // if (!app.globalData.yizhanInfo.suppliers_id) {
-    //   wx.showToast({
-    //     title: '没有店铺信息',
-    //     icon: "none"
-    //   })
-    //   wx.navigateBack({
-
-    //   })
-    //   return;
-    // }
     let data = {
       path: '/ConsolePages/pages/renzheng',
       user_id: userId
     };
     let res = await newapi.getShareImg(data);
-    wx.showLoading({
-      title: '绘制图片中'
-    });
+    util.showLoading('绘制图片中');
     var a = wx.getSystemInfoSync().windowWidth / 375;
     var height = wx.getSystemInfoSync().windowHeight;
     var width = wx.getSystemInfoSync().windowWidth;

@@ -27,7 +27,7 @@
 <script>
 import wepy from 'wepy';
 import newapi from '../../API/newapi';
-import wxpay1 from '../../utils/index';
+import util from '../../utils/index';
 export default class orderbutton extends wepy.component {
   props = {
     orderDetail: {
@@ -44,68 +44,35 @@ export default class orderbutton extends wepy.component {
     // 取消订单
     async cancelOrderTap(id) {
       var that = this;
-      var modalRes = await wepy.showModal({
-        title: '提示', //提示的标题,
-        content: '你确定要取消订单吗', //提示的内容,
-        showCancel: true, //是否显示取消按钮,
-        confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-        confirmColor: '#e50012' //确定按钮的文字颜色,
-      });
-      if (modalRes.confirm) {
+      let mRes = await util.showModalBig('你确定要取消订单吗');
+      if (mRes.confirm) {
         var res = await this.toCancelOrder(id);
         if (res.data.code == 0) this.$emit('cancelOrderTap');
-        else
-          wx.showToast({
-            title: '取消失败', //提示的内容,
-            icon: 'none', //图标,
-            duration: 2000, //延迟时间,
-            mask: true //显示透明蒙层，防止触摸穿透,
-          });
-      } else if (modalRes.cancel) {
+        else util.showToast('取消失败');
+      } else if (mRes.cancel) {
       }
     },
     // 确认收货
     async confirmBtnTap(id) {
       var that = this;
-      var modalRes = await wepy.showModal({
-        title: '提示', //提示的标题,
-        content: '你确定收货吗', //提示的内容,
-        showCancel: true, //是否显示取消按钮,
-        cancelText: '取消', //取消按钮的文字，默认为取消，最多 4 个字符,
-        cancelColor: '#000000', //取消按钮的文字颜色,
-        confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-        confirmColor: '#e50012' //确定按钮的文字颜色,
-      });
-      if (modalRes.confirm) {
+      let mRes = await util.showModalBig('你确定收货吗');
+      if (mRes.confirm) {
         var res = await this.toConfirmBtn(id);
         if (res.data.code == 0) this.$emit('confirmBtnTap');
-        else
-          wx.showToast({
-            title: '确认收货失败', //提示的内容,
-            icon: 'none', //图标,
-            duration: 2000, //延迟时间,
-            mask: true //显示透明蒙层，防止触摸穿透,
-          });
-      } else if (modalRes.cancel) {
+        else util.showToast('确认收货失败');
+      } else if (mRes.cancel) {
       }
     },
     // 马上付款
     async toPayTap(id) {
-      wx.showLoading({
-        title: '支付中...', //提示的内容,
-        mask: true //显示透明蒙层，防止触摸穿透,
-      });
-      var res = await wxpay1.wxpay1(
+      util.showLoading('支付中...');
+      var res = await util.wxpay1(
         id,
         '/Shop/pages/orderList?order_status=2',
         '/Shop/pages/orderList?order_status=1'
       );
       wx.hideLoading();
-      wx.showToast({
-        title: res.msg, //提示的内容,
-        icon: 'none', //图标,
-        mask: true //显示透明蒙层，防止触摸穿透,
-      });
+      util.showToast(res.msg);
     }
   };
   // 取消订单
@@ -121,7 +88,6 @@ export default class orderbutton extends wepy.component {
   toPayTap() {
     this.$emit('toPayTap');
   }
-  async onLoad() {
-  }
+  async onLoad() {}
 }
 </script>

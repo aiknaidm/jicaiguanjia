@@ -133,10 +133,7 @@ export default class orderlist extends wepy.page {
   methods = {
     // 选择
     statusTap(index) {
-      wx.showLoading({
-        title: '加载中', //提示的内容,
-        mask: true //显示透明蒙层，防止触摸穿透,
-      });
+      util.showLoading();
       this.thisindex = index;
       this.page = 1;
       this.isMoreData = true;
@@ -156,11 +153,7 @@ export default class orderlist extends wepy.page {
     user_id = this.userId,
     suppliers_id = this.suppliers_id
   ) {
-    wx.showLoading({
-      title: '加载中...', //提示的内容,
-      mask: true, //显示透明蒙层，防止触摸穿透,
-      success: res => {}
-    });
+    util.showLoading();
     switch (parseInt(order_status)) {
       case 0:
         var type = 'daifukuan';
@@ -215,10 +208,7 @@ export default class orderlist extends wepy.page {
     this.$apply();
   }
   async onLoad(option) {
-    wx.showLoading({
-      title: '加载中', //提示的内容,
-      mask: true //显示透明蒙层，防止触摸穿透,
-    });
+    util.showLoading();
     this.userId = await this.$parent.loginInfo();
     this.suppliers_id = option.suppliers_id
       ? option.suppliers_id
@@ -231,11 +221,7 @@ export default class orderlist extends wepy.page {
   }
   onReachBottom() {
     if (this.isMoreData) {
-      wx.showLoading({
-        title: '加载中', //提示的内容,
-        mask: true, //显示透明蒙层，防止触摸穿透,
-        success: res => {}
-      });
+      util.showLoading();
       this.page = this.page + 1;
       this.getOrderList(this.thisindex, this.page);
     }

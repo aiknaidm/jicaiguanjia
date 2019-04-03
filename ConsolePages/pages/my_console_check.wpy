@@ -281,6 +281,7 @@
 <script>
 import wepy from 'wepy';
 import newapi from '../../API/newapi';
+import util from '../../utils/index';
 export default class my_console_check extends wepy.page {
   config = {
     navigationBarTitleText: '会员管理'
@@ -349,8 +350,7 @@ export default class my_console_check extends wepy.page {
             that.shenhe(id, 'jujue');
           }
         },
-        fail: function(res) {
-        }
+        fail: function(res) {}
       });
     },
     //解除关系提示
@@ -365,8 +365,7 @@ export default class my_console_check extends wepy.page {
             that.jiechu(id, money);
           }
         },
-        fail: function(res) {
-        }
+        fail: function(res) {}
       });
     },
     tocallphone: function(e) {
@@ -421,14 +420,7 @@ export default class my_console_check extends wepy.page {
     let user_id = id;
     let suppliers_id = this.$parent.globalData.suppliers_id;
     if (money > 0) {
-      wx.showModal({
-        title: '提示', //提示的标题,
-        content: '此会员是充值用户，暂不能解除会员关系', //提示的内容,
-        showCancel: false, //是否显示取消按钮,
-        confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-        confirmColor: '#e50012', //确定按钮的文字颜色,
-        success: res => {}
-      });
+      util.showModal('此会员是充值用户，暂不能解除会员关系');
       return;
     }
     let data = {
@@ -437,27 +429,15 @@ export default class my_console_check extends wepy.page {
     };
     let res = await newapi.jcgx(data);
     if (res.data.code == '0') {
-      wx.showToast({
-        title: '解除关系成功',
-        icon: 'success',
-        duration: 2000
-      });
+      util.showToast('解除关系成功');
       this.getShenheList(this.sales_id);
     } else {
-      wx.showToast({
-        title: res.data.message,
-        icon: 'success',
-        duration: 2000
-      });
+      util.showToast(res.data.message);
     }
   }
   //审核
   async shenhe(id, type) {
-    wx.showLoading({
-      title: '审核中...', //提示的内容,
-      mask: true, //显示透明蒙层，防止触摸穿透,
-      success: res => {}
-    });
+    util.showLoading('审核中...');
     let user_id = id;
     let suppliers_id = this.suppliers_id;
     var type = type;

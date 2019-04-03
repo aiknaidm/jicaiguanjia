@@ -81,6 +81,7 @@ checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
 <script>
 import wepy from 'wepy';
 import newapi from '../../API/newapi';
+import util from '../../utils/index';
 import popupbox from '../../components/popupbox';
 export default class my_setServiceInfo extends wepy.page {
   config = {
@@ -101,17 +102,11 @@ export default class my_setServiceInfo extends wepy.page {
     },
     async formSubmit(e) {
       if (e.detail.value.name === '') {
-        wx.showToast({
-          title: '客服姓名不能为空',
-          icon: 'none'
-        });
+        util.showToast('客服姓名不能为空');
         return;
       }
       if (e.detail.value.phone === '') {
-        wx.showToast({
-          title: '客服电话不能为空',
-          icon: 'none'
-        });
+        util.showToast('客服电话不能为空');
         return;
       }
       var suppliers_id = this.suppliers_id;
@@ -124,15 +119,11 @@ export default class my_setServiceInfo extends wepy.page {
       };
       let res = await newapi.addService(data);
       if (res.data.code == '0') {
-        wx.showToast({
-          title: '添加成功'
-        });
+        util.showToast('添加成功');
         this.popupdata.isshowpopup = false;
         this.serviceList();
       } else {
-        wx.showToast({
-          title: '请求超时'
-        });
+        util.showToast('请求超时');
       }
     },
     // 选择客服
@@ -143,33 +134,20 @@ export default class my_setServiceInfo extends wepy.page {
     async delServiceInfo() {
       if (this.values.length) {
         var id = this.values.toString();
-        var modalRes = await wepy.showModal({
-          title: '提示', //提示的标题,
-          content: '你确定要删除吗', //提示的内容,
-          showCancel: true, //是否显示取消按钮,
-          confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-          confirmColor: '#e50012' //确定按钮的文字颜色,
-        });
-        if (modalRes.confirm) {
+        let mRes = await util.showModalBig('你确定要删除吗');
+        if (mRes.confirm) {
           var res = await this.delService(id);
           if (res.data.code == 0) {
-            wx.showToast({
-              title: '删除成功'
-            });
+            util.showToast('删除成功');
             this.values = [];
             this.serviceList();
           } else {
-            wx.showToast({
-              title: res.data.message
-            });
+            util.showToast(res.data.message);
           }
-        } else if (modalRes.cancel) {
+        } else if (mRes.cancel) {
         }
       } else {
-        wx.showToast({
-          title: '请选择需要删除的客服',
-          icon: 'none'
-        });
+        util.showToast('请选择需要删除的客服');
       }
     },
     // 添加客服信息

@@ -473,10 +473,7 @@ export default class newslist extends wepy.page {
     async submitTap(e) {
       var that = this;
       if (!e.detail.value.rules) {
-        wx.showToast({
-          title: '请输入规则',
-          icon: 'none'
-        });
+        util.showToast('请输入规则');
         return;
       }
       let data = {
@@ -488,21 +485,17 @@ export default class newslist extends wepy.page {
       if (res.data.code == 0) {
         this.rules = e.detail.value.rules;
         this.$apply();
-        wx.showToast({
-          title: '上传成功'
-        });
+        util.showToast('上传成功');
       }
     },
     //终止活动
     async cancleTap(e) {
       var that = this;
       var promotion_id = e.currentTarget.dataset.promotion_id;
-      var res = await wepy.showModal({
-        content: '终止当前活动？'
-      });
-      if (res.confirm) {
+      let mRes = await util.showModalBig('终止当前活动？');
+      if (mRes.confirm) {
         that.cancleActivity(promotion_id);
-      } else if (res.cancel) {
+      } else if (mRes.cancel) {
       }
     },
     statusTap(index) {
@@ -526,33 +519,17 @@ export default class newslist extends wepy.page {
       var moneyman = Number(e.detail.value.moneyman);
       var moneyfan = Number(e.detail.value.moneyfan);
       if (youhuiname == '') {
-        wx.showModal({
-          content: '请填写充值金额',
-          showCancel: false
-        });
+        util.showModal('请填写充值金额');
         return;
       }
       if (!moneyman) {
-        wx.showModal({
-          content: '请填写充值金额',
-          showCancel: false
-        });
+        util.showModal('请填写充值金额');
         return;
       }
       if (!moneyfan) {
-        wx.showModal({
-          content: '请填写赠送金额',
-          showCancel: false
-        });
+        util.showModal('请填写赠送金额');
         return;
       }
-      // if (that.data.ifyouhui == "") {
-      //   wx.showModal({
-      //     content: '请选择是否包括优惠券',
-      //     showCancel: false
-      //   })
-      //   return
-      // }
       //获取bgid,然后网络提交
       let data = {
         user_id: this.user_id,
@@ -566,20 +543,11 @@ export default class newslist extends wepy.page {
       };
       let res = await newapi.card_add(data);
       if (res.data.code == 0) {
-        wepy
-          .showModal({
-            title: '提示', //提示的标题,
-            content: '创建成功', //提示的内容,
-            showCancel: false, //是否显示取消按钮,
-            confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-            confirmColor: '#e50012' //确定按钮的文字颜色,
-          })
-          .then(res => {
-            this.getActivityList();
-            this.currentType = 1;
-            this.currentStatu = 1;
-            this.$apply();
-          });
+        await util.showModal('创建成功');
+        this.getActivityList();
+        this.currentType = 1;
+        this.currentStatu = 1;
+        this.$apply();
       }
     }
   };
@@ -674,27 +642,16 @@ export default class newslist extends wepy.page {
     clearInterval(t1);
   }
   async onLoad(option) {
-    wx.showLoading({
-      title: '加载中', //提示的内容,
-      mask: true, //显示透明蒙层，防止触摸穿透,
-      success: res => {}
-    });
+    util.showLoading();
     try {
       this.user_id = await this.$parent.loginInfo();
       this.suppliers_id = this.$parent.globalData.suppliers_id
         ? this.$parent.globalData.suppliers_id
         : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
     } catch (error) {
-      wx.showToast({
-        title: '登录失败', //提示的内容,
-        icon: 'none', //图标,
-        duration: 1000, //延迟时间,
-        mask: true, //显示透明蒙层，防止触摸穿透,
-        success: res => {
-          wx.redirectTo({
-            url: '/ConsolePages/pages/index'
-          });
-        }
+      await util.showToast('登录失败');
+      wx.redirectTo({
+        url: '/ConsolePages/pages/index'
       });
     }
     wx.hideLoading();

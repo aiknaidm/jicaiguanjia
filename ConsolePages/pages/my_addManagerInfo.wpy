@@ -223,6 +223,7 @@
 import wepy from 'wepy';
 import api from '../../API/api';
 import newapi from '../../API/newapi';
+import util from '../../utils/index';
 import noorder from '../../components/noOrder';
 export default class my_addManagerInfo extends wepy.page {
   config = {
@@ -258,12 +259,8 @@ export default class my_addManagerInfo extends wepy.page {
       var user_id = e.currentTarget.dataset.user_id;
       var suppliers_id = this.$parent.globalData.suppliers_id;
       var sales_id = this.sales_id ? this.sales_id : '';
-      var modalRes = await wepy.showModal({
-        title: '提示', //提示的标题,
-        content: '确定要添加吗', //提示的内容,
-        showCancel: true //是否显示取消按钮,
-      });
-      if (modalRes.confirm) {
+      let mRes = await util.showModalBig('确定要添加吗');
+      if (mRes.confirm) {
         let data = {
           user_id,
           suppliers_id,
@@ -280,84 +277,52 @@ export default class my_addManagerInfo extends wepy.page {
 
         if (res.data.code == '0') {
           if (this.type == 'member') {
-            wepy
-              .showModal({
-                title: '提示', //提示的标题,
-                content: '添加会员成功', //提示的内容,
-                showCancel: false, //是否显示取消按钮,
-                cancelText: '取消', //取消按钮的文字，默认为取消，最多 4 个字符,
-                cancelColor: '#000000', //取消按钮的文字颜色,
-                confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-                confirmColor: '#e50012' //确定按钮的文字颜色,
-              })
-              .then(res => {
-                this.$parent.$pages[
-                  '/ConsolePages/pages/my_console_check'
-                ].getShenheList(this.sales_id, suppliers_id);
-                wx.navigateBack({
-                  delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
-                });
-              });
-          } else if (this.type == 'salesman') {
-            let res1 = await wepy.showModal({
-              title: '提示', //提示的标题,
-              content: '业务员添加成功，同时将改用户设为管理员吗', //提示的内容,
-              confirmColor: '#e50012' //确定按钮的文字颜色,
+            await util.showModal('添加会员成功');
+            this.$parent.$pages[
+              '/ConsolePages/pages/my_console_check'
+            ].getShenheList(this.sales_id, suppliers_id);
+            wx.navigateBack({
+              delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
             });
-            if (res1.confirm) {
+          } else if (this.type == 'salesman') {
+            let mRes = await util.showModalBig(
+              '业务员添加成功，同时将改用户设为管理员吗'
+            );
+            if (mRes.confirm) {
               let data = {
                 user_id,
                 suppliers_id
               };
               let res0 = await newapi.addManager(data);
               if (res0.data.code == 0) {
-                wepy
-                  .showToast({
-                    title: '设置成功' //提示的内容,
-                  })
-                  .then(res => {});
+                util.showToast('设置成功');
               } else {
-                wepy.showToast({
-                  title: res0.message //提示的内容,
-                });
+                util.showToast(res0.message);
               }
             }
             wx.navigateBack({
               delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
             });
           } else {
-            let res1 = await wepy.showModal({
-              title: '提示', //提示的标题,
-              content: '管理员添加成功，同时将改用户设为业务员吗', //提示的内容,
-              confirmColor: '#e50012' //确定按钮的文字颜色,
-            });
-            if (res1.confirm) {
+            let mRes = await util.showModalBig(
+              '管理员添加成功，同时将改用户设为业务员吗'
+            );
+            if (mRes.confirm) {
               let data = {
                 user_id,
                 suppliers_id
               };
               let res0 = await newapi.addSalesman(data);
 
-              if (res0.data.code == 0)
-                wepy
-                  .showToast({
-                    title: '设置成功' //提示的内容,
-                  })
-                  .then(res => {});
-              else
-                wepy.showToast({
-                  title: res0.message //提示的内容,
-                });
+              if (res0.data.code == 0) util.showToast('设置成功');
+              else util.showToast(res0.message);
             }
             wx.navigateBack({
               delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
             });
           }
         } else {
-          wx.showToast({
-            title: res.data.message,
-            icon: 'none'
-          });
+          util.showToast(res.data.message);
         }
       }
     }

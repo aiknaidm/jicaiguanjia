@@ -166,6 +166,7 @@
 <script>
 import wepy from 'wepy';
 import newapi from '../../API/newapi';
+import util from '../../utils/index';
 import expendList from '../../components/expendList';
 export default class my_console_cardExpendDetail extends wepy.page {
   config = {
