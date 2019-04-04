@@ -170,7 +170,7 @@
         </view>
       </view> -->
       <view class="up">
-        <input placeholder="会员名" @input="changeMemberName">
+        <input placeholder="会员名" @input="changeMemberName"/>
       </view>
     </view>
     <view class="payList-box">
@@ -335,7 +335,7 @@ export default class my_console_cardPayDetail extends wepy.page {
     this.page = 1;
     this.end_time = util.formatDate();
     this.now_time = this.end_time;
-    this.start_time = this.getStartTime();
+    this.start_time = util.getStartTime();
 
     this.suppliers_id = this.$parent.globalData.suppliers_id
       ? this.$parent.globalData.suppliers_id
@@ -352,16 +352,6 @@ export default class my_console_cardPayDetail extends wepy.page {
       var data = this.init();
       this.getCzjl(data);
     }
-  }
-  getStartTime() {
-    var nowdates = new Date();
-
-    var year = nowdates.getFullYear();
-    var month = nowdates.getMonth() + 1;
-    var date = '01';
-    if (month < 10) month = '0' + month;
-
-    return year + '-' + month + '-' + date;
   }
   async onShow() {}
 }

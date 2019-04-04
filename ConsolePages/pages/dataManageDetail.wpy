@@ -397,7 +397,7 @@ page {
     <view wx:for-items="{{goodsMap}}" wx:key="{{index}}" class='list-box'>
       <view @tap="orderDetail({{orderList[index].order_id}})">
         <view wx:if="{{item.length==1}}" class="img-box1">
-          <image src="{{item[0].goods_imgs}}" class="goods-img">
+          <image src="{{item[0].goods_imgs}}" class="goods-img"/>
             <view class="img-box1-1">
               <view>{{item[0].goods_name}}</view>
               <view class="img-box1-guige">{{item[0].goods_attr}}</view>
@@ -409,7 +409,7 @@ page {
         </view>
         <scroll-view class="goods-img-container" scroll-x="true" wx:else>
           <view class="img-box" wx:for-items="{{item}}" wx:key="{{index2}}">
-            <image src="{{item.goods_imgs}}" class="goods-img">
+            <image src="{{item.goods_imgs}}" class="goods-img"/>
           </view>
         </scroll-view>
       </view>

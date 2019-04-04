@@ -141,7 +141,7 @@
   <view class="container">
     <view class="content">
       <view class="img">
-        <image src="{{info.avatar}}" mode="scaleToFill" lazy-load="false">
+        <image src="{{info.avatar}}" mode="scaleToFill" lazy-load="false"/>
       </view>
       <view class="">
         <view>
@@ -311,14 +311,6 @@ export default class my_console_checkDetail extends wepy.page {
   };
   events = {};
 
-  getStartTime() {
-    var nowdates = new Date();
-    var year = nowdates.getFullYear();
-    var month = nowdates.getMonth() + 1;
-    var date = '01';
-    if (month < 10) month = '0' + month;
-    return year + '-' + month + '-' + date;
-  }
   // 会员充值记录
   async getCzjl(data) {
     data.dqr = 1;
@@ -386,7 +378,7 @@ export default class my_console_checkDetail extends wepy.page {
 
       this.end_time = util.formatDate();
       this.now_time = this.end_time;
-      this.start_time = this.getStartTime();
+      this.start_time = util.getStartTime();
       this.isMoreData1 = true;
       this.isMoreData2 = true;
       this.page1 = 1;

@@ -131,17 +131,9 @@ export default class my_console_cardPayDetail extends wepy.page {
       : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
     this.end_time = util.formatDate();
     this.now_time = this.end_time;
-    this.start_time = this.getStartTime();
+    this.start_time = util.getStartTime();
     this.getCzphb();
     this.$apply();
-  }
-  getStartTime() {
-    var nowdates = new Date();
-    var year = nowdates.getFullYear();
-    var month = nowdates.getMonth() + 1;
-    var date = '01';
-    if (month < 10) month = '0' + month;
-    return year + '-' + month + '-' + date;
   }
   async onShow() {}
 }

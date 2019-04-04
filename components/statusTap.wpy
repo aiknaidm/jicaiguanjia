@@ -63,14 +63,14 @@
         </slot>
         {{item}}<text class='goodsListnum' wx:if="{{goodsListnum[index]&&goodsListnum[index]!=0}}">{{goodsListnum[index]}}</text>
         <block wx:if="{{type=='shop'}}">
-          <image wx:if="{{index==2&&index != currentType}}" src="/images/sanjiao.png">
+          <image wx:if="{{index==2&&index != currentType}}" src="/images/sanjiao.png"/>
           <image
             wx:if="{{index==2&&index == currentType}}"
             src="/images/sanjiao-active.png"
             class="img"
-          >
-          <image wx:if="{{index==3&&index != currentType}}" src="/images/shaixuan.png">
-          <image wx:if="{{index==3&&index == currentType}}" src="/images/shaixuan-active.png">
+          />
+          <image wx:if="{{index==3&&index != currentType}}" src="/images/shaixuan.png"/>
+          <image wx:if="{{index==3&&index == currentType}}" src="/images/shaixuan-active.png"/>
         </block>
         
       </view>

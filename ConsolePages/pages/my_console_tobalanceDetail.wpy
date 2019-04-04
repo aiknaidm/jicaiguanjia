@@ -172,7 +172,7 @@
             </view>
           </view> -->
       <view class="up">
-        <input placeholder="会员名" @input="changeMemberName">
+        <input placeholder="会员名" @input="changeMemberName"/>
       </view>
     </view>
     <view class="payList-box" wx:if="{{currentType==0}}">
