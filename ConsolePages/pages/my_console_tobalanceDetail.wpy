@@ -340,10 +340,7 @@ export default class my_console_cardPayDetail extends wepy.page {
     var datas = res.data.data.data;
     this.yue = res.data.zonge;
     datas.forEach((item, index) => {
-      datas[index].add_time = util.formatTime(
-        new Date(item.add_time * 1000),
-        'yyyy-MM-dd hh:mm:ss'
-      );
+      datas[index].add_time = util.formatTime(item.add_time);
     });
     if (data.page == 1) {
       this.isMoreData = true;
@@ -360,10 +357,7 @@ export default class my_console_cardPayDetail extends wepy.page {
     wx.hideLoading();
     var datas = res.data.data.data;
     datas.forEach((item, index) => {
-      datas[index].add_time = util.formatTime(
-        new Date(item.add_time * 1000),
-        'yyyy-MM-dd hh:mm:ss'
-      );
+      datas[index].add_time = util.formatTime(item.add_time);
     });
     if (data.page == 1) {
       this.isMoreData = true;
@@ -396,8 +390,7 @@ export default class my_console_cardPayDetail extends wepy.page {
     // 页数
     this.page = 1;
     // 筛选日期
-    var newDate = new Date().getTime();
-    this.end_time = util.formatTime(new Date(), 'yyyy-MM-dd');
+    this.end_time = util.formatDate();
     this.now_time = this.end_time;
     this.start_time = util.getStartTime();
     this.suppliers_id = this.$parent.globalData.suppliers_id

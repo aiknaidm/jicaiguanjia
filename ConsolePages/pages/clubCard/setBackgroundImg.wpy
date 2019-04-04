@@ -127,7 +127,7 @@ page {
             <view class='shopList'>
                 <view class='left'>
                     <view class="imgBox">
-                        <image mode="aspectFill" src='{{userInfo.avatar}}'></image>
+                        <image mode="aspectFill" src='{{userInfo.avatar}}'/>
                     </view>
                     <view class='nameBox'>
                         <view class='name'> {{userInfo.yizhan_name}}</view>

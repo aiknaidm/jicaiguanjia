@@ -56,19 +56,8 @@ export default class my_console_renewRecord extends wepy.page {
     var fwfpaylist = res.data.data;
 
     fwfpaylist.forEach((item, index) => {
-      var newDate = new Date();
-      var newDate2 = new Date();
-
-      newDate.setTime(item.pay_time * 1000);
-      newDate2.setTime(item.end_time * 1000);
-      fwfpaylist[index].pay_time = util.formatTime(
-        newDate,
-        'yyyy-MM-dd hh:mm:ss'
-      );
-      fwfpaylist[index].end_time = util.formatTime(
-        newDate2,
-        'yyyy-MM-dd hh:mm:ss'
-      );
+      fwfpaylist[index].pay_time = util.formatTime(item.pay_time);
+      fwfpaylist[index].end_time = util.formatTime(item.end_time);
     });
     this.fwfpaylist = fwfpaylist;
     this.$apply();

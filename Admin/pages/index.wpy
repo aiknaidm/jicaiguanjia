@@ -127,10 +127,10 @@
         <view class="ss-my {{showSearch?'active':''}}">
             <view class='ss-my-c'>
                 <view class='ss-my-c-img'>
-                    <image src='/images/s.png'></image>
+                    <image src='/images/s.png'/>
                 </view>
                 <view class='ss-my-c-ipt'>
-                    <input value='{{keyword}}' placeholder='输入关键词' @input="searchIpt"></input>
+                    <input value='{{keyword}}' placeholder='输入关键词' @input="searchIpt"/>
                 </view>
                 <view class='ss-my-c-x'>
                     <text hidden='true'></text>
@@ -143,8 +143,7 @@
         <!-- </form> -->
         <view class="suppliers-list" wx:for="{{suppliers_list}}" wx:key="{{index}}" @tap="supplierDetail({{item.suppliers_id}},{{item}})">
             <view class="supplier-img">
-                <image src="{{item.img}}" lazy-load="false">
-                </image>
+                <image src="{{item.img}}" lazy-load="false"/>
             </view>
             <view class="supplier-content">
                 <view class="">店铺名：{{item.suppliers_desc}}</view>
@@ -211,10 +210,7 @@ export default class newslist extends wepy.page {
     var that = this;
     wx.hideLoading();
     res.data.data.data.forEach(function(item, index) {
-      res.data.data.data[index].end_time_new = util.formatTime(
-        new Date(item.end_time * 1000),
-        'yyyy-MM-dd'
-      );
+      res.data.data.data[index].end_time_new = util.formatDate(item.end_time);
       res.data.data.data[index].is_expire = that.newData > item.end_time * 1000;
     });
     if (page == 1) this.suppliers_list = res.data.data.data;

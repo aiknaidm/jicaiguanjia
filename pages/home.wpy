@@ -302,11 +302,11 @@ button::after {
       indicator-active-color="rgba(0,0,0,0.5)"
     >
       <swiper-item @tap="toBannerDetail2">
-        <image src="http://wsc.jicaizx.com/images/ad2.jpg?{{date}}" mode="aspectFill"></image>
+        <image src="http://wsc.jicaizx.com/images/ad2.jpg?{{date}}" mode="aspectFill"/>
       </swiper-item>
       <block wx:for="{{carousel}}" wx:key="{{index}}">
         <swiper-item bindtap="toBannerDetail({{item.url}})">
-          <image src="http://maijia.jicaizx.com/{{item.content}}?{{date}}" mode="aspectFill"></image>
+          <image src="http://maijia.jicaizx.com/{{item.content}}?{{date}}" mode="aspectFill"/>
         </swiper-item>
       </block>
     </swiper>
@@ -335,7 +335,7 @@ button::after {
         @tap="toZiXunDetailTap({{item.id}})"
       >
         <view class="img">
-          <image src="{{item.img}}"></image>
+          <image src="{{item.img}}"/>
         </view>
         <view class="txt">
           <view class="txt-title">{{item.post_title}}</view>

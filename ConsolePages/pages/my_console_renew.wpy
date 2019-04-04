@@ -83,7 +83,7 @@
 <view class='container'>
   <view class='renew-top'>
     <view class='img'>
-      <image src='{{yizhanInfo.avatar}}'></image>
+      <image src='{{yizhanInfo.avatar}}'/>
     </view>
     <view class='txt'>
       <view wx:if="{{yizhanInfo.end_time}}">服务费到期时间：{{yizhanInfo.end_time}}</view>
@@ -93,7 +93,7 @@
   </view>
 	<view class='text'>
 		<view>邀请码</view>
-		<view><input type='' value='{{shareCode}}' bindinput='changeInput' maxlength='6' placeholder='请输入邀请码' placeholder-class="placeholder"></input></view>
+		<view><input type='' value='{{shareCode}}' bindinput='changeInput' maxlength='6' placeholder='请输入邀请码' placeholder-class="placeholder"/></view>
 		<!-- <view class=''>您已获得优惠 </view> -->
 	</view>
   <view class='renew-list' wx:for="{{renewList}}" wx:key="index" >
@@ -170,9 +170,7 @@ export default class my_console_renew extends wepy.page {
     }
     var newDate = new Date();
     if (yizhanInfo.end_time) {
-      newDate.setTime(yizhanInfo.end_time * 1000);
-      yizhanInfo.end_time = util.formatTime(newDate, 'yyyy-MM-dd');
-    } else {
+      yizhanInfo.end_time = util.formatDate(yizhanInfo.end_time);
     }
 
     this.yizhanInfo = yizhanInfo;

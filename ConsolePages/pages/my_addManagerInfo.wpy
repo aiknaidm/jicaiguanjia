@@ -188,7 +188,7 @@
         <image src='/images/s.png'/>
       </view>
       <view class='ss-my-c-ipt'>
-        <input value='{{keyword}}' placeholder='请输入您要搜索的用户昵称' bindinput="searchIpt"></input>
+        <input value='{{keyword}}' placeholder='请输入您要搜索的用户昵称' bindinput="searchIpt"/>
       </view>
       <view class='ss-my-c-x'>
         <text hidden='true'></text>
@@ -207,7 +207,7 @@
     <block wx:for="{{adminList}}" wx:key="index">
       <view class='headPortrait '>
 			  <view class='img'>
-        <image src="{{item.avatar?item.avatar:'https://lmbge.com/upload/avatar/weixin3.png'}}" data-user_id="{{type=='member'?item.user_id:item.id}}" bindtap='addManager' mode='aspectFill'></image>
+        <image src="{{item.avatar?item.avatar:'https://lmbge.com/upload/avatar/weixin3.png'}}" data-user_id="{{type=='member'?item.user_id:item.id}}" bindtap='addManager' mode='aspectFill'/>
       </view>
       <view class='text' wx:if="{{type=='member'}}">{{item.user_name?item.user_name:'jc'+item.user_id}}</view>
       <view class='text' wx:else>{{item.user_nickname?item.user_nickname:'jc'+item.id}}</view>

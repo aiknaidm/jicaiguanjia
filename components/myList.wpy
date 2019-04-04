@@ -65,7 +65,7 @@ button {
 
   <button form-type="submit" class="weui_cell" @tap="toUrl({{tabItem.url}},{{tabItem.type}})" tabItem="列表内容">
     <view class="weui_cell_hd" style="background:{{tabItem.bgcolor}}">
-      <image src="{{tabItem.icon}}" wx:if="{{tabItem.icon}}"></image>
+      <image src="{{tabItem.icon}}" wx:if="{{tabItem.icon}}"/>
       <view  wx:else>{{tabItem.num}}</view>
     </view>
     <view class="weui_cell_bd">

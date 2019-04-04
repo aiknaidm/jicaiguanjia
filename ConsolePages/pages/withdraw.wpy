@@ -78,7 +78,7 @@ page {
       <view class='tx-jine'>
         <view>提现金额</view>
         <view class='tx-input'>￥
-          <input type='digit' name="money" disabled value='{{ketx}}'></input>
+          <input type='digit' name="money" disabled value='{{ketx}}'/>
         </view>
         <view class='tx-yue'>当前余额:{{ketx}}元</view>
         <!-- <view class='tx-sx'>提现将会收取0.6%的手续费</view> -->

@@ -95,9 +95,6 @@
   margin: auto;
 }
 
-.qrcode {
-}
-
 .qrcode image {
   width: 350rpx;
   height: 380rpx;
@@ -141,10 +138,7 @@ export default class share extends wepy.page {
     wx.hideLoading();
     var datas = res.data.data.data;
     datas.forEach((item, index) => {
-      datas[index].add_time = util.formatTime(
-        new Date(item.add_time * 1000),
-        'yyyy-MM-dd'
-      );
+      datas[index].add_time = util.formatDate(item.add_time);
     });
     if (this.page == 1) {
       this.isMoreData = true;

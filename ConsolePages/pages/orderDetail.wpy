@@ -141,18 +141,9 @@ export default class orderDetails extends wepy.page {
     wx.hideLoading();
     this.orderDetail = res.data.data.orderList;
     this.goodsMap = res.data.data.goodsMap;
-    this.orderDetail.add_time = util.formatTime(
-      new Date(this.orderDetail.add_time * 1000),
-      'yyyy-MM-dd hh:mm:ss'
-    );
-    this.orderDetail.pay_time = util.formatTime(
-      new Date(this.orderDetail.pay_time * 1000),
-      'yyyy-MM-dd hh:mm:ss'
-    );
-    this.orderDetail.confirm_time = util.formatTime(
-      new Date(this.orderDetail.confirm_time * 1000),
-      'yyyy-MM-dd hh:mm:ss'
-    );
+    this.orderDetail.add_time = util.formatTime(this.orderDetail.add_time);
+    this.orderDetail.pay_time = util.formatTime(this.orderDetail.pay_time);
+    this.orderDetail.confirm_time = util.formatTime(this.orderDetail.confirm_time);
     this.$apply();
   }
 

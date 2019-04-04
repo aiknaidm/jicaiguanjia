@@ -297,8 +297,6 @@ page {
   display: flex;
   /* margin-bottom: 20rpx; */
 }
-.address-box .iconfont {
-}
 .img-box1-guige {
   font-size: 24rpx;
   color: #797979;
@@ -375,10 +373,10 @@ page {
       </view>
       <!-- sousuo -->
       <view class='jy-top-img'>
-        <!-- <image src='/images/u85.png' bindtap='openSelect'></image> -->
+        <!-- <image src='/images/u85.png' bindtap='openSelect'/> -->
         <!-- <picker mode="date" value="{{date}}" fields="month" @change="bindDateChange"> -->
         <view class="picker" @tap="filtrate">
-          <image src='/images/u87.png'></image>
+          <image src='/images/u87.png'/>
         </view>
         <!-- </picker> -->
       </view>
@@ -595,12 +593,6 @@ export default class newslist extends wepy.page {
     let res = await newapi.jyjl(data);
     var datas = res.data.data;
     this.zonge = res.data.data.zonge;
-    // for (var i = 0; i < datas.length; i++) {
-    //   datas[i].pay_time = util.formatTime(
-    //     new Date(datas[i].pay_time * 1000),
-    //     'yyyy-MM-dd hh:mm:ss             '
-    //   );
-    // }
     if (this.datas.page == 1) {
       this.orderList = datas.orderList;
       this.goodsMap = datas.goodsMap;

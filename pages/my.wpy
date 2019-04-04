@@ -29,7 +29,7 @@
       </repeat>
     </view>
     <!-- <view class='ad'  @tap='toBannerDetail2' >
-      <image src='http://wsc.jicaizx.com/images/ad1.jpg'  mode='aspectFill'></image>
+      <image src='http://wsc.jicaizx.com/images/ad1.jpg'  mode='aspectFill'/>
     </view> -->
     <!-- 遮罩层 -->
     <mask wx:if="{{isShowprompt}}"></mask>

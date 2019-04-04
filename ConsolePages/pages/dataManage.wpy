@@ -62,7 +62,7 @@
 
       <view>{{num}}</view>
        <view @tap='toDataManageDetail'>
-        <image src='/images/go.png'></image>
+        <image src='/images/go.png'/>
        </view>
     </view>
   </view>

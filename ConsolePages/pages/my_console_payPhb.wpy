@@ -65,8 +65,7 @@
           <image
             src="{{item.avatar}}"
             mode="scaleToFill"
-            lazy-load="false">
-          </image>
+            lazy-load="false"/>
         </view>
         <view class="phb-txt">
           <view>姓名：{{item.user_name}}</view>
@@ -130,7 +129,7 @@ export default class my_console_cardPayDetail extends wepy.page {
     this.suppliers_id = this.$parent.globalData.suppliers_id
       ? this.$parent.globalData.suppliers_id
       : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
-    this.end_time = util.formatTime(new Date(), 'yyyy-MM-dd');
+    this.end_time = util.formatDate();
     this.now_time = this.end_time;
     this.start_time = this.getStartTime();
     this.getCzphb();

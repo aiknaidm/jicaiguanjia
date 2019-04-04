@@ -21,7 +21,7 @@
         </textarea>
       </block>
       <block wx:if="{{node.name === 'img'}}">
-        <image class="editor-image" src="{{node.attrs.src}}" style="height: {{node.attrs._height * 700}}rpx"></image>
+        <image class="editor-image" src="{{node.attrs.src}}" style="height: {{node.attrs._height * 700}}rpx"/>
       </block>
       <view class="editor-delete iconfont icon-close" data-index="{{index}}" bindtap="deleteNode"></view>
     </view>

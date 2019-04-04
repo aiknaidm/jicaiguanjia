@@ -30,10 +30,7 @@ export default class details extends wepy.page {
     let res = await newapi.articleDetail(data);
     wx.hideLoading();
     this.articleDetail = res.data.data;
-    this.articleDetail.published_time = util.formatTime(
-      new Date(this.articleDetail.published_time * 1000),
-      'yyyy-MM-dd'
-    );
+    this.articleDetail.published_time = util.formatDate(this.articleDetail.published_time);
 
     this.articleDetail.post_content = this.articleDetail.post_content.replace(
       /\<img/gi,

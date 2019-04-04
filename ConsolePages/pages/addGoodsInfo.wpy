@@ -288,7 +288,7 @@
         <view class='listBox'>
           <view class="listOption">商品品牌</view>
           <view class="listOptionImages">
-            <input placeholder='添加准确品牌方便顾客查找商品' @input='changeBrandInput'></input>
+            <input placeholder='添加准确品牌方便顾客查找商品' @input='changeBrandInput'/>
             <button bindtap='bindBrandSure'>
                             确定
                           </button>
@@ -327,20 +327,20 @@
       </navigator>
       <view class="listBox">
         <view class="listOption">起订量</view>
-        <input class="shownnum" value='{{goodsdetail.qidingliang}}' placeholder="请输入起订量" type='number' placeholder-class="holder" name="qidingliang"></input>
+        <input class="shownnum" value='{{goodsdetail.qidingliang}}' placeholder="请输入起订量" type='number' placeholder-class="holder" name="qidingliang"/>
       </view>
       <block wx:if='{{goods_attr.length==0}}'>
         <view class="listBox">
           <view class="listOption">批发价</view>
-          <input class="shownnum" type='digit' value='{{goodsdetail.shop_price}}' name="shop_price"></input>
+          <input class="shownnum" type='digit' value='{{goodsdetail.shop_price}}' name="shop_price"/>
         </view>
         <view class="listBox">
           <view class="listOption">零售价</view>
-          <input class="shownnum" type='digit' value='{{goodsdetail.floor_price}}' name="floor_price"></input>
+          <input class="shownnum" type='digit' value='{{goodsdetail.floor_price}}' name="floor_price"/>
         </view>
         <view class="listBox">
           <view class="listOption">商品库存</view>
-          <input class="shownnum" type='number' value="{{goodsdetail.goods_number}}" name="goods_number"></input>
+          <input class="shownnum" type='number' value="{{goodsdetail.goods_number}}" name="goods_number"/>
         </view>
       </block>
       <block wx:else>
@@ -348,19 +348,19 @@
           <view class='itouch' data-index="{{index}}">
             <view class="listBox">
               <view class="listOption">商品规格</view>
-              <input class="shownnum" @input='getAttrName({{index}})' value='{{item.attr_value}}'></input>
+              <input class="shownnum" @input='getAttrName({{index}})' value='{{item.attr_value}}'/>
             </view>
             <view class="listBox">
               <view class="listOption">批发价</view>
-              <input class="shownnum" @input='getAttrhyPrice({{index}})' type='digit' value='{{item.attr_price}}'></input>
+              <input class="shownnum" @input='getAttrhyPrice({{index}})' type='digit' value='{{item.attr_price}}'/>
             </view>
             <view class="listBox">
               <view class="listOption">零售价</view>
-              <input class="shownnum" @input='getAttrPrice({{index}})' type='digit' value='{{item.floor_price}}'></input>
+              <input class="shownnum" @input='getAttrPrice({{index}})' type='digit' value='{{item.floor_price}}'/>
             </view>
             <view class="listBox">
               <view class="listOption">商品库存</view>
-              <input class="shownnum" @input='getAttrNum({{index}})' type='number' value='{{item.goods_number}}'></input>
+              <input class="shownnum" @input='getAttrNum({{index}})' type='number' value='{{item.goods_number}}'/>
             </view>
           </view>
           <view class="del" @tap.stop="delAttr({{index}})">删除</view>

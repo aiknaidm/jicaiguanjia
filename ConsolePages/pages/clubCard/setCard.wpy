@@ -337,21 +337,21 @@ picker {
     <form class='' wx:if="{{currentType==0}}" bindsubmit="formSubmit">
       <view class='promotion-name'>
         <text>充值金额：</text>
-        <input class='' type='digtal' placeholder='' name="youhuiname" @input="changeMoney"></input>
+        <input class='' type='digtal' placeholder='' name="youhuiname" @input="changeMoney"/>
       </view>
       <view class='promotion-content'>
         <text class='title'>充值内容</text>
         <view class='promotion-content-box'>
           <view class='icon'>充</view>
           <view class='box'>
-            <input name="moneyman" value="{{money}}" disabled></input>
+            <input name="moneyman" value="{{money}}" disabled/>
             <text>元</text> </view>
         </view>
       </view>
       <view class='promotion-content-box'>
         <view class='icon'>送</view>
         <view class='box'>
-          <input name="moneyfan" type='digtal'></input>
+          <input name="moneyfan" type='digtal'/>
           <text>元</text>
         </view>
       </view>
@@ -591,14 +591,8 @@ export default class newslist extends wepy.page {
     let res = await newapi.card_list(data);
     var datas = res.data.data;
     for (var i = 0; i < datas.length; i++) {
-      datas[i].start_time_t = util.formatTime(
-        new Date(datas[i].start_time * 1000),
-        'yyyy-MM-dd'
-      );
-      datas[i].end_time_t = util.formatTime(
-        new Date(datas[i].end_time * 1000),
-        'yyyy-MM-dd'
-      );
+      datas[i].start_time_t = util.formatDate(datas[i].start_time);
+      datas[i].end_time_t = util.formatDate(datas[i].end_time);
       datas[i].yj_money =
         parseFloat(datas[i].card_fee) + parseFloat(datas[i].free_money);
     }
@@ -657,8 +651,7 @@ export default class newslist extends wepy.page {
     wx.hideLoading();
     this.getCardrules();
     this.getActivityList();
-    var newDate = new Date();
-    var date = util.formatTime(newDate, 'yyyy-MM-dd');
+    var date = util.formatDate();
     //开始时间
     this.date = date;
     // 结束时间

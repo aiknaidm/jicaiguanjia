@@ -217,7 +217,7 @@
         <view class="container {{right?'active':''}}">
             <view class='control-title'>
                 <view class='control-title-img'>
-                    <image src='{{supplierDetail.img}}'></image>
+                    <image src='{{supplierDetail.img}}'/>
                 </view>
                 <view>
                     <view class='control-title-txt1'>店铺名：{{supplierDetail.suppliers_desc}}</view>

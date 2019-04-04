@@ -137,7 +137,7 @@
       <view class='poster-btn'>生成推广海报</view>
     </navigator>
     <view class='qrcode'>
-      <image src="{{qrcode.qrcode2}}"></image>
+      <image src="{{qrcode.qrcode2}}"/>
     </view>
   </view>
 

@@ -568,7 +568,7 @@ button::after {
         <view class='border'>{{item}}
           <text class='iconfont icon-jiantou'></text>
         </view>
-        <!-- <image rc='/images/sanjiao-active.png' class='img'></image> -->
+        <!-- <image rc='/images/sanjiao-active.png' class='img'/> -->
       </view>
       <!-- <view class='border' wx:for="{{catList}}" bindtap="statusTap"> 二级分类
                 <text class='iconfont icon-jiantou'></text>
@@ -582,10 +582,10 @@ button::after {
       <view class="ss-my {{showSearch?'active':''}}">
         <view class='ss-my-c'>
           <view class='ss-my-c-img'>
-            <image src='/images/s.png'></image>
+            <image src='/images/s.png'/>
           </view>
           <view class='ss-my-c-ipt'>
-            <input value='{{keyword}}' placeholder='输入关键词' @input="searchIpt"></input>
+            <input value='{{keyword}}' placeholder='输入关键词' @input="searchIpt"/>
           </view>
           <view class='ss-my-c-x'>
             <text hidden='true'></text>

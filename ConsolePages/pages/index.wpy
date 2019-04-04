@@ -229,7 +229,7 @@
   <view class="container {{right?'active':''}}" >
       <view class='control-title'>
       <view class='control-title-img'>
-        <image src='{{yizhanInfo.avatar}}'></image>
+        <image src='{{yizhanInfo.avatar}}'/>
       </view>
       
       <view>

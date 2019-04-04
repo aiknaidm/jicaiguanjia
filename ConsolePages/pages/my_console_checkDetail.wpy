@@ -328,10 +328,7 @@ export default class my_console_checkDetail extends wepy.page {
     var datas = res.data.data.data;
     this.money = res.data.zonge;
     datas.forEach((item, index) => {
-      datas[index].add_time = util.formatTime(
-        new Date(item.add_time * 1000),
-        'yyyy-MM-dd hh:mm:ss'
-      );
+      datas[index].add_time = util.formatTime(item.add_time);
     });
     if (data.page == 1) {
       this.isMoreData1 = true;
@@ -347,10 +344,7 @@ export default class my_console_checkDetail extends wepy.page {
     var datas = res.data.data.data;
     this.zhichu = res.data.zonge;
     datas.forEach((item, index) => {
-      datas[index].add_time = util.formatTime(
-        new Date(item.add_time * 1000),
-        'yyyy-MM-dd hh:mm:ss'
-      );
+      datas[index].add_time = util.formatTime(item.add_time);
     });
     if (data.page == 1) {
       this.isMoreData2 = true;
@@ -390,7 +384,7 @@ export default class my_console_checkDetail extends wepy.page {
       this.suppliers_id = this.$parent.globalData.suppliers_id;
       this.getInfo(this.pay_user_id);
 
-      this.end_time = util.formatTime(new Date(), 'yyyy-MM-dd');
+      this.end_time = util.formatDate();
       this.now_time = this.end_time;
       this.start_time = this.getStartTime();
       this.isMoreData1 = true;

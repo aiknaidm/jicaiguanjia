@@ -73,7 +73,7 @@
  <block wx:for="{{adminList}}" wx:key="index">
     <view class='headPortrait '>
       <view class='img'>
-        <image src="{{item.avatar?item.avatar:'https://lmbge.com/upload/avatar/weixin3.png'}}" data-user_id='{{item.id}}' mode='aspectFill'></image>
+        <image src="{{item.avatar?item.avatar:'https://lmbge.com/upload/avatar/weixin3.png'}}" data-user_id='{{item.id}}' mode='aspectFill'/>
     
         <text class='iconfont icon-close' wx:if="{{isshowclose}}" data-user_id='{{item.id}}' catchtap='delSalesman'></text>
       </view>
