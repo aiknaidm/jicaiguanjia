@@ -106,7 +106,7 @@ export default class newslist extends wepy.page {
   computed = {};
   methods = {
     statusTap(index) {
-      this.getShareList(this.userId, index);
+      this.getShareList(index);
     },
     // 详情
     async toShareDetails(id) {
@@ -123,10 +123,8 @@ export default class newslist extends wepy.page {
   events = {};
   async getIndexNewsList(id) {}
   // 分享列表
-  async getShareList(userId, status) {
-    let data = {
-      user_id: userId
-    };
+  async getShareList(status) {
+    let data = {};
     let res = await newapi.fxfxList(data);
     if (res.data.code == '0') {
       var shareList = res.data.data;
@@ -152,10 +150,9 @@ export default class newslist extends wepy.page {
     return data;
   }
   async onLoad(option) {
-    var userId = await this.$parent.loginInfo();
-    this.userId = userId;
+    await this.$parent.loginInfo();
     this.status = option.status;
-    this.getShareList(userId, this.status);
+    this.getShareList(this.status);
     this.zong = option.zong;
     this.ketx = option.ketx;
   }

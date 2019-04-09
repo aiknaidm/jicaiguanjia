@@ -143,10 +143,9 @@ export default class data extends wepy.page {
   };
   events = {};
   async getIndexNewsList(id) {}
-  async getDataManage(user_id, suppliers_id) {
+  async getDataManage(suppliers_id) {
     util.showLoading();
     let data = {
-      user_id,
       suppliers_id
     };
     let res = await newapi.shuju(data);
@@ -164,11 +163,11 @@ export default class data extends wepy.page {
     }
   }
   async onLoad(option) {
-    this.user_id = await this.$parent.loginInfo();
+    await this.$parent.loginInfo();
     this.suppliers_id = this.$parent.globalData.suppliers_id
       ? this.$parent.globalData.suppliers_id
-      : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
-    this.getDataManage(this.user_id, this.suppliers_id);
+      : (await this.$parent.getYizhanInfo()).suppliers_id;
+    this.getDataManage(this.suppliers_id);
   }
 }
 </script>

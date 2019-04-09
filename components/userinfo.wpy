@@ -71,9 +71,6 @@ export default class List extends wepy.component {
   };
 
   async onLoad() {
-    //  let userId = await this.$parent.loginInfo();
-    //  this.userId=userId;
-    this.$apply();
   }
 }
 </script>

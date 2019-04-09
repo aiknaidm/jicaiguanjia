@@ -401,7 +401,6 @@ export default class my_setShopInfo extends wepy.page {
   components = {};
   methods = {
     getFormId: function(e) {
-      //util.submitFormId(app.globalData.userId, e.detail.formId);
     },
     listenerPhoneInput(e) {
       this.phone = e.detail.value;
@@ -449,19 +448,18 @@ export default class my_setShopInfo extends wepy.page {
   };
   events = {};
   async onLoad(option) {
-    let userId = await this.$parent.loginInfo();
+    await this.$parent.loginInfo();
     let suppliers_id = this.$parent.globalData.suppliers_id
       ? this.$parent.globalData.suppliers_id
-      : (await this.$parent.getYizhanInfo(userId, suppliers_id)).suppliers_id;
-    this.userDetail = await this.getSuppliersDetails(userId, suppliers_id);
+      : (await this.$parent.getYizhanInfo()).suppliers_id;
+    this.userDetail = await this.getSuppliersDetails(suppliers_id);
     this.region[0] = this.userDetail.sheng;
     this.region[1] = this.userDetail.shi;
     this.region[2] = this.userDetail.qu;
     this.$apply();
   }
-  async getSuppliersDetails(user_id, suppliers_id) {
+  async getSuppliersDetails(suppliers_id) {
     let data = {
-      user_id,
       suppliers_id
     };
     let res = await newapi.supplier_detail(data);
@@ -526,11 +524,6 @@ export default class my_setShopInfo extends wepy.page {
         var is_picture = param.is_picture ? 0 : 1;
         var is_friend = param.is_friend ? 1 : 0;
 
-        if (this.userId == '-1') {
-          util.showModal('登录失败请稍后再试');
-          return;
-        }
-
         if (realname == '') {
           util.showModal('请填写姓名');
           return;
@@ -554,7 +547,6 @@ export default class my_setShopInfo extends wepy.page {
         util.showLoading();
         let data = {
           suppliers_id,
-          user_id: this.userId,
           mobile: phone,
           realname: realname,
           sheng,

@@ -10,11 +10,6 @@
         wx:if="{{orderDetail.order_status==1}}"
         @tap.stop="cancelOrderTap({{orderDetail.id}})"
       >取消订单</view>
-      <view
-        class="btn topay-btn"
-        wx:if="{{orderDetail.order_status==1}}"
-        @tap.stop="toPayTap({{orderDetail.id}},{{orderDetail.id}},{{orderDetail.order_amount}},{{index}})"
-      >马上付款</view>
      
       <view
         class="btn topay-btn"
@@ -63,17 +58,6 @@ export default class orderbutton extends wepy.component {
       } else if (mRes.cancel) {
       }
     },
-    // 马上付款
-    async toPayTap(id) {
-      util.showLoading('支付中...');
-      var res = await util.wxpay1(
-        id,
-        '/Shop/pages/orderList?order_status=2',
-        '/Shop/pages/orderList?order_status=1'
-      );
-      wx.hideLoading();
-      util.showToast(res.msg);
-    }
   };
   // 取消订单
   async toCancelOrder(id) {
@@ -84,9 +68,6 @@ export default class orderbutton extends wepy.component {
   async toConfirmBtn(id) {
     let data = { id };
     return await newapi.confirmOrder(data);
-  }
-  toPayTap() {
-    this.$emit('toPayTap');
   }
   async onLoad() {}
 }

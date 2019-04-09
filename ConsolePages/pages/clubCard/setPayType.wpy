@@ -249,13 +249,13 @@ export default class newslist extends wepy.page {
   async onShow() {
     try {
       this.page = 1;
-      this.user_id = await this.$parent.loginInfo();
+      await this.$parent.loginInfo();
       this.suppliers_id = this.$parent.globalData.suppliers_id
         ? this.$parent.globalData.suppliers_id
-        : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
+        : (await this.$parent.getYizhanInfo()).suppliers_id;
       this.is_hdky =
         this.$parent.globalData.yizhanInfo.hdky == 1 ? true : false;
-      if (this.user_id == '' || this.suppliers_id == '') {
+      if (this.suppliers_id == '') {
         await util.showToast('登录失败');
         wx.redirectTo({
           url: '/ConsolePages/pages/index'

@@ -229,7 +229,7 @@ export default class my_console_cardPayDetail extends wepy.page {
       });
     },
     getFormId: function(e) {
-      //util.submitFormId(app.globalData.userId, e.detail.formId);
+      util.submitFormId(e.detail.formId);
     },
     salesmanNameTap: function() {
       this.isShowSalesList = true;
@@ -339,7 +339,7 @@ export default class my_console_cardPayDetail extends wepy.page {
 
     this.suppliers_id = this.$parent.globalData.suppliers_id
       ? this.$parent.globalData.suppliers_id
-      : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
+      : (await this.$parent.getYizhanInfo()).suppliers_id;
     this.getSalesmanList();
     var data = this.init();
     this.getCzjl(data);

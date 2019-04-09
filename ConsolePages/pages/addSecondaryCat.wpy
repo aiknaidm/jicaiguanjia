@@ -152,7 +152,6 @@ export default class newslist extends wepy.page {
       }
       // this.initKind();
       this.addGoodsList(
-        this.user_id,
         this.suppliers_id,
         this.goodsKeyword,
         this.parent_id
@@ -173,7 +172,7 @@ export default class newslist extends wepy.page {
     async longtabGoods(name, id, index) {
       let mRes = await util.showModalBig('你确定要删除"' + name + '"分类吗');
       if (mRes.confirm) {
-        this.sureDelGoods(this.user_id, id, index);
+        this.sureDelGoods(id, index);
       } else if (mRes.cancel) {
       }
     },
@@ -193,13 +192,11 @@ export default class newslist extends wepy.page {
   };
   events = {};
   //确定删除分类
-  async sureDelGoods(user_id, id, index) {
+  async sureDelGoods(id, index) {
     var that = this; //
-    var userID = wx.getStorageSync('userId');
 
     let data = {
       cat_id: id,
-      user_id
     };
     let res = await newapi.del_categorys(data);
     wx.hideLoading();
@@ -211,11 +208,10 @@ export default class newslist extends wepy.page {
     this.$apply();
   }
   // 分类列表 用户id 店铺id 有keyword时添加查找商品
-  async getGoodsList(userId, suppliers_id, keyword = '', parent_id) {
+  async getGoodsList(suppliers_id, keyword = '', parent_id) {
     var that = this;
     util.showLoading();
     let data = {
-      user_id: userId,
       suppliers_id: suppliers_id,
       keyword: keyword,
       parent_id
@@ -227,11 +223,10 @@ export default class newslist extends wepy.page {
     this.$apply();
   }
   // 添加分类
-  async addGoodsList(userId, suppliers_id, keyword = '', parent_id) {
+  async addGoodsList(suppliers_id, keyword = '', parent_id) {
     var that = this;
     util.showLoading();
     let data = {
-      user_id: userId,
       suppliers_id: suppliers_id,
       keyword,
       parent_id
@@ -248,7 +243,7 @@ export default class newslist extends wepy.page {
   async onLoad(option) {
     try {
       this.parent_id = option.cat_id; //上一级分类
-      this.user_id = await this.$parent.loginInfo();
+      await this.$parent.loginInfo();
       this.cat_id = this.$parent.$pages[
         '/ConsolePages/pages/addGoodsInfo'
       ].ch_cat_id;
@@ -257,8 +252,8 @@ export default class newslist extends wepy.page {
       ].goods_secondray_dec;
       this.suppliers_id = this.$parent.globalData.suppliers_id
         ? this.$parent.globalData.suppliers_id
-        : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
-      this.getGoodsList(this.user_id, this.suppliers_id, '', this.parent_id);
+        : (await this.$parent.getYizhanInfo()).suppliers_id;
+      this.getGoodsList(this.suppliers_id, '', this.parent_id);
     } catch (error) {
       var log = wx.getStorageSync('log');
       wx.setStorageSync('log', log + '/n' + error);

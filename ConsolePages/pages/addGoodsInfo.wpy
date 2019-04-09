@@ -467,14 +467,14 @@ export default class newslist extends wepy.page {
     async longtabBrand(name, id, index) {
       let mRes = await util.showModalBig('你确定要删除"' + name + '"品牌吗');
       if (mRes.confirm) {
-        this.sureDelBrand(this.user_id, id, index);
+        this.sureDelBrand(id, index);
       } else if (mRes.cancel) {
       }
     },
     async longtabGoods(name, id, index) {
       let mRes = await util.showModalBig('你确定要删除"' + name + '"分类吗');
       if (mRes.confirm) {
-        this.sureDelGoods(this.user_id, id, index);
+        this.sureDelGoods(id, index);
       } else if (mRes.cancel) {
       }
     },
@@ -485,7 +485,7 @@ export default class newslist extends wepy.page {
         return;
       }
       // this.initKind();
-      this.addGoodsList(this.user_id, this.suppliers_id, this.goodsKeyword);
+      this.addGoodsList(this.suppliers_id, this.goodsKeyword);
     },
     bindBrandSure() {
       var brandList = this.brandList;
@@ -493,7 +493,7 @@ export default class newslist extends wepy.page {
         util.showToast('请输入查找的商品品牌');
         return;
       }
-      this.getBrandList(this.user_id, this.suppliers_id, this.brandKeyword);
+      this.getBrandList(this.suppliers_id, this.brandKeyword);
     },
     // 添加规格
     addFormat() {
@@ -548,7 +548,7 @@ export default class newslist extends wepy.page {
       }
     },
     getFormId(e) {
-      util.submitFormId(this.user_id, e.detail.formId);
+      util.submitFormId(e.detail.formId);
       this.addNewGoodTap(e);
     }
   };
@@ -581,11 +581,10 @@ export default class newslist extends wepy.page {
     }
   }
   // 品牌列表 用户id 店铺id 有keyword时添加查找商品
-  async getBrandList(userId, suppliers_id, keyword = '') {
+  async getBrandList(suppliers_id, keyword = '') {
     var that = this;
     util.showLoading();
     let data = {
-      user_id: userId,
       suppliers_id: suppliers_id,
       keyword: keyword
     };
@@ -604,11 +603,10 @@ export default class newslist extends wepy.page {
     }
   }
   // 分类列表 用户id 店铺id 有keyword时添加查找商品
-  async getGoodsList(userId, suppliers_id, keyword = '') {
+  async getGoodsList(suppliers_id, keyword = '') {
     var that = this;
     util.showLoading();
     let data = {
-      user_id: userId,
       suppliers_id: suppliers_id,
       keyword: keyword
     };
@@ -619,12 +617,11 @@ export default class newslist extends wepy.page {
     this.$apply();
   }
   // 添加分类
-  async addGoodsList(userId, suppliers_id, keyword = '') {
+  async addGoodsList(suppliers_id, keyword = '') {
     var that = this;
     util.showLoading();
 
     let data = {
-      user_id: userId,
       suppliers_id: suppliers_id,
       keyword
     };
@@ -637,12 +634,10 @@ export default class newslist extends wepy.page {
     this.$apply();
   }
   //确定删除分类
-  async sureDelGoods(user_id, id, index) {
+  async sureDelGoods(id, index) {
     var that = this; //
-    var userID = wx.getStorageSync('userId');
     let data = {
       cat_id: id,
-      user_id
     };
     let res = await newapi.del_categorys(data);
     wx.hideLoading();
@@ -654,9 +649,8 @@ export default class newslist extends wepy.page {
     this.$apply();
   }
   //确定删除品牌
-  async sureDelBrand(user_id, id, index) {
+  async sureDelBrand(id, index) {
     let data = {
-      user_id,
       brand_id: id
     };
     let res = await newapi.del_brands(data);
@@ -669,26 +663,6 @@ export default class newslist extends wepy.page {
   }
   // 发布商品
   async addNewGoodTap(e) {
-    //  user_id: userId,
-    //     suppliers_id: app.globalData.yizhanInfo.suppliers_id,
-    //     goods_id: that.data.goodsId ? that.data.goodsId : "",
-    //     goods_img: that.data.picURL ? that.data.picURL : "",
-    //     goods_name: that.data.goods_cat_name,
-    //     cat_id: that.data.goodsListid,
-    //     brand_id: that.data.brandListId,
-    //     goods_type: that.data.goods_type,
-    //     goods_attr: that.data.items,
-    //     goods_number: that.data.goods_goodsNum,
-    //     ch_cat_id: that.data.goods_secondray_id,
-    //     // 零售
-    //     floor_price: that.data.goods_ShopPrice ? that.data.goods_ShopPrice : 0,
-    //     goods_desc: that.data.goods_describe.toString(),
-    //     //批发
-    //     shop_price: that.data.goods_hyShopPrice ? that.data.goods_hyShopPrice : 0,
-    //     qidingliang: that.data.goods_qdl
-    // var goods_img = this.imgUrl;
-    // if (this.imgSrc != '') goods_img = await this.upImg();
-    var user_id = this.user_id;
     var goods_name = e.detail.value.goods_name; //商品名称
     var goods_id = this.goodsId ? this.goodsId : '';
     var suppliers_id = this.suppliers_id;
@@ -803,7 +777,6 @@ export default class newslist extends wepy.page {
     var goods_img = this.goods_imgs[0];
     var img_url = this.goods_imgs;
     var data = {
-      user_id,
       suppliers_id,
       goods_id,
       goods_img,
@@ -909,10 +882,10 @@ export default class newslist extends wepy.page {
   async onLoad(option) {
     try {
       this.goodsId = '';
-      this.user_id = await this.$parent.loginInfo();
+      await this.$parent.loginInfo();
       this.suppliers_id = this.$parent.globalData.suppliers_id
         ? this.$parent.globalData.suppliers_id
-        : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
+        : (await this.$parent.getYizhanInfo()).suppliers_id;
       this.hdky = this.$parent.globalData.yizhanInfo.hdky == 1 ? true : false;
       if (option.id) this.setGoodsInfo(option.id);
       else {
@@ -923,8 +896,8 @@ export default class newslist extends wepy.page {
         this.goodsId = '';
       }
       if (option.index) this.index = option.index;
-      this.getBrandList(this.user_id, this.suppliers_id);
-      this.getGoodsList(this.user_id, this.suppliers_id);
+      this.getBrandList(this.suppliers_id);
+      this.getGoodsList(this.suppliers_id);
       this.$apply();
     } catch (error) {}
   }

@@ -108,8 +108,8 @@ export default class shoperweima extends wepy.page {
   };
   events = {};
   async onLoad(options) {
-    var userId = await this.$parent.loginInfo();
-    this.eventDraw(userId);
+    await this.$parent.loginInfo();
+    this.eventDraw();
     this.sales_id = options.sales_id ? options.sales_id : 0;
     this.sales_name = options.sales_name ? options.sales_name : 0;
   }
@@ -118,16 +118,15 @@ export default class shoperweima extends wepy.page {
     this.shareImage = event.detail.tempFilePath;
   }
 
-  async eventDraw(userId) {
+  async eventDraw() {
     var suppliers_id = this.$parent.globalData.suppliers_id;
-    var user_id = userId;
     var that = this;
     if (!suppliers_id) {
       await util.showToast('没有店铺信息');
       wx.navigateBack({});
       return;
     }
-    var yizhanInfo = await this.$parent.getYizhanInfo(user_id, suppliers_id);
+    var yizhanInfo = await this.$parent.getYizhanInfo(suppliers_id);
     this.yizhanInfo = yizhanInfo;
 
     let data = {
@@ -138,7 +137,6 @@ export default class shoperweima extends wepy.page {
         this.sales_id +
         '&sales_name=' +
         this.sales_name,
-      user_id,
       suppliers_id
     };
     let res = await newapi.getQRCodeImg(data);

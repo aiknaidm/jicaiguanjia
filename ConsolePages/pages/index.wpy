@@ -457,16 +457,14 @@ export default class newslist extends wepy.page {
       this.$apply();
     },
     getFormId(e) {
-      util.submitFormId(this.userId, e.detail.formId);
+      util.submitFormId(e.detail.formId);
     }
   };
   events = {};
   async getIndexNewsList(id) {}
   // 获取管理的易站列表
   async getjllist() {
-    let data = {
-      user_id: this.userId
-    };
+    let data = {};
     let res = await newapi.jlList(data);
     this.yizhanlist = res.data.data;
     this.$apply();
@@ -507,7 +505,6 @@ export default class newslist extends wepy.page {
   // 是否开通会员卡
   async ishasCard() {
     let data = {
-      user_id: this.userId,
       suppliers_id: this.suppliers_id
     };
     let res = await newapi.supplier_detail(data);
@@ -524,7 +521,7 @@ export default class newslist extends wepy.page {
     if (this.yizhanInfo.is_salesman == 1 && this.yizhanInfo.is_admin == 0) {
       this.applicationList[1].url =
         'my_console_check?sales_id=' +
-        this.userId +
+        this.user_id +
         '&sales_name=' +
         this.yizhanInfo.user_nickname;
     } else {
@@ -533,7 +530,7 @@ export default class newslist extends wepy.page {
     if (this.yizhanInfo.is_salesman == 1) {
       this.applicationList[8].url =
         '/pages/shoperweima?sales_id=' +
-        this.userId +
+        this.user_id +
         '&sales_name=' +
         this.yizhanInfo.user_nickname;
     } else {
@@ -541,10 +538,7 @@ export default class newslist extends wepy.page {
     }
   }
   async init(suppliers_id) {
-    let yizhanInfo = await this.$parent.getYizhanInfo(
-      this.userId,
-      suppliers_id
-    );
+    let yizhanInfo = await this.$parent.getYizhanInfo(suppliers_id);
 
     if (!yizhanInfo.is_admin && !yizhanInfo.is_salesman) {
       let mRes = await util.showModalBig(
@@ -573,7 +567,10 @@ export default class newslist extends wepy.page {
     this.$apply();
   }
   async onShow(option) {
-    this.userId = await this.$parent.loginInfo();
+    await this.$parent.loginInfo();
+    let userInfo = await this.$parent.getUserInfo();
+    this.user_id = userInfo.user_id;
+
     this.suppliers_id = this.$parent.globalData.suppliers_id
       ? this.$parent.globalData.suppliers_id
       : '';

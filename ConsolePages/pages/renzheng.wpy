@@ -375,10 +375,9 @@ export default class newslist extends wepy.page {
     }, 1000);
   }
   // 绑定上级
-  async bindSuperior(shareCode, userId) {
+  async bindSuperior(shareCode) {
     let data = {
       share_code: shareCode,
-      user_id: userId
     };
     let res = await newapi.getYizhanInfo(data);
     return res.data.data;
@@ -420,10 +419,6 @@ export default class newslist extends wepy.page {
         var pcusername = e.detail.value.pcusername;
         var password = '123456';
         var share_code = e.detail.value.shareCode;
-        if (this.userId == '-1') {
-          util.showModal('登录失败请稍后再试');
-          return;
-        }
         if (realname == '') {
           util.showModal('请填写姓名');
           return;
@@ -450,7 +445,6 @@ export default class newslist extends wepy.page {
 
         util.showLoading();
         let data = {
-          user_id: this.userId,
           mobile: phone,
           realname: realname,
           sheng,
@@ -480,13 +474,12 @@ export default class newslist extends wepy.page {
     }
   }
   async onLoad(option) {
-    let userId = await this.$parent.loginInfo();
+    await this.$parent.loginInfo();
 
     let shareCode = option.shareCode;
     this.shareCode = shareCode;
-    this.userId = userId;
-    if (shareCode) var yizhanInfo = await this.bindSuperior(shareCode, userId);
-    else var yizhanInfo = await this.$parent.getYizhanInfo(userId);
+    if (shareCode) var yizhanInfo = await this.bindSuperior(shareCode);
+    else var yizhanInfo = await this.$parent.getYizhanInfo();
 
     if (yizhanInfo.user_type == 4) {
       this.isuserDetail = true;

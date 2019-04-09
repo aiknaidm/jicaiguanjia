@@ -111,7 +111,6 @@ export default class my extends wepy.page {
   events = {};
   async upUserInfo() {
     let data = {
-      user_id: this.userId,
       avatarUrl: this.userInfo.avatarUrl,
       nickName: this.userInfo.nickName
     };
@@ -120,16 +119,16 @@ export default class my extends wepy.page {
   }
   async onLoad() {
     let that = this;
-    this.userId = await this.$parent.loginInfo();
+    await this.$parent.loginInfo();
     let isSettingStatus = await this.$parent.checkSettingStatus();
-    let userInfo = await this.$parent.getUserInfo(this.userId);
+    let userInfo = await this.$parent.getUserInfo();
 
     this.userInfo = userInfo;
     // 是否有获取用户信息的权限
     if (isSettingStatus) {
       if (!userInfo.unionid) {
         let code = await wepy.login();
-        await wx.getUserInfo({
+        wx.getUserInfo({
           success(res) {
             var encryptedData = res.encryptedData;
             var iv = res.iv;

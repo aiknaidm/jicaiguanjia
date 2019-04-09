@@ -934,7 +934,7 @@ export default class newslist extends wepy.page {
     }
   }
   async getShopList(data) {
-    if (!this.suppliers_id || !this.user_id) {
+    if (!this.suppliers_id) {
       util.showToast('获取店铺信息失败，请稍后再试');
       return;
     }
@@ -961,7 +961,6 @@ export default class newslist extends wepy.page {
   async getFenLei(parent_id = '') {
     let data = {
       suppliers_id: this.suppliers_id,
-      user_id: this.user_id,
       parent_id
     };
     let res = await newapi.allcats(data);
@@ -972,7 +971,6 @@ export default class newslist extends wepy.page {
   }
   initData() {
     var data = {
-      user_id: this.user_id,
       cat_id: '',
       paixuid: '',
       keyword: '',
@@ -983,10 +981,10 @@ export default class newslist extends wepy.page {
   }
   async onLoad(option) {
     try {
-      this.user_id = await this.$parent.loginInfo();
+      await this.$parent.loginInfo();
       this.suppliers_id = this.$parent.globalData.suppliers_id
         ? this.$parent.globalData.suppliers_id
-        : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
+        : (await this.$parent.getYizhanInfo()).suppliers_id;
       this.is_hdky =
         this.$parent.globalData.yizhanInfo.hdky == 1 ? true : false;
       this.buttonText = this.is_hdky ? '设置会员卡不可用' : '设置会员卡可用';

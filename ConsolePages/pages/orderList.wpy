@@ -150,7 +150,6 @@ export default class orderlist extends wepy.page {
   async getOrderList(
     order_status = '0',
     page = 1,
-    user_id = this.userId,
     suppliers_id = this.suppliers_id
   ) {
     util.showLoading();
@@ -179,7 +178,6 @@ export default class orderlist extends wepy.page {
         break;
     }
     let data = {
-      user_id,
       type,
       page,
       suppliers_id
@@ -206,7 +204,7 @@ export default class orderlist extends wepy.page {
   }
   async onLoad(option) {
     util.showLoading();
-    this.userId = await this.$parent.loginInfo();
+    await this.$parent.loginInfo();
     this.suppliers_id = option.suppliers_id
       ? option.suppliers_id
       : this.$parent.globalData.suppliers_id;

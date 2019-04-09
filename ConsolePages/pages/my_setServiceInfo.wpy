@@ -98,7 +98,7 @@ export default class my_setServiceInfo extends wepy.page {
   methods = {
     // 收集formid
     getFormId: function(e) {
-      //util.submitFormId(app.globalData.userId, e.detail.formId);
+      util.submitFormId(e.detail.formId);
     },
     async formSubmit(e) {
       if (e.detail.value.name === '') {

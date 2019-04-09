@@ -154,12 +154,11 @@ export default class newslist extends wepy.page {
   };
   events = {};
   async getIndexNewsList(id) {}
-  async eventDraw(userId) {
+  async eventDraw() {
     // var suppliers_id = app.globalData.yizhanInfo.suppliers_id;
     var that = this;
     let data = {
       path: '/ConsolePages/pages/renzheng',
-      user_id: userId
     };
     let res = await newapi.getShareImg(data);
     util.showLoading('绘制图片中');
@@ -267,8 +266,8 @@ export default class newslist extends wepy.page {
     this.shareImage = event.detail.tempFilePath;
   }
   async onLoad(option) {
-    var userId = await this.$parent.loginInfo();
-    this.eventDraw(userId);
+    await this.$parent.loginInfo();
+    this.eventDraw();
   }
 }
 </script>

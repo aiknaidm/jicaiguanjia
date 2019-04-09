@@ -149,7 +149,7 @@ export default class my_console_renew extends wepy.page {
       var index = e.currentTarget.dataset.index;
       var data = this.renewList[index];
       data.isHasShareCode = this.isHasShareCode;
-      util.fwfwxpay(this.user_id, this.suppliers_id, data, this.shareCode);
+      util.fwfwxpay(this.suppliers_id, data, this.shareCode);
     },
     toRenewRecord: function() {
       wx.navigateTo({
@@ -159,12 +159,11 @@ export default class my_console_renew extends wepy.page {
   };
   events = {};
   async onLoad(options) {
-    this.user_id = await this.$parent.loginInfo();
+    await this.$parent.loginInfo();
     this.suppliers_id = this.$parent.globalData.suppliers_id;
     var yizhanInfo = this.$parent.globalData.yizhanInfo;
     if (!yizhanInfo) {
       yizhanInfo = await this.$parent.getYizhanInfo(
-        this.user_id,
         this.suppliers_id
       );
     }

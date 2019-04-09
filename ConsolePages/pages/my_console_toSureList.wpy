@@ -129,7 +129,7 @@ export default class share extends wepy.page {
     util.showLoading();
     this.suppliers_id = this.$parent.globalData.suppliers_id
       ? this.$parent.globalData.suppliers_id
-      : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
+      : (await this.$parent.getYizhanInfo()).suppliers_id;
     let data = {
       suppliers_id: this.suppliers_id,
       page: this.page

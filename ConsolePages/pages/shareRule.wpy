@@ -41,8 +41,8 @@ export default class share extends wepy.page {
     this.$apply();
   }
   async onLoad(option) {
-    var userId = await this.$parent.loginInfo();
-    this.getTxt(userId);
+    await this.$parent.loginInfo();
+    this.getTxt();
   }
 }
 </script>

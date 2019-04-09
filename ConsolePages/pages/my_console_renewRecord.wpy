@@ -46,10 +46,9 @@ export default class my_console_renewRecord extends wepy.page {
   methods = {};
   events = {};
   async onShow() {
-    let user_id = await this.$parent.loginInfo();
+    await this.$parent.loginInfo();
     let suppliers_id = this.$parent.globalData.suppliers_id;
     let data = {
-      user_id,
       suppliers_id
     };
     let res = await newapi.fwfpaylist(data);

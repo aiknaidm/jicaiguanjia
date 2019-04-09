@@ -336,7 +336,7 @@ export default class newslist extends wepy.page {
       this.right = 0;
     },
     getFormId(e) {
-      util.submitFormId(this.userId, e.detail.formId);
+      util.submitFormId(e.detail.formId);
     }
   };
   events = {};
@@ -356,7 +356,7 @@ export default class newslist extends wepy.page {
   async onLoad(option) {
     this.suppliers_id = option.suppliers_id;
     this.height = wx.getSystemInfoSync().windowHeight;
-    this.user_id = await this.$parent.loginInfo();
+    await this.$parent.loginInfo();
     this.supplierDetail = await this.getSuppliersDetails(this.suppliers_id);
     this.supplierDetail.img = this.$parent.globalData.suppliers_img;
     this.supplierDetail.end_time_new = this.$parent.globalData.end_time_new;

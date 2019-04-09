@@ -1,4 +1,5 @@
 import wepy from 'wepy'
+import newapi from '../API/newapi';
 const formatTime = function (d = 0) {
   var date = new Date();
   if (d) {
@@ -40,130 +41,27 @@ const getStartTime = function () {
 
   return [year, month, day].map(formatNumber).join('-')
 }
-// orderId 订单id redirectUrl 跳转url failUrl 失败跳转
-// 支付
-const wxpay1 = async function (orderId) {
-  //   let remark = "在线充值";
-  //   let nextAction = {};
-  //   if (orderId != 0) {
-  //    let remark = "支付订单 ：" + orderId;
-  //    let nextAction = {
-  //       type: 0,
-  //       id: orderId
-  //     };
-  //   }
-  var res0 = await wepy.login()
-  var code = res0.code
-  if (!code) {
-    return {
-      code: 0,
-      msg: "登录失败"
-    };
-  }
-  var res = await wepy.request({
-    url: 'https://lmbge.com/wxapi/jicai/wxpay1',
-    data: {
-      weixin: res0.code,
-      id: orderId
-    },
-  })
-  var result = res.data.data;
-  if (res.data.code == 0) {
-    //  通知用
-    var prepay_id = result.package.replace("prepay_id=", "");
-    // 发起支付
-
-    try {
-      var payres = await wepy.requestPayment({
-        timeStamp: result.timeStamp,
-        nonceStr: result.nonceStr,
-        package: result.package,
-        signType: result.signType,
-        paySign: result.paySign,
-
-      })
-      wepy.request({
-        url: 'https://lmbge.com/wxapi/jicai/paysuccess',
-        data: {
-          id: orderId
-        },
-      })
-
-      // wx.redirectTo({
-      //     url: redirectUrl
-      // });
-      return {
-
-        code: 1,
-        msg: "支付成功"
-      };
-
-    } catch (err) {
-      // 取消支付 
-      return {
-        code: 2,
-        msg: "取消支付"
-      };
-
-    }
-  } else {
-    return {
-      code: 3,
-      msg: "服务器忙"
-    };
-  }
-}
 // 提现到零钱
-const wxpay3 = async function (user_id) {
-
-  var res0 = await wepy.login()
-  var code = res0.code
-  if (!code) {
+const wxpay3 = async function () {
+  let mRes = await showModalBig('你确定要提现吗');
+  if (mRes.cancel) {
     return {
-      code: 0,
-      msg: "登录失败"
-    };
-  }
-  var res = await wepy.showModal({
-    title: '提示', //提示的标题,
-    content: "你确定要提现吗", //提示的内容,
-    showCancel: true, //是否显示取消按钮,
-    cancelText: '取消', //取消按钮的文字，默认为取消，最多 4 个字符,
-    cancelColor: '#000000', //取消按钮的文字颜色,
-    confirmText: '确定', //确定按钮的文字，默认为取消，最多 4 个字符,
-    confirmColor: '#e500012', //确定按钮的文字颜色,
-
-  });
-
-  if (res.cancel) {
-    return {
-
       code: 3,
       msg: "取消提现"
     };
-    return
   }
-  wx.showLoading({
-    title: '提现中'
-  });
+  showLoading('提现中');
   try {
-    var res = await wepy.request({
-      url: 'https://lmbge.com/wxapi/jcgj/wxpay3',
-      data: {
-        weixin: res0.code,
-        user_id,
-        desc: "提现"
-      },
-    })
+    let data = {
+      desc: "提现"
+    };
+    let res = await newapi.wxpay3(data);
     var result = res.data.data;
     if (res.data.code == 0) {
-
       return {
-
         code: 0,
         msg: "提现成功"
       };
-
 
     } else {
       return {
@@ -173,7 +71,6 @@ const wxpay3 = async function (user_id) {
     }
   } catch (error) {
     return {
-
       code: 2,
       msg: "提现失败"
     };
@@ -182,32 +79,16 @@ const wxpay3 = async function (user_id) {
 }
 
 // 服务费缴费
-const fwfwxpay = async function (user_id, suppliers_id, data, pid) {
-  wx.showLoading({
-    title: '支付中...', //提示的内容,
-    mask: true, //显示透明蒙层，防止触摸穿透,
-    success: res => {}
-  });
-  var res0 = await wepy.login()
-  var code = res0.code
-  if (!code) {
-    return {
-      code: 0,
-      msg: "登录失败"
-    };
-  }
-  var res = await wepy.request({
-    url: 'https://lmbge.com/wxapi/jcgj/fwfwxpay',
-    data: {
-      user_id: user_id,
-      suppliers_id: suppliers_id,
-      weixin: res0.code,
-      goods_id: data.id,
-      goods_name: data.goods_name,
-      goods_price: data.isHasShareCode == "0" ? data.goods_price : data.youhui_price,
-      months: data.months
-    },
-  })
+const fwfwxpay = async function (suppliers_id, data, pid) {
+  showLoading('支付中...');
+  let data1 = {
+    suppliers_id: suppliers_id,
+    goods_id: data.id,
+    goods_name: data.goods_name,
+    goods_price: data.isHasShareCode == "0" ? data.goods_price : data.youhui_price,
+    months: data.months
+  };
+  let res = await newapi.fwfwxpay(data1);
   wx.hideLoading();
   var result = res.data.data;
   if (res.data.code == 0) {
@@ -222,29 +103,24 @@ const fwfwxpay = async function (user_id, suppliers_id, data, pid) {
         signType: result.signType,
         paySign: result.paySign,
       })
-      wepy.request({
-        url: 'https://lmbge.com/wxapi/jcgj/fwfpaysuccess',
-        data: {
-          id: res.data.orderId,
-          months: data.months,
-          user_id: user_id,
-          suppliers_id: suppliers_id,
-          share_code: pid
-        },
-      })
-      return {
-        code: 1,
-        msg: "支付成功"
-      };
-
     } catch (err) {
       // 取消支付 
       return {
         code: 2,
         msg: "取消支付"
       };
-
     }
+    let data2 = {
+      id: res.data.orderId,
+      months: data.months,
+      suppliers_id: suppliers_id,
+      share_code: pid
+    };
+    newapi.fwfpaysuccess(data2);
+    return {
+      code: 1,
+      msg: "支付成功"
+    };
   } else {
     return {
       code: 3,
@@ -254,17 +130,9 @@ const fwfwxpay = async function (user_id, suppliers_id, data, pid) {
 }
 
 // 会员缴费 
-const pay = async function (data, data2, url, sucessUrl) {
-  wx.showLoading({
-    title: '支付中...', //提示的内容,
-    mask: true, //显示透明蒙层，防止触摸穿透,
-    success: res => {}
-  });
-
-  var res = await wepy.request({
-    url,
-    data,
-  })
+const pay = async function (data, data2) {
+  showLoading('支付中...');
+  let res = await newapi.kthypay(data);
   wx.hideLoading();
   var result = res.data.data;
 
@@ -280,20 +148,14 @@ const pay = async function (data, data2, url, sucessUrl) {
         signType: result.signType,
         paySign: result.paySign,
       })
-
-
     } catch (err) {
       // 取消支付 
       return {
         code: 2,
         msg: "取消支付"
       };
-
     }
-    wepy.request({
-      url: sucessUrl,
-      data: data2,
-    })
+    newapi.kthypaysuccess(data2);
     return {
       code: 1,
       msg: "支付成功"
@@ -307,18 +169,14 @@ const pay = async function (data, data2, url, sucessUrl) {
 }
 
 // 收集formid
-const submitFormId = function (userId, formId) {
+const submitFormId = function (formId) {
   if (formId == "the formId is a mock one") {
     return
   }
-  wx.request({
-    url: 'https://lmbge.com/wxapi/jcgj/add_form',
-    data: {
-      user_id: userId,
-      form_id: formId,
-
-    }
-  })
+  let data = {
+    form_id: formId,
+  };
+  newapi.add_form();
 }
 const html_decode = function (str) {
   var s = "";
@@ -430,13 +288,12 @@ export default {
   formatTime,
   formatDate,
   formatNumber,
-  wxpay1,
   wxpay3,
   fwfwxpay,
+  pay,
   regexConfig,
   submitFormId,
   html_decode,
-  pay,
   getStartTime,
   showLoading,
   hideLoading,

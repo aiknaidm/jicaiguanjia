@@ -198,12 +198,11 @@ export default class share extends wepy.page {
   };
   events = {};
 
-  async getCode(user_id) {
+  async getCode() {
     util.showLoading();
 
     let data = {
       path: '/ConsolePages/pages/renzheng',
-      user_id
     };
     let res = await newapi.getShareImg(data);
     if (res.data.code == '0') {
@@ -216,8 +215,8 @@ export default class share extends wepy.page {
     this.$apply();
   }
   async onLoad(option) {
-    var userId = await this.$parent.loginInfo();
-    this.getCode(userId);
+    await this.$parent.loginInfo();
+    this.getCode();
   }
 }
 </script>

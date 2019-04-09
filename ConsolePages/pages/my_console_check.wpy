@@ -327,7 +327,7 @@ export default class my_console_check extends wepy.page {
       });
     },
     getFormId: function(e) {
-      //util.submitFormId(app.globalData.userId, e.detail.formId);
+      util.submitFormId(e.detail.formId);
     },
     statusTap: function(e) {
       this.getShenheList(this.sales_id);
@@ -467,7 +467,7 @@ export default class my_console_check extends wepy.page {
     this.is_kthy = this.$parent.globalData.is_kthy;
     this.suppliers_id = this.$parent.globalData.suppliers_id
       ? this.$parent.globalData.suppliers_id
-      : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
+      : (await this.$parent.getYizhanInfo()).suppliers_id;
     if (option.sales_id) {
       this.sales_id = option.sales_id;
       this.salesmanName = option.sales_name;

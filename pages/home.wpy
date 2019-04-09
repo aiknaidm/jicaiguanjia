@@ -357,8 +357,6 @@ export default class Index extends wepy.page {
   };
   components = {};
   data = {
-    user_id: '',
-
     pages: 1,
     adImg: [],
     date: new Date().getTime(),
@@ -449,8 +447,7 @@ export default class Index extends wepy.page {
   async onLoad() {
     util.showLoading();
     let that = this;
-    var userId = await this.$parent.loginInfo();
-    // var userInfo = await this.$parent.getUserInfo(userId);
+    await this.$parent.loginInfo();
     this.getMessage();
     this.getCarousel();
   }

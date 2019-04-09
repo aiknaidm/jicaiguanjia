@@ -287,14 +287,9 @@ export default class extends wepy.app {
   }
 
   async loginInfo() {
-    let userId = this.globalData.userId;
-    if (userId) {
-      return userId;
-    }
-    userId = wx.getStorageSync('userId');
-    if (userId) {
-      this.globalData.userId = userId;
-      return userId;
+    let token = wx.getStorageSync('Token') || '';
+    if (token) {
+      return;
     }
     let code = await wepy.login();
     let data = {
@@ -303,22 +298,17 @@ export default class extends wepy.app {
       avatar: 'https://lmbge.com/upload/avatar/weixin1.png'
     };
     let res = await newapi.login(data);
-    this.globalData.userId = res.data.data.user_id;
-    wx.setStorageSync('userId', res.data.data.user_id);
-    return res.data.data.user_id;
+    wx.setStorageSync('Token', res.data.data.token);
+    return;
   }
-  async getUserInfo(userId) {
-    let data = {
-      user_id: userId
-    };
-    let res = await newapi.getUserInfo(data);
+  async getUserInfo() {
+    let res = await newapi.getUserInfo();
     if (res.data.code == '0') return res.data.data;
     else util.showToast('获取用户信息失败');
     return 0;
   }
-  async getYizhanInfo(user_id, suppliers_id = '') {
+  async getYizhanInfo(suppliers_id = '') {
     let data = {
-      user_id,
       suppliers_id
     };
     let res = await newapi.getYizhanInfo(data);

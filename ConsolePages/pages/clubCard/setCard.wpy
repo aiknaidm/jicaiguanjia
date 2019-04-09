@@ -477,7 +477,6 @@ export default class newslist extends wepy.page {
         return;
       }
       let data = {
-        user_id: this.user_id,
         card_rules: e.detail.value.rules,
         suppliers_id: this.suppliers_id
       };
@@ -532,7 +531,6 @@ export default class newslist extends wepy.page {
       }
       //获取bgid,然后网络提交
       let data = {
-        user_id: this.user_id,
         card_name: youhuiname,
         // buy_goods: that.data.choose_good_id,
         card_fee: moneyman,
@@ -555,7 +553,6 @@ export default class newslist extends wepy.page {
   // 活动规则
   async getCardrules() {
     let data = {
-      user_id: this.user_id,
       suppliers_id: this.suppliers_id
     };
     let res = await newapi.cardrules(data);
@@ -585,7 +582,6 @@ export default class newslist extends wepy.page {
     var that = this;
     clearInterval(t1);
     let data = {
-      user_id: this.user_id,
       suppliers_id: this.suppliers_id
     };
     let res = await newapi.card_list(data);
@@ -638,10 +634,10 @@ export default class newslist extends wepy.page {
   async onLoad(option) {
     util.showLoading();
     try {
-      this.user_id = await this.$parent.loginInfo();
+      await this.$parent.loginInfo();
       this.suppliers_id = this.$parent.globalData.suppliers_id
         ? this.$parent.globalData.suppliers_id
-        : (await this.$parent.getYizhanInfo(this.user_id)).suppliers_id;
+        : (await this.$parent.getYizhanInfo()).suppliers_id;
     } catch (error) {
       await util.showToast('登录失败');
       wx.redirectTo({
