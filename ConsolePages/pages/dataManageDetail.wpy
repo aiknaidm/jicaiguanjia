@@ -588,7 +588,6 @@ export default class newslist extends wepy.page {
   };
   events = {};
   async getMoneyData(data) {
-    var that = this;
     //交易列表
     let res = await newapi.jyjl(data);
     var datas = res.data.data;

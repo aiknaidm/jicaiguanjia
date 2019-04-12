@@ -126,7 +126,7 @@ export default class newslist extends wepy.page {
   async getShareList(status) {
     let data = {};
     let res = await newapi.fxfxList(data);
-    if (res.data.code == '0') {
+    if (res.data.code == 0) {
       var shareList = res.data.data;
       shareList.ketx = this.dataForEach(shareList.ketx);
       shareList.zong = this.dataForEach(shareList.zong);

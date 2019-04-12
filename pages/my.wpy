@@ -118,7 +118,6 @@ export default class my extends wepy.page {
     util.showToast('提交信息成功');
   }
   async onLoad() {
-    let that = this;
     await this.$parent.loginInfo();
     let isSettingStatus = await this.$parent.checkSettingStatus();
     let userInfo = await this.$parent.getUserInfo();

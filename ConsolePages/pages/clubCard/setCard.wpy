@@ -494,7 +494,6 @@ export default class newslist extends wepy.page {
       let mRes = await util.showModalBig('终止当前活动？');
       if (mRes.confirm) {
         that.cancleActivity(promotion_id);
-      } else if (mRes.cancel) {
       }
     },
     statusTap(index) {

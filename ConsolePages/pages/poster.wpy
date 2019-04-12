@@ -127,7 +127,7 @@ export default class newslist extends wepy.page {
             res.authSetting['scope.writePhotosAlbum']
           ) {
             wx.saveImageToPhotosAlbum({
-              filePath: this.shareImage,
+              filePath: that.shareImage,
               success(res) {
                 util.showToast('保存图片成功');
               }
@@ -139,7 +139,7 @@ export default class newslist extends wepy.page {
               success: res => {
                 if (res.authSetting['scope.writePhotosAlbum']) {
                   wx.saveImageToPhotosAlbum({
-                    filePath: this.shareImage,
+                    filePath: that.shareImage,
                     success(res) {
                       util.showToast('保存图片成功');
                     }

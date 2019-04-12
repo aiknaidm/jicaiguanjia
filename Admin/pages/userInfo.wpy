@@ -218,7 +218,7 @@ export default class my_console_check extends wepy.page {
   async serviceList(suppliers_id) {
     let data = { suppliers_id };
     let res = await newapi.serviceList(data);
-    if (res.data.code == '0') {
+    if (res.data.code == 0) {
       this.items = res.data.data;
       this.$apply();
     }
@@ -227,7 +227,7 @@ export default class my_console_check extends wepy.page {
   async managerList(suppliers_id) {
     let data = { suppliers_id };
     let res = await newapi.findManagers(data);
-    if (res.data.code == '0') {
+    if (res.data.code == 0) {
       this.items = res.data.data;
       this.$apply();
     }
@@ -236,7 +236,7 @@ export default class my_console_check extends wepy.page {
   async salesmanList(suppliers_id) {
     let data = { suppliers_id };
     let res = await newapi.findSalesman(data);
-    if (res.data.code == '0') {
+    if (res.data.code == 0) {
       this.items = res.data.data;
       this.$apply();
     }

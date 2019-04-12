@@ -366,22 +366,19 @@ export default class newslist extends wepy.page {
     },
     //零售价格修改
     bindJiaGe2Input: function(e) {
-      var that = this;
       var goods_attr_id = e.currentTarget.dataset.goods_attr_id;
       var jiage = e.detail.value;
       var i = e.currentTarget.dataset.index;
-      var datas = that.data.properties;
+      var datas = this.data.properties;
       datas[i].floor_price = jiage;
       this.properties = datas;
     },
     //价格修改
     bindJiaGeInput: function(e) {
-      var that = this;
-
       var goods_attr_id = e.currentTarget.dataset.goods_attr_id;
       var jiage = e.detail.value;
       var i = e.currentTarget.dataset.index;
-      var datas = that.data.properties;
+      var datas = this.data.properties;
       datas[i].attr_price = jiage;
 
       this.properties = datas;
@@ -389,11 +386,10 @@ export default class newslist extends wepy.page {
 
     //库存修改
     bindKuCunInput: function(e) {
-      var that = this;
       var goods_attr_id = e.currentTarget.dataset.goods_attr_id;
       var kucun = e.detail.value;
       var i = e.currentTarget.dataset.index;
-      var datas = that.data.properties;
+      var datas = this.data.properties;
 
       datas[i].goods_number = kucun;
       this.properties = datas;

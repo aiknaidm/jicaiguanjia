@@ -38,24 +38,20 @@ export default class orderbutton extends wepy.component {
   methods = {
     // 取消订单
     async cancelOrderTap(id) {
-      var that = this;
       let mRes = await util.showModalBig('你确定要取消订单吗');
       if (mRes.confirm) {
         var res = await this.toCancelOrder(id);
         if (res.data.code == 0) this.$emit('cancelOrderTap');
         else util.showToast('取消失败');
-      } else if (mRes.cancel) {
       }
     },
     // 确认收货
     async confirmBtnTap(id) {
-      var that = this;
       let mRes = await util.showModalBig('你确定收货吗');
       if (mRes.confirm) {
         var res = await this.toConfirmBtn(id);
         if (res.data.code == 0) this.$emit('confirmBtnTap');
         else util.showToast('确认收货失败');
-      } else if (mRes.cancel) {
       }
     },
   };

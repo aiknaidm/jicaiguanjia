@@ -36,7 +36,9 @@ export default class newslist extends wepy.page {
     let res = await newapi.newsList(data);
     this.newsList = res.data.data;
     this.newsList.forEach(function(item, index) {
-      that.newsList[index].published_time = util.formatDate(item.published_time);
+      that.newsList[index].published_time = util.formatDate(
+        item.published_time
+      );
     });
     this.$apply();
   }

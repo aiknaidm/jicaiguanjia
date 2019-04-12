@@ -498,7 +498,6 @@ export default class newslist extends wepy.page {
       );
       if (mRes.confirm) {
         wx.navigateTo({ url: '/ConsolePages/pages/my_console_renew' });
-      } else if (mRes.cancel) {
       }
     }
   }

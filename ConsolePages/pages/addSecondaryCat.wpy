@@ -173,7 +173,6 @@ export default class newslist extends wepy.page {
       let mRes = await util.showModalBig('你确定要删除"' + name + '"分类吗');
       if (mRes.confirm) {
         this.sureDelGoods(id, index);
-      } else if (mRes.cancel) {
       }
     },
     changeSecondary() {
@@ -193,8 +192,6 @@ export default class newslist extends wepy.page {
   events = {};
   //确定删除分类
   async sureDelGoods(id, index) {
-    var that = this; //
-
     let data = {
       cat_id: id,
     };
@@ -209,7 +206,6 @@ export default class newslist extends wepy.page {
   }
   // 分类列表 用户id 店铺id 有keyword时添加查找商品
   async getGoodsList(suppliers_id, keyword = '', parent_id) {
-    var that = this;
     util.showLoading();
     let data = {
       suppliers_id: suppliers_id,
@@ -224,7 +220,6 @@ export default class newslist extends wepy.page {
   }
   // 添加分类
   async addGoodsList(suppliers_id, keyword = '', parent_id) {
-    var that = this;
     util.showLoading();
     let data = {
       suppliers_id: suppliers_id,

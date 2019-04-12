@@ -191,13 +191,12 @@ export default class newslist extends wepy.page {
       this.is_hdky = e.detail.value;
       let mRes = await util.showModalBig(msg);
       if (mRes.confirm) {
-        var that = this;
         this.is_hdky = e.detail.value;
         this.$parent.globalData.yizhanInfo.hdky = this.is_hdky ? 1 : 0;
         this.getCardSetinfo(this.suppliers_id, this.is_hdky ? 1 : 0, function(
           res
         ) {
-          that.getGoodsList(that.suppliers_id, that.is_hdky ? 0 : 1, 1);
+          this.getGoodsList(this.suppliers_id, this.is_hdky ? 0 : 1, 1);
         });
         this.$apply();
       } else if (mRes.cancel) {

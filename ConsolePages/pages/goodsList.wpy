@@ -750,15 +750,17 @@ export default class newslist extends wepy.page {
     },
     // 全选
     bindAllSelect: function() {
+      var that = this;
       this.isallSelect = !this.isallSelect;
       this.list.forEach((item, index) => {
-        this.list[index].active = this.isallSelect;
+        that.list[index].active = that.isallSelect;
       });
       this.del = this.isallSelect;
       this.$apply();
     },
     // 选择
     selectTap: function(index) {
+      var that = this;
       this.list[index].active = !this.list[index].active;
       var active = true;
       this.del = false;
@@ -767,7 +769,7 @@ export default class newslist extends wepy.page {
           active = false;
         }
         if (item.active) {
-          this.del = true;
+          that.del = true;
         }
       });
       this.isallSelect = active;
@@ -793,7 +795,6 @@ export default class newslist extends wepy.page {
       );
       if (mRes.confirm) {
         this.delGoods(deleteSelectList);
-      } else if (mRes.cancel) {
       }
     },
     async clickbtn() {
@@ -930,7 +931,6 @@ export default class newslist extends wepy.page {
         });
         that.$apply();
       });
-    } else if (mRes.cancel) {
     }
   }
   async getShopList(data) {
@@ -941,9 +941,10 @@ export default class newslist extends wepy.page {
     util.showLoading();
     let res = await newapi.search(data);
     wx.hideLoading();
+    var that = this;
     if (res.data.code == 0) {
       res.data.data.forEach((item, index) => {
-        res.data.data[index].active = this.isallSelect;
+        res.data.data[index].active = that.isallSelect;
       });
       if (this.initdata.page == 1) this.list = res.data.data;
       else this.list.push(...res.data.data);

@@ -243,24 +243,22 @@ export default class my_console_check extends wepy.page {
     },
     //需要审核提示
     async toShenhe(e) {
-      var that = this;
       //审核人的id
       var id = e.currentTarget.dataset.id;
       let mRes = await util.showActionSheet(['通过', '拒绝']);
       if (mRes.tapIndex == 0) {
-        that.shenhe(id, 'tongguo');
+        this.shenhe(id, 'tongguo');
       } else if (mRes.tapIndex == 1) {
-        that.shenhe(id, 'jujue');
+        this.shenhe(id, 'jujue');
       }
     },
     //解除关系提示
     async toJiechu(e) {
-      var that = this;
       //审核人的id
       var id = e.currentTarget.dataset.id;
       let mRes = await util.showActionSheet(['解除关系']);
       if (mRes.tapIndex == 0) {
-        that.jiechu(id);
+        this.jiechu(id);
       }
     },
     tocallphone: function(e) {
@@ -305,7 +303,7 @@ export default class my_console_check extends wepy.page {
       sales_id
     };
     let res = await newapi.yhlb(data);
-    if (res.data.code == '0') {
+    if (res.data.code == 0) {
       this.weishenhe = res.data.data.weishenhe;
       this.yishenhe = res.data.data.yishenhe;
       this.$apply();
@@ -320,7 +318,7 @@ export default class my_console_check extends wepy.page {
       suppliers_id
     };
     let res = await newapi.jcgx(data);
-    if (res.data.code == '0') {
+    if (res.data.code == 0) {
       util.showToast('解除关系成功');
       this.getShenheList(this.sales_id);
     } else {
@@ -340,7 +338,7 @@ export default class my_console_check extends wepy.page {
     };
     let res = await newapi.yhsh(data);
     wx.hideLoading();
-    if (res.data.code == '0') {
+    if (res.data.code == 0) {
       this.getShenheList();
     }
   }
@@ -352,7 +350,7 @@ export default class my_console_check extends wepy.page {
       getall: 1
     };
     let res = await newapi.findSalesman(data);
-    if (res.data.code == '0') {
+    if (res.data.code == 0) {
       this.adminList = res.data.data;
       this.$apply();
     }

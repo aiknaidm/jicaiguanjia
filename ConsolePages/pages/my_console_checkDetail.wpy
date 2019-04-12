@@ -263,20 +263,16 @@ export default class my_console_checkDetail extends wepy.page {
     },
     //通过
     async tongguo(e) {
-      var that = this;
       let mRes = await util.showModalBig('通过该用户的审核请求');
       if (mRes.confirm) {
-        that.shenhe(that.id, 'tongguo');
-      } else if (mRes.cancel) {
+        this.shenhe(this.id, 'tongguo');
       }
     },
     //拒绝
     async jujue(e) {
-      var that = this;
       let mRes = await util.showModalBig('拒绝该用户的审核请求');
       if (mRes.confirm) {
-        that.shenhe(that.id, 'jujue');
-      } else if (mRes.cancel) {
+        this.shenhe(this.id, 'jujue');
       }
     },
     changeisclick: function() {
@@ -415,7 +411,7 @@ export default class my_console_checkDetail extends wepy.page {
       type
     };
     let res = await newapi.yhsh(data);
-    if (res.data.code == '0') {
+    if (res.data.code == 0) {
       util.showToast('操作成功');
       this.currentStatu = 0;
     } else {

@@ -275,7 +275,7 @@ export default class my_addManagerInfo extends wepy.page {
           res = await newapi.addManager(data);
         }
 
-        if (res.data.code == '0') {
+        if (res.data.code == 0) {
           if (this.type == 'member') {
             await util.showModal('添加会员成功');
             this.$parent.$pages[

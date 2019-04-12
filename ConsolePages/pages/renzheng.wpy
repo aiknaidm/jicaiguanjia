@@ -458,9 +458,6 @@ export default class newslist extends wepy.page {
         let res = await newapi.renzheng(data);
         wx.hideLoading();
         if (res.data.code == 0) {
-          wx.redirectTo({
-            url: '/pages/my-console/index'
-          });
           util.showToast('注册成功');
           this.isuserDetail = true;
         } else {

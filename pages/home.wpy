@@ -446,7 +446,6 @@ export default class Index extends wepy.page {
 
   async onLoad() {
     util.showLoading();
-    let that = this;
     await this.$parent.loginInfo();
     this.getMessage();
     this.getCarousel();

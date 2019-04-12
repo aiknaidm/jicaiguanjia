@@ -119,7 +119,7 @@ export default class my_setSalesman extends wepy.page {
         suppliers_id
       };
       let res = await newapi.delSalesman(data);
-      if (res.data.code == '0') {
+      if (res.data.code == 0) {
         util.showToast('删除成功');
         this.salesmanList();
       } else {
@@ -146,7 +146,7 @@ export default class my_setSalesman extends wepy.page {
     let suppliers_id = this.$parent.globalData.suppliers_id;
     let data = { suppliers_id };
     let res = await newapi.findSalesman(data);
-    if (res.data.code == '0') {
+    if (res.data.code == 0) {
       this.adminList = res.data.data;
       this.$apply();
     }

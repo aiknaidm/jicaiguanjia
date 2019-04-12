@@ -281,7 +281,7 @@ export default class my_console_cardPayDetail extends wepy.page {
       getall: 1
     };
     let res = await newapi.findSalesman(data);
-    if (res.data.code == '0') {
+    if (res.data.code == 0) {
       this.salesmanList = res.data.data;
       this.$apply();
     }
@@ -293,7 +293,7 @@ export default class my_console_cardPayDetail extends wepy.page {
       getall: 1
     };
     let res = await newapi.findmemberNameList(data);
-    if (res.data.code == '0') {
+    if (res.data.code == 0) {
       this.memberNameList = res.data.data;
       this.$apply();
     }

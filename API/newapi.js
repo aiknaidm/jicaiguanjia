@@ -16,7 +16,7 @@ const newapi = {
   kthypaysuccess: (data) => fetch(`${host_pay}/kthypaysuccess`, 'GET', data),
   wxpay3: (data) => fetch(`${host_pay}/wxpay3`, 'GET', data),
 
-  add_form: () => fetch(`${host_chk}/add_form`, 'GET'),
+  add_form: (data) => fetch(`${host_chk}/add_form`, 'GET', data),
   getUserInfo: (data) => fetch(`${host_chk}/get_user_info`, 'GET', data), //用户信息
   upUserInfo: (data) => fetch(`${host_chk}/up_user_info`, 'GET', data),
   getYizhanInfo: (data) => fetch(`${host_chk}/jlxx`, 'GET', data),
@@ -123,7 +123,6 @@ const fetch = async function (url, method, data) {
             content: '未知错误', //提示的内容,
           });
         }
-
       },
       // complete(res) {
       //   if (res.statusCode != 200) {

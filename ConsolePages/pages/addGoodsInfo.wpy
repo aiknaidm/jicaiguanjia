@@ -468,14 +468,12 @@ export default class newslist extends wepy.page {
       let mRes = await util.showModalBig('你确定要删除"' + name + '"品牌吗');
       if (mRes.confirm) {
         this.sureDelBrand(id, index);
-      } else if (mRes.cancel) {
       }
     },
     async longtabGoods(name, id, index) {
       let mRes = await util.showModalBig('你确定要删除"' + name + '"分类吗');
       if (mRes.confirm) {
         this.sureDelGoods(id, index);
-      } else if (mRes.cancel) {
       }
     },
     bindGoodsSure() {
@@ -544,7 +542,6 @@ export default class newslist extends wepy.page {
       if (mRes.confirm) {
         this.goods_attr.splice(index, 1);
         this.$apply();
-      } else if (mRes.cancel) {
       }
     },
     getFormId(e) {
@@ -576,13 +573,11 @@ export default class newslist extends wepy.page {
       );
       if (mRes.confirm) {
         await this.upImg(i);
-      } else if (mRes.cancel) {
       }
     }
   }
   // 品牌列表 用户id 店铺id 有keyword时添加查找商品
   async getBrandList(suppliers_id, keyword = '') {
-    var that = this;
     util.showLoading();
     let data = {
       suppliers_id: suppliers_id,
@@ -604,7 +599,6 @@ export default class newslist extends wepy.page {
   }
   // 分类列表 用户id 店铺id 有keyword时添加查找商品
   async getGoodsList(suppliers_id, keyword = '') {
-    var that = this;
     util.showLoading();
     let data = {
       suppliers_id: suppliers_id,
@@ -618,7 +612,6 @@ export default class newslist extends wepy.page {
   }
   // 添加分类
   async addGoodsList(suppliers_id, keyword = '') {
-    var that = this;
     util.showLoading();
 
     let data = {
@@ -635,7 +628,6 @@ export default class newslist extends wepy.page {
   }
   //确定删除分类
   async sureDelGoods(id, index) {
-    var that = this; //
     let data = {
       cat_id: id,
     };
@@ -850,7 +842,6 @@ export default class newslist extends wepy.page {
   }
   // 修改商品 获取初始信息
   async setGoodsInfo(goods_id) {
-    var that = this;
     util.showLoading();
     wx.setNavigationBarTitle({
       title: '修改商品'

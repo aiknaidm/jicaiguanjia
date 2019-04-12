@@ -73,7 +73,6 @@ export default class orderDetails extends wepy.page {
   };
   // 上传发货图片
   upfahuoimg(orderId) {
-    var that = this;
     wepy
       .chooseImage({
         count: 1, // 默认9
@@ -114,7 +113,6 @@ export default class orderDetails extends wepy.page {
   // 发货
 
   async fahuo(orderId) {
-    var that = this;
     let data = {
       order_id: orderId
     };

@@ -29,7 +29,6 @@ export default class share extends wepy.page {
   methods = {};
   events = {};
   async getTxt() {
-    var that = this;
     var res = await newapi.fxgz_get();
     wx.hideLoading();
     this.articleDetail = res.data.data;

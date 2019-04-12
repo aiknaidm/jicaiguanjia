@@ -207,8 +207,8 @@ export default class newslist extends wepy.page {
       };
 
     let res = await newapi.suppliers_list(data);
-    var that = this;
     wx.hideLoading();
+    var that = this;
     res.data.data.data.forEach(function(item, index) {
       res.data.data.data[index].end_time_new = util.formatDate(item.end_time);
       res.data.data.data[index].is_expire = that.newData > item.end_time * 1000;

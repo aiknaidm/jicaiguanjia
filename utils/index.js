@@ -176,59 +176,59 @@ const submitFormId = function (formId) {
   let data = {
     form_id: formId,
   };
-  newapi.add_form();
+  newapi.add_form(data);
 }
 const html_decode = function (str) {
   var s = "";
   if (str.length == 0) return "";
   // s = str.replace(/&gt;/g, "&");
 
-  s = str.replace(/& amp; /g, "&");
-  s = s.replace(/& amp; /g, "&");
-  s = s.replace(/& amp; /g, "&");
-  s = s.replace(/& lt; /g, "<");
-  s = s.replace(/& gt; /g, ">");
+  s = str.replace(/&amp;/g, "&");
+  s = s.replace(/&amp;/g, "&");
+  s = s.replace(/&amp;/g, "&");
+  s = s.replace(/&lt;/g, "<");
+  s = s.replace(/&gt;/g, ">");
   s = s.replace(/\/>/g, '></img>');
 
   s = "<p>" + s + "</p>"
 
   // if (s.substr(s.length - 5, 5) == "/img>") {
   // }
-  s = s.replace(/< img/g, '</p><img');
-  s = s.replace(/< \/img >/g, '<\/img><p>');
+  s = s.replace(/<img/g, '</p><img');
+  s = s.replace(/<\/img>/g, '<\/img><p>');
 
   s = s.replace(/\/>/g, '/></p>');
-  s = s.replace(/\/>< \/p >/g, '/>');
-  s = s.replace(/< \/p >< \/p >/g, '</p>');
-  s = s.replace(/< \/p > \/n < \/p >/g, '</p>');
-  s = s.replace(/< \/p > \/r < \/p >/g, '</p>');
-  s = s.replace(/< \/p > \/n\/r < \/p >/g, '</p>');
-  s = s.replace(/< \/p > \/r\/n < \/p >/g, '</p>');
-  s = s.replace(/< p >< \/p >/g, '');
+  s = s.replace(/\/><\/p>/g, '/>');
+  s = s.replace(/<\/p><\/p>/g, '</p>');
+  s = s.replace(/<\/p>\/n<\/p>/g, '</p>');
+  s = s.replace(/<\/p>\/r<\/p>/g, '</p>');
+  s = s.replace(/<\/p>\/n\/r<\/p>/g, '</p>');
+  s = s.replace(/<\/p>\/r\/n<\/p>/g, '</p>');
+  s = s.replace(/<p><\/p>/g, '');
   // s = s.replace(/>\/n<p><\/p><img/g, '><img');
   // s = s.replace(/>\/r<p><\/p><img/g, '><img');
   // s = s.replace(/>\/r\/n<p><\/p><img/g, '><img');
   // s = s.replace(/>\/n\/r<p><\/p><img/g, '><img');
-  s = s.replace(/< p >< p/g, '<p');
+  s = s.replace(/<p><p/g, '<p');
 
 
 
-  s = s.replace(/& nbsp; /g, " ");
-  s = s.replace(/& #39; /g, "\'");
-  s = s.replace(/& quot; /g, "\"");
+  s = s.replace(/&nbsp;/g, " ");
+  s = s.replace(/&#39;/g, "\'");
+  s = s.replace(/&quot;/g, "\"");
   s = s.replace(/<br>/g, "\n");
-  s = s.replace(/<p/g, '<p class="xing - p"');
-  s = s.replace(/<img/g, '<img class="xing - img"');
+  s = s.replace(/<p/g, '<p class="xing-p"');
+  s = s.replace(/<img/g, '<img class="xing-img"');
   s = s.replace(/src="\/images/g, 'src="http://maijia.jicaizx.com/images');
 
-  s = s.replace(/ >< \/img >/g, ' _uploaded="true"></img>');
+  s = s.replace(/ ><\/img>/g, ' _uploaded="true"></img>');
   return s;
 }
 //邮箱以及手机的正则表达式
 const regexConfig = function () {
   var reg = {
-    email: /^(\w -  * \. * ) + @(\w -?) + (\.\w {2, }) + $/,
-    phone: /^1(3 | 4 | 5 | 6 | 7 | 8 | 9)\d {9}$/
+    email: /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/,
+    phone: /^1[34578]\d{9}$/
   }
   return reg;
 }
