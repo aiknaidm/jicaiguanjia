@@ -65,7 +65,7 @@ button::after {
      
 		  <button form-type='submit' @tap="statusTap({{index}})" class="scroll-view-item_H {{index == thisindex ? 'active' : ''}}" wx:for-items="{{statusType}}" wx:key="{{index}}" data-index="{{index}}" data-type="{{statusType[index]}}">
       {{statusType[index]}}
-       <text class='goodsListnum' wx:if="{{goodsListnum[index]&&goodsListnum[index]!=0}}">{{orderListnum[index]}}</text>
+       <text class='goodsListnum' wx:if="{{goodsListnum[index]}}">{{goodsListnum[index]}}</text>
       </button>
 		 
     </scroll-view>
@@ -105,7 +105,6 @@ export default class orderlist extends wepy.page {
       '待付款',
       '待发货',
       '已发货',
-      '退款售后',
       '交易成功',
       '交易关闭'
     ],
@@ -164,15 +163,11 @@ export default class orderlist extends wepy.page {
         var type = 'yifahuo';
         break;
       case 3:
-        var type = 'tuikuan';
-        break;
-      case 4:
         var type = 'chenggong';
         break;
-      case 5:
+      case 4:
         var type = 'guanbi';
         break;
-
       default:
         var type = 'daifukuan';
         break;
@@ -200,6 +195,15 @@ export default class orderlist extends wepy.page {
     if (orderList.length < 10) {
       this.isMoreData = false;
     }
+
+    let data2 = { suppliers_id };
+    let res2 = await newapi.orderNum(data2);
+    this.goodsListnum[0] = res2.data.data.daifukuan;
+    this.goodsListnum[1] = res2.data.data.daifahuo;
+    this.goodsListnum[2] = res2.data.data.yifahuo;
+    this.goodsListnum[3] = res2.data.data.chenggong;
+    this.goodsListnum[4] = res2.data.data.guanbi;
+
     this.$apply();
   }
   async onLoad(option) {

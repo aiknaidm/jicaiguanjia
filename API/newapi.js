@@ -92,6 +92,7 @@ const newapi = {
   goods_hdky: (data) => fetch(`${host_chk}/goods_hdky`, 'POST', data),
   set_unionid: (data) => fetch(`${host_chk}/set_unionid`, 'GET', data),
   fxgz_get: () => fetch(`${host_chk}/fxgz_get`, 'GET'),
+  orderNum: (data) => fetch(`${host_chk}/order_num`, 'GET', data), //订单数量
 }
 const fetch = async function (url, method, data) {
   return new Promise((resolve, reject) => {

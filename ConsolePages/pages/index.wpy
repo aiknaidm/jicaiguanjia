@@ -213,6 +213,11 @@
       margin-right: 10rpx;
       margin-left: 40rpx;
     }
+    .hui_txt {
+      font-size: 24rpx;
+      color: #666;
+      margin-left: 16rpx;
+    }
   }
 }
 .info_list .weui_cell_hd {
@@ -257,7 +262,7 @@
           url="{{}}"
           open-type="navigate"
           hover-class="none"> 
-          <image src="/images/console/transaction-manage.png"/>交易管理
+          <image src="/images/console/transaction-manage.png"/>交易管理 <view class='hui_txt'> (您当前最多可收到{{yizhanInfo.msg_num}}条通知)</view>
         </navigator>
        <repeat for="{{tabList}}" wx:key="{{index}}">
         <myList :tabItem="item"></myList>

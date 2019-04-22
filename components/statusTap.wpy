@@ -48,7 +48,7 @@
   font-size: 20rpx;
   position: absolute;
   top: 15rpx;
-  right: -5rpx;
+  right: 0rpx;
 }
 </style>
 <template>
