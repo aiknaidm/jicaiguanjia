@@ -9,7 +9,7 @@ view {
   width: 100%;
   background-color: #fff;
   border-top: 16rpx solid #f0f0f0;
-  border-bottom: 1rpx solid #eee
+  border-bottom: 1rpx solid #eee;
 }
 
 .a-order .order-date {
@@ -180,7 +180,7 @@ button.ss-my-d {
 }
 .price-box2 {
   text-align: left;
-   justify-content: flex-end
+  justify-content: flex-end;
 }
 </style>
 <template>
@@ -229,7 +229,7 @@ button.ss-my-d {
       </view>
       <view class="address-box">
         <text class='iconfont icon-icon-'></text>
-        <view>{{item.region}} {{item.address}}</view>
+        <view @tap="textPaste" data-con="{{item.region}} {{item.address}}">{{item.region}} {{item.address}}</view>
       </view>
       <slot name="btn">
        
@@ -239,6 +239,7 @@ button.ss-my-d {
 </template>
 <script>
 import wepy from 'wepy';
+import util from '../../utils/index';
 export default class List extends wepy.component {
   props = {
     orderList: {
@@ -267,6 +268,13 @@ export default class List extends wepy.component {
     // 去店铺页面
     toshop(id) {
       wx.navigateTo({ url: '/Shop/pages/index?suppliers_id=' + id });
+    },
+    textPaste(e) {
+      let con = e.currentTarget.dataset.con;
+      wx.setClipboardData({
+        data: con,
+        success: function(res) {}
+      });
     }
   };
 

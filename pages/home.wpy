@@ -301,9 +301,9 @@ button::after {
       indicator-color="rgba(0,0,0,0.2)"
       indicator-active-color="rgba(0,0,0,0.5)"
     >
-      <swiper-item @tap="toBannerDetail2">
+      <!-- <swiper-item @tap="toBannerDetail2">
         <image src="http://wsc.jicaizx.com/images/ad2.jpg?{{date}}" mode="aspectFill"/>
-      </swiper-item>
+      </swiper-item> -->
       <block wx:for="{{carousel}}" wx:key="{{index}}">
         <swiper-item bindtap="toBannerDetail({{item.url}})">
           <image src="http://maijia.jicaizx.com/{{item.content}}?{{date}}" mode="aspectFill"/>
