@@ -129,20 +129,22 @@ export default class my_console_renew extends wepy.page {
   computed = {};
   components = {};
   methods = {
-    async changeInput(e) {
+     changeInput(e) {
       var shareCode = e.detail.value;
       if (shareCode.length == 6) {
         let data = {
           share_code: shareCode
         };
-        let res = await newapi.verifyCode(data);
-        if (res.data.code == 0) {
+      newapi.verifyCode(data).then(res=>{
+   if (res.data.code == 0) {
           this.isHasShareCode = res.data.data;
           this.shareCode = shareCode;
           this.$apply();
-        }
+        
       } else {
         this.isHasShareCode = 0;
+      }
+      })
       }
     },
     toBuy: function(e) {
