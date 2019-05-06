@@ -629,6 +629,9 @@ button::after {
 </style>
 <template>
 <view class="container {{isshowbiaoti||showSearch||isShowGoodsList?'hidden':''}}">
+<view @tap="copyGoods">
+  复制吉采专营商品
+</view>
   <view class='search-title '>
     <view @tap="statusTap({{index}})" class="status-label {{index == currentType ? 'active' : ''}} {{isclick?'down':'up'}}" wx:for-items="{{statusType}}" wx:key="{{index}}" data-index="{{index}}" data-name="{{item.name}}">
       <view class='border'>{{item}}
@@ -777,6 +780,13 @@ export default class newslist extends wepy.page {
     },
     searchIpt(e) {
       this.keyword = e.detail.value;
+    },
+    async copyGoods() {
+      let data = {
+        suppliers_id: this.suppliers_id
+      };
+      let res = await newapi.copy_goods(data);
+      console.log(res);
     },
     buttonTap() {
       this.showSearch = false;

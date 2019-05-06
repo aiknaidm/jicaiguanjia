@@ -93,7 +93,8 @@ const newapi = {
     set_unionid: (data) => fetch(`${host_chk}/set_unionid`, 'GET', data),
     fxgz_get: () => fetch(`${host_chk}/fxgz_get`, 'GET'),
     orderNum: (data) => fetch(`${host_chk}/order_num`, 'GET', data), //订单数量
-    up_endtime: (data) => fetch(`${host_chk}/up_endtime`, 'GET', data)
+    up_endtime: (data) => fetch(`${host_chk}/up_endtime`, 'GET', data),
+    copy_goods: (data) => fetch(`${host_chk}/copy_goods`, 'GET', data)
 }
 const fetch = async function(url, method, data) {
     return new Promise((resolve, reject) => {
