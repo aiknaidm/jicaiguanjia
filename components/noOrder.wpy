@@ -22,7 +22,7 @@
   width: 100%;
   text-align: center;
   background-color: #f2f2f2;
-  padding-top: 80rpx;
+  padding-top: 100rpx;
 }
 
 .no-order-img {

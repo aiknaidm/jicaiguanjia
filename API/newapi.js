@@ -94,7 +94,10 @@ const newapi = {
     fxgz_get: () => fetch(`${host_chk}/fxgz_get`, 'GET'),
     orderNum: (data) => fetch(`${host_chk}/order_num`, 'GET', data), //订单数量
     up_endtime: (data) => fetch(`${host_chk}/up_endtime`, 'GET', data),
-    copy_goods: (data) => fetch(`${host_chk}/copy_goods`, 'GET', data)
+    copy_goods: (data) => fetch(`${host_chk}/copy_goods`, 'GET', data),
+    swyz: (data) => fetch(`${host_chk}/swyz`, 'GET', data),
+    copeCartList: (data) => fetch(`${host_chk}/cat_copy_chk`, 'GET', data),
+
 }
 const fetch = async function(url, method, data) {
     return new Promise((resolve, reject) => {

@@ -244,8 +244,13 @@
               确认修改
             </view>
           </view>
+         <view style="margin-top:20px">
+            <text wx:if="{{is_yizhan==0}}" @tap="setYizhan" style="margin-left:20rpx;background:#f7bf30;padding:5rpx 20rpx;border-radius:50px">设为易站</text>
+            <text wx:else @tap="delYizhan" style="margin-left:20rpx;background:#f7bf30;padding:5rpx 20rpx;border-radius:50px">取消易站</text>
+          </view>
           <!-- <view class='control-title-txt qiehuan' bindtap='showyizhan'>切换店铺</view> -->
         </view>
+         
       </view>
       <form report-submit bindsubmit='getFormId'>
         <view class="info_list order_list">
@@ -301,6 +306,7 @@
     data = {
       yizhanInfo: {},
       yizhanlist: [],
+      is_yizhan:0,
       right: 0,
       ischange: false,
       applicationList: [{
@@ -337,6 +343,36 @@
     };
     computed = {};
     methods = {
+      setYizhan(){
+        newapi.swyz({suppliers_id:this.suppliers_id,is_yizhan:1}).then(res=>{
+         if(res.data.code==0){
+            this.is_yizhan=1;
+          wx.showToast({
+            title: '设置成功', //提示的内容,
+            icon: 'none', //图标,
+         
+          });
+         }else{
+           wx.showToast({
+            title:res.data.message, //提示的内容,
+            icon: 'none', //图标,
+         
+          });
+         }
+          this.$apply();
+        })
+      },
+      delYizhan(){
+          newapi.swyz({suppliers_id:this.suppliers_id,is_yizhan:0}).then(res=>{
+            this.is_yizhan=0;
+            wx.showToast({
+            title: '取消成功', //提示的内容,
+            icon: 'none', //图标,
+         
+          });
+            this.$apply();
+          })
+      },
       bindDateChange(e) {
         this.ischange = true;
         this.supplierDetail.end_time_new = e.detail.value;
@@ -384,6 +420,7 @@
         suppliers_id
       };
       let res = await newapi.supplier_detail(data);
+      this.is_yizhan=res.data.data.is_yizhan
       return res.data.data;
     }
     async onLoad(option) {
