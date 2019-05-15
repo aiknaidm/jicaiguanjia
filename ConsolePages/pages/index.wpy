@@ -541,13 +541,21 @@
         this.applicationList[1].url = 'my_console_check';
       }
       if (this.yizhanInfo.is_salesman == 1) {
-        this.applicationList[8].url =
-          '/pages/shoperweima?sales_id=' +
+        this.applicationList.forEach((item,index)=>{
+          if(item.text=="查看我的店铺")
+          this.applicationList[index].url = '/pages/shoperweima?sales_id=' +
           this.user_id +
           '&sales_name=' +
           this.yizhanInfo.user_nickname;
+        })
+    
+         
       } else {
-        this.applicationList[8].url = '/pages/shoperweima';
+        this.applicationList.forEach((item,index)=>{
+          if(item.text=="查看我的店铺")
+          this.applicationList[index].url = '/pages/shoperweima'
+        })
+       
       }
     }
     async init(suppliers_id) {
