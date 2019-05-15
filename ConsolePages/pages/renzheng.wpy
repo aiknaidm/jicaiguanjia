@@ -1,279 +1,30 @@
 <style lang="less">
-/* page/lmbg/login/login.wxss */
-page {
-  background-color: #fff;
+.boss-list{
+  padding: 30rpx;
+  border-bottom: 1px solid #f0f0f0
 }
-
-.container {
+.add-boss-list{
   text-align: center;
-  height: 100%;
-  font-size: 15px;
-  color: #666;
-  background-color: #fff;
+  padding: 30rpx;
+  text{
+   
+    padding: 10rpx 40rpx;
+    background: #e50012;
+    color:#fff;
+    border-radius: 50px;
+  }
 }
-
-form {
-  display: flex;
-  flex-direction: column;
-  /* padding-top: 10px; */
-}
-
-.section {
-  /* margin-top: 10px; */
-  flex: 1;
-  display: flex;
-  align-items: center;
-  /* justify-content: center; */
-  border-bottom: 1px solid #eee;
-  font-size: 30rpx;
-  padding: 20rpx 40rpx;
-}
-
-.section input,
-picker {
-  height: 60rpx;
-  /* background-color: pink; */
-  line-height: 60rpx;
-  text-align: left;
-  padding-left: 20rpx;
-  flex: 10;
-}
-
-.section image {
-  width: 43rpx;
-  height: 43rpx;
-}
-.section .label {
-  width: 180rpx;
-  text-align: left;
-  /* text-align-last:justify; */
-}
-.section .label2 {
-  width: 200rpx;
-  text-align: left;
-}
-.yzm {
-  display: flex;
-  flex-direction: row;
-  margin-top: 20px;
-  border-bottom: 0px solid #c4c4c4;
-}
-
-.yzm input {
-  border: 1px solid #c4c4c4;
-  height: 35px;
-  width: 130px;
-  flex: 1;
-  text-align: left;
-  padding: 4px;
-}
-
-.yzm text {
-  height: 35px;
-  line-height: 35px;
-  margin-left: 10px;
-  flex: 1;
-  display: inline-block;
-  border: 1px solid #c4c4c4;
-  margin-top: 4px;
-  color: #09f;
-}
-
-button {
-  background-color: #e50012;
-  color: #fff;
-  height: 80rpx;
-  line-height: 80rpx;
-  font-size: 30rpx;
-  border-radius: 3px;
-  margin-top: 20rpx;
-  margin-bottom: 20rpx;
-}
-
-.picker {
-  color: #888;
-  flex: 10;
-}
-
-.section:last-child {
-  /* border: 0px solid; */
-}
-.label-right {
-  flex: 1;
-}
-
-.smsCode {
-  /* border: 0px solid #c4c4c4; */
-  border-bottom: 1rpx solid #eee;
-  justify-content: center;
-  align-items: center;
-}
-.smsCode:last-child {
-  border-bottom: 1rpx solid #eee;
-}
-.smsCode input {
-  flex: 1;
-  /* height: 80rpx; */
-  /* border-bottom: 1rpx solid #c4c4c4; */
-  /* float: left; */
-}
-
-.smsCode .getSmsCodeBtn {
-  flex: 1;
-  font-size: 30rpx;
-  color: #fff;
-  box-sizing: border-box;
-  margin-right: 0;
-  border-radius: 0px;
-  margin: 0;
-  /* height: 84rpx;
-   line-height: 84rpx; */
-  background-color: #e50012;
-}
-
-.rz-submit {
-  width: 80%;
-  margin: auto;
-  margin-top: 40rpx;
-}
-
-.smsCode {
-  display: flex;
-  justify-content: space-between;
-  /* border-bottom: 1px solid #ddd;
-  padding-right: 10%; */
-}
-
-.smsCode input {
-  width: 336rpx;
-}
-
-.smsCode .getSmsCodeBtn {
-  font-size: 30rpx;
-  color: #fff;
-  width: 216rpx;
-  box-sizing: border-box;
-  height: 80rpx;
-  line-height: 80rpx;
-
-  background-color: #e50012;
-}
-
-button {
-  background-color: #e50012;
-}
-button[disabled] {
-  /* color: #fff; */
-}
-button[disabled][type='default'],
-wx-button[disabled]:not([type]) {
-  /* color: #fff; */
-}
-.section .label text,
-.section .label2 text {
-  color: #e50012;
-  margin-right: 5rpx;
-}
-.radio-group {
-  /* padding-left: 20rpx; */
-  display: flex;
-}
-.radio-group .radio {
-  display: flex;
-  align-items: center;
-  padding-left: 20rpx;
-}
-/* 开店规则 */
-.check {
-  text-align: left;
-  margin: 50rpx 0;
-  font-size: 24rpx;
-  padding: 0 30rpx;
-}
-.main-color {
-  color: #e50012;
+.boss-title{
+  padding: 30rpx;
 }
 </style>
 <template>
- <view class='container'>
-  <form bindsubmit="formSubmit">
-
-    <view class="input-area">
-
-      <view class="input-log section">
-        <view class="label">
-          <text>*</text>手机号码</view>
-        <input value='{{userDetail.mobile}}' name="phone" maxlength='11' type="number" placeholder="手机号" bindinput="listenerPhoneInput" disabled='{{isuserDetail}}' />
-      </view>
-
-      <view class="section smsCode " wx:if="{{!isuserDetail}}">
-        <view class="label">
-          <text>*</text>验证码</view>
-        <input name="smscode" maxlength='4' type="number" placeholder="验证码" bindinput="listenerSmsCodeInput" disabled='{{isuserDetail}}' />
-        <button bindtap="getSmsCode" disabled="{{smsCodeDisabled}}" style="background-color:{{getSmsCodeBtnColor}}" class="getSmsCodeBtn">{{getSmsCodeBtnTxt}}</button>
-      </view>
-    </view>
-
-    <view class="section">
-      <view class="label">
-        <text>*</text>真实姓名</view>
-      <view class="label-right">
-        <input name="realname" class="input" type="text" value="{{userDetail.user_nickname}}" disabled='{{isuserDetail}}' />
-      </view>
-    </view>
-    <view class="section">
-      <view class="label">
-        <text>*</text>店铺名</view>
-      <view class="label-right">
-        <input name="storename" class="input" type="text" value="{{userDetail.suppliers_desc}}" disabled='{{isuserDetail}}' />
-      </view>
-    </view>
-    <view class="section">
-      <view class="label label2">
-        <text>*</text>pc管理账号</view>
-      <view class="label-right">
-        <input name="pcusername" class="input" type="text" value="{{userDetail.suppliers_name}}" disabled='{{isuserDetail}}' />
-      </view>
-    </view>
-    <view class="section">
-      <view class="label label2">
-        <text>*</text>pc管理密码</view>
-      <view class="label-right">
-        <input name="password" class="input" type="text" value="{{password}}"  disabled/>
-      </view>
-    </view>
-    <view class="section" >
-      <view class="label">
-        <text>*</text>所属地区</view>
-      <picker  mode="region"  disabled="{{isuserDetail}}" @change="bindRegionChange">
-        <view class="picker" >
-        {{region[0]}}-{{region[1]}}-{{region[2]}}
-        </view>
-   
-      </picker>
-    </view>
-		<view class="section" wx:if='{{!isuserDetail}}'>
-      <view class="label label2">
-        邀请码</view>
-      <view class="label-right">
-        <input name="shareCode" class="input" type="text" value="{{shareCode}}"  />
-      </view>
-    </view>
-		 <view class='check' wx:if='{{!isuserDetail}}'>
-        <checkbox-group bindchange="agreeClick">
-          <label class="checkbox">
-            <checkbox value="{{isAgreed}}" checked="{{isAgreed}}" />
-            <text >我已阅读</text><text class='main-color'  catchtap='showtext'>吉采易站批发版规则</text><text >，同意在吉采易站批发版开店</text>
-          </label>
-        </checkbox-group>
-
-      </view>
-
-    <button class='rz-submit' formType="submit" wx:if="{{!isuserDetail}}" disabled='{{issubmit}}'>提交</button>
-    <button class='rz-submit' @tap="backIndex" wx:else >回到首页</button>
-    <!-- <button class='rz-submit' disabled='true' wx:if="{{userDetail.user_status=='0'}}">审核中...</button> -->
-  </form>
-</view>
+  <view class="container">
+    <view class="boss-title">我的店铺</view>
+    <view class="boss-list" wx:for="{{bossList}}" wx:key="{{index}}" @tap="toSuppliersDetail({{item.suppliers_id}})">店铺名：{{item.suppliers_desc}}</view>
+    <view wx:if="{{bossList.length==0}}">你还没有注册店铺！<text @tap="toSuppliersDetail()">点击添加</text></view>
+    <view wx:else class="add-boss-list" @tap="toSuppliersDetail()"><text>新店注册</text></view>
+  </view>
 </template>
 
 <script>
@@ -282,212 +33,59 @@ import newapi from '../../API/newapi';
 import util from '../../utils/index';
 export default class newslist extends wepy.page {
   config = {
-    navigationBarTitleText: '认证'
+    navigationBarTitleText: '店铺列表'
   };
   components = {};
   data = {
-    userDetail: {},
-    region: [],
-    isuserDetail: false,
-    issubmit: false,
-    getSmsCodeBtnTxt: '获取验证码',
-    getSmsCodeBtnColor: '#E50012',
-    password: '123456',
-    smsCodeDisabled: false,
-    isAgreed: false,
-    shareCode: ''
+    bossList: {}
   };
   computed = {};
   methods = {
-    backIndex() {
-      wx.switchTab({ url: '/pages/home' });
-    },
-    // 免责条款
-    showtext: function() {
-      wx.navigateTo({
-        url: '/pages/my-rulesDescription/index'
-      });
-    },
-    // 同意免责条款
-    agreeClick: function(e) {
-      this.isAgreed = !this.isAgreed;
-    },
-    listenerPhoneInput(e) {
-      this.phone = e.detail.value;
-    },
-    //联网获取验证码
-    async getSmsCode() {
-      this.smsCodeDisabled = true;
-      //点击了获取验证码先在本地验证手机号的合法性
-      if (this.checkPhone(this.phone)) {
-        try {
-          let data = {
-            mobile: this.phone
-          };
-          let res = await newapi.yzm(data);
-          if (res.data.code == 0) {
-            //将获取的验证码赋值
-            this.code = res.data.data;
-            util.showModal('验证码发送成功');
-          } else {
-            util.showToast(res.data.message);
-            this.smsCodeDisabled = false;
-          }
-          var count = 120;
-          this.setTime(count);
-        } catch (error) {
-          this.smsCodeDisabled = false;
-          util.showToast('链接超时');
-        }
-      } else {
-        this.smsCodeDisabled = false;
-      }
-    },
-    /**
-     * 监听验证码输入
-     */
-    listenerSmsCodeInput: function(e) {
-      this.inputCode = e.detail.value;
-    },
-    // 选择的地区
-    bindRegionChange(e) {
-      this.region = e.detail.value;
+    toSuppliersDetail (id){
+     wx.navigateTo({ url: 'renzhengDetail?suppliers_id='+id });
     }
   };
   events = {};
-  setTime(count) {
-    var count = count;
-    var that = this;
-    var si = setInterval(function() {
-      if (count > 0) {
-        count--;
-        that.getSmsCodeBtnTxt = count + ' s';
-        that.getSmsCodeBtnColor = '#999';
-        that.smsCodeDisabled = true;
-        that.$apply();
-      } else {
-        that.getSmsCodeBtnTxt = '重新获取';
-        that.getSmsCodeBtnColor = '#ff7701';
-        that.smsCodeDisabled = false;
-        clearInterval(si);
-        that.$apply();
-      }
-    }, 1000);
-  }
+
   // 绑定上级
   async bindSuperior(shareCode) {
     let data = {
-      share_code: shareCode,
+      share_code: shareCode
     };
     let res = await newapi.getYizhanInfo(data);
     return res.data.data;
   }
-  //检查输入的手机号
-  checkPhone(param = '') {
-    var phone = util.regexConfig().phone;
 
-    var inputUserName = param.trim();
-    if (phone.test(inputUserName)) {
-      return true;
-    } else {
-      util.showModal('请输入正确的手机号码');
-      return false;
-    }
-  }
-  //检查输入的验证码
-  checkSmsCode(param) {
-    var smsCode = param.trim();
-
-    if (smsCode.length < 4) {
-      util.showModal('请输入4位短信验证码');
-      return false;
-    } else {
-      return true;
-    }
-  }
-  //表单数据提交
-  async formSubmit(e) {
-    var param = e.detail.value;
-    var that = this;
-    var flag = that.checkPhone(param.phone) && that.checkSmsCode(param.smscode);
-    if (flag) {
-      if (this.inputCode == this.code) {
-        var phone = e.detail.value.phone;
-        var smscode = e.detail.value.smscode;
-        var realname = e.detail.value.realname;
-        var storename = e.detail.value.storename;
-        var pcusername = e.detail.value.pcusername;
-        var password = '123456';
-        var share_code = e.detail.value.shareCode;
-        if (realname == '') {
-          util.showModal('请填写姓名');
-          return;
-        }
-        if (storename == '') {
-          util.showModal('请填写店铺名');
-          return;
-        }
-        if (pcusername == '') {
-          util.showModal('请填写后台用户名');
-          return;
-        }
-        if (this.region.length == 0) {
-          util.showModal('请填写地区');
-          return;
-        }
-        if (!that.data.isAgreed) {
-          util.showModal('请同意吉采易站批发版规则');
-          return;
-        }
-        var sheng = this.region[0];
-        var shi = this.region[1];
-        var qu = this.region[2];
-
-        util.showLoading();
-        let data = {
-          mobile: phone,
-          realname: realname,
-          sheng,
-          shi,
-          qu,
-          suppliers_name: pcusername,
-          password,
-          suppliers_desc: storename,
-          share_code: share_code
-        };
-        let res = await newapi.renzheng(data);
-        wx.hideLoading();
-        if (res.data.code == 0) {
-          util.showToast('注册成功');
-          this.isuserDetail = true;
-        } else {
-          this.issubmit = false;
-          util.showModal(res.data.message);
-        }
-        this.$apply();
-      } else {
-        util.showModal('输入的验证码有误');
-      }
-    }
+  async getBossList() {
+    var res = await newapi.bossList();
+    var bossList = res.data.data;
+    if (bossList.length != 0) {
+      this.bossList = bossList;
+      this.$apply();
+    } else wx.redirectTo({ url: 'renzhengDetail' });
   }
   async onLoad(option) {
     await this.$parent.loginInfo();
-
     let shareCode = option.shareCode;
     this.shareCode = shareCode;
     if (shareCode) var yizhanInfo = await this.bindSuperior(shareCode);
-    else var yizhanInfo = await this.$parent.getYizhanInfo();
+    
+    // else var yizhanInfo = await this.$parent.getYizhanInfo();
 
-    if (yizhanInfo.user_type == 4) {
-      this.isuserDetail = true;
-      this.userDetail = yizhanInfo;
-      this.region[0] = yizhanInfo.sheng;
-      this.region[1] = yizhanInfo.shi;
-      this.region[2] = yizhanInfo.qu;
-      this.phone = yizhanInfo.mobile;
-    } else {
-    }
-    this.$apply();
+    // if (yizhanInfo.user_type >= 4) {
+    //   this.isuserDetail = true;
+    //   this.userDetail = yizhanInfo;
+    //   this.region[0] = yizhanInfo.sheng;
+    //   this.region[1] = yizhanInfo.shi;
+    //   this.region[2] = yizhanInfo.qu;
+    //   this.phone = yizhanInfo.mobile;
+    // } else {
+    // }
+    // this.$apply();
+  }
+  async onShow(){
+     await this.$parent.loginInfo();
+    this.getBossList();
   }
 }
 </script>

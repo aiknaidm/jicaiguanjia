@@ -1,586 +1,592 @@
 <style lang="less">
-.control-title {
-  background-color: #e50012;
-  display: flex;
-  padding: 20rpx 40rpx 40rpx 40rpx;
-  align-items: center;
-  color: #fff;
-  position: relative;
-  height: 100rpx;
-}
-
-.scrolllist {
-  flex: 1;
-}
-
-.control-title-img {
-  width: 110rpx;
-  height: 110rpx;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 1px solid #fff;
-  margin-right: 20rpx;
-  background-color: #fff;
-}
-
-.control-title-img image {
-  width: 100%;
-  height: 100%;
-}
-
-.control-title-txt {
-  position: relative;
-  top: 10rpx;
-}
-
-.control-title-txt .txt {
-  border: 1px solid #fff;
-  padding: 0 30rpx;
-  border-radius: 50px;
-  margin-right: 20rpx;
-}
-.control-title-txt .iconfont {
-  width: 60rpx;
-  height: 60rpx;
-  border: 1px solid #fff;
-  border-radius: 50%;
-  font-size: 24rpx;
-  text-align: center;
-  line-height: 50rpx;
-  padding: 5rpx;
-}
-.control-title-txt1 {
-  font-size: 32rpx;
-  font-weight: bold;
-  line-height: 55rpx;
-  padding-left: 10rpx;
-}
-/* 分享好友 */
-
-.share {
-  position: absolute;
-  right: 40rpx;
-  bottom: 40rpx;
-  color: #fff;
-}
-
-.share text {
-  margin-right: 10rpx;
-  color: #14c09a;
-  font-size: 30rpx;
-}
-.share button {
-  color: #fff;
-}
-
-.yizhan-list2 {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 75%;
-  height: 100%;
-  /* padding: 40rpx; */
-  background: #fff;
-  /* -webkit-transform: translateY(-50%); */
-  transform: translateX(-100%);
-  -ms-transform: translateX(-100%); /* IE 9 */
-  -moz-transform: translateX(-100%); /* Firefox */
-  -webkit-transform: translateX(-100%); /* Safari 和 Chrome */
-  -o-transform: translateX(-100%);
-  color: #000;
-  overflow: hidden;
-  transition: transform 0.3s;
-}
-
-.list {
-  transform: translateX(0);
-  -ms-transform: translateX(0); /* IE 9 */
-  -moz-transform: translateX(0); /* Firefox */
-  -webkit-transform: translateX(0); /* Safari 和 Chrome */
-  -o-transform: translateX(0);
-  transition: transform 0.3s;
-}
-
-.list.active {
-  transform: translateX(75%);
-  -ms-transform: translateX(75%); /* IE 9 */
-  -moz-transform: translateX(75%); /* Firefox */
-  -webkit-transform: translateX(75%); /* Safari 和 Chrome */
-  -o-transform: translateX(75%);
-  transition: transform 0.3s;
-  width: 100%;
-  height: 100%;
-  /* overflow: hidden */
-}
-
-.container.active {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  position: relative;
-}
-
-.scroll-view {
-  height: 100%;
-}
-
-.yizhan-list2 .title {
-  text-align: center;
-  font-size: 40rpx;
-  padding: 30rpx 0;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.scroll-view-item {
-  line-height: 100rpx;
-  padding: 0 30rpx;
-  border-bottom: 1px solid #f0f0f0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 30rpx;
-}
-
-.scroll-view-item text {
-  border: 1px solid #e50012;
-  border-radius: 50%;
-  display: inline-block;
-  width: 50rpx;
-  height: 50rpx;
-  color: #e50012;
-  text-align: center;
-  line-height: 50rpx;
-  font-size: 30rpx;
-}
-
-.weui-loading {
-  color: #333;
-}
-
-.loading {
-  padding: 20rpx 0;
-  text-align: center;
-  color: #666;
-  font-size: 26rpx;
-}
-
-.qiehuan {
-  padding: 0 10rpx;
-  margin-left: 10rpx;
-  font-size: 24rpx;
-  display: inline-block;
-  margin-top: 10rpx;
-}
-.info_list .weui_cell {
-  display: flex;
-  flex-direction: column;
-  /* align-items: center; */
-  border-right: 1px solid #f0f0f0;
-  border-bottom: 1px solid #f0f0f0;
-  width: 33%;
-  padding: 30rpx 0;
-}
-.info_list {
-  display: flex;
-  flex-wrap: wrap;
-  border-bottom: 16rpx solid #f0f0f0;
-  font-size: 28rpx;
-  .weui_cell_hd {
-    border-radius: 50%;
-    padding: 10rpx;
-    text-align: center;
+  .control-title {
+    background-color: #e50012;
     display: flex;
+    padding: 20rpx 40rpx 40rpx 40rpx;
     align-items: center;
-    justify-content: center;
+    color: #fff;
+    position: relative;
+    height: 100rpx;
+  }
+  .scrolllist {
+    flex: 1;
+  }
+  .control-title-img {
+    width: 110rpx;
+    height: 110rpx;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid #fff;
+    margin-right: 20rpx;
+    background-color: #fff;
+  }
+  .control-title-img image {
+    width: 100%;
+    height: 100%;
+  }
+  .control-title-txt {
+    position: relative;
+    top: 10rpx;
+  }
+  .control-title-txt .txt {
+    border: 1px solid #fff;
+    padding: 0 30rpx;
+    border-radius: 50px;
+    margin-right: 20rpx;
+  }
+  .control-title-txt .iconfont {
+    width: 60rpx;
+    height: 60rpx;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    font-size: 24rpx;
+    text-align: center;
+    line-height: 50rpx;
+    padding: 5rpx;
+  }
+  .control-title-txt1 {
+    font-size: 32rpx;
+    font-weight: bold;
+    line-height: 55rpx;
+    padding-left: 10rpx;
+  }
+  /* 分享好友 */
+  .share {
+    position: absolute;
+    right: 40rpx;
+    bottom: 40rpx;
+    color: #fff;
+  }
+  .share text {
+    margin-right: 10rpx;
+    color: #14c09a;
+    font-size: 30rpx;
+  }
+  .share button {
+    color: #fff;
+  }
+  .yizhan-list2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 75%;
+    height: 100%;
+    /* padding: 40rpx; */
+    background: #fff;
+    /* -webkit-transform: translateY(-50%); */
+    transform: translateX(-100%);
+    -ms-transform: translateX(-100%);
+    /* IE 9 */
+    -moz-transform: translateX(-100%);
+    /* Firefox */
+    -webkit-transform: translateX(-100%);
+    /* Safari 和 Chrome */
+    -o-transform: translateX(-100%);
+    color: #000;
+    overflow: hidden;
+    transition: transform 0.3s;
+  }
+  .list {
+    transform: translateX(0);
+    -ms-transform: translateX(0);
+    /* IE 9 */
+    -moz-transform: translateX(0);
+    /* Firefox */
+    -webkit-transform: translateX(0);
+    /* Safari 和 Chrome */
+    -o-transform: translateX(0);
+    transition: transform 0.3s;
+  }
+  .list.active {
+    transform: translateX(75%);
+    -ms-transform: translateX(75%);
+    /* IE 9 */
+    -moz-transform: translateX(75%);
+    /* Firefox */
+    -webkit-transform: translateX(75%);
+    /* Safari 和 Chrome */
+    -o-transform: translateX(75%);
+    transition: transform 0.3s;
+    width: 100%;
+    height: 100%;
+    /* overflow: hidden */
+  }
+  .container.active {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+  .scroll-view {
+    height: 100%;
+  }
+  .yizhan-list2 .title {
+    text-align: center;
+    font-size: 40rpx;
+    padding: 30rpx 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .scroll-view-item {
+    line-height: 100rpx;
+    padding: 0 30rpx;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 30rpx;
+  }
+  .scroll-view-item text {
+    border: 1px solid #e50012;
+    border-radius: 50%;
+    display: inline-block;
     width: 50rpx;
     height: 50rpx;
-    image {
-      width: 70%;
-      height: 70%;
-      vertical-align: -2px;
-    }
+    color: #e50012;
+    text-align: center;
+    line-height: 50rpx;
+    font-size: 30rpx;
   }
-  navigator {
-    display: block;
-    width: 100%;
-    line-height: 120rpx;
+  .weui-loading {
+    color: #333;
+  }
+  .loading {
+    padding: 20rpx 0;
+    text-align: center;
+    color: #666;
+    font-size: 26rpx;
+  }
+  .qiehuan {
+    padding: 0 10rpx;
+    margin-left: 10rpx;
+    font-size: 24rpx;
+    display: inline-block;
+    margin-top: 10rpx;
+  }
+  .info_list .weui_cell {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    /* align-items: center; */
+    border-right: 1px solid #f0f0f0;
     border-bottom: 1px solid #f0f0f0;
-    image {
-      height: 50rpx;
+    width: 33%;
+    padding: 30rpx 0;
+  }
+  .info_list {
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 16rpx solid #f0f0f0;
+    font-size: 28rpx;
+    .weui_cell_hd {
+      border-radius: 50%;
+      padding: 10rpx;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: 50rpx;
-      margin-right: 10rpx;
-      margin-left: 40rpx;
+      height: 50rpx;
+      image {
+        width: 70%;
+        height: 70%;
+        vertical-align: -2px;
+      }
     }
-    .hui_txt {
-      font-size: 24rpx;
-      color: #666;
-      margin-left: 16rpx;
+    navigator {
+      display: block;
+      width: 100%;
+      line-height: 120rpx;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #f0f0f0;
+      image {
+        height: 50rpx;
+        width: 50rpx;
+        margin-right: 10rpx;
+        margin-left: 40rpx;
+      }
+      .hui_txt {
+        font-size: 24rpx;
+        color: #666;
+        margin-left: 16rpx;
+      }
     }
   }
-}
-.info_list .weui_cell_hd {
-  margin-right: 0rpx;
-}
-.order_list .weui_cell_hd {
-  width: auto;
-}
+  .info_list .weui_cell_hd {
+    margin-right: 0rpx;
+  }
+  .order_list .weui_cell_hd {
+    width: auto;
+  }
 </style>
 <template>
-
-<view style='position:relative;' class="list {{right?'active':''}}" >
-     <view class=" {{right?'mask':''}}" catchtouchmove="{{right?'stopscroll':''}}" bindtap='hiddenyizhan'></view>
-  <view class="container {{right?'active':''}}" >
+  <view style='position:relative;' class="list {{right?'active':''}}">
+    <view class=" {{right?'mask':''}}" catchtouchmove="{{right?'stopscroll':''}}" bindtap='hiddenyizhan'></view>
+    <view class="container {{right?'active':''}}">
       <view class='control-title'>
-      <view class='control-title-img'>
-        <image src='{{yizhanInfo.avatar}}'/>
-      </view>
-      
-      <view>
-        <view class='control-title-txt1'>{{yizhanInfo.user_nickname}}</view>
-        <view class='control-title-txt' wx:if="{{yizhanInfo.yizhan_name!=null}}">
-          <text class='txt'>{{yizhanInfo.yizhan_name}}</text>
-          <text class='iconfont icon-qiehuan' @tap='showyizhan' wx:if="{{yizhanlist.length>1}}"></text>
+        <view class='control-title-img'>
+          <image src='{{yizhanInfo.avatar}}' />
         </view>
-        <!-- <view class='control-title-txt qiehuan' bindtap='showyizhan'>切换店铺</view> -->
+        <view>
+          <view class='control-title-txt1'>{{yizhanInfo.user_nickname}}</view>
+          <view class='control-title-txt' wx:if="{{yizhanInfo.yizhan_name!=null}}">
+            <text class='txt'>{{yizhanInfo.yizhan_name}}</text>
+            <text class='iconfont icon-qiehuan' @tap='showyizhan' wx:if="{{yizhanlist.length>1}}"></text>
+          </view>
+          <!-- <view class='control-title-txt qiehuan' bindtap='showyizhan'>切换店铺</view> -->
+        </view>
+        <view class='share'>
+          <form report-submit bindsubmit='getFormId'>
+            <navigator url='/ConsolePages/pages/share'>
+              <button form-type="submit">
+                <text class='iconfont icon-fenxiang'></text>分享好友</button>
+            </navigator>
+          </form>
+        </view>
       </view>
-      <view class='share'>
-        <form report-submit bindsubmit='getFormId'>
-          <navigator url='/ConsolePages/pages/share'>
-            <button form-type="submit">
-              <text class='iconfont icon-fenxiang'></text>分享好友</button>
-
+      <form report-submit bindsubmit='getFormId'>
+        <view class="info_list order_list" wx:if="{{yizhanInfo.is_admin==1}}">
+          <navigator url="{{}}" open-type="navigate" hover-class="none">
+            <image src="/images/console/transaction-manage.png" />交易管理
+            <view class='hui_txt'> (您当前最多可收到{{yizhanInfo.msg_num}}条通知)</view>
           </navigator>
-        </form>
+          <repeat for="{{tabList}}" wx:key="{{index}}">
+            <myList :tabItem="item"></myList>
+          </repeat>
+        </view>
+        <view class="info_list" wx:if="{{yizhanInfo.is_admin==1}}">
+          <navigator url="{{}}" open-type="navigate" hover-class="none">
+            <image src="/images/console/goods-manage.png" />商品管理
+          </navigator>
+          <repeat for="{{shopList}}" wx:key="{{index}}">
+            <myList :tabItem="item"></myList>
+          </repeat>
+        </view>
+        <view class="info_list">
+          <navigator url="{{}}" open-type="navigate" hover-class="none">
+            <image src="/images/console/wdyy.png" />我的应用
+          </navigator>
+          <repeat for="{{applicationList}}" wx:key="{{index}}">
+          <block wx:if="{{yizhanInfo.is_yizhan==1&&item.isyizhan==1}}">
+ 
+              <myList :tabItem="item"  ></myList>
+            
+          </block>
+          <block wx:else>
+   
+              <!-- 易站所有者 -->
+            <myList :tabItem="item" wx:if="{{yizhanInfo.is_boss==1}}"></myList>
+            <!-- 管理员 -->
+            <myList :tabItem="item" wx:elif="{{item.isadmin==1&&yizhanInfo.is_admin==1}}"></myList>
+            <!-- 业务员 -->
+            <myList :tabItem="item" wx:elif="{{item.isyewuyuan==1&&yizhanInfo.is_salesman==1}}"></myList>
 
-      </view>
+          </block>
+            
+          </repeat>
+        </view>
+      </form>
     </view>
-     <form report-submit bindsubmit='getFormId'>
-    <view class="info_list order_list" wx:if="{{yizhanInfo.is_admin==1}}">
-        <navigator
-          url="{{}}"
-          open-type="navigate"
-          hover-class="none"> 
-          <image src="/images/console/transaction-manage.png"/>交易管理 <view class='hui_txt'> (您当前最多可收到{{yizhanInfo.msg_num}}条通知)</view>
-        </navigator>
-       <repeat for="{{tabList}}" wx:key="{{index}}">
-        <myList :tabItem="item"></myList>
-      </repeat>
-    </view>
-    <view class="info_list" wx:if="{{yizhanInfo.is_admin==1}}">
-        <navigator
-          url="{{}}"
-          open-type="navigate"
-          hover-class="none"> 
-          <image src="/images/console/goods-manage.png"/>商品管理
-        </navigator>
-       <repeat for="{{shopList}}" wx:key="{{index}}">
-        <myList :tabItem="item"></myList>
-      </repeat>
-    </view>
-    <view class="info_list">
-        <navigator
-          url="{{}}"
-          open-type="navigate"
-          hover-class="none"> 
-          <image src="/images/console/wdyy.png"/>我的应用
-        </navigator>
-       <repeat for="{{applicationList}}" wx:key="{{index}}">
-         <!-- 店铺所有者 -->
-         <myList :tabItem="item" wx:if="{{yizhanInfo.is_boss==1}}"></myList>
-          <!-- 管理员 -->
-        <myList :tabItem="item" wx:elif="{{item.isadmin==1&&yizhanInfo.is_admin==1}}"></myList>
-        <!-- 业务员 -->
-        <myList :tabItem="item" wx:elif="{{item.isyewuyuan==1&&yizhanInfo.is_salesman==1}}"></myList>
-       
-      </repeat>
-    </view>
-     </form>
-  </view>
     <view class='yizhan-list2' catchtouchmove='' style="height: {{height}}PX;overflow: hidden">
-    <scroll-view scroll-y style="height: {{height}}PX;overflow: hidden" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
-      <view class='title'>
-        我管理的店铺列表
-      </view>
-      <view style='height:100rpx' class="scroll-view-item bc_green" wx:for="{{yizhanlist}}"  @tap='changeShop({{item.suppliers_id}})' wx:key="{{index}}">
-        {{item.suppliers_desc}}
-        <text class='iconfont icon-qiehuan' wx:if="{{item.suppliers_id!==userinfo.suppliers_id}}"></text>
-      </view> 
-    </scroll-view>
-
+      <scroll-view scroll-y style="height: {{height}}PX;overflow: hidden" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
+        <view class='title'>
+          我管理的店铺列表
+        </view>
+        <view style='height:100rpx' class="scroll-view-item bc_green" wx:for="{{yizhanlist}}" @tap='changeShop({{item.suppliers_id}})' wx:key="{{index}}">
+          {{item.suppliers_desc}}
+          <text class='iconfont icon-qiehuan' wx:if="{{item.suppliers_id!==userinfo.suppliers_id}}"></text>
+        </view>
+      </scroll-view>
+    </view>
   </view>
-</view>
 </template>
 
 <script>
-import wepy from 'wepy';
-import newapi from '../../API/newapi';
-import util from '../../utils/index';
-import myList from '../../components/myList';
-export default class newslist extends wepy.page {
-  config = {
-    navigationBarTitleText: '管理工作台'
-  };
-  components = { myList };
-  data = {
-    yizhanInfo: {},
-    yizhanlist: [],
-    right: 0,
-    tabList: [
-      {
-        num: 0,
-        text: '待付款',
-
-        url: '/ConsolePages/pages/orderList?order_status=0'
+  import wepy from 'wepy';
+  import newapi from '../../API/newapi';
+  import util from '../../utils/index';
+  import myList from '../../components/myList';
+  export default class newslist extends wepy.page {
+    config = {
+      navigationBarTitleText: '管理工作台'
+    };
+    components = {
+      myList
+    };
+    data = {
+      yizhanInfo: {},
+      yizhanlist: [],
+      right: 0,
+      tabList: [{
+          num: 0,
+          text: '待付款',
+          url: '/ConsolePages/pages/orderList?order_status=0'
+        },
+        {
+          num: 0,
+          text: '待发货',
+          url: '/ConsolePages/pages/orderList?order_status=1'
+        },
+        {
+          num: 0,
+          text: '已发货',
+          url: '/ConsolePages/pages/orderList?order_status=2'
+        },
+        {
+          num: 0,
+          text: '交易成功',
+          url: '/ConsolePages/pages/orderList?order_status=4'
+        },
+        {
+          num: 0,
+          text: '交易关闭',
+          url: '/ConsolePages/pages/orderList?order_status=5'
+        }
+      ],
+      shopList: [{
+          icon: '/images/console/fabushangpin.png',
+          num: 0,
+          text: '发布商品',
+          url: 'addGoodsInfo',
+          bgcolor: '#10b3b1'
+        },
+        {
+          icon: '/images/console/shangpinliebiao.png',
+          num: 0,
+          text: '商品列表',
+          url: 'goodsList',
+          bgcolor: '#f7bf30'
+        }
+      ],
+      applicationList: [{
+          icon: '/images/console/shujuguanli.png',
+          text: '数据管理',
+          url: 'dataManage',
+          bgcolor: '#f7bf30',
+          isadmin: 1
+        },
+        {
+          icon: '/images/console/shenheguanli.png',
+          text: '会员管理',
+          url: 'my_console_check',
+          bgcolor: '#10b3b1',
+          isyewuyuan: 1,
+          isadmin: 1
+        },
+        {
+          icon: '/images/console/xufeiguanli.png',
+          text: '续费管理',
+          url: 'my_console_renew',
+          bgcolor: '#fd7602',
+          isadmin: 1
+        },
+        {
+          icon: '/images/console/dianpushezhi.png',
+          text: '店铺设置',
+          url: 'my_setShopInfo',
+          bgcolor: '#a78dd3'
+        },
+        {
+          icon: '/images/console/kefuguanli.png',
+          text: '客服管理',
+          url: 'my_setServiceInfo',
+          bgcolor: '#f7bf30',
+          isadmin: 1
+        },
+        {
+          icon: '/images/console/guanliyuanbd.png',
+          text: '管理员绑定',
+          url: 'my_setManagerInfo',
+          bgcolor: '#10b3b1'
+        },
+        {
+          icon: '/images/console/hyk.png',
+          text: '上传设计案例',
+          url: 'caseList',
+          bgcolor: '#fd7602',
+          isyizhan: 1,
+   
+        },
+         {
+          icon: '/images/console/hyk.png',
+          text: '免费设计',
+          url: 'design',
+          bgcolor: '#fd7602',
+          isyizhan: 1,
+   
+        },
+        {
+          icon: '/images/console/ywy.png',
+          text: '业务员绑定',
+          url: 'my_setSalesman',
+          bgcolor: '#10b3b1',
+          isadmin: 1,
+          isfufei: 1
+        },
+        
+        {
+          icon: '/images/console/hyk.png',
+          text: '会员卡',
+          url: 'clubCard/payCard',
+          bgcolor: '#fd7602',
+          isadmin: 1,
+          isfufei: 1
+        },
+        {
+          icon: '/images/console/chakanmyshop.png',
+          text: '查看我的店铺',
+          url: '/pages/shoperweima',
+          bgcolor: '#f7bf30',
+          isyewuyuan: 1,
+          isadmin: 1
+        }
+      ],
+      height: 0
+    };
+    computed = {};
+    methods = {
+      showyizhan: function() {
+        this.right = 1;
       },
-      {
-        num: 0,
-
-        text: '待发货',
-        url: '/ConsolePages/pages/orderList?order_status=1'
+      hiddenyizhan: function() {
+        this.right = 0;
       },
-      {
-        num: 0,
-        text: '已发货',
-
-        url: '/ConsolePages/pages/orderList?order_status=2'
+      async changeShop(suppliers_id) {
+        this.suppliers_id = suppliers_id;
+        this.$parent.globalData.suppliers_id = suppliers_id;
+        this.init(suppliers_id);
+        this.right = 0;
+        this.$apply();
       },
-      {
-        num: 0,
-        text: '交易成功',
-        url: '/ConsolePages/pages/orderList?order_status=4'
-      },
-      {
-        num: 0,
-        text: '交易关闭',
-        url: '/ConsolePages/pages/orderList?order_status=5'
+      getFormId(e) {
+        util.submitFormId(e.detail.formId);
       }
-    ],
-    shopList: [
-      {
-        icon: '/images/console/fabushangpin.png',
-        num: 0,
-        text: '发布商品',
-        url: 'addGoodsInfo',
-        bgcolor: '#10b3b1'
-      },
-      {
-        icon: '/images/console/shangpinliebiao.png',
-        num: 0,
-        text: '商品列表',
-        url: 'goodsList',
-        bgcolor: '#f7bf30'
-      }
-    ],
-    applicationList: [
-      {
-        icon: '/images/console/shujuguanli.png',
-        text: '数据管理',
-        url: 'dataManage',
-        bgcolor: '#f7bf30',
-        isadmin: 1
-      },
-      {
-        icon: '/images/console/shenheguanli.png',
-        text: '会员管理',
-        url: 'my_console_check',
-        bgcolor: '#10b3b1',
-        isyewuyuan: 1,
-        isadmin: 1
-      },
-      {
-        icon: '/images/console/xufeiguanli.png',
-        text: '续费管理',
-        url: 'my_console_renew',
-        bgcolor: '#fd7602',
-        isadmin: 1
-      },
-      {
-        icon: '/images/console/dianpushezhi.png',
-        text: '店铺设置',
-        url: 'my_setShopInfo',
-        bgcolor: '#a78dd3'
-      },
-      {
-        icon: '/images/console/kefuguanli.png',
-        text: '客服管理',
-        url: 'my_setServiceInfo',
-        bgcolor: '#f7bf30',
-        isadmin: 1
-      },
-      {
-        icon: '/images/console/guanliyuanbd.png',
-        text: '管理员绑定',
-        url: 'my_setManagerInfo',
-        bgcolor: '#10b3b1'
-      },
-      {
-        icon: '/images/console/ywy.png',
-        text: '业务员绑定',
-        url: 'my_setSalesman',
-        bgcolor: '#10b3b1',
-        isadmin: 1,
-        isfufei: 1
-      },
-      {
-        icon: '/images/console/hyk.png',
-        text: '会员卡',
-        url: 'clubCard/payCard',
-        bgcolor: '#fd7602',
-        isadmin: 1,
-        isfufei: 1
-      },
-
-      {
-        icon: '/images/console/chakanmyshop.png',
-        text: '查看我的店铺',
-        url: '/pages/shoperweima',
-        bgcolor: '#f7bf30',
-        isyewuyuan: 1,
-        isadmin: 1
-      }
-    ],
-
-    height: 0
-  };
-  computed = {};
-  methods = {
-    showyizhan: function() {
-      this.right = 1;
-    },
-    hiddenyizhan: function() {
-      this.right = 0;
-    },
-    async changeShop(suppliers_id) {
-      this.suppliers_id = suppliers_id;
-      this.$parent.globalData.suppliers_id = suppliers_id;
-      this.init(suppliers_id);
-
-      this.right = 0;
-
+    };
+    events = {};
+    async getIndexNewsList(id) {}
+    // 获取管理的易站列表
+    async getjllist() {
+      let data = {};
+      let res = await newapi.jlList(data);
+      this.yizhanlist = res.data.data;
       this.$apply();
-    },
-    getFormId(e) {
-      util.submitFormId(e.detail.formId);
     }
-  };
-  events = {};
-  async getIndexNewsList(id) {}
-  // 获取管理的易站列表
-  async getjllist() {
-    let data = {};
-    let res = await newapi.jlList(data);
-    this.yizhanlist = res.data.data;
-    this.$apply();
-  }
-  // 订单数量
-  async orderNum() {
-    this.tabList[0].num = this.yizhanInfo.daifukuan;
-    this.tabList[1].num = this.yizhanInfo.daifahuo;
-    this.tabList[2].num = this.yizhanInfo.yifahuo;
-
-    this.tabList[3].num = this.yizhanInfo.chenggong;
-    this.tabList[4].num = this.yizhanInfo.guanbi;
-  }
-  // 是否过期
-  async isexpired(yizhanInfo) {
-    var new_time = new Date().getTime();
-    var shiyong_time = 7 * 24 * 3600 * 1000;
-    var end_time = yizhanInfo.end_time * 1000;
-    if (end_time == 0) {
-      return;
+    // 订单数量
+    async orderNum() {
+      this.tabList[0].num = this.yizhanInfo.daifukuan;
+      this.tabList[1].num = this.yizhanInfo.daifahuo;
+      this.tabList[2].num = this.yizhanInfo.yifahuo;
+      this.tabList[3].num = this.yizhanInfo.chenggong;
+      this.tabList[4].num = this.yizhanInfo.guanbi;
     }
-    if (new_time > end_time) {
-      await util.showModal('您的小程序已到期');
-      wx.navigateTo({ url: '/ConsolePages/pages/my_console_renew' });
-    } else if (new_time + shiyong_time > end_time) {
-      var time = Math.floor((end_time - new_time) / 1000 / 3600 / 24);
-      let mRes = await util.showModalBig(
-        '您的小程序将在' +
+    // 是否过期
+    async isexpired(yizhanInfo) {
+      var new_time = new Date().getTime();
+      var shiyong_time = 7 * 24 * 3600 * 1000;
+      var end_time = yizhanInfo.end_time * 1000;
+      if (end_time == 0) {
+        return;
+      }
+      if (new_time > end_time) {
+        await util.showModal('您的小程序已到期');
+        wx.navigateTo({
+          url: '/ConsolePages/pages/my_console_renew'
+        });
+      } else if (new_time + shiyong_time > end_time) {
+        var time = Math.floor((end_time - new_time) / 1000 / 3600 / 24);
+        let mRes = await util.showModalBig(
+          '您的小程序将在' +
           time +
           '天以后到期，请及时续费，以免到期系统自动关闭，影响您的正常使用。'
-      );
-      if (mRes.confirm) {
-        wx.navigateTo({ url: '/ConsolePages/pages/my_console_renew' });
+        );
+        if (mRes.confirm) {
+          wx.navigateTo({
+            url: '/ConsolePages/pages/my_console_renew'
+          });
+        }
       }
     }
-  }
-  // 是否开通会员卡
-  async ishasCard() {
-    let data = {
-      suppliers_id: this.suppliers_id
-    };
-    let res = await newapi.supplier_detail(data);
-    if (res.data.code == 0 && res.data.data.is_kthy == 1) {
-      this.$parent.globalData.is_kthy = res.data.data.is_kthy;
-      this.applicationList[7].url = '/ConsolePages/pages/clubCard/setCard';
-    } else {
-      this.$parent.globalData.is_kthy = res.data.data.is_kthy;
-      this.applicationList[7].url = '/ConsolePages/pages/clubCard/payCard';
-    }
-  }
-  // 是否是业务员
-  isSalesman() {
-    if (this.yizhanInfo.is_salesman == 1 && this.yizhanInfo.is_admin == 0) {
-      this.applicationList[1].url =
-        'my_console_check?sales_id=' +
-        this.user_id +
-        '&sales_name=' +
-        this.yizhanInfo.user_nickname;
-    } else {
-      this.applicationList[1].url = 'my_console_check';
-    }
-    if (this.yizhanInfo.is_salesman == 1) {
-      this.applicationList[8].url =
-        '/pages/shoperweima?sales_id=' +
-        this.user_id +
-        '&sales_name=' +
-        this.yizhanInfo.user_nickname;
-    } else {
-      this.applicationList[8].url = '/pages/shoperweima';
-    }
-  }
-  async init(suppliers_id) {
-    let yizhanInfo = await this.$parent.getYizhanInfo(suppliers_id);
-
-    if (!yizhanInfo.is_admin && !yizhanInfo.is_salesman) {
-      let mRes = await util.showModalBig(
-        '您还不是批发商，没有管理权限，赶紧去注册吧'
-      );
-      if (mRes.cancel) {
-        wx.switchTab({
-          url: '/pages/my'
-        });
+    // 是否开通会员卡
+    async ishasCard() {
+      let data = {
+        suppliers_id: this.suppliers_id
+      };
+      let res = await newapi.supplier_detail(data);
+      if (res.data.code == 0 && res.data.data.is_kthy == 1) {
+        this.$parent.globalData.is_kthy = res.data.data.is_kthy;
+        this.$parent.globalData.is_yizhan = res.data.data.is_yizhan;
+        this.applicationList.forEach((item,index)=>{
+          if(item.text=="会员卡")
+          this.applicationList[index].url = '/ConsolePages/pages/clubCard/setCard';
+        })
+        
+      } else {
+        this.$parent.globalData.is_kthy = res.data.data.is_kthy;
+        this.$parent.globalData.is_yizhan = res.data.data.is_yizhan;
+        this.applicationList.forEach((item,index)=>{
+          if(item.text=="会员卡")
+          this.applicationList[index].url = '/ConsolePages/pages/clubCard/payCard';
+        })
+        
       }
-      if (mRes.confirm) {
-        wx.navigateTo({
-          url: '/ConsolePages/pages/renzheng'
-        });
-      }
-      return;
     }
-    this.yizhanInfo = yizhanInfo;
-    this.suppliers_id = yizhanInfo.suppliers_id;
-    this.orderNum();
-    this.getjllist();
-    this.isexpired(yizhanInfo);
-    this.isSalesman();
-    this.ishasCard();
-    this.height = wx.getSystemInfoSync().windowHeight;
-    this.$apply();
+    // 是否是业务员
+    isSalesman() {
+      if (this.yizhanInfo.is_salesman == 1 && this.yizhanInfo.is_admin == 0) {
+        this.applicationList[1].url =
+          'my_console_check?sales_id=' +
+          this.user_id +
+          '&sales_name=' +
+          this.yizhanInfo.user_nickname;
+      } else {
+        this.applicationList[1].url = 'my_console_check';
+      }
+      if (this.yizhanInfo.is_salesman == 1) {
+        this.applicationList[8].url =
+          '/pages/shoperweima?sales_id=' +
+          this.user_id +
+          '&sales_name=' +
+          this.yizhanInfo.user_nickname;
+      } else {
+        this.applicationList[8].url = '/pages/shoperweima';
+      }
+    }
+    async init(suppliers_id) {
+      let yizhanInfo = await this.$parent.getYizhanInfo(suppliers_id);
+      if (!yizhanInfo.is_admin && !yizhanInfo.is_salesman) {
+        let mRes = await util.showModalBig(
+          '您还不是批发商，没有管理权限，赶紧去注册吧'
+        );
+        if (mRes.cancel) {
+          wx.switchTab({
+            url: '/pages/my'
+          });
+        }
+        if (mRes.confirm) {
+          wx.navigateTo({
+            url: '/ConsolePages/pages/renzheng'
+          });
+        }
+        return;
+      }
+      this.yizhanInfo = yizhanInfo;
+      this.suppliers_id = yizhanInfo.suppliers_id;
+      this.orderNum();
+      this.getjllist();
+      this.isexpired(yizhanInfo);
+      this.isSalesman();
+      this.ishasCard();
+      this.height = wx.getSystemInfoSync().windowHeight;
+      this.$apply();
+    }
+    async onShow(option) {
+      await this.$parent.loginInfo();
+      let userInfo = await this.$parent.getUserInfo();
+      this.user_id = userInfo.user_id;
+      this.suppliers_id = this.$parent.globalData.suppliers_id ?
+        this.$parent.globalData.suppliers_id :
+        '';
+      this.init(this.suppliers_id);
+      this.$apply();
+    }
   }
-  async onShow(option) {
-    await this.$parent.loginInfo();
-    let userInfo = await this.$parent.getUserInfo();
-    this.user_id = userInfo.user_id;
-
-    this.suppliers_id = this.$parent.globalData.suppliers_id
-      ? this.$parent.globalData.suppliers_id
-      : '';
-    this.init(this.suppliers_id);
-
-    this.$apply();
-  }
-}
 </script>

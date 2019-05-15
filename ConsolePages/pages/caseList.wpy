@@ -1,0 +1,121 @@
+<style lang="less">
+page{
+  height:auto;
+}
+.case-list{
+    font-size: 30rpx;
+    background: #fff;
+    padding: 20rpx;
+    // border-bottom: 6rpx solid #f0f0f0;
+    margin: 30rpx;
+    box-shadow:0 0 10rpx 1px  #ccc;
+    border-radius: 10rpx;
+    color: #525252;
+      opacity:0.8;
+    .case-list-img{
+        width: 100%;
+        height: 200rpx;
+        image{
+            width: 100%;
+            height: 100%;
+        }
+    }
+    .case-list-name{
+        margin-top: 20rpx;
+    }
+    .case-list-del{
+        text-align: right;
+        text{
+            padding: 5rpx 20rpx;
+            background: #e50012;
+            color: #fff;
+            border-radius: 50px;
+
+        }
+
+    }
+}
+.case-add{
+    width: 80%;
+border-radius: 50px;
+    text-align: center;
+    margin: auto;
+    margin-top:100rpx;
+    line-height: 80rpx;
+    font-size: 30rpx;
+    background: #e50012;
+    color: #fff;
+}
+</style>
+<template>
+<view>
+<view class="case-list" wx:for="{{caseList}}" wx:key="{{index}}" @tap="toDetail({{item.article_id}})">
+    <view class="case-list-img">
+        <image
+          src="{{item.file_url}}"
+          mode="aspectFill"
+          lazy-load="true">
+        </image>
+    </view>
+    <view  class="case-list-name">{{item.title}}</view>
+    <view class="case-list-del">
+       <text @tap.stop="todel({{item.article_id}},{{index}})"> 删除</text>
+        
+    </view>
+
+</view>
+<view class="case-add" @tap="toAdd">添加案例</view>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import newapi from '../../API/newapi';
+import util from '../../utils/index';
+
+export default class newslist extends wepy.page {
+  config = {
+    navigationBarTitleText: '设计案例',
+  };
+  components = {};
+  data = {
+    caseList: []
+  };
+  computed = {};
+  methods = {
+      toAdd(){
+          wx.navigateTo({ url: 'upCase' });
+      },
+       toDetail(id){
+          wx.navigateTo({ url: 'upCase?id='+id });
+      },
+    async  todel( article_id,index ){
+         var res=await util.showModalBig("你确定要删除吗？");
+
+         if(res.confirm){
+             newapi.del_anli({ article_id });
+           this.caseList.splice(index,1);  
+           console.log(this.caseList);
+           this.$apply();
+         }
+          
+      }
+  }
+  events = {};
+  async getCaseList(suppliers_id){
+    var res=  await  newapi.anli_list({suppliers_id});
+    this.caseList=res.data.data;
+    this.$apply();
+  }
+  async onLoad(option) {
+       if (!this.$parent.globalData.suppliers_id) {
+                util.showToast("登录失败")
+                wx.navigateBack();
+            } else {
+                this.suppliers_id = this.$parent.globalData.suppliers_id
+            }
+        this.getCaseList(this.suppliers_id);
+  }
+
+}
+</script>

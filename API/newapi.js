@@ -8,7 +8,7 @@ const newapi = {
     carousel: () => fetch(`${host}/lunbo`, 'GET'), //轮播图
     newsKind: () => fetch(`${host}/ggfl`, 'GET'),
     newsList: (data) => fetch(`${host}/gglb`, 'GET', data),
-    articleDetail: (data) => fetch(`${host_chk}/ggnr`, 'GET', data),
+    articleDetail: (data) => fetch(`${host}/ggnr`, 'GET', data),
 
     fwfwxpay: (data) => fetch(`${host_pay}/fwfwxpay`, 'GET', data),
     fwfpaysuccess: (data) => fetch(`${host_pay}/fwfpaysuccess`, 'GET', data),
@@ -34,7 +34,8 @@ const newapi = {
     serviceList: (data) => fetch(`${host_chk}/kefu_list`, 'GET', data),
     addService: (data) => fetch(`${host_chk}/kefu_add`, 'GET', data),
     delService: (data) => fetch(`${host_chk}/kefu_del`, 'GET', data),
-    yhlb: (data) => fetch(`${host_chk}/yhlb`, 'GET', data), //会员管理
+    // yhlb: (data) => fetch(`${host_chk}/yhlb`, 'GET', data), //会员管理
+    yhlb: (data) => fetch(`${host_chk}/yhlb_new`, 'GET', data),
     jcgx: (data) => fetch(`${host_chk}/jcgx`, 'GET', data),
     yhsh: (data) => fetch(`${host_chk}/yhsh`, 'GET', data),
     find_users: (data) => fetch(`${host_chk}/find_users`, 'GET', data),
@@ -97,6 +98,16 @@ const newapi = {
     copy_goods: (data) => fetch(`${host_chk}/copy_goods`, 'GET', data),
     swyz: (data) => fetch(`${host_chk}/swyz`, 'GET', data),
     copeCartList: (data) => fetch(`${host_chk}/cat_copy_chk`, 'GET', data),
+    bossList: (data) => fetch(`${host_chk}/boss_list`, 'GET', data),
+    anli_list: (data) => fetch(`${host_chk}/anli_list`, 'GET', data),
+    yh_num: (data) => fetch(`${host_chk}/yh_num`, 'GET', data),
+    anli_detail: (data) => fetch(`${host_chk}/anli_detail`, 'GET', data),
+    edit_anli: (data) => fetch(`${host_chk}/edit_anli`, 'GET', data),
+    del_anli: (data) => fetch(`${host_chk}/del_anli`, 'GET', data),
+    add_anli: (data) => fetch(`${host_chk}/add_anli`, 'GET', data),
+    kehu: (data) => fetch(`${host_chk}/kehu`, 'GET', data),
+    kehu_read: (data) => fetch(`${host_chk}/kehu_read`, 'GET', data),
+
 
 }
 const fetch = async function(url, method, data) {

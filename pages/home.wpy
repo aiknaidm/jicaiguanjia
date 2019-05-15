@@ -289,6 +289,7 @@ button::after {
 .ad-box image {
   width: 100%;
 }
+
 /* 内容 */
 </style>
 <template>

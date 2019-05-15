@@ -143,6 +143,8 @@
 .goodsList .list {
   padding: 40rpx;
   border-bottom: 1px solid #e4e4e4;
+  max-height: 250rpx;
+  overflow: scroll;
 }
 .goodsList .list .list-label {
   padding: 10rpx 40rpx;
@@ -374,7 +376,19 @@
         <view class="listOption">商品活动</view>
         <textarea class="shownnum" type='text' value="{{goodsdetail.goods_brief}}" name="goods_brief"></textarea>
       </view>
-      <view class="listBox listBox3">
+      <view class="listBox listBox3" wx:if="{{is_yizhan==1}}">
+        <view class="listOption" >设为特供商品</view>
+        <view class="listOptionImages goodsDetail">
+          <switch checked="{{is_best}}" name="is_best" bindchange="switch1Change" color="#e50012" />
+        </view>
+      </view>
+      <view class="listBox listBox3" wx:if="{{is_yizhan==1}}">
+        <view class="listOption">设为活动商品</view>
+        <view class="listOptionImages goodsDetail">
+          <switch checked="{{is_hot}}" name="is_hot" bindchange="switch1Change" color="#e50012" />
+        </view>
+      </view>
+      <view class="listBox listBox3" >
         <view class="listOption">是否可用会员卡</view>
         <view class="listOptionImages goodsDetail">
           <switch checked="{{hdky}}" name="hdky" bindchange="switch1Change" color="#e50012" />
@@ -419,7 +433,10 @@ export default class newslist extends wepy.page {
     goods_desc: '',
     imgUrl: '',
     goodsId: '',
-    hdky: false
+    hdky: false,
+    is_hot: false,
+    is_best: false,
+    is_yizhan:0,
   };
   computed = {};
   methods = {
@@ -673,7 +690,11 @@ export default class newslist extends wepy.page {
     var goods_desc = this.goods_desc ? this.goods_desc : ''; //描述
     var goods_brief = e.detail.value.goods_brief;
     this.hdky = e.detail.value.hdky;
+    this.is_best = e.detail.value.is_best;
+    this.is_hot = e.detail.value.is_hot;
     var hdky = e.detail.value.hdky ? 1 : 0;
+    var is_best = e.detail.value.is_best ? 1 : 0;
+    var is_hot = e.detail.value.is_hot ? 1 : 0;
     if (goods_name == '') {
       util.showToast('请输入商品标题');
       return;
@@ -786,7 +807,9 @@ export default class newslist extends wepy.page {
       qidingliang,
       goods_desc,
       goods_brief, //商品活动
-      hdky
+      hdky,
+      is_best,
+      is_hot,
     };
     let res = await newapi.addGoodsInfo(data);
 
@@ -866,6 +889,8 @@ export default class newslist extends wepy.page {
       this.goods_attr = goodsInfo.properties;
       this.goodsId = goodsInfo.goods_id;
       this.hdky = goodsInfo.hdky;
+      this.is_best = goodsInfo.is_best;
+      this.is_hot = goodsInfo.is_hot;
       this.$apply();
     }
   }
@@ -877,6 +902,7 @@ export default class newslist extends wepy.page {
       this.suppliers_id = this.$parent.globalData.suppliers_id
         ? this.$parent.globalData.suppliers_id
         : (await this.$parent.getYizhanInfo()).suppliers_id;
+      this.is_yizhan = this.$parent.globalData.is_yizhan
       this.hdky = this.$parent.globalData.yizhanInfo.hdky == 1 ? true : false;
       if (option.id) this.setGoodsInfo(option.id);
       else {

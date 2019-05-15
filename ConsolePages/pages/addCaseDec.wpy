@@ -1,0 +1,46 @@
+<style lang="less">
+</style>
+<template>
+<view>
+
+ <xing-editor @finish="finish" output-type="html" image-upload-url="https://lmbge.com/wxapi/jcgj/upload" image-upload-name="file" image-upload-key-chain="image.url" html="{{html}}"/>
+
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class addCaseDec extends wepy.page {
+  config = {
+    navigationBarTitleText: '案例详情',
+    usingComponents: {
+      'xing-editor': '/components/editor/xing-editor'
+    }
+  };
+  components = {};
+  data = {
+    html: ''
+  };
+  computed = {};
+  methods = {
+    finish: function(e) {
+      this.$parent.$pages['/ConsolePages/pages/upCase'].content =
+        e.detail.content;
+      wx.navigateBack({
+        delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+      });
+    }
+  };
+  events = {};
+
+  async onLoad(option) {
+    this.html = this.$parent.$pages[
+      '/ConsolePages/pages/upCase'
+    ].content;
+    console.log(this.html)
+      this.$apply();
+  }
+  
+}
+</script>

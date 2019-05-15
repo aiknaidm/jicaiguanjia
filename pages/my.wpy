@@ -65,7 +65,7 @@ export default class my extends wepy.page {
     tabList: [
       {
         icon: '/images/icon_normal.png',
-        text: '实名认证',
+        text: '注册',
         url: '/ConsolePages/pages/renzheng'
       },
       {
@@ -151,7 +151,7 @@ export default class my extends wepy.page {
       this.tabList = [
         {
           icon: '/images/icon_normal.png',
-          text: '实名认证',
+          text: '注册',
           url: '/ConsolePages/pages/renzheng'
         },
         {

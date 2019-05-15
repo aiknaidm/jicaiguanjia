@@ -159,7 +159,7 @@ export default class payList extends wepy.component {
         let res = await newapi.czqr(data);
         if (res.data.code == 0) {
           wx.hideLoading();
-          this.item.pay_id = 0;
+          this.item.pay_status = 1;
           util.showToast('确认成功');
           this.$apply();
         }

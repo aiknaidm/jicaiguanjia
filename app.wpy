@@ -156,7 +156,12 @@ export default class extends wepy.app {
           'pages/my_console_cardExpendDetail',
           'pages/my_console_payPhb',
           'pages/my_console_toSureList',
-          'pages/my_console_tobalanceDetail'
+          'pages/my_console_tobalanceDetail',
+          'pages/renzhengDetail',
+          'pages/upCase',
+          'pages/caseList',
+          'pages/addCaseDec',
+          'pages/design'
         ]
       },
       {

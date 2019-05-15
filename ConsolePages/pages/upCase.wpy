@@ -1,0 +1,449 @@
+<style lang="less">
+    .topNavR {
+        background: #fff;
+        height: 126rpx;
+        line-height: 126rpx;
+        font-size: 18px;
+        display: inline-block;
+        margin-left: 40rpx;
+    }
+    .topNavL {
+        border: none;
+        background-color: #fff;
+        display: inline-block;
+        margin-left: 58rpx;
+    }
+    .topNavL image {
+        width: 32rpx;
+        height: 30rpx;
+    }
+    .cameraBox {
+        height: 204rpx;
+        background-color: #f2f2f2;
+        line-height: 204rpx;
+        display: flex; // flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        overflow-x: scroll;
+    }
+    .camera {
+        width: 102rpx;
+        height: 106rpx;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        margin-right: 30rpx;
+    }
+    .camera image {
+        width: 102rpx;
+        height: 106rpx;
+    }
+    .inputBox {
+        padding: 0 36rpx;
+        border-bottom: 1px solid #e4e4e4;
+    }
+    .title {
+        width: 100%;
+        height: 100rpx;
+        line-height: 100rpx;
+    }
+    .listBox {
+        height: 90rpx;
+        line-height: 90rpx;
+        border-bottom: 1px solid#e4e4e4;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .listBoxAdd {
+        height: 90rpx;
+        line-height: 90rpx;
+        border-bottom: 1px solid#e4e4e4;
+        display: flex;
+        /* justify-content: space-between; */
+        align-items: center;
+        color: #e50012;
+    }
+    .listOption {
+        display: inline-block;
+        margin: 0 36rpx;
+        margin-right: 10rpx;
+        width: 180rpx;
+    }
+    .listOptionAdd {
+        display: inline-block;
+        margin-left: 36rpx;
+        /* width: 150rpx; */
+    }
+    .del {
+        background-color: #e50012;
+        width: 90px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        position: absolute;
+        right: -90px;
+        top: 0;
+        height: 100%;
+        z-index: 100; // -webkit-transform: translateX(90px);
+        // transform: translateX(90px);
+        // -webkit-transition: all 0.4s;
+        // transition: all 0.4s;
+    }
+    .formatBox.touch-move-active {
+        left: -90px;
+    }
+    .listOptionImages {
+        display: flex;
+        flex: 1;
+        padding-left: 20rpx;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .formatBox {
+        display: flex;
+        justify-content: space-between;
+        border-top: 10rpx solid#e4e4e4;
+        position: relative;
+        left: 0;
+        transition: left 0.4s;
+        -webkit-transition: left 0.4s;
+    }
+    .itouch {
+        width: 100%;
+        width: 100%;
+        line-height: 22px;
+        margin-right: 0;
+        -webkit-transition: all 0.4s;
+        transition: all 0.4s;
+        -webkit-transform: translateX(90px);
+        transform: translateX(90px);
+        margin-left: -90px;
+    }
+    .itouch .listBox {}
+    .listOptionImages input {
+        flex: 1;
+        font-size: 28rpx;
+        padding-right: 10rpx;
+    }
+    .format {
+        font-size: 25rpx;
+        margin: 0;
+        margin-left: 5rpx;
+    }
+    .goodsList .listBox {
+        border: 0px solid;
+    }
+    .goodsList .list {
+        padding: 40rpx;
+        border-bottom: 1px solid #e4e4e4;
+        max-height: 250rpx;
+        overflow: scroll;
+    }
+    .goodsList .list .list-label {
+        padding: 10rpx 40rpx;
+        border: 1px solid #e4e4e4;
+        margin-right: 20rpx;
+        margin-bottom: 20rpx;
+        border-radius: 10rpx;
+        color: #888;
+        display: inline-block;
+        position: relative;
+    }
+    .goodsList .list .list-label .icon-guanbi {
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        right: -10rpx;
+        top: -10rpx;
+        border: 0px solid;
+        background-color: #fff;
+        color: #e50012;
+        /* border-radius:50%;
+                                          wid */
+        width: 45rpx;
+        height: 45rpx;
+        text-align: center;
+        font-size: 44rpx;
+        display: inline-block;
+    }
+    .goodsList .list .list-label.active {
+        border: 1px solid #e50012;
+        color: #e50012;
+    }
+    .listOptionImages button {
+        margin: 0;
+        padding: 0 30rpx;
+        margin-left: 10rpx;
+        line-height: 60rpx;
+        height: 60rpx;
+        font-size: 26rpx;
+        margin-right: 20rpx;
+    }
+    .listOptionImages in .listOptionImages image {
+        width: 22rpx;
+        height: 22rpx;
+    }
+    .publish {
+        margin-top: 48rpx;
+        text-align: center;
+        background-color: #e50012;
+        color: #fff;
+        height: 88rpx;
+        line-height: 88rpx;
+        border-radius: 0;
+    }
+    .showname {
+        margin-right: 30rpx;
+    }
+    .goodsDetail {
+        justify-content: flex-end;
+        padding-right: 20rpx;
+    }
+    .showprice {
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        width: 50rpx;
+        margin-right: 60rpx;
+        height: 90rpx;
+        line-height: 90rpx;
+        vertical-align: top;
+        float: right;
+    }
+    .shownnum {
+        margin: 0;
+        padding: 0;
+        /* text-align: center; */
+        /* width: 50rpx; */
+        margin-right: 60rpx;
+        height: 90rpx;
+        line-height: 90rpx;
+        vertical-align: top;
+        float: right;
+        /* text-align: right; */
+        flex: 1;
+    }
+    .icon-arrow-right {
+        color: #aaa;
+    }
+    .close {
+        width: 35rpx;
+        height: 35rpx;
+        background-color: #e50012;
+        border-radius: 50%;
+        color: #fff;
+        text-align: center;
+        line-height: 30rpx;
+        position: absolute;
+        right: -15rpx;
+        top: -15rpx;
+    }
+    .listBox2 {
+        height: auto;
+    }
+    .listBox2 textarea {
+        height: 200rpx;
+        line-height: 40rpx;
+        padding: 20rpx;
+    }
+    .listBox3 .listOption {
+        width: 300rpx;
+    }
+    .tishi {
+        background: #fff;
+        color: #888;
+        padding: 20rpx;
+        text-align: center;
+    }
+</style>
+
+<template>
+    <form report-submit bindsubmit='getFormId'>
+        <view class="container">
+            <view class="cameraBox">
+                <view class="camera" wx:for="{{imgSrc}}" wx:key="{{index}}">
+                    <image src="{{item.img_url}}" />
+                    <text class="close" @tap='delImg({{index}})'>x</text>
+                </view>
+                <view class="camera" @tap='chooseImg' wx:if="{{imgSrc.length<1}}">
+                    <image src="/images/add_img.png" mode='aspectFit' />
+                </view>
+            </view>
+            <view class="inputBox">
+                <input class="title" placeholder="请输入案例标题" type="text" value="{{article_detail.title}}" name="title" />
+            </view>
+            <view class="btnBox">
+                <navigator url="addCaseDec">
+                    <view class="listBox">
+                        <view class="listOption">商品详情</view>
+                        <view class="listOptionImages goodsDetail">
+                            <label class="showname">{{content==""?"":"已填写"}}</label>
+                            <text class='iconfont icon-arrow-right'></text>
+                        </view>
+                    </view>
+                </navigator>
+                <button form-type='submit' class="publish">立即发布</button>
+            </view>
+        </view>
+    </form>
+</template>
+
+<script>
+    import wepy from 'wepy';
+    import newapi from '../../API/newapi';
+    import api from '../../API/api';
+    import util from '../../utils/index';
+    export default class upCase extends wepy.page {
+        config = {
+            navigationBarTitleText: '添加设计案例'
+        };
+        components = {};
+        data = {
+            imgSrc: [],
+            content: '',
+            article_detail:{}
+        }
+        computed = {};
+        methods = {
+            getFormId(e) {
+                util.submitFormId(e.detail.formId);
+                this.addNewCase(e);
+            },
+            // 删除图片
+            delImg(i) {
+                this.imgSrc.splice(i, 1);
+            },
+            // 上传图片
+            async chooseImg() {
+                wepy
+                    .chooseImage({
+                        count: 1, // 默认9
+                        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                        sourceType: ['album', 'camera'] // 可以指定来源是相册还是相机，默认二者都有
+                    })
+                    .then(res => {
+                        var that = this;
+                        // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+                        var tempFilePaths = res.tempFilePaths;
+                        tempFilePaths.forEach(function(item, index) {
+                            that.imgSrc.push({});
+                            that.imgSrc[that.imgSrc.length - 1].upload = true;
+                            that.imgSrc[that.imgSrc.length - 1].img_url = item;
+                        });
+                        this.$apply();
+                    })
+                    .catch(res => {});
+            },
+        };
+        events = {};
+        onLoad(option) {
+            if (option.id) {
+                // 修改
+                this.article_id = option.id;
+                this.getCaseDetail(option.id)
+                this.type = "1"
+            } else {
+                // 添加
+                this.type = "0"
+            }
+            if (!this.$parent.globalData.suppliers_id) {
+                util.showToast("登录失败")
+                wx.navigateBack();
+            } else {
+                this.suppliers_id = this.$parent.globalData.suppliers_id;
+                
+            }
+        }
+        async addNewCase(e) {
+            var title = e.detail.value.title;
+            var content = this.content;
+            if (title == '') {
+                util.showToast("请填写标题")
+                return
+            }
+            if (this.imgSrc.length == 0) {
+                util.showToast("请填写缩略图")
+                return
+            }
+            if (content == '') {
+                util.showToast("请填写案例详情")
+                return
+            }
+            if (this.imgSrc[0].upload) {
+                this.file_url = await this.upImg();
+                this.imgSrc[0].upload = false;
+            }
+            if (this.type == '0') {
+                var data = {
+                    title,
+                    content,
+                    file_url: this.file_url,
+                    suppliers_id: this.suppliers_id
+                }
+                var res = await newapi.add_anli(data);
+               
+            } else {
+                var data = {
+                    title,
+                    content,
+                    file_url: this.file_url,
+                    suppliers_id: this.suppliers_id,
+                    article_id: this.article_id
+                }
+                var res = await newapi.edit_anli(data);
+               
+            }
+             if (res.data.code == 0) {
+                    var res = await util.showModal("上传成功");
+                     this.$parent.$pages['/ConsolePages/pages/caseList'].getCaseList(this.suppliers_id);
+                    if (res) wx.navigateBack();
+                } else {
+                    util.showToast(res.data.message)
+                }
+        }
+        async getCaseDetail(id) {
+            var res = await newapi.anli_detail({
+                article_id: id
+            });
+            var datas=res.data.data;
+            this.article_detail = res.data.data;
+            this.content=datas.content
+            this.imgSrc[0]={img_url:datas.file_url}
+            this.file_url=datas.file_url
+            this.$apply();
+        }
+        async upImg(i = 0) {
+            util.showLoading('上传中');
+            try {
+                var res = await wepy.uploadFile({
+                    url: api.upload,
+                    filePath: this.imgSrc[i].img_url,
+                    name: 'file',
+                    header: {
+                        Accept: 'application/json'
+                    }
+                });
+                wx.hideLoading();
+                var datas = JSON.parse(res.data.trim());
+                if (datas.code == 0) {
+                    return datas.data.pic_url;
+                }
+            } catch (error) {
+                console.log(error)
+                wx.hideLoading();
+                let mRes = await util.showModalBig(
+                    '图片' + this.imgSrc[i].img_url + '上传失败'
+                );
+                if (mRes.confirm) {
+                    await this.upImg(i);
+                }
+            }
+        }
+    }
+</script>

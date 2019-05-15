@@ -734,7 +734,6 @@
               cat_name: "全部分类"
             })
           this.iscopy = true;
-          console.log(" this.iscopy", this.iscopy);
           this.$apply();
         } else {
           wx.showToast({
@@ -744,12 +743,22 @@
         }
         return;
       },
-      async copyGoods(cat_id) {
+      async copyGoods(cat_id,cat_name) {
+        var modalRes=await util.showModalBig("你确定要复制'"+cat_name+"'的内容吗")
+        if(!modalRes){
+          return
+        }
         let data = {
           suppliers_id: this.suppliers_id,
           cat_id
         };
+         wx.showLoading({
+           title: '加载中...', //提示的内容,
+           mask: true, //显示透明蒙层，防止触摸穿透,
+           success: res => {}
+         });
         let res = await newapi.copy_goods(data);
+       wx.hideLoading();
         this.iscopy = false;
         this.getShopList(this.initdata);
         this.fenleilist = await this.getFenLei();

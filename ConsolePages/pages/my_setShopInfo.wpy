@@ -1,577 +1,668 @@
 <style lang="less">
-page {
-  background-color: #fff;
-}
+  page {
+    background-color: #fff;
+  }
+  .container {
+    text-align: center;
+    height: 100%;
+    font-size: 15px;
+    color: #666;
+    background-color: #fff;
+    padding-bottom: 20rpx;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    /* padding-top: 10px; */
+  }
+  .section {
+    /* margin-top: 10px; */
+    flex: 1;
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+    border-bottom: 1px solid #eee;
+    font-size: 30rpx;
+    padding: 20rpx 40rpx;
+  }
+  .section input,
+  picker {
+    height: 60rpx;
+    /* background-color: pink; */
+    line-height: 60rpx;
+    text-align: left;
+    padding-left: 20rpx;
+    flex: 10;
+  }
+  .section image {
+    width: 43rpx;
+    height: 43rpx;
+  }
+  .section .label {
+    width: 150rpx;
+    text-align: left;
+  }
+  .section .label2 {
+    width: 200rpx;
+    text-align: left;
+  }
+  .yzm {
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+    border-bottom: 0px solid #c4c4c4;
+  }
+  .yzm input {
+    border: 1px solid #c4c4c4;
+    height: 35px;
+    width: 130px;
+    flex: 1;
+    text-align: left;
+    padding: 4px;
+  }
+  .yzm text {
+    height: 35px;
+    line-height: 35px;
+    margin-left: 10px;
+    flex: 1;
+    display: inline-block;
+    border: 1px solid #c4c4c4;
+    margin-top: 4px;
+    color: #09f;
+  }
+  button {
+    background-color: #e50012;
+    color: #fff;
+    height: 80rpx;
+    line-height: 80rpx;
+    font-size: 30rpx;
+    border-radius: 3px;
+    margin-top: 20rpx;
+    margin-bottom: 20rpx;
+  }
+  .picker {
+    color: #888;
+    flex: 10;
+  }
+  .section:last-child {
+    /* border: 0px solid; */
+  }
+  .label-right {
+    flex: 1;
+  }
+  /* 上传身份证 */
+  .upImg {
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    height: 300rpx;
+    overflow: hidden;
+    margin-top: 40rpx;
+    text-align: center;
+    border: 0px solid #eee;
+    color: #888;
+  }
+  .upImg button {
+    width: 180rpx;
+    font-size: 32rpx;
+    padding: 0 20rpx;
+    height: 60rpx;
+    line-height: 60rpx;
+    margin-right: 30rpx;
+  }
+  .upImg view {
+    flex: 1;
+  }
+  .upImg view image {
+    width: 100%;
+  }
+  .upImg .text {
+    flex: 1;
+    height: 296rpx;
+    border: 1px solid #eee;
+    line-height: 296rpx;
+    overflow: hidden;
+  }
+  .zhuce {
+    text-align: left;
+    border: 0px solid;
+    margin-top: 40rpx;
+    font-size: 26rpx;
+  }
+  .smsCode {
+    /* border: 0px solid #c4c4c4; */
+    border-bottom: 1rpx solid #eee;
+    justify-content: center;
+    align-items: center;
+  }
+  .smsCode:last-child {
+    border-bottom: 1rpx solid #eee;
+  }
+  .smsCode input {
+    flex: 1;
+    /* height: 80rpx; */
+    /* border-bottom: 1rpx solid #c4c4c4; */
+    /* float: left; */
+  }
+  .smsCode .getSmsCodeBtn {
+    flex: 1;
+    font-size: 30rpx;
+    color: #fff;
+    box-sizing: border-box;
+    margin-right: 0;
+    border-radius: 0px;
+    margin: 0;
+    /* height: 84rpx;
+     line-height: 84rpx; */
+    background-color: #e50012;
+  }
+  .register {
+    background-color: #e50012;
+  }
+  .rz-submit {
+    width: 80%;
+    margin: auto;
+    margin-top: 40rpx;
+    font-size: 36rpx;
+  }
+  /* @import "../login/index.wxss"; */
+  .content {
+    font-size: 30rpx;
+  }
+  .smsCode {
+    display: flex;
+    justify-content: space-between;
+    /* border-bottom: 1px solid #ddd;
+    padding-right: 10%; */
+  }
+  .smsCode input {
+    width: 336rpx;
+  }
+  .smsCode .getSmsCodeBtn {
+    font-size: 30rpx;
+    color: #fff;
+    width: 216rpx;
+    box-sizing: border-box;
+    height: 80rpx;
+    line-height: 80rpx;
+    background-color: #e50012;
+  }
+  .logo {
+    margin-top: 80rpx;
+    margin-bottom: 80rpx;
+  }
+  .logo image {
+    width: 600rpx;
+    height: 200rpx;
+  }
+  button {
+    background-color: #e50012;
+  }
+  button[disabled] {
+    /* color: #fff; */
+  }
+  button[disabled][type='default'],
+  wx-button[disabled]:not([type]) {
+    /* color: #fff; */
+  }
+  .section .label text,
+  .section .label2 text {
+    color: #e50012;
+    margin-right: 5rpx;
+  }
+  .radio-group {
+    /* padding-left: 20rpx; */
+    display: flex;
+  }
+  .radio-group .radio {
+    display: flex;
+    align-items: center;
+    padding-left: 20rpx;
+  }
+  .section2 {
+    display: flex;
+    justify-content: space-between;
+  }
+  .section2 .label {
+    width: 180px;
+  }
+  // 设置banner
+  .cameraBox {
+    height: 204rpx;
+    background-color: #f2f2f2;
+    line-height: 204rpx;
+    display: flex; // flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    overflow-x: scroll;
+  }
+  .camera {
+    width: 102rpx;
+    height: 106rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-right: 30rpx;
+  }
+  .camera image {
+    width: 102rpx;
+    height: 106rpx;
+  }
+  .close {
+    width: 35rpx;
+    height: 35rpx;
+    background-color: #e50012;
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+    line-height: 30rpx;
+    position: absolute;
+    right: -15rpx;
+    top: -15rpx;
+  }
 
-.container {
-  text-align: center;
-  height: 100%;
-  font-size: 15px;
-  color: #666;
-  background-color: #fff;
-  padding-bottom: 20rpx;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  /* padding-top: 10px; */
-}
-
-.section {
-  /* margin-top: 10px; */
-  flex: 1;
-  display: flex;
-  align-items: center;
-  /* justify-content: center; */
-  border-bottom: 1px solid #eee;
-  font-size: 30rpx;
-  padding: 20rpx 40rpx;
-}
-
-.section input,
-picker {
-  height: 60rpx;
-  /* background-color: pink; */
-  line-height: 60rpx;
-  text-align: left;
-  padding-left: 20rpx;
-  flex: 10;
-}
-
-.section image {
-  width: 43rpx;
-  height: 43rpx;
-}
-.section .label {
-  width: 150rpx;
-  text-align: left;
-}
-.section .label2 {
-  width: 200rpx;
-  text-align: left;
-}
-.yzm {
-  display: flex;
-  flex-direction: row;
-  margin-top: 20px;
-  border-bottom: 0px solid #c4c4c4;
-}
-
-.yzm input {
-  border: 1px solid #c4c4c4;
-  height: 35px;
-  width: 130px;
-  flex: 1;
-  text-align: left;
-  padding: 4px;
-}
-
-.yzm text {
-  height: 35px;
-  line-height: 35px;
-  margin-left: 10px;
-  flex: 1;
-  display: inline-block;
-  border: 1px solid #c4c4c4;
-  margin-top: 4px;
-  color: #09f;
-}
-
-button {
-  background-color: #e50012;
-  color: #fff;
-  height: 80rpx;
-  line-height: 80rpx;
-  font-size: 30rpx;
-  border-radius: 3px;
-  margin-top: 20rpx;
-  margin-bottom: 20rpx;
-}
-
-.picker {
-  color: #888;
-  flex: 10;
-}
-
-.section:last-child {
-  /* border: 0px solid; */
-}
-.label-right {
-  flex: 1;
-}
-
-/* 上传身份证 */
-
-.upImg {
-  display: flex;
-  /* justify-content: center; */
-  align-items: center;
-  height: 300rpx;
-  overflow: hidden;
-  margin-top: 40rpx;
-  text-align: center;
-  border: 0px solid #eee;
-  color: #888;
-}
-
-.upImg button {
-  width: 180rpx;
-  font-size: 32rpx;
-  padding: 0 20rpx;
-  height: 60rpx;
-  line-height: 60rpx;
-  margin-right: 30rpx;
-}
-
-.upImg view {
-  flex: 1;
-}
-
-.upImg view image {
-  width: 100%;
-}
-
-.upImg .text {
-  flex: 1;
-  height: 296rpx;
-  border: 1px solid #eee;
-  line-height: 296rpx;
-  overflow: hidden;
-}
-
-.zhuce {
-  text-align: left;
-  border: 0px solid;
-  margin-top: 40rpx;
-  font-size: 26rpx;
-}
-
-.smsCode {
-  /* border: 0px solid #c4c4c4; */
-  border-bottom: 1rpx solid #eee;
-  justify-content: center;
-  align-items: center;
-}
-.smsCode:last-child {
-  border-bottom: 1rpx solid #eee;
-}
-.smsCode input {
-  flex: 1;
-  /* height: 80rpx; */
-  /* border-bottom: 1rpx solid #c4c4c4; */
-  /* float: left; */
-}
-
-.smsCode .getSmsCodeBtn {
-  flex: 1;
-  font-size: 30rpx;
-  color: #fff;
-  box-sizing: border-box;
-  margin-right: 0;
-  border-radius: 0px;
-  margin: 0;
-  /* height: 84rpx;
-   line-height: 84rpx; */
-  background-color: #e50012;
-}
-.register {
-  background-color: #e50012;
-}
-.rz-submit {
-  width: 80%;
-  margin: auto;
-  margin-top: 40rpx;
-  font-size: 36rpx;
-}
-/* @import "../login/index.wxss"; */
-.content {
-  font-size: 30rpx;
-}
-.smsCode {
-  display: flex;
-  justify-content: space-between;
-  /* border-bottom: 1px solid #ddd;
-  padding-right: 10%; */
-}
-
-.smsCode input {
-  width: 336rpx;
-}
-
-.smsCode .getSmsCodeBtn {
-  font-size: 30rpx;
-  color: #fff;
-  width: 216rpx;
-  box-sizing: border-box;
-  height: 80rpx;
-  line-height: 80rpx;
-
-  background-color: #e50012;
-}
-
-.logo {
-  margin-top: 80rpx;
-  margin-bottom: 80rpx;
-}
-
-.logo image {
-  width: 600rpx;
-  height: 200rpx;
-}
-button {
-  background-color: #e50012;
-}
-button[disabled] {
-  /* color: #fff; */
-}
-button[disabled][type='default'],
-wx-button[disabled]:not([type]) {
-  /* color: #fff; */
-}
-.section .label text,
-.section .label2 text {
-  color: #e50012;
-  margin-right: 5rpx;
-}
-.radio-group {
-  /* padding-left: 20rpx; */
-  display: flex;
-}
-.radio-group .radio {
-  display: flex;
-  align-items: center;
-  padding-left: 20rpx;
-}
-.section2 {
-  display: flex;
-  justify-content: space-between;
-}
-.section2 .label {
-  width: 180px;
-}
 </style>
 <template>
-<view class='container'>
-  <form bindsubmit="formSubmit" report-submit>
-
-    <view class="input-area">
-
-      <view class="input-log section">
-        <view class="label">
-          <text>*</text>手机号码</view>
-        <input value='{{userDetail.mobile}}' name="phone" maxlength='11' type="number" placeholder="手机号" bindinput="listenerPhoneInput" disabled='{{isuserDetail}}' />
-      </view>
-
-      <view class="section smsCode " wx:if="{{!isuserDetail}}">
-        <view class="label">
-          <text>*</text>验证码</view>
-        <input name="smscode" maxlength='4' type="number" placeholder="验证码" bindinput="listenerSmsCodeInput" disabled='{{isuserDetail}}' />
-        <button bindtap="getSmsCode({{userDetail.mobile}})" disabled="{{smsCodeDisabled}}" style="background-color:{{getSmsCodeBtnColor}}" class="getSmsCodeBtn">{{getSmsCodeBtnTxt}}</button>
-      </view>
-
-
-    </view>
-
-    <view class="section">
-      <view class="label">
-        <text>*</text>真实姓名</view>
-      <view class="label-right">
-        <input name="realname" class="input" type="text" value="{{userDetail.username}}" />
-      </view>
-    </view>
-    <view class="section">
-      <view class="label">
-        <text>*</text>店铺名</view>
-      <view class="label-right">
-        <input name="storename" class="input" type="text" value="{{userDetail.suppliers_desc}}" disabled='{{isuserDetail}}' />
-      </view>
-    </view>
-    <view class="section">
-      <view class="label label2">
-        <text>*</text>pc管理账号</view>
-      <view class="label-right">
-        <input name="pcusername" class="input" type="text" value="{{userDetail.suppliers_name}}" disabled/>
-      </view>
-    </view>
-    <view class="section">
-      <view class="label">
-        <text>*</text>默认密码</view>
-      <view class="label-right">
-        <input name="password" class="input" type="password" value="{{password}}" />
-      </view>
-    </view>
-    
-    <view class="section" >
-      <view class="label">
-        <text>*</text>所属地区</view>
-      <picker  mode="region"  disabled="{{isuserDetail}}" @change="bindRegionChange">
-        <view class="picker" >
-        {{region[0]}}-{{region[1]}}-{{region[2]}}
-        </view>
-   
-      </picker>
-    </view>
-    <view class="section section2" >
+  <view class='container'>
+    <form bindsubmit="formSubmit" report-submit>
+      <view class="input-area">
+        <view class="input-log section">
           <view class="label">
-            商品无图模式</view>
-          <view class="body-view">
-      <switch color="#e50012" checked="{{!userDetail.is_picture}}"  name="is_picture"/>
-
-    </view>
-    </view>
-    <view class="section section2" >
-      <view class="label">
-       代下单</view>
-     
-        <view class="body-view" >
-        <switch color="#e50012" checked="{{userDetail.is_friend}}"  name="is_friend" />
+            <text>*</text>手机号码</view>
+          <input value='{{userDetail.mobile}}' name="phone" maxlength='11' type="number" placeholder="手机号" bindinput="listenerPhoneInput" disabled='{{isuserDetail}}' />
         </view>
-   
- 
-    </view>
-    <button class='rz-submit' formType="submit" wx:if="{{!isuserDetail}}" disabled='{{issubmit}}'>提交修改</button>
-    <button class='rz-submit' disabled='true' wx:if="{{userDetail.user_status=='0'||isshenhe}}">审核中...</button>
-  </form>
-</view>
+        <view class="section smsCode " wx:if="{{!isuserDetail}}">
+          <view class="label">
+            <text>*</text>验证码</view>
+          <input name="smscode" maxlength='4' type="number" placeholder="验证码" bindinput="listenerSmsCodeInput" disabled='{{isuserDetail}}' />
+          <button bindtap="getSmsCode({{userDetail.mobile}})" disabled="{{smsCodeDisabled}}" style="background-color:{{getSmsCodeBtnColor}}" class="getSmsCodeBtn">{{getSmsCodeBtnTxt}}</button>
+        </view>
+      </view>
+      <view class="section">
+        <view class="label">
+          <text>*</text>真实姓名</view>
+        <view class="label-right">
+          <input name="realname" class="input" type="text" value="{{userDetail.username}}" />
+        </view>
+      </view>
+      <view class="section">
+        <view class="label">
+          <text>*</text>店铺名</view>
+        <view class="label-right">
+          <input name="storename" class="input" type="text" value="{{userDetail.suppliers_desc}}" disabled='{{isuserDetail}}' />
+        </view>
+      </view>
+      <view class="section">
+        <view class="label label2">
+          <text>*</text>pc管理账号</view>
+        <view class="label-right">
+          <input name="pcusername" class="input" type="text" value="{{userDetail.suppliers_name}}" disabled/>
+        </view>
+      </view>
+      <view class="section">
+        <view class="label">
+          <text>*</text>默认密码</view>
+        <view class="label-right">
+          <input name="password" class="input" type="password" value="{{password}}" />
+        </view>
+      </view>
+      <view class="section">
+        <view class="label">
+          <text>*</text>所属地区</view>
+        <picker mode="region" disabled="{{isuserDetail}}" @change="bindRegionChange">
+          <view class="picker">
+            {{region[0]}}-{{region[1]}}-{{region[2]}}
+          </view>
+        </picker>
+      </view>
+      <view class="section section2">
+        <view class="label">
+          商品无图模式</view>
+        <view class="body-view">
+          <switch color="#e50012" checked="{{!userDetail.is_picture}}" name="is_picture" />
+        </view>
+      </view>
+      <view class="section section2">
+        <view class="label">
+          代下单</view>
+        <view class="body-view">
+          <switch color="#e50012" checked="{{userDetail.is_friend}}" name="is_friend" />
+        </view>
+      </view>
+      <view class="title" style="padding:40rpx;text-align:center">首页轮播图设置</view>
+      <view class="cameraBox">
+        <view class="camera" wx:for="{{imgSrc}}" wx:key="{{index}}">
+          <image src="{{item.img_url}}" />
+          <text class="close" @tap='delImg({{index}})'>x</text>
+        </view>
+        <view class="camera" @tap='chooseImg' wx:if="{{imgSrc.length<5}}">
+          <image src="/images/add_img.png" mode='aspectFit' />
+        </view>
+      </view>
+      <button class='rz-submit' formType="submit" wx:if="{{!isuserDetail}}" disabled='{{issubmit}}'>提交修改</button>
+      <button class='rz-submit' disabled='true' wx:if="{{userDetail.user_status=='0'||isshenhe}}">审核中...</button>
+    </form>
+  </view>
 </template>
 
 <script>
-import wepy from 'wepy';
-import newapi from '../../API/newapi';
-import util from '../../utils/index';
-export default class my_setShopInfo extends wepy.page {
-  config = {
-    navigationBarTitleText: '店铺信息修改'
-  };
-  data = {
-    userDetail: {},
-    region: [],
-    userInfo: {},
-    getSmsCodeBtnTxt: '获取验证码',
-    getSmsCodeBtnColor: '#E50012',
-    //#E50012红色
-    //#0099FF蓝色
-    //getSmsCodeBtnTime:60,
-    btnLoading: false,
-    registDisabled: false,
-    smsCodeDisabled: false,
-    isuserDetail: false,
-    inputPhone: '',
-    inputCode: '',
-    gotCode: '',
-    //城市列表
-    multiIndex: [0, 0, 0],
-    CityData: [],
-    sheng: new Array(),
-    shi: new Array(),
-    qu: new Array(),
-    //上传图片
-    index: 0,
-    img: [
-      {
-        imgSrc: '',
-        content: '身份证正面'
-      },
-      {
-        imgSrc: '',
-        content: '身份证背面'
-      }
-    ],
-    imgPath: '',
-    //判断照片是否上传
-    imgZM: false,
-    imgFM: false,
-    //需要上传的数据id
-    provinceId: '',
-    cityId: '',
-    districtId: '',
-    //用户身份
-    // identity: [
-    //   { name: 'gongzhang', value: '工长', checked: 'true' },
-    //   { name: 'jingli', value: '经理'}
-    // ],
-    yizhanIndex: '0',
-    yizhanId: '',
-    shenfen: 'jl',
-    password: '123456',
-    issubmit: false
-  };
-  computed = {};
-  components = {};
-  methods = {
-    getFormId: function(e) {
-    },
-    listenerPhoneInput(e) {
-      this.phone = e.detail.value;
-      this.userDetail.mobile = e.detail.value;
-      this.$apply();
-    },
-    //联网获取验证码
-    async getSmsCode(phone) {
-      this.smsCodeDisabled = true;
-      //点击了获取验证码先在本地验证手机号的合法性
-      if (this.checkPhone(phone)) {
-        try {
-          let data = {
-            mobile: phone
-          };
-          let res = await newapi.yzm(data);
-          if (res.data.code == 0) {
-            //将获取的验证码赋值
-            this.code = res.data.data;
-            util.showModal('验证码发送成功');
-          } else {
-            util.showToast(res.data.message);
-            this.smsCodeDisabled = false;
-          }
-          var count = 120;
-          this.setTime(count);
-        } catch (error) {
-          this.smsCodeDisabled = false;
-          util.showToast('链接超时');
-        }
-      } else {
-        this.smsCodeDisabled = false;
-      }
-    },
-    /**
-     * 监听验证码输入
-     */
-    listenerSmsCodeInput: function(e) {
-      this.inputCode = e.detail.value;
-    },
-    // 选择的地区
-    bindRegionChange(e) {
-      this.region = e.detail.value;
-    }
-  };
-  events = {};
-  async onLoad(option) {
-    await this.$parent.loginInfo();
-    let suppliers_id = this.$parent.globalData.suppliers_id
-      ? this.$parent.globalData.suppliers_id
-      : (await this.$parent.getYizhanInfo()).suppliers_id;
-    this.userDetail = await this.getSuppliersDetails(suppliers_id);
-    this.region[0] = this.userDetail.sheng;
-    this.region[1] = this.userDetail.shi;
-    this.region[2] = this.userDetail.qu;
-    this.$apply();
-  }
-  async getSuppliersDetails(suppliers_id) {
-    let data = {
-      suppliers_id
+  import wepy from 'wepy';
+  import newapi from '../../API/newapi';
+  import api from '../../API/api';
+  import util from '../../utils/index';
+  export default class my_setShopInfo extends wepy.page {
+    config = {
+      navigationBarTitleText: '店铺信息修改'
     };
-    let res = await newapi.supplier_detail(data);
-    return res.data.data;
-  }
-  setTime(count) {
-    var count = count;
-    var that = this;
-    var si = setInterval(function() {
-      if (count > 0) {
-        count--;
-        that.getSmsCodeBtnTxt = count + ' s';
-        that.getSmsCodeBtnColor = '#999';
-        that.smsCodeDisabled = true;
-        that.$apply();
-      } else {
-        that.getSmsCodeBtnTxt = '重新获取';
-        that.getSmsCodeBtnColor = '#ff7701';
-        that.smsCodeDisabled = false;
-        clearInterval(si);
-        that.$apply();
-      }
-    }, 1000);
-  }
-  //检查输入的手机号
-  checkPhone(param) {
-    var phone = util.regexConfig().phone;
-    var inputUserName = param.trim();
-    if (phone.test(inputUserName)) {
-      return true;
-    } else {
-      util.showModal('请输入正确的手机号码');
-      return false;
-    }
-  }
-  //检查输入的验证码
-  checkSmsCode(param) {
-    var smsCode = param.trim();
-
-    if (smsCode.length < 4) {
-      util.showModal('请输入4位短信验证码');
-      return false;
-    } else {
-      return true;
-    }
-  }
-  //表单数据提交
-  async formSubmit(e) {
-    var param = e.detail.value;
-    var that = this;
-    var flag = that.checkPhone(param.phone) && that.checkSmsCode(param.smscode);
-    if (flag) {
-      if (this.inputCode == this.code) {
-        var suppliers_id = this.$parent.globalData.suppliers_id;
-        var phone = param.phone;
-        var smscode = param.smscode;
-        var realname = param.realname;
-        var storename = param.storename;
-        var pcusername = param.pcusername;
-        var password = param.password == '123456' ? '' : param.password;
-        // var share_code = param.shareCode;
-        var is_picture = param.is_picture ? 0 : 1;
-        var is_friend = param.is_friend ? 1 : 0;
-
-        if (realname == '') {
-          util.showModal('请填写姓名');
-          return;
+    data = {
+      userDetail: {},
+      region: [],
+      userInfo: {},
+      getSmsCodeBtnTxt: '获取验证码',
+      getSmsCodeBtnColor: '#E50012',
+      //#E50012红色
+      //#0099FF蓝色
+      //getSmsCodeBtnTime:60,
+      btnLoading: false,
+      registDisabled: false,
+      smsCodeDisabled: false,
+      isuserDetail: false,
+      inputPhone: '',
+      inputCode: '',
+      gotCode: '',
+      //城市列表
+      multiIndex: [0, 0, 0],
+      CityData: [],
+      sheng: new Array(),
+      shi: new Array(),
+      qu: new Array(),
+      //上传图片
+      index: 0,
+      imgSrc: [],
+      img: [{
+          imgSrc: '',
+          content: '身份证正面'
+        },
+        {
+          imgSrc: '',
+          content: '身份证背面'
         }
-        if (storename == '') {
-          util.showModal('请填写店铺名');
-          return;
-        }
-        if (pcusername == '') {
-          util.showModal('请填写后台用户名');
-          return;
-        }
-        if (this.region.length == 0) {
-          util.showModal('请填写地区');
-          return;
-        }
-        var sheng = this.region[0];
-        var shi = this.region[1];
-        var qu = this.region[2];
-
-        util.showLoading();
-        let data = {
-          suppliers_id,
-          mobile: phone,
-          realname: realname,
-          sheng,
-          shi,
-          qu,
-          suppliers_name: pcusername,
-          password,
-          suppliers_desc: storename,
-          is_picture,
-          is_friend
-        };
-        let res = await newapi.supplier_upd(data);
-        wx.hideLoading();
-        if (res.data.code == 0) {
-          wx.navigateBack({});
-          //this.isuserDetail = true;
-        } else {
-          this.issubmit = false;
-          util.showModal(res.data.message);
-        }
+      ],
+      imgPath: '',
+      //判断照片是否上传
+      imgZM: false,
+      imgFM: false,
+      //需要上传的数据id
+      provinceId: '',
+      cityId: '',
+      districtId: '',
+      //用户身份
+      // identity: [
+      //   { name: 'gongzhang', value: '工长', checked: 'true' },
+      //   { name: 'jingli', value: '经理'}
+      // ],
+      yizhanIndex: '0',
+      yizhanId: '',
+      shenfen: 'jl',
+      password: '123456',
+      issubmit: false
+    };
+    computed = {};
+    components = {};
+    methods = {
+      delImg(i) {
+        this.imgSrc.splice(i, 1);
+      },
+      // 上传图片
+      async chooseImg() {
+        var l = this.imgSrc.length;
+        wepy
+          .chooseImage({
+            count: 8 - l, // 默认9
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'] // 可以指定来源是相册还是相机，默认二者都有
+          })
+          .then(res => {
+            var that = this;
+            // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+            var tempFilePaths = res.tempFilePaths;
+            tempFilePaths.forEach(function(item, index) {
+              that.imgSrc.push({});
+              that.imgSrc[that.imgSrc.length - 1].upload = true;
+              that.imgSrc[that.imgSrc.length - 1].img_url = item;
+            });
+            this.$apply();
+          })
+          .catch(res => {});
+      },
+      listenerPhoneInput(e) {
+        this.phone = e.detail.value;
+        this.userDetail.mobile = e.detail.value;
         this.$apply();
+      },
+      //联网获取验证码
+      async getSmsCode(phone) {
+        this.smsCodeDisabled = true;
+        //点击了获取验证码先在本地验证手机号的合法性
+        if (this.checkPhone(phone)) {
+          try {
+            let data = {
+              mobile: phone
+            };
+            let res = await newapi.yzm(data);
+            if (res.data.code == 0) {
+              //将获取的验证码赋值
+              this.code = res.data.data;
+              util.showModal('验证码发送成功');
+            } else {
+              util.showToast(res.data.message);
+              this.smsCodeDisabled = false;
+            }
+            var count = 120;
+            this.setTime(count);
+          } catch (error) {
+            this.smsCodeDisabled = false;
+            util.showToast('链接超时');
+          }
+        } else {
+          this.smsCodeDisabled = false;
+        }
+      },
+      /**
+       * 监听验证码输入
+       */
+      listenerSmsCodeInput: function(e) {
+        this.inputCode = e.detail.value;
+      },
+      // 选择的地区
+      bindRegionChange(e) {
+        this.region = e.detail.value;
+      },
+      //表单数据提交
+      async formSubmit(e) {
+        var param = e.detail.value;
+        var that = this;
+        var flag = that.checkPhone(param.phone) && that.checkSmsCode(param.smscode);
+        if (flag) {
+          if (this.inputCode == this.code) {
+            var suppliers_id = this.$parent.globalData.suppliers_id;
+            var phone = param.phone;
+            var smscode = param.smscode;
+            var realname = param.realname;
+            var storename = param.storename;
+            var pcusername = param.pcusername;
+            var password = param.password == '123456' ? '' : param.password;
+            // var share_code = param.shareCode;
+            var is_picture = param.is_picture ? 0 : 1;
+            var is_friend = param.is_friend ? 1 : 0;
+            if (realname == '') {
+              util.showModal('请填写姓名');
+              return;
+            }
+            if (storename == '') {
+              util.showModal('请填写店铺名');
+              return;
+            }
+            if (pcusername == '') {
+              util.showModal('请填写后台用户名');
+              return;
+            }
+            if (this.region.length == 0) {
+              util.showModal('请填写地区');
+              return;
+            }
+            var sheng = this.region[0];
+            var shi = this.region[1];
+            var qu = this.region[2];
+            // 上传图片
+            this.goods_imgs = [];
+            if (this.imgSrc != '') {
+              if (this.imgSrc.length > 5) {
+                util.showModal('上传图片不能大于五张');
+                return;
+              }
+            }
+            var i = 0;
+            for (var i = 0; i < this.imgSrc.length; i++) {
+              if (this.imgSrc[i].upload) {
+                var img = await this.upImg(i);
+                if (img) {
+                  this.goods_imgs.push(img);
+                }
+              } else {
+                this.goods_imgs.push(this.imgSrc[i].img_url);
+              }
+            }
+            var goods_img = this.goods_imgs[0];
+            var img_url = this.goods_imgs.toString();
+            console.log("img_url",img_url);
+            util.showLoading();
+            let data = {
+              suppliers_id,
+              mobile: phone,
+              realname: realname,
+              sheng,
+              shi,
+              qu,
+              suppliers_name: pcusername,
+              password,
+              suppliers_desc: storename,
+              is_picture,
+              is_friend,
+              img_url
+            };
+            let res = await newapi.supplier_upd(data);
+            wx.hideLoading();
+            if (res.data.code == 0) {
+              wx.navigateBack({});
+              //this.isuserDetail = true;
+            } else {
+              this.issubmit = false;
+              util.showModal(res.data.message);
+            }
+            this.$apply();
+          } else {
+            util.showModal('输入的验证码有误');
+          }
+        }
+      }
+    };
+    events = {};
+    async onLoad(option) {
+      await this.$parent.loginInfo();
+      let suppliers_id = this.$parent.globalData.suppliers_id ?
+        this.$parent.globalData.suppliers_id :
+        (await this.$parent.getYizhanInfo()).suppliers_id;
+      this.userDetail = await this.getSuppliersDetails(suppliers_id);
+        
+      this.region[0] = this.userDetail.sheng;
+      this.region[1] = this.userDetail.shi;
+      this.region[2] = this.userDetail.qu;
+      this.$apply();
+    }
+    async getSuppliersDetails(suppliers_id) {
+      let data = {
+        suppliers_id
+      };
+      let res = await newapi.supplier_detail(data);
+       this.imgSrc=[];
+
+        res.data.data.banner.forEach((item)=>{
+    
+          this.imgSrc.push({img_url:item.content})
+        })
+
+          this.$apply();
+      return res.data.data;
+    }
+    async upImg(i = 0) {
+      util.showLoading('上传中');
+      try {
+        var res = await wepy.uploadFile({
+          url: api.upload,
+          filePath: this.imgSrc[i].img_url,
+          name: 'file',
+          header: {
+            Accept: 'application/json'
+          }
+        });
+        wx.hideLoading();
+        var datas = JSON.parse(res.data.trim());
+        if (datas.code == 0) {
+          return datas.data.pic_url;
+        }
+      } catch (error) {
+        console.log(error);
+        let mRes = await util.showModalBig(
+          '图片' + this.imgSrc[i].img_url + '上传失败'
+        );
+        if (mRes.confirm) {
+          await this.upImg(i);
+        }
+      }
+    }
+    setTime(count) {
+      var count = count;
+      var that = this;
+      var si = setInterval(function() {
+        if (count > 0) {
+          count--;
+          that.getSmsCodeBtnTxt = count + ' s';
+          that.getSmsCodeBtnColor = '#999';
+          that.smsCodeDisabled = true;
+          that.$apply();
+        } else {
+          that.getSmsCodeBtnTxt = '重新获取';
+          that.getSmsCodeBtnColor = '#ff7701';
+          that.smsCodeDisabled = false;
+          clearInterval(si);
+          that.$apply();
+        }
+      }, 1000);
+    }
+    //检查输入的手机号
+    checkPhone(param) {
+      var phone = util.regexConfig().phone;
+      var inputUserName = param.trim();
+      if (phone.test(inputUserName)) {
+        return true;
       } else {
-        util.showModal('输入的验证码有误');
+        util.showModal('请输入正确的手机号码');
+        return false;
+      }
+    }
+    //检查输入的验证码
+    checkSmsCode(param) {
+      var smsCode = param.trim();
+      if (smsCode.length < 4) {
+        util.showModal('请输入4位短信验证码');
+        return false;
+      } else {
+        return true;
       }
     }
   }
-}
 </script>
