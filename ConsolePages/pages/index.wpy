@@ -238,7 +238,7 @@
           <form report-submit bindsubmit='getFormId'>
             <navigator url='/ConsolePages/pages/share'>
               <button form-type="submit">
-                <text class='iconfont icon-fenxiang'></text>分享好友</button>
+                  <text class='iconfont icon-fenxiang'></text>分享好友</button>
             </navigator>
           </form>
         </view>
@@ -266,22 +266,17 @@
             <image src="/images/console/wdyy.png" />我的应用
           </navigator>
           <repeat for="{{applicationList}}" wx:key="{{index}}">
-          <block wx:if="{{yizhanInfo.is_yizhan==1&&item.isyizhan==1}}">
- 
-              <myList :tabItem="item"  ></myList>
-            
-          </block>
-          <block wx:else>
-   
+            <block wx:if="{{yizhanInfo.is_yizhan==1&&item.isyizhan==1}}">
+              <myList :tabItem="item"></myList>
+            </block>
+            <block wx:else>
               <!-- 易站所有者 -->
-            <myList :tabItem="item" wx:if="{{yizhanInfo.is_boss==1}}"></myList>
-            <!-- 管理员 -->
-            <myList :tabItem="item" wx:elif="{{item.isadmin==1&&yizhanInfo.is_admin==1}}"></myList>
-            <!-- 业务员 -->
-            <myList :tabItem="item" wx:elif="{{item.isyewuyuan==1&&yizhanInfo.is_salesman==1}}"></myList>
-
-          </block>
-            
+              <myList :tabItem="item" wx:if="{{yizhanInfo.is_boss==1}}"></myList>
+              <!-- 管理员 -->
+              <myList :tabItem="item" wx:elif="{{item.isadmin==1&&yizhanInfo.is_admin==1}}"></myList>
+              <!-- 业务员 -->
+              <myList :tabItem="item" wx:elif="{{item.isyewuyuan==1&&yizhanInfo.is_salesman==1}}"></myList>
+            </block>
           </repeat>
         </view>
       </form>
@@ -355,6 +350,13 @@
           text: '商品列表',
           url: 'goodsList',
           bgcolor: '#f7bf30'
+        },
+        {
+          icon: '/images/console/shangpinliebiao.png',
+          num: 0,
+          text: '分类管理',
+          url: 'my_console_catManage',
+          bgcolor: '#f7bf30'
         }
       ],
       applicationList: [{
@@ -404,15 +406,13 @@
           url: 'caseList',
           bgcolor: '#fd7602',
           isyizhan: 1,
-   
         },
-         {
+        {
           icon: '/images/console/hyk.png',
           text: '免费设计',
           url: 'design',
           bgcolor: '#fd7602',
           isyizhan: 1,
-   
         },
         {
           icon: '/images/console/ywy.png',
@@ -422,7 +422,6 @@
           isadmin: 1,
           isfufei: 1
         },
-        
         {
           icon: '/images/console/hyk.png',
           text: '会员卡',
@@ -514,19 +513,17 @@
       if (res.data.code == 0 && res.data.data.is_kthy == 1) {
         this.$parent.globalData.is_kthy = res.data.data.is_kthy;
         this.$parent.globalData.is_yizhan = res.data.data.is_yizhan;
-        this.applicationList.forEach((item,index)=>{
-          if(item.text=="会员卡")
-          this.applicationList[index].url = '/ConsolePages/pages/clubCard/setCard';
+        this.applicationList.forEach((item, index) => {
+          if (item.text == "会员卡")
+            this.applicationList[index].url = '/ConsolePages/pages/clubCard/setCard';
         })
-        
       } else {
         this.$parent.globalData.is_kthy = res.data.data.is_kthy;
         this.$parent.globalData.is_yizhan = res.data.data.is_yizhan;
-        this.applicationList.forEach((item,index)=>{
-          if(item.text=="会员卡")
-          this.applicationList[index].url = '/ConsolePages/pages/clubCard/payCard';
+        this.applicationList.forEach((item, index) => {
+          if (item.text == "会员卡")
+            this.applicationList[index].url = '/ConsolePages/pages/clubCard/payCard';
         })
-        
       }
     }
     // 是否是业务员
