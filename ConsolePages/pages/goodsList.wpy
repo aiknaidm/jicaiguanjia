@@ -943,9 +943,9 @@ export default class newslist extends wepy.page {
     wx.hideLoading();
     var that = this;
     if (res.data.code == 0) {
-      res.data.data.forEach((item, index) => {
-        res.data.data[index].active = that.isallSelect;
-      });
+      // res.data.data.forEach((item, index) => {
+      //   res.data.data[index].active = that.isallSelect;
+      // });
       if (this.initdata.page == 1) this.list = res.data.data;
       else this.list.push(...res.data.data);
       if (res.data.data.length < 10) {

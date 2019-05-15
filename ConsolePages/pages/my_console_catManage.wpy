@@ -1,0 +1,296 @@
+<style lang="less">
+  .container {
+    margin-bottom: 150rpx;
+  }
+  .kind {
+    border-bottom: 8rpx solid #f0f0f0;
+  }
+  .kind-1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2rpx solid #f0f0f0;
+    padding: 20rpx 40rpx;
+  }
+  .kind-1 text {
+    color: #999999;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+    -webkit-transition: transform 0.2s;
+    -moz-transition: transform 0.2s;
+    -ms-transition: transform 0.2s;
+    -o-transition: transform 0.2s;
+    transition: transform 0.2s;
+  }
+  .kind-1 .active {
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+  }
+  .lists {
+    display: none;
+  }
+  .lists .list,
+  .lists .addGoods {
+    margin-left: 120rpx;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 20rpx 40rpx;
+  }
+  .lists .addGoods {
+    color: #14c09a;
+  }
+  .lists.active {
+    display: block;
+  }
+  .add {
+    position: fixed;
+    bottom: 10px;
+    width: 80%;
+    left: 10%;
+    margin: auto;
+    background-color: #14c09a;
+    text-align: center;
+    line-height: 80rpx;
+    border-radius: 50px;
+    color: #fff;
+  }
+  .delete {
+    text-align: center;
+    background-color: #14c09a;
+    color: #eee;
+    line-height: 80rpx;
+  }
+  .add-box {
+    background: #fff;
+    border-top: 3px solid #14c09a;
+    width: 85%;
+    position: relative;
+    z-index: 15;
+  }
+  .add-box .title {
+    padding: 20rpx 40rpx;
+    font-size: 35rpx;
+  }
+  .add-box .content {
+    padding: 20rpx 40rpx;
+  }
+  .add-box .content input {
+    font-size: 30rpx;
+    width: 100%;
+    min-width: 450rpx;
+  }
+  .add-box .btn {
+    display: flex;
+    border: 1px solid #f0f0f0;
+  }
+  .add-box .btn view {
+    flex: 1;
+    text-align: center;
+    font-size: 30rpx;
+    line-height: 80rpx;
+    border-right: 1px solid #f0f0f0;
+  }
+  .opacity {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+  }
+</style>
+<template>
+  <view class='container'>
+    <navigator class="delete main-bgcolor  opacity" url='/pages/my-kindDelete/index'>
+      编辑分类，点击进入编辑列表
+    </navigator>
+    <view class='kind' wx:for="{{kind}}">
+      <view class="kind-1" bindtap="showList" data-index="{{index}}">
+        <view>{{item.cat_name}}({{item.goods_num}})</view>
+        <text class="iconfont icon-arrow-right {{item.active?'active':''}}"></text>
+      </view>
+      <view class="lists {{item.active?'active':''}}">
+        <view class="list" wx:for="{{item.xiaofenlei}}" wx:for-item="itemName" wx:for-index="idx">
+          <view>{{itemName.cat_name}}({{itemName.goods_num}})</view>
+        </view>
+        <view class="addGoods" bindtap='addLittleKindTap' data-parent_id='{{item.cat_id}}'>
+          <text class="iconfont icon-tianjia-copy mian-color"></text>添加分类
+        </view>
+      </view>
+    </view>
+    <view class="add main-bgcolor" bindtap='addKindTap'>
+      添加分类
+    </view>
+    <view class="body-bg" hidden="{{!isShowAddKindV}}" bindtouchmove='cancelTap' bindtap='cancelTap'>
+      <view class="add-box" catchtouchmove='showKindTap' catchtap="showKindTap">
+        <view class="title">
+          请输入新分类名称
+        </view>
+        <view class="content">
+          <input type="text" name="" value="{{newKindName}}" bindinput='kindNameIpt' placeholder='请输入'></input>
+        </view>
+        <view class="btn">
+          <view catchtap='cancelTap' data-type='0'>取消</view>
+          <view catchtap='sureTap' data-type='0'>确定</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import newapi from '../../API/newapi';
+  import util from '../../utils/index';
+  export default class my_console_catManage extends wepy.page {
+    config = {
+      navigationBarTitleText: '分类管理'
+    };
+    data = {
+      kind: [],
+      isShowAddKindV: false,
+      newKindName: '',
+      currentKindType: '',
+      currentParentID: ''
+    };
+    computed = {};
+    components = {};
+    methods = {
+      kindNameIpt(e) {
+        console.log('e.detail.value is--->', e.detail.value);
+        this.newKindName = e.detail.value;
+        this.$apply();
+      },
+      addLittleKindTap(e) {
+        console.log('e.currentTarget.dataset.parent_id', e.currentTarget.dataset.parent_id);
+        this.currentKindType = 2;
+        this.isShowAddKindV = true;
+        this.currentParentID = e.currentTarget.dataset.parent_id;
+        this.$apply();
+      },
+      addKindTap() {
+        this.isShowAddKindV = true;
+        this.currentKindType = 1;
+        this.$apply();
+      },
+      showKindTap() {
+        this.isShowAddKindV= true;
+        this.$apply();
+      },
+      showList(e) {
+        var index = e.currentTarget.dataset.index;
+        for (var i = 0; i < this.kind.length; i++) {
+          if (i !== index) {
+            this.kind[i].active = false;
+          }
+        }
+        console.log("index", index);
+        console.log("this.kind", this.kind);
+        this.kind[index].active = !this.kind[index].active;
+        this.$apply();
+      },
+      cancelTap() {
+        this.isShowAddKindV = false;
+        this.$apply();
+      },
+      sureTap() {
+        var that = this;
+        if (that.newKindName.length == 0) {
+          wx.showToast({
+            title: '名称不能为空哦',
+          })
+          return;
+        } else if (that.newKindName.length >= 12) {
+          wx.showToast({
+            title: '不能超过12个字',
+          })
+          return;
+        } else {
+          console.log('输入的分类的名称是', that.newKindName);
+          var userID = wx.getStorageSync('userId');
+          console.log('userid is', userID);
+          console.log("currentKindType,currentParentID", that.currentKindType, that.currentParentID);
+          if (that.currentKindType == 1) {
+            wx.request({
+              //http://www.lmbge.com/wxapi/gztai/yhlb?user_id=990  user_id  易站经理ID
+              url: 'https://lmbge.com/wxapi/zygztai/add_categorys?user_id=' + userID,
+              method: 'GET',
+              data: {
+                cat_name: that.newKindName
+              },
+              header: {
+                'Accept': 'application/json'
+              },
+              success: function(res) {
+                if (res.data.code == 0) {
+                  console.log("添加分类-->", res.data.data)
+                  that.onShow();
+                }
+              }
+            })
+          } else if (that.currentKindType == 2) {
+            wx.request({
+              //http://www.lmbge.com/wxapi/gztai/yhlb?user_id=990  user_id  易站经理ID
+              url: 'https://lmbge.com/wxapi/zygztai/add_categorys?user_id=' + userID,
+              method: 'GET',
+              data: {
+                cat_name: that.newKindName,
+                parent_id: that.currentParentID
+              },
+              header: {
+                'Accept': 'application/json'
+              },
+              success: function(res) {
+                if (res.data.code == 0) {
+                  console.log("添加分类-->", res.data.data)
+                  that.onShow();
+                }
+              }
+            })
+          }
+        }
+      },
+    };
+    events = {};
+    getKindList() {
+      var that = this;
+      var userId = wx.getStorageSync('userId');
+      // wx.getStorage({
+      //   key: 'userId',
+      //   success: function (res) {
+      wx.request({
+        //http://www.lmbge.com/wxapi/gztai/yhlb?user_id=990  user_id  易站经理ID
+        url: 'https://lmbge.com/wxapi/zygztai/categorys?user_id=' + userId,
+        method: 'GET',
+        data: {},
+        header: {
+          'Accept': 'application/json'
+        },
+        success: function(res) {
+          if (res.data.code == 0) {
+            console.log("kind列表-->", res.data.data)
+            that.kind = res.data.data;
+            that.$apply();
+          }
+        }
+      })
+      //   },
+      //   fail: function (res) {
+      //     wx.hideLoading();
+      //   }
+      // });
+    }
+    async onLoad(option) {}
+    async onShow() {
+      var that = this;
+      that.setData({
+        currentParentID: '',
+        currentKindType: '',
+        newKindName: '',
+        isShowAddKindV: ''
+      })
+      that.getKindList();
+    }
+  }
+</script>
