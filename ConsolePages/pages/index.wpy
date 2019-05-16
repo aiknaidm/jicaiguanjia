@@ -271,7 +271,7 @@
             </block>
             <block wx:else>
               <!-- 易站所有者 -->
-              <myList :tabItem="item" wx:if="{{yizhanInfo.is_boss==1}}"></myList>
+              <myList :tabItem="item" wx:if="{{yizhanInfo.is_boss==1&&item.isyizhan!=1}}"></myList>
               <!-- 管理员 -->
               <myList :tabItem="item" wx:elif="{{item.isadmin==1&&yizhanInfo.is_admin==1}}"></myList>
               <!-- 业务员 -->

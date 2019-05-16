@@ -1,0 +1,571 @@
+<style lang="less">
+    .container {
+        margin-bottom: 150rpx;
+    }
+    .kind {
+        border-bottom: 8rpx solid #f0f0f0;
+    }
+    .kind-1 {
+        /* display: flex; */
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2rpx solid #f0f0f0;
+        padding: 20rpx 40rpx;
+    }
+    .kind-1 text {
+        color: #999999;
+        -webkit-transform: rotate(90deg);
+        -moz-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        -o-transform: rotate(90deg);
+        transform: rotate(90deg);
+        -webkit-transition: transform 0.2s;
+        -moz-transition: transform 0.2s;
+        -ms-transition: transform 0.2s;
+        -o-transition: transform 0.2s;
+        transition: transform 0.2s;
+    }
+    .kind-1 .active {
+        -webkit-transform: rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+        -ms-transform: rotate(-90deg);
+        -o-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+    }
+    .kind-1 view {
+        display: inline-block;
+        line-height: 50rpx;
+        image{
+            width: 50rpx;
+            height: 50rpx;
+            margin: 0 20rpx;
+        }
+    }
+    .kind-1 text {
+        float: right;
+    }
+    .lists {
+        display: none;
+    }
+    .lists .list,
+    .lists .addGoods {
+        margin-left: 120rpx;
+        border-bottom: 1px solid #f0f0f0;
+        padding: 20rpx 40rpx;
+    }
+    .lists .addGoods {
+        color: #e50012;
+    }
+    .lists.active {
+        display: block;
+    }
+    .list {
+        display: flex;
+        line-height: 50rpx;
+        image{
+            width: 50rpx;
+            height: 50rpx;
+            margin: 0 20rpx;
+        }
+    }
+    .add {
+        position: fixed;
+        display: flex;
+        justify-content: space-around;
+        bottom: 10px;
+        width: 80%;
+        left: 10%;
+        margin: auto;
+        background-color: #e50012;
+        text-align: center;
+        line-height: 80rpx;
+        border-radius: 50px;
+        color: #fff;
+    }
+    .delete {
+        text-align: center;
+        background-color: #e50012;
+        color: #eee;
+        line-height: 80rpx;
+    }
+    .add-box {
+        background: #fff;
+        border-top: 3px solid #e50012;
+        width: 80%;
+    }
+    .add-box .title {
+        padding: 20rpx 40rpx;
+        font-size: 35rpx;
+        text-align: center;
+    }
+    .add-box .content {
+        padding: 20rpx 40rpx;
+    }
+    .add-box .content input {
+        font-size: 30rpx;
+        width: 100%;
+        min-width: 450rpx;
+    }
+    .add-box .btn {
+        display: flex;
+        border: 1px solid #f0f0f0;
+    }
+    .add-box .btn view {
+        flex: 1;
+        text-align: center;
+        font-size: 30rpx;
+        line-height: 80rpx;
+        border-right: 1px solid #f0f0f0;
+    }
+    .del {
+        background: #e50012;
+        border-radius: 50px;
+        color: #fff;
+        flex: 1;
+    }
+//   上传图片
+.cameraBox {
+  height: 204rpx;
+  background-color: #f2f2f2;
+  line-height: 204rpx;
+  display: flex; // flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  overflow-x: scroll;
+}
+.camera {
+  width: 102rpx;
+  height: 106rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-right: 30rpx;
+}
+.camera image {
+  width: 102rpx;
+  height: 106rpx;
+}
+.inputBox {
+  padding: 0 36rpx;
+  border-bottom: 1px solid #e4e4e4;
+}
+.title {
+  width: 100%;
+  height: 100rpx;
+  line-height: 100rpx;
+}
+.listBox {
+  height: 90rpx;
+  line-height: 90rpx;
+  border-bottom: 1px solid#e4e4e4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.listBoxAdd {
+  height: 90rpx;
+  line-height: 90rpx;
+  border-bottom: 1px solid#e4e4e4;
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
+  color: #e50012;
+}
+.listOption {
+  display: inline-block;
+  margin: 0 36rpx;
+  margin-right: 10rpx;
+  width: 180rpx;
+}
+.listOptionAdd {
+  display: inline-block;
+  margin-left: 36rpx;
+  /* width: 150rpx; */
+}
+.close {
+  width: 35rpx;
+  height: 35rpx;
+  background-color: #e50012;
+  border-radius: 50%;
+  color: #fff;
+  text-align: center;
+  line-height: 30rpx;
+  position: absolute;
+  right: -15rpx;
+  top: -15rpx;
+}
+</style>
+
+<template>
+    <div>
+        <!--pages/my-kindManage/index.wxml-->
+        <view class='container'>
+            <form @submit="formSubmit">
+                <radio-group @change="radioChange" name="radiobox">
+                    <view class='kind' wx:for="{{kind}}" wx:for-index="indexx" wx:key="{{indexx}}">
+                        <view class="kind-1" data-index="{{indexx}}" @tap="clickKind">
+                            <label @tap.stop="clickdafenlei({{indexx}},{{item.cat_id}},{{item.cat_name}},{{itemName.cat_img}})">
+                                                            <radio value="{{item.cat_id}}" data-indexx="{{indexx}}" data-catid="{{item.cat_id}}"  />
+                                                          </label>
+                            <view><image src="{{item.cat_img}}"></image>{{item.cat_name}}({{item.goods_num}})</view>
+                            <text class="iconfont icon-arrow-right {{kind[indexx].open?'active':''}}"></text>
+                        </view>
+                        <view class="lists {{kind[indexx].open?'active':''}}">
+                            <label wx:for="{{item.xiaofenlei}}" class="list" wx:for-item="itemName" wx:for-index="indexy" wx:key="{{indexy}}" data-indexx="{{indexx}}" data-indexy="{{indexy}}" data-catid="{{itemName.cat_id}}" @tap='clickxiaolei({{indexx}},{{indexy}},{{itemName.cat_id}},{{itemName.cat_name}},{{itemName.cat_img}})'>
+                                                            <radio value="{{itemName.cat_id}}" /><image src="{{itemName.cat_img}}"></image>{{itemName.cat_name}}({{itemName.goods_num}})</label>
+                            <view class="addGoods" bindtap='addLittleKindTap' data-parent_id='{{item.cat_id}}'>
+                                <text class="iconfont icon-tianjia-copy mian-color"></text>添加分类
+                            </view>
+                        </view>
+                    </view>
+                </radio-group>
+                <view class="add">
+                    <button class='del' formType="submit">删除分类</button>
+                    <button class='del' bindtap="addKindTap">添加分类</button>
+                    <button class='del' bindtap='isshowbox'>编辑分类</button>
+                </view>
+            </form>
+        </view>
+        <view class="body-bg" hidden="{{!isShowEditKindV}}" bindtouchmove='hiddenbox' bindtap='hiddenbox'>
+            <view class="add-box" catchtouchmove='showbox' catchtap="showbox">
+               
+                <view class="title">
+                    修改分类
+                </view>
+                 <view class="cameraBox">
+                    <view class="camera" wx:for="{{imgSrc}}" wx:key="{{index}}">
+                    <image src="{{item.img_url}}" />
+                    <text class="close" @tap='delImg({{index}})'>x</text>
+                    </view>
+                    <view class="camera" @tap='chooseImg' wx:if="{{imgSrc.length<1}}">
+                    <image src="/images/add_img.png" mode='aspectFit' />
+                    </view>
+                </view>
+                <view class="content">
+                    <input type="text" name="" value="{{thisCatName}}" bindinput='kindNameIpt' placeholder='请输入'></input>
+                </view>
+                <view class="btn">
+                    <view catchtap='hiddenbox' data-type='0'>取消</view>
+                    <view catchtap='editList({{thisCatId}},{{thisCatName}})' data-type='0'>确定</view>
+                </view>
+            </view>
+        </view>
+        <view class="body-bg" hidden="{{!isShowAddKindV}}" bindtouchmove='cancelTap' bindtap='cancelTap'>
+            <view class="add-box" catchtouchmove='showKindTap' catchtap="showKindTap">
+               
+                <view class="title">
+                    请输入新分类名称
+                </view>
+                 <view class="cameraBox">
+                    <view class="camera" wx:for="{{imgSrc}}" wx:key="{{index}}">
+                    <image src="{{item.img_url}}" />
+                    <text class="close" @tap='delImg({{index}})'>x</text>
+                    </view>
+                    <view class="camera" @tap='chooseImg' wx:if="{{imgSrc.length<1}}">
+                    <image src="/images/add_img.png" mode='aspectFit' />
+                    </view>
+                </view>
+                <view class="content">
+                    <input type="text" name="" value="{{newKindName}}" bindinput='kindNameIpt2' placeholder='请输入'></input>
+                </view>
+                <view class="btn">
+                    <view catchtap='cancelTap' data-type='0'>取消</view>
+                    <view catchtap='addTap' data-type='0'>确定</view>
+                </view>
+            </view>
+        </view>
+        <!-- <view class="body-bg" hidden="{{!isShowDelKindV}}">
+                                                  <view class="add-box">
+                                                    <view class="title">
+                                                      确定删除该分类?
+                                                    </view>
+                                                    <view class="title">
+                                                      一旦删除将无法撤销
+                                                    </view>
+                                                    <view class="btn">
+                                                      <view bindtap='cancelTap'>取消</view>
+                                                      <view bindtap='sureTap'>确定</view>
+                                                    </view>
+                                                  </view>
+                                                </view> -->
+    </div>
+</template>
+<script>
+    import wepy from 'wepy';
+    import newapi from '../../API/newapi';
+    import api from '../../API/api';
+    import util from '../../utils/index';
+    export default class newslist extends wepy.page {
+        config = {
+            navigationBarTitleText: '分类管理',
+        };
+        components = {};
+        data = {
+            kind: [],
+            isShowDelKindV: false,
+            newKindName: '',
+            currentKindType: '',
+            currentParentID: '',
+            currentSelectIds: [],
+            isShowEditKindV: false,
+            isShowAddKindV: false,
+            thisCatName: '',
+            thisCatId: '',
+            imgSrc:[]
+        };
+        methods = {
+            async addTap() {
+                var parent_id = this.currentParentID
+                var keyword = this.newKindName
+                var suppliers_id = this.suppliers_id
+                if (keyword.length == 0) {
+                    wx.showToast({
+                        title: '名称不能为空哦',
+                    })
+                    return;
+                } else if (keyword.length >= 12) {
+                    wx.showToast({
+                        title: '不能超过12个字',
+                    })
+                    return;
+                }
+                 var res = await this.upImg()
+                 console.log(res);
+                 var cat_img=res;
+                var res = await newapi.add_categorys({
+                    suppliers_id,
+                    keyword,
+                    parent_id,
+                    cat_img
+                });
+                this.getKindList(suppliers_id);
+                this.isShowAddKindV = false;
+                this.$apply();
+            },
+            cancelTap() {
+                this.isShowAddKindV = false;
+                this.$apply();
+            },
+            hiddenbox() {
+                this.isShowEditKindV = false;
+            },
+             // 上传图片
+    async chooseImg() {
+  
+      wepy
+        .chooseImage({
+          count:1, // 默认9
+          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+          sourceType: ['album', 'camera'] // 可以指定来源是相册还是相机，默认二者都有
+        })
+        .then(res => {
+          var that = this;
+          // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+          var tempFilePaths = res.tempFilePaths;
+          tempFilePaths.forEach(function(item, index) {
+            that.imgSrc.push({});
+            that.imgSrc[that.imgSrc.length - 1].upload = true;
+            that.imgSrc[that.imgSrc.length - 1].img_url = item;
+            console.log("that.imgSrc",that.imgSrc);
+          });
+          this.$apply();
+        })
+        .catch(res => {});
+    },
+            // 添加分类
+             addKindTap() {
+        this.isShowAddKindV = true;
+        this.currentKindType = 1;
+        this.$apply();
+      },
+            // 删除分类
+            async formSubmit(e) {
+                console.log('form发生了submit事件，携带数据为：', e.detail.value)
+                if (e.detail.value.radiobox != "") {
+                    // this.currentSelectIds = e.detail.value.radiobox
+                    var res = await util.showModalBig("一旦删除无法撤销", "确定删除")
+                    if (res.confirm) {
+                        this.sureTap(e.detail.value.radiobox);
+                    } else if (res.cancel) {
+                        this.isShowDelKindV = false
+                        this.$apply();
+                    }
+                } else {
+                    wx.showModal({
+                        title: '提示',
+                        content: '请先选择分类后删除',
+                    })
+                }
+                // }, 1000)
+            },
+            clickxiaolei(x, y, catid, catName,catImg) {
+                this.x = x;
+                this.y = y;
+                this.thisCatName = catName
+                this.thisCatId = catid
+                this.thisCatImg = catImg
+               
+                this.$apply();
+            },
+            clickdafenlei(x, catid, catName,catImg) {
+                this.x = x;
+                this.y = -1;
+                this.thisCatName = catName
+                this.thisCatId = catid
+                  this.thisCatImg = catImg
+               
+                this.$apply();
+            },
+            kindNameIpt: function(e) {
+                console.log('e.detail.value is--->', e.detail.value);
+                this.thisCatName = e.detail.value
+            },
+            kindNameIpt2: function(e) {
+                console.log('e.detail.value is--->', e.detail.value);
+                this.newKindName = e.detail.value
+            },
+            clickKind: function(e) {
+                var index = e.currentTarget.dataset.index;
+                this.data.kind[index].open = !this.data.kind[index].open;
+                this.setData({
+                    kind: this.data.kind
+                })
+            },
+            isshowbox: function() {
+                console.log("this.thisCatImg",this.thisCatImg)
+                if (this.thisCatId != "") {
+                    this.isShowEditKindV = true
+                    if( this.thisCatImg=='')  this.imgSrc=[]
+                    else{
+ this.imgSrc[0]={}
+                    this.imgSrc[0].upload = false;
+                    this.imgSrc[0].img_url = this.thisCatImg;
+                    }
+                   
+                } else {
+                    wx.showModal({
+                        title: '提示',
+                        content: '请先选择分类',
+                    })
+                }
+            },
+            addLittleKindTap(e) {
+                console.log('e.currentTarget.dataset.parent_id', e.currentTarget.dataset.parent_id);
+                this.currentKindType = 2;
+                this.isShowAddKindV = true;
+                this.currentParentID = e.currentTarget.dataset.parent_id;
+                this.$apply();
+            },
+            // 修改分类
+            async editList(cat_id, cat_name) {
+                var res = await newapi.up_categorys({
+                    cat_id,
+                    cat_name
+                })
+                if (res.data.code == 0) {
+                    if (this.y != -1) this.kind[this.x].xiaofenlei[this.y].cat_name = cat_name
+                    else this.kind[this.x].cat_name = cat_name
+                    this.isShowEditKindV = false;
+                    this.$apply();
+                } else {
+                    util.showToast(res.data.message)
+                }
+            },
+        }
+        onLoad() {
+            var suppliers_id = this.$parent.globalData.suppliers_id
+            this.suppliers_id = suppliers_id
+            this.getKindList(suppliers_id);
+            this.x = -1;
+            this.y = -1;
+        }
+        async showAddBox() {}
+        //确定删除
+        async sureTap(cat_id) {
+            var res = await newapi.del_categorys({
+                cat_id
+            });
+            if (res.data.code == 0) {
+                console.log("item", this.y)
+                if (this.y != -1) {
+                    this.kind[this.x].xiaofenlei.splice(this.y, 1);
+                    console.log("item", this.y)
+                } else this.kind.splice(this.x, 1)
+                this.isShowEditKindV = false;
+                this.$apply();
+            } else {
+                util.showToast(res.data.message)
+            }
+        }
+        async getKindList(suppliers_id) {
+            util.showLoading()
+            var res = await newapi.cat_manage({
+                suppliers_id
+            });
+            this.kind = res.data.data;
+            util.hideLoading();
+            this.$apply();
+        }
+        async upImg(i = 0) {
+    util.showLoading('上传中');
+      console.log("this.imgSrc[i]",this.imgSrc[i])
+    try {
+      
+      var res = await wepy.uploadFile({
+        url: api.upload,
+        filePath: this.imgSrc[i].img_url,
+        name: 'file',
+        header: {
+          Accept: 'application/json'
+        }
+      });
+      wx.hideLoading();
+      var datas = JSON.parse(res.data.trim());
+      if (datas.code == 0) {
+        return datas.data.pic_url;
+      }
+    } catch (error) {
+      
+         wx.hideLoading();
+      let mRes = await util.showModalBig(
+        '图片' + this.imgSrc[i].img_url + '上传失败'
+      );
+      if (mRes.confirm) {
+        await this.upImg(i);
+      }
+    }
+  }
+        // showList: function (e) {
+        //   var index = e.currentTarget.dataset.index;
+        //   var xiaofenlei = this.data.kind[index].xiaofenlei;
+        //   for (var i = 0; i < xiaofenlei.length; i++) {
+        //     if (!this.data.kind[index].active) {
+        //       xiaofenlei[i].active = !this.data.kind[index].active;
+        //     };
+        //   }
+        //   this.data.kind[index].xiaofenlei = xiaofenlei;
+        //   this.data.kind[index].active = !this.data.kind[index].active;
+        //   if (this.data.kind[index].active) {
+        //     this.data.kind[index].open = true;
+        //   };
+        //   this.setData({
+        //     kind: this.data.kind
+        //   });
+        // },
+        // clickRadio: function (e){
+        //   var index = e.currentTarget.dataset.index;
+        //   this.data.kind[index].active = !this.data.kind[index].active;
+        //   this.clickKind(e);
+        // },
+        // radioChange: function(e) {
+        //   console.log('radio携带value值为：', e.detail.value)
+        //   var that = this;
+        //   that.setData({
+        //     currentSelectIds: e.detail.value
+        //   })
+        // },
+    }
+</script>

@@ -107,6 +107,8 @@ const newapi = {
     add_anli: (data) => fetch(`${host_chk}/add_anli`, 'GET', data),
     kehu: (data) => fetch(`${host_chk}/kehu`, 'GET', data),
     kehu_read: (data) => fetch(`${host_chk}/kehu_read`, 'GET', data),
+    cat_manage: (data) => fetch(`${host_chk}/cat_manage`, 'GET', data),
+    up_categorys: (data) => fetch(`${host_chk}/up_categorys`, 'GET', data),
 
 
 }

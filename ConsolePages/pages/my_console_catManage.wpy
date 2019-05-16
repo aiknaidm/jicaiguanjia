@@ -42,7 +42,7 @@
     padding: 20rpx 40rpx;
   }
   .lists .addGoods {
-    color: #14c09a;
+    color: #e50012;
   }
   .lists.active {
     display: block;
@@ -53,7 +53,7 @@
     width: 80%;
     left: 10%;
     margin: auto;
-    background-color: #14c09a;
+    background-color: #e50012;
     text-align: center;
     line-height: 80rpx;
     border-radius: 50px;
@@ -61,13 +61,13 @@
   }
   .delete {
     text-align: center;
-    background-color: #14c09a;
+    background-color: #e50012;
     color: #eee;
     line-height: 80rpx;
   }
   .add-box {
     background: #fff;
-    border-top: 3px solid #14c09a;
+    border-top: 3px solid #e50012;
     width: 85%;
     position: relative;
     z-index: 15;
@@ -102,7 +102,7 @@
 </style>
 <template>
   <view class='container'>
-    <navigator class="delete main-bgcolor  opacity" url='/pages/my-kindDelete/index'>
+    <navigator class="delete main-bgcolor  opacity" url='/ConsolePages/pages/my_console_catDelete'>
       编辑分类，点击进入编辑列表
     </navigator>
     <view class='kind' wx:for="{{kind}}">
@@ -175,7 +175,7 @@
         this.$apply();
       },
       showKindTap() {
-        this.isShowAddKindV= true;
+        this.isShowAddKindV = true;
         this.$apply();
       },
       showList(e) {
@@ -194,103 +194,46 @@
         this.isShowAddKindV = false;
         this.$apply();
       },
-      sureTap() {
-        var that = this;
-        if (that.newKindName.length == 0) {
+      async sureTap() {
+        var parent_id = this.currentParentID
+        var keyword = this.newKindName
+        var suppliers_id = this.suppliers_id
+        if (keyword.length == 0) {
           wx.showToast({
             title: '名称不能为空哦',
           })
           return;
-        } else if (that.newKindName.length >= 12) {
+        } else if (keyword.length >= 12) {
           wx.showToast({
             title: '不能超过12个字',
           })
           return;
-        } else {
-          console.log('输入的分类的名称是', that.newKindName);
-          var userID = wx.getStorageSync('userId');
-          console.log('userid is', userID);
-          console.log("currentKindType,currentParentID", that.currentKindType, that.currentParentID);
-          if (that.currentKindType == 1) {
-            wx.request({
-              //http://www.lmbge.com/wxapi/gztai/yhlb?user_id=990  user_id  易站经理ID
-              url: 'https://lmbge.com/wxapi/zygztai/add_categorys?user_id=' + userID,
-              method: 'GET',
-              data: {
-                cat_name: that.newKindName
-              },
-              header: {
-                'Accept': 'application/json'
-              },
-              success: function(res) {
-                if (res.data.code == 0) {
-                  console.log("添加分类-->", res.data.data)
-                  that.onShow();
-                }
-              }
-            })
-          } else if (that.currentKindType == 2) {
-            wx.request({
-              //http://www.lmbge.com/wxapi/gztai/yhlb?user_id=990  user_id  易站经理ID
-              url: 'https://lmbge.com/wxapi/zygztai/add_categorys?user_id=' + userID,
-              method: 'GET',
-              data: {
-                cat_name: that.newKindName,
-                parent_id: that.currentParentID
-              },
-              header: {
-                'Accept': 'application/json'
-              },
-              success: function(res) {
-                if (res.data.code == 0) {
-                  console.log("添加分类-->", res.data.data)
-                  that.onShow();
-                }
-              }
-            })
-          }
         }
+        var res = await newapi.add_categorys({
+          suppliers_id,
+          keyword,
+          parent_id
+        });
+        this.getKindList(suppliers_id);
+        this.isShowAddKindV=false;
+        this.$apply();
       },
     };
     events = {};
-    getKindList() {
-      var that = this;
-      var userId = wx.getStorageSync('userId');
-      // wx.getStorage({
-      //   key: 'userId',
-      //   success: function (res) {
-      wx.request({
-        //http://www.lmbge.com/wxapi/gztai/yhlb?user_id=990  user_id  易站经理ID
-        url: 'https://lmbge.com/wxapi/zygztai/categorys?user_id=' + userId,
-        method: 'GET',
-        data: {},
-        header: {
-          'Accept': 'application/json'
-        },
-        success: function(res) {
-          if (res.data.code == 0) {
-            console.log("kind列表-->", res.data.data)
-            that.kind = res.data.data;
-            that.$apply();
-          }
-        }
-      })
-      //   },
-      //   fail: function (res) {
-      //     wx.hideLoading();
-      //   }
-      // });
+    async getKindList(suppliers_id) {
+      util.showLoading()
+      var res = await newapi.cat_manage({
+        suppliers_id
+      });
+      this.kind = res.data.data;
+      util.hideLoading();
+      this.$apply();
     }
     async onLoad(option) {}
     async onShow() {
-      var that = this;
-      that.setData({
-        currentParentID: '',
-        currentKindType: '',
-        newKindName: '',
-        isShowAddKindV: ''
-      })
-      that.getKindList();
+      var suppliers_id = this.$parent.globalData.suppliers_id
+      this.suppliers_id = suppliers_id
+      this.getKindList(suppliers_id);
     }
   }
 </script>
