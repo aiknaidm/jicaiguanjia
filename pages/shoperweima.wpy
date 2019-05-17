@@ -84,21 +84,24 @@
         });
       },
       toshop() {
-        this.is_yizhan = this.$parent.globalData.is_yizhan;
+        this.is_yizhan = this.yizhanInfo.is_yizhan;
         var appId = "";
+        var path = "";
         if (this.is_yizhan == 1) {
           appId = "wx87bfbcfe887faf4d";
+          path = '/pages/home?suppliers_id=' + this.$parent.globalData.suppliers_id;
         } else {
           appId = "wx7e302245debd521a";
-        }
-        wx.navigateToMiniProgram({
-          appId: appId,
-          path: '/Shop/pages/index?suppliers_id=' +
+          path = '/Shop/pages/index?suppliers_id=' +
             this.$parent.globalData.suppliers_id +
             '&sales_id=' +
             this.sales_id +
             '&sales_name=' +
-            this.yizhanInfo.user_nickname,
+            this.yizhanInfo.user_nickname;
+        }
+        wx.navigateToMiniProgram({
+          appId,
+          path,
           // extraData: {
           // 	suppliers_id: suppliers_id,
           // },
@@ -132,13 +135,19 @@
       var yizhanInfo = await this.$parent.getYizhanInfo(suppliers_id);
       this.yizhanInfo = yizhanInfo;
       let is_yizhan = yizhanInfo.is_yizhan;
-      let data = {
-        path: '/Shop/pages/index?suppliers_id=' +
+      var path;
+      if (is_yizhan == 1) {
+        path = '/pages/home?suppliers_id=' + suppliers_id;
+      } else {
+        path = '/Shop/pages/index?suppliers_id=' +
           suppliers_id +
           '&sales_id=' +
           this.sales_id +
           '&sales_name=' +
-          this.sales_name,
+          this.sales_name;
+      }
+      let data = {
+        path,
         suppliers_id,
         is_yizhan
       };
