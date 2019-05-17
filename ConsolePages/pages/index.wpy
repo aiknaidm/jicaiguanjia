@@ -355,7 +355,7 @@
           icon: '/images/console/shangpinliebiao.png',
           num: 0,
           text: '分类管理',
-          url: 'my_console_catManage',
+          url: 'my_console_catDelete',
           bgcolor: '#f7bf30'
         }
       ],
