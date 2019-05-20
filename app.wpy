@@ -163,7 +163,9 @@ export default class extends wepy.app {
           'pages/upCase',
           'pages/caseList',
           'pages/addCaseDec',
-          'pages/design'
+          'pages/design',
+          'pages/coupon/addCoupon',
+          'pages/coupon/selectCoupon'
         ]
       },
       {

@@ -208,7 +208,7 @@
                     <view class='kind' wx:for="{{kind}}" wx:for-index="indexx" wx:key="{{indexx}}">
                         <view class="kind-1" data-index="{{indexx}}" @tap="clickKind">
                             <label @tap.stop="clickdafenlei({{indexx}},{{item.cat_id}},{{item.cat_name}},{{item.cat_img}})">
-                                                                <radio value="{{item.cat_id}}" data-indexx="{{indexx}}" data-catid="{{item.cat_id}}"  />
+                                                                <radio value="{{item.cat_id}}" checked="{{item.checked}}" data-indexx="{{indexx}}" data-catid="{{item.cat_id}}"  />
                                                               </label>
                             <view>
                                 <image src="{{item.cat_img}}"></image>{{item.cat_name}}({{item.goods_num}})</view>
@@ -216,7 +216,7 @@
                         </view>
                         <view class="lists {{kind[indexx].open?'active':''}}">
                             <label wx:for="{{item.xiaofenlei}}" class="list" wx:for-item="itemName" wx:for-index="indexy" wx:key="{{indexy}}" data-indexx="{{indexx}}" data-indexy="{{indexy}}" data-catid="{{itemName.cat_id}}" @tap='clickxiaolei({{indexx}},{{indexy}},{{itemName.cat_id}},{{itemName.cat_name}},{{itemName.cat_img}})'>
-                                                                <radio value="{{itemName.cat_id}}" /><image src="{{itemName.cat_img}}"></image>{{itemName.cat_name}}({{itemName.goods_num}})</label>
+                                                                <radio value="{{itemName.cat_id}}" checked="{{itemName.checked}}"/><image src="{{itemName.cat_img}}"></image>{{itemName.cat_name}}({{itemName.goods_num}})</label>
                             <view class="addGoods" bindtap='addLittleKindTap' data-parent_id='{{item.cat_id}}'>
                                 <text class="iconfont icon-tianjia-copy mian-color"></text>添加分类
                             </view>
@@ -482,7 +482,7 @@
                         this.thisCatImg = cat_img;
                     } else {
                         this.kind[this.x].cat_name = cat_name;
-                        this.kind[this.x].xiaofenlei[this.y].cat_img = cat_img
+                        this.kind[this.x].cat_img = cat_img
                         this.thisCatImg = cat_img;
                     }
                     this.isShowEditKindV = false;
@@ -495,34 +495,58 @@
         onLoad() {
             var suppliers_id = this.$parent.globalData.suppliers_id
             this.suppliers_id = suppliers_id
-            this.getKindList(suppliers_id);
+            
             this.x = -1;
             this.y = -1;
+            this.isMoreData=true;
+            this.page=1;
+            this.getKindList(suppliers_id);
         }
+        
         async showAddBox() {}
         //确定删除
-        async sureTap(cat_id) {
+        async sureTap(cat_id,sure=0) {
             var res = await newapi.del_categorys({
-                cat_id
+                cat_id,
+                sure
             });
             if (res.data.code == 0) {
-                console.log("item", this.y)
                 if (this.y != -1) {
                     this.kind[this.x].xiaofenlei.splice(this.y, 1);
-                    console.log("item", this.y)
+                   
                 } else this.kind.splice(this.x, 1)
                 this.isShowEditKindV = false;
+                this.thisCatId="";
+                this.thisCatName="";
+                this.thisCatImg=""
                 this.$apply();
-            } else {
+            } 
+            else if(res.data.code==4){
+             var res= await  util.showModalBig(res.data.message);
+             if(res.confirm) {
+                 this.sureTap(cat_id,'1')
+             }
+            }
+            else {
+                
                 util.showToast(res.data.message)
             }
         }
         async getKindList(suppliers_id) {
             util.showLoading()
             var res = await newapi.cat_manage({
-                suppliers_id
+                suppliers_id,
+                page:this.page
             });
-            this.kind = res.data.data;
+            var datas=res.data.data
+            if(this.page==1){
+                this.kind = datas;
+            }else{
+                 this.kind.push(...datas)
+            }
+           if(datas.length<10){
+               this.isMoreData = false;
+           }
             util.hideLoading();
             this.$apply();
         }
@@ -553,6 +577,15 @@
                 }
             }
         }
+         onReachBottom() {
+    if (this.isMoreData) {
+      this.page = this.page + 1;
+      this.getKindList(this.suppliers_id)
+    }
+  }
+   onUnload() {
+ this.page=1
+  }
         // showList: function (e) {
         //   var index = e.currentTarget.dataset.index;
         //   var xiaofenlei = this.data.kind[index].xiaofenlei;

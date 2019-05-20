@@ -1,0 +1,640 @@
+<style lang="less">
+/* pages/my/my-hy/my-promotion-add/index.wxss */
+/*tab切换  */
+.status-box {
+  width: 100%;
+  /* height: 100rpx; */
+  line-height: 100rpx;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-bottom: 6rpx solid #eee;
+  /* justify-content: space-between;
+                                                               */
+}
+.gray {
+  color: gray;
+}
+.status-box .status-label {
+  text-align: center;
+  font-size: 30rpx;
+  padding: 0px 25rpx;
+  flex: 1;
+  border-bottom: 6rpx solid #fff;
+  position: relative;
+  /* border-right: 2rpx solid #eee; */
+}
+.status-box .status-label .red-dot {
+  width: 16rpx;
+  height: 16rpx;
+  position: absolute;
+  left: 116rpx;
+  top: 23rpx;
+  background-color: #f43530;
+  border-radius: 50%;
+}
+.promotion-name {
+  display: flex;
+  padding: 40rpx 20rpx;
+  align-items: center;
+}
+.promotion-name text {
+  display: inline-block;
+  margin-right: 20rpx;
+  /* font-weight: bold; */
+  font-size: 30rpx;
+}
+.promotion-name input {
+  flex: 1;
+  border: 1px solid #e2e2e2;
+  border-radius: 10rpx;
+  width: 300rpx;
+  padding-left: 10rpx;
+}
+.box {
+  display: flex;
+}
+.box text {
+  vertical-align: middle;
+}
+.promotion-content-box {
+  margin: 0 40rpx;
+  border: 1px solid #e2e2e2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50rpx;
+  position: relative;
+  padding-top: 100rpx;
+  border-radius: 15rpx;
+  margin-top: 80rpx;
+  margin-bottom: 30rpx;
+}
+.promotion-content-box .icon {
+  width: 100rpx;
+  height: 100rpx;
+  border: 1px solid #e2e2e2;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 100rpx;
+  position: absolute;
+  top: -50rpx;
+  background-color: #fff;
+  font-size: 40rpx;
+  font-weight: bold;
+}
+.promotion-content-box .name {
+  width: 95%;
+  text-align: left;
+}
+.promotion-content-box .money {
+  display: flex;
+  justify-content: space-center;
+  margin-top: 40rpx;
+  width: 95%;
+}
+.promotion-content-box input {
+  padding: 0 20rpx;
+  border: 1px solid #e2e2e2;
+  border-radius: 10rpx;
+  font-size: 26rpx;
+  margin-right: 20rpx;
+}
+.promotion-content-box .money input {
+  margin: 0 40rpx;
+  width: 120rpx;
+}
+.promotion-content-box .fan input {
+  margin-left: 0;
+}
+.promotion-userstyle {
+  margin: 40rpx;
+  line-height: 60rpx;
+}
+.promotion-userstyle radio:last-child {
+  margin-left: 20rpx;
+}
+.promotion-return {
+  display: flex;
+  padding: 40rpx;
+}
+.promotion-return input {
+  flex: 1;
+  border: 1px solid #e2e2e2;
+  border-radius: 10rpx;
+  margin: 0 10rpx;
+  padding: 0 20rpx;
+}
+.promotion-usermoney {
+  padding: 0;
+  padding-top: 40rpx;
+  border-top: 1px solid #f0f0f0;
+  margin-top: 20rpx;
+}
+.promotion-time {
+  display: flex;
+  align-items: center;
+  padding: 40rpx;
+  padding-bottom: 0;
+}
+picker {
+  line-height: 80rpx;
+  border: 1px solid #e2e2e2;
+  flex: 1;
+  padding: 0 40rpx;
+  position: relative;
+}
+.promotion-time text {
+  line-height: 80rpx;
+  display: inline-block;
+}
+.promotion-submit {
+  padding: 40rpx;
+  display: flex;
+  justify-content: space-around;
+}
+.promotion-submit button {
+  padding: 0 40rpx;
+  font-size: 28rpx;
+}
+.icon-rili {
+  color: #ff9292;
+  position: absolute;
+  right: 20rpx;
+}
+/*活动列表  */
+.promotion-activity {
+  background-color: #f0f0f0;
+  padding-top: 40rpx;
+}
+.promotion-activity-list {
+  width: 90%;
+  margin: auto;
+  background-color: #fff;
+  margin-bottom: 40rpx;
+  border-radius: 10rpx;
+}
+.promotion-activity-list2 .moneycancle {
+  color: #aaa !important;
+}
+.promotion-activity-list2 .free {
+  color: #aaa !important;
+  border: 1px solid#aaa !important;
+}
+.promotion-activity-list2 .btn {
+  background-color: #aaa !important;
+}
+.promotion-activity-list .content {
+  padding: 20rpx;
+  display: flex;
+  padding-top: 10rpx;
+  justify-content: space-between;
+}
+.promotion-activity-list .left {
+  padding: 20rpx 30rpx 20rpx 0;
+  min-width: 250rpx;
+}
+.promotion-activity-list .content .money {
+  margin-bottom: 10rpx;
+  font-size: 55rpx;
+  color: #ff6769;
+  text-align: center;
+  line-height: 55rpx;
+  font-weight: bold;
+  margin-right: 20rpx;
+}
+.promotion-activity-list .moneycancle {
+  margin-bottom: 10rpx;
+  font-size: 50rpx;
+  text-align: center;
+  line-height: 50rpx;
+  margin-right: 20rpx;
+  color: #ff6600;
+}
+.promotion-activity-list .content .text {
+  font-size: 35rpx;
+  padding: 20rpx 0;
+}
+.promotion-activity-list .content .textcancle {
+  font-size: 35rpx;
+  color: #aaa;
+  padding: 20rpx 0;
+}
+.vName {
+  line-height: 44rpx;
+  font-size: 36rpx;
+}
+.txt2 {
+  font-size: 28rpx;
+  color: #6b6b6b;
+}
+.promotion-activity-list .time {
+  font-size: 24rpx;
+  color: #aaa;
+  border-top: 1px dashed #e2e2e2;
+  line-height: 60rpx;
+  padding: 0 20rpx;
+}
+.promotion-activity-list .btn {
+  color: #fff;
+  line-height: 70rpx;
+  padding: 0 10rpx;
+  border-radius: 15rpx;
+  margin-left: 20rpx;
+  height: 70rpx;
+  background-color: #ff6600;
+}
+.promotion-activity-list .btn.activecancle {
+  color: #aaa;
+  border: 1px solid #aaa;
+}
+.title {
+  background: #f2f2f2;
+  display: block;
+  padding: 20rpx;
+  font-weight: bold;
+  font-size: 32rpx;
+}
+.main-bgcolorg {
+  background-color: #f2f2f2;
+  color: #666;
+}
+.moneyBox {
+  display: flex;
+}
+.free {
+  height: 40rpx;
+  line-height: 40rpx;
+  width: 140rpx;
+  font-size: 22rpx;
+  color: #ff6600;
+  border-radius: 20rpx;
+  border: 1px solid#ff6600;
+  text-align: center;
+}
+.topBox {
+  padding: 30rpx;
+  display: flex;
+  justify-content: space-around;
+  border-bottom: 8rpx solid #f0f0f0;
+}
+
+.top {
+  color: #ff6600;
+  border-radius: 10rpx;
+  border: 1px solid#ff6600;
+  height: 70rpx;
+  line-height: 70rpx;
+  font-size: 28rpx;
+  text-align: center;
+  font-weight: bold;
+  flex: 1;
+  margin: 0 10rpx;
+}
+.textarea {
+  background-color: #fff;
+}
+.main-color {
+  color: #e50012;
+}
+.main-color.active {
+  border: 0px solid !important;
+  border-bottom: 6rpx solid #e50012 !important;
+}
+.main-bgcolor {
+  background-color: #e50012 !important;
+  color: #fff !important;
+}
+.textarea {
+  background-color: #fff;
+}
+.textarea textarea {
+  padding: 30rpx;
+}
+.btn {
+  text-align: center;
+  height: 80rpx;
+  line-height: 80rpx;
+  background-color: #f9f9f9;
+}
+</style>
+<template>
+  <!--pages/my/my-hy/my-promotion-add/index.wxml-->
+  <view class='container'>
+   
+    <view class="status-box">
+      <view bindtap="statusTap({{index}})" class="status-label {{index == currentType ? 'main-color active' : ''}}" wx:for-items="{{statusType}}" wx:key="{{index}}" data-index="{{index}}" data-statu="{{statusKey[index]}}">
+        {{item}}
+      </view>
+    </view>
+    <form class='' wx:if="{{currentType==0}}" bindsubmit="formSubmit">
+      <view class='promotion-name'>
+        <text>充值金额：</text>
+        <input class='' type='digtal' placeholder='' name="youhuiname" @input="changeMoney"/>
+      </view>
+      <view class='promotion-content'>
+        <text class='title'>充值内容</text>
+        <view class='promotion-content-box'>
+          <view class='icon'>充</view>
+          <view class='box'>
+            <input name="moneyman" value="{{money}}" disabled/>
+            <text>元</text> </view>
+        </view>
+      </view>
+      <view class='promotion-content-box'>
+        <view class='icon'>送</view>
+        <view class='box'>
+          <input name="moneyfan" type='digtal'/>
+          <text>元</text>
+        </view>
+      </view>
+      <text class='title'>时间设置</text>
+      <view class='promotion-time'>
+        <text>开始时间：</text>
+        <picker mode="date" value="{{date}}" start="2015-09-01" bindchange="bindDateChange">
+          <view class="picker">
+            {{date}} 00:00:00
+            <text class='iconfont icon-rili'></text>
+          </view>
+        </picker>
+      </view>
+      <view class='promotion-time'>
+        <text>结束时间：</text>
+        <picker mode="date" value="{{date2}}" start="{{date}}" bindchange="bindDateChange2">
+          <view class="picker">
+            {{date2}} 23:59:59
+            <text class='iconfont icon-rili'></text>
+          </view>
+        </picker>
+      </view>
+      <!-- </view> -->
+      <view class='promotion-submit'>
+        <button class=' main-bgcolorg' bindtap='over'>取消创建</button>
+        <button class=' main-bgcolor' form-type='submit'>创建活动</button>
+      </view>
+    </form>
+    <view class='promotion-activity' wx:if="{{currentType==1}}">
+      <view class="promotion-activity-list {{item.state==2?'promotion-activity-list2':''}}" wx:for="{{activitylist}}" wx:key='{{index}}' data-id='{{item.card_id}}' data-index="{{index}}">
+        <view wx:if="{{item.state==2}}">
+          <view class='content'>
+            <view class='left'>
+              <view class='moneyBox'>
+                <view class='moneycancle'>￥{{item.card_fee}}</view>
+                <view class="free">送{{item.free_money}}元</view>
+              </view>
+              <view class='txt txt2'>可用金额￥{{item.yj_money}}元</view>
+            </view>
+            <view class='text'>
+              <view class='btn active ' catchtap="{{item.state==2?'':'cancleTap'}}" data-promotion_id='{{item.card_id}}'>活动终止
+              </view>
+            </view>
+          </view>
+          <view class='time'>{{item.start_time_t}} 00:00:00——{{item.end_time_t}} 23:59:59
+          </view>
+        </view>
+        <view wx:else>
+          <view class='content'>
+            <view class='left'>
+              <view class='moneyBox'>
+                <view class='moneycancle'>￥{{item.card_fee}}</view>
+                <view class="free">送{{item.free_money}}元</view>
+              </view>
+              <view class='txt txt2'>可用金额￥{{item.yj_money}}元</view>
+            </view>
+            <view class='text'>
+              <view class='btn active ' catchtap="{{item.state==2?'':'cancleTap'}}" data-promotion_id='{{item.card_id}}'>终止活动
+              </view>
+            </view>
+          </view>
+          <view class='time'>{{item.start_time_t}} 00:00:00——{{item.end_time_t}} 23:59:59
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class='' wx:if="{{currentType==2}}">
+     <form bindsubmit='submitTap'>
+      <view class='textarea'>
+          <textarea  placeholder='请输入会员活动规则' name = "rules" value='{{rules}}'></textarea>
+          <button class='btn' formType="submit">上传规则</button>
+      </view>
+      </form>
+    </view>
+  </view>
+</template>
+
+<script>
+var t1;
+import wepy from 'wepy';
+import newapi from '../../../API/newapi';
+import util from '../../../utils/index';
+export default class newslist extends wepy.page {
+  config = {
+    navigationBarTitleText: '会员卡管理'
+  };
+  components = {};
+  data = {
+    date: '2018-10-01',
+    date2: '2018-10-01',
+    time: '12:00',
+    dateTimeArray: null,
+    dateTime: null,
+    dateTimeArray1: null,
+    dateTime1: null,
+    startYear: 2000,
+    endYear: 2050,
+    statusType: ['创建活动', '活动列表', '活动规则'],
+    statusKey: ['0', '1', '3'],
+    currentType: 0,
+    currentStatu: '0',
+    money: '',
+    activitylist: [],
+    rules: ''
+  };
+  computed = {};
+  methods = {
+    // 上传规则
+    async submitTap(e) {
+      var that = this;
+      if (!e.detail.value.rules) {
+        util.showToast('请输入规则');
+        return;
+      }
+      let data = {
+        card_rules: e.detail.value.rules,
+        suppliers_id: this.suppliers_id
+      };
+      let res = await newapi.card_rules(data);
+      if (res.data.code == 0) {
+        this.rules = e.detail.value.rules;
+        this.$apply();
+        util.showToast('上传成功');
+      }
+    },
+    //终止活动
+    async cancleTap(e) {
+      var that = this;
+      var promotion_id = e.currentTarget.dataset.promotion_id;
+      let mRes = await util.showModalBig('终止当前活动？');
+      if (mRes.confirm) {
+        that.cancleActivity(promotion_id);
+      }
+    },
+    statusTap(index) {
+      this.currentType = index;
+      this.currentStatu = this.statusType[index];
+    },
+    changeMoney(e) {
+      this.money = e.detail.value;
+    },
+    bindDateChange(e) {
+      this.date = e.detail.value;
+      this.date2 = e.detail.value;
+    },
+    bindDateChange2(e) {
+      this.date2 = e.detail.value;
+    },
+    //表单数据提交
+    async formSubmit(e) {
+      var that = this;
+      var youhuiname = e.detail.value.youhuiname;
+      var moneyman = Number(e.detail.value.moneyman);
+      var moneyfan = Number(e.detail.value.moneyfan);
+      if (youhuiname == '') {
+        util.showModal('请填写充值金额');
+        return;
+      }
+      if (!moneyman) {
+        util.showModal('请填写充值金额');
+        return;
+      }
+      if (!moneyfan) {
+        util.showModal('请填写赠送金额');
+        return;
+      }
+      //获取bgid,然后网络提交
+      let data = {
+        card_name: youhuiname,
+        // buy_goods: that.data.choose_good_id,
+        card_fee: moneyman,
+        free_money: moneyfan,
+        start_time: that.data.date,
+        end_time: that.data.date2,
+        suppliers_id: this.suppliers_id
+      };
+      let res = await newapi.card_add(data);
+      if (res.data.code == 0) {
+        await util.showModal('创建成功');
+        this.getActivityList();
+        this.currentType = 1;
+        this.currentStatu = 1;
+        this.$apply();
+      }
+    }
+  };
+  events = {};
+  // 活动规则
+  async getCardrules() {
+    let data = {
+      suppliers_id: this.suppliers_id
+    };
+    let res = await newapi.cardrules(data);
+    this.rules = res.data.data.card_rules;
+    this.$apply();
+  }
+  // 终止活动
+  async cancleActivity(promotion_id) {
+    var that = this;
+    let data = {
+      card_id: promotion_id
+    };
+    await newapi.card_stop(data);
+    that.getActivityList();
+  }
+  // 获取费用
+  async getCardPrice() {
+    let res = await newapi.kthy_price(data);
+    if (res.data.code == 0) {
+      this.price = res.data.data.goods_price;
+      this.datas = res.data.data;
+    }
+    this.$apply();
+  }
+  //已添加的活动列表
+  async getActivityList() {
+    var that = this;
+    clearInterval(t1);
+    let data = {
+      suppliers_id: this.suppliers_id
+    };
+    let res = await newapi.card_list(data);
+    var datas = res.data.data;
+    for (var i = 0; i < datas.length; i++) {
+      datas[i].start_time_t = util.formatDate(datas[i].start_time);
+      datas[i].end_time_t = util.formatDate(datas[i].end_time);
+      datas[i].yj_money =
+        parseFloat(datas[i].card_fee) + parseFloat(datas[i].free_money);
+    }
+    this.activitylist = datas;
+    this.$apply();
+    var newDate = new Date().getTime();
+    that.activitylist = this.setState(newDate, datas).datas;
+    that.$apply();
+    t1 = setInterval(res => {
+      var { datas, stop } = this.setState(newDate, that.activitylist);
+      if (stop) {
+        clearInterval(t1);
+      }
+      that.activitylist = datas;
+      that.$apply();
+    }, 1000);
+  }
+  setState(newDate, datas) {
+    var stop = true;
+    newDate = newDate + 1000;
+    for (var i = 0; i < datas.length; i++) {
+      if (newDate > datas[i].end_time * 1000 || datas[i].state == 2) {
+        datas[i].state = 2;
+      } else {
+        stop = false;
+      }
+    }
+    return { datas, stop };
+  }
+  /**
+   * 生命周期函数--监听页面隐藏
+   */
+  onHide() {
+    clearInterval(t1);
+  }
+
+  /**
+   * 生命周期函数--监听页面卸载
+   */
+  onUnload() {
+    clearInterval(t1);
+  }
+  async onLoad(option) {
+    util.showLoading();
+    try {
+      await this.$parent.loginInfo();
+      this.suppliers_id = this.$parent.globalData.suppliers_id
+        ? this.$parent.globalData.suppliers_id
+        : (await this.$parent.getYizhanInfo()).suppliers_id;
+    } catch (error) {
+      await util.showToast('登录失败');
+      wx.redirectTo({
+        url: '/ConsolePages/pages/index'
+      });
+    }
+    wx.hideLoading();
+    this.getCardrules();
+    this.getActivityList();
+    var date = util.formatDate();
+    //开始时间
+    this.date = date;
+    // 结束时间
+    this.date2 = date;
+    this.$apply();
+  }
+}
+</script>

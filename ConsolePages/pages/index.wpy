@@ -430,6 +430,14 @@
           isadmin: 1,
           isfufei: 1
         },
+         {
+          icon: '/images/console/hyk.png',
+          text: '优惠券',
+          url: 'coupon/addCoupon',
+          bgcolor: '#fd7602',
+          isadmin: 1,
+          isfufei: 1
+        },
         {
           icon: '/images/console/chakanmyshop.png',
           text: '查看我的店铺',

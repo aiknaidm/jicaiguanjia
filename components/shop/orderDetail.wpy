@@ -503,9 +503,9 @@ page {
       <view class="wuliu-text wuliu-date" wx:if="{{orderDetail.order_status>=1}}">创建时间：{{orderDetail.add_time}}</view>
       <view class="wuliu-text wuliu-date" wx:if="{{orderDetail.order_status>=2}}">付款时间：{{orderDetail.pay_time}}</view>
       <view class="wuliu-text wuliu-date" wx:if="{{orderDetail.order_status>=3}}">发货时间：{{orderDetail.confirm_time}}</view>
-      <view class='wuliu-text wuliu-date' wx:if="{{item.pay_id==2}}">支付方式：线下支付 请注意核对订单</view>
-      <view class='wuliu-text wuliu-date' wx:if="{{item.pay_id==0}}">支付方式：线上支付</view>
-      <view class='wuliu-text wuliu-date' wx:if="{{item.pay_id==4}}">支付方式：会员卡支付</view>
+      <view class='wuliu-text wuliu-date' wx:if="{{orderDetail.pay_id==2}}">支付方式：线下支付 请注意核对订单</view>
+      <view class='wuliu-text wuliu-date' wx:if="{{orderDetail.pay_id==0}}">支付方式：线上支付</view>
+      <view class='wuliu-text wuliu-date' wx:if="{{orderDetail.pay_id==4}}">支付方式：会员卡支付</view>
       <view class="wuliu-text wuliu-date" wx:if="{{orderDetail.pay_note}}">备注：{{orderDetail.pay_note}}</view>
       <view class="wuliu-text wuliu-date red" @tap="showFahuodan({{orderDetail.fahuodan}})" wx:if="{{orderDetail.fahuodan!=''}}">查看发货单</view>
     </view>
