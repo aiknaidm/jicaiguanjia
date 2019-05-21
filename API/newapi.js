@@ -109,8 +109,9 @@ const newapi = {
     kehu_read: (data) => fetch(`${host_chk}/kehu_read`, 'GET', data),
     cat_manage: (data) => fetch(`${host_chk}/cat_manage`, 'GET', data),
     up_categorys: (data) => fetch(`${host_chk}/up_categorys`, 'GET', data),
-
-
+    promotion_add: (data) => fetch(`${host_chk}/promotion_add`, 'GET', data),
+    promotion_stop: (data) => fetch(`${host_chk}/promotion_stop`, 'GET', data),
+    promotion_list: (data) => fetch(`${host_chk}/promotion_list`, 'GET', data),
 }
 const fetch = async function(url, method, data) {
     return new Promise((resolve, reject) => {

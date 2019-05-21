@@ -10,7 +10,7 @@
         background-color: #fff;
         border-bottom: 6rpx solid #eee;
         /* justify-content: space-between;
-                                                                   */
+                                                                           */
     }
     .gray {
         color: gray;
@@ -374,18 +374,18 @@
             </view>
         </form>
         <view class='promotion-activity' wx:if="{{currentType==1}}">
-            <view class="promotion-activity-list {{item.state==2?'promotion-activity-list2':''}}" wx:for="{{activitylist}}" wx:key='{{index}}' data-id='{{item.card_id}}' data-index="{{index}}">
-                <view wx:if="{{item.state==2}}">
+            <view class="promotion-activity-list {{item.promotion_state==2?'promotion-activity-list2':''}}" wx:for="{{activitylist}}" wx:key='{{index}}' data-id='{{item.promotion_id}}' data-index="{{index}}">
+                <view wx:if="{{item.promotion_state==2}}">
                     <view class='content'>
                         <view class='left'>
                             <view class='moneyBox'>
-                                <view class='moneycancle'>￥{{item.card_fee}}</view>
-                                <view class="free">送{{item.free_money}}元</view>
+                                <view class='moneycancle'>￥{{item.buy_money}}</view>
+                                <view class="free">减{{item.rebate_money}}元</view>
                             </view>
-                            <view class='txt txt2'>可用金额￥{{item.yj_money}}元</view>
+                            <!-- <view class='txt txt2'>可用金额￥{{item.yj_money}}元</view> -->
                         </view>
                         <view class='text'>
-                            <view class='btn active ' catchtap="{{item.state==2?'':'cancleTap'}}" data-promotion_id='{{item.card_id}}'>活动终止
+                            <view class='btn active ' catchtap="{{item.promotion_state==2?'':'cancleTap'}}" data-promotion_id='{{item.promotion_id}}'>活动终止
                             </view>
                         </view>
                     </view>
@@ -396,13 +396,13 @@
                     <view class='content'>
                         <view class='left'>
                             <view class='moneyBox'>
-                                <view class='moneycancle'>￥{{item.card_fee}}</view>
-                                <view class="free">送{{item.free_money}}元</view>
+                                <view class='moneycancle'>￥{{item.buy_money}}</view>
+                                <view class="free">送{{item.rebate_money}}元</view>
                             </view>
-                            <view class='txt txt2'>可用金额￥{{item.yj_money}}元</view>
+                            <!-- <view class='txt txt2'>可用金额￥{{item.yj_money}}元</view> -->
                         </view>
                         <view class='text'>
-                            <view class='btn active ' catchtap="{{item.state==2?'':'cancleTap'}}" data-promotion_id='{{item.card_id}}'>终止活动
+                            <view class='btn active ' catchtap="{{item.promotion_state==2?'':'cancleTap'}}" data-promotion_id='{{item.promotion_id}}'>终止活动
                             </view>
                         </view>
                     </view>
@@ -412,13 +412,13 @@
             </view>
         </view>
         <!-- <view class='' wx:if="{{currentType==2}}">
-            <form bindsubmit='submitTap'>
-                <view class='textarea'>
-                    <textarea placeholder='请输入会员活动规则' name="rules" value='{{rules}}'></textarea>
-                    <button class='btn' formType="submit">上传规则</button>
-                </view>
-            </form>
-        </view> -->
+                    <form bindsubmit='submitTap'>
+                        <view class='textarea'>
+                            <textarea placeholder='请输入会员活动规则' name="rules" value='{{rules}}'></textarea>
+                            <button class='btn' formType="submit">上传规则</button>
+                        </view>
+                    </form>
+                </view> -->
     </view>
 </template>
 
@@ -429,7 +429,7 @@
     import util from '../../../utils/index';
     export default class newslist extends wepy.page {
         config = {
-            navigationBarTitleText: '会员卡管理'
+            navigationBarTitleText: '优惠券管理'
         };
         components = {};
         data = {
@@ -448,10 +448,17 @@
             currentStatu: '0',
             money: '',
             activitylist: [],
-            rules: ''
+            rules: '',
+            choose_good_id: 0,
+            choose_good_name:''
         };
         computed = {};
         methods = {
+            togoodsList: function() {
+                wx.navigateTo({
+                    url: 'goodsList',
+                })
+            },
             // 上传规则
             // async submitTap(e) {
             //     var that = this;
@@ -511,17 +518,22 @@
                     util.showModal('请填写赠送金额');
                     return;
                 }
+                console.log(that.data)
+                if (!that.choose_good_id) {
+                    util.showModal('请选择活动商品');
+                    return;
+                }
                 //获取bgid,然后网络提交
                 let data = {
-                    card_name: youhuiname,
-                    // buy_goods: that.data.choose_good_id,
-                    card_fee: moneyman,
-                    free_money: moneyfan,
-                    start_time: that.data.date,
-                    end_time: that.data.date2,
+                    promotion_name: youhuiname,
+                    buy_goods: that.choose_good_id,
+                    buy_money: moneyman,
+                    rebate_money: moneyfan,
+                    start_time: that.date,
+                    end_time: that.date2,
                     suppliers_id: this.suppliers_id
                 };
-                let res = await newapi.card_add(data);
+                let res = await newapi.promotion_add(data);
                 if (res.data.code == 0) {
                     await util.showModal('创建成功');
                     this.getActivityList();
@@ -532,22 +544,13 @@
             }
         };
         events = {};
-        // 活动规则
-        async getCardrules() {
-            let data = {
-                suppliers_id: this.suppliers_id
-            };
-            let res = await newapi.cardrules(data);
-            this.rules = res.data.data.card_rules;
-            this.$apply();
-        }
         // 终止活动
         async cancleActivity(promotion_id) {
             var that = this;
             let data = {
-                card_id: promotion_id
+                promotion_id: promotion_id
             };
-            await newapi.card_stop(data);
+            await newapi.promotion_stop(data);
             that.getActivityList();
         }
         // 获取费用
@@ -566,7 +569,7 @@
             let data = {
                 suppliers_id: this.suppliers_id
             };
-            let res = await newapi.card_list(data);
+            let res = await newapi.promotion_list(data);
             var datas = res.data.data;
             for (var i = 0; i < datas.length; i++) {
                 datas[i].start_time_t = util.formatDate(datas[i].start_time);
@@ -595,8 +598,8 @@
             var stop = true;
             newDate = newDate + 1000;
             for (var i = 0; i < datas.length; i++) {
-                if (newDate > datas[i].end_time * 1000 || datas[i].state == 2) {
-                    datas[i].state = 2;
+                if (newDate > datas[i].end_time * 1000 || datas[i].promotion_state == 2) {
+                    datas[i].promotion_state = 2;
                 } else {
                     stop = false;
                 }
@@ -632,7 +635,6 @@
                 });
             }
             wx.hideLoading();
-            this.getCardrules();
             this.getActivityList();
             var date = util.formatDate();
             //开始时间
