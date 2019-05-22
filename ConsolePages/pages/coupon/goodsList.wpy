@@ -1,120 +1,4 @@
 <style lang="less">
-  .search-title {
-    display: flex;
-    justify-content: space-around;
-    line-height: 88rpx;
-    font-size: 30rpx;
-    border-bottom: 1px solid #eee;
-    align-items: center;
-  }
-  .search-title .active {
-    color: #0095e5
-  }
-  .search-title image {
-    width: 35rpx;
-    height: 35rpx;
-    margin-left: 5rpx;
-  }
-  .search-title view {
-    display: flex;
-    align-items: center;
-  }
-  .search-title .up .img {
-    transform: rotate(180deg);
-    -ms-transform: rotate(180deg);
-    /* IE 9 */
-    -webkit-transform: rotate(180deg);
-    /* Safari and Chrome */
-  }
-  .container2 {
-    width: 100%;
-    overflow: hidden;
-  }
-  .ss-my {
-    display: flex;
-    text-align: center;
-    padding: 24rpx;
-    border-bottom: 1px solid #f0f0f0;
-  }
-  .ss-my-c {
-    display: flex;
-    flex: 1;
-  }
-  .ss-my-c image {
-    width: 30rpx;
-    height: 30rpx;
-  }
-  .ss-my-c-img {
-    background-color: #f0f0f0;
-    width: 60rpx;
-    height: 60rpx;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 90px 0 0 90px;
-  }
-  .ss-my-c-ipt {
-    background-color: #f0f0f0;
-    height: 60rpx;
-    line-height: 60rpx;
-    flex: 1;
-  }
-  .ss-my-c-ipt input {
-    width: 100%;
-    height: 100%;
-    font-size: 30rpx;
-  }
-  .ss-my-c-x {
-    background-color: #f0f0f0;
-    width: 60rpx;
-    height: 60rpx;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 0px 90px 90px 0px;
-  }
-  .ss-my-d {
-    width: 100rpx;
-    height: 60rpx;
-    border: 1px solid #f0f0f0;
-    text-align: center;
-    line-height: 60rpx;
-    border-radius: 10rpx;
-    font-size: 28rpx;
-    background-color: #fafafa;
-    margin-left: 10rpx;
-  }
-  .ss-hot {
-    padding: 24rpx;
-    background-color: #fff;
-  }
-  .ss-title {
-    display: flex;
-    justify-content: space-between;
-    font-size: 30rpx;
-  }
-  .ss-title view:last-child {
-    font-size: 28rpx;
-    color: #e50112;
-  }
-  .ss-content {
-    display: flex;
-    margin-top: 24rpx;
-    flex-wrap: wrap;
-    flex: 1;
-  }
-  .ss-content view {
-    margin-right: 24rpx;
-    padding: 15rpx 20rpx;
-    background-color: #f0f0f0;
-    margin-bottom: 24rpx;
-    border-radius: 10rpx;
-    font-size: 30rpx;
-  }
-  .queding {
-    background-color: #e50112;
-    color: #fff;
-  }
   .title-box {
     width: 100%;
     padding-top: 330rpx;
@@ -153,11 +37,6 @@
   .list-top .edit-btn {
     color: #999;
     height: 100%;
-  }
-  .goodsList {
-    width: 100%;
-    padding-bottom: 150rpx;
-    /* height: 100%; */
   }
   .a-gooods {
     width: 100%;
@@ -449,103 +328,6 @@
   .search-title .icon-sousuo {
     font-size: 40rpx;
   }
-  /*搜索框  */
-  .ss-my {
-    display: none;
-    background-color: #f0f0f0;
-    text-align: center;
-    width: 100%;
-    height: 92rpx;
-    position: fixed;
-    z-index: 100;
-    justify-content: center;
-    align-items: center;
-  }
-  .ss-my.active {
-    display: flex;
-  }
-  .ss-my-c {
-    display: flex;
-    flex: 1;
-    margin-left: 10px;
-  }
-  .ss-my-c image {
-    width: 30rpx;
-    height: 30rpx;
-  }
-  .ss-my-c-img {
-    background-color: #fff;
-    width: 60rpx;
-    height: 60rpx;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 3px 0 0 3px;
-  }
-  .ss-my-c-ipt {
-    background-color: #fff;
-    height: 60rpx;
-    line-height: 60rpx;
-    flex: 1;
-  }
-  .ss-my-c-ipt input {
-    width: 100%;
-    height: 100%;
-    font-size: 30rpx;
-  }
-  .ss-my-c-x {
-    background-color: #fff;
-    width: 60rpx;
-    height: 60rpx;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 0px 3px 3px 0px;
-  }
-  .ss-my-d {
-    width: 100rpx;
-    height: 60rpx;
-    border: 1px solid #f0f0f0;
-    text-align: center;
-    line-height: 60rpx;
-    border-radius: 10rpx;
-    font-size: 28rpx;
-    background-color: #fff;
-    margin-left: 10rpx;
-    margin-right: 10px;
-    color: #e50012;
-  }
-  .ss-hot {
-    padding: 24rpx;
-    background-color: #fff;
-  }
-  .ss-title {
-    display: flex;
-    justify-content: space-between;
-    font-size: 30rpx;
-  }
-  .ss-title view:last-child {
-    font-size: 28rpx;
-    color: #e50112;
-  }
-  .ss-content {
-    display: flex;
-    margin-top: 24rpx;
-    flex-wrap: wrap;
-    flex: 1;
-  }
-  .ss-content view {
-    margin-right: 24rpx;
-    padding: 15rpx 20rpx;
-    background-color: #f0f0f0;
-    margin-bottom: 24rpx;
-    border-radius: 10rpx;
-    font-size: 30rpx;
-  }
-  .queding {
-    background-color: #fff;
-    color: #333;
-  }
   /*列表样式  */
   .goods-info .img-box {
     margin: 0;
@@ -644,41 +426,26 @@
     align-items: center;
   }
   .goodsList {
+    z-index: 10;
     width: 100%;
-    padding-bottom: 150rpx;
     background: #f0f0f0;
     /* height: 100%; */
   }
 </style>
 <template>
   <view class='container'>
-    <view class='ss-my'>
-      <view class='ss-my-c'>
-        <view class='ss-my-c-img'>
-          <image src='/images/s.png'></image>
-        </view>
-        <view class='ss-my-c-ipt'>
-          <input value='{{keyword}}' placeholder='输入想要搜索的内容' bindinput="searchIpt"></input>
-        </view>
-        <view class='ss-my-c-x'>
-          <text hidden='true'></text>
-        </view>
-      </view>
-      <view class='ss-my-d {{buttonClass}}' bindtap='buttonTap'>
-        {{ssButton}}
-      </view>
-    </view>
+    <search @buttonTap.user="searchTap"></search>
     <noorder text="暂无商品" wx:if="{{list.length==0}}"></noorder>
     <view class="goodsList" wx:else>
       <view class="a-gooods" wx:for="{{list}}" wx:key="{{index}}">
         <!-- wx:for="{{list}}" wx:key="{{index}}" -->
         <view class="a-goods-conts " @tap.stop="toChooseTap({{item.goods_id}},{{item.goods_name}})">
           <view class="goods-info">
-            <view class="img-box" >
+            <view class="img-box">
               <image src="http://maijia.jicaizx.com/{{item.original_img}}" class="img" wx:if="{{item.original_img1==''}}" />
               <image src="{{item.original_img1}}" class="img" wx:else/>
             </view>
-            <view class="text-box" >
+            <view class="text-box">
               <view class="goods-title" data-id="{{item.goods_id}}">
                 {{item.goods_name}}
                 <text wx:if="{{item.hdky==1}}">支持会员卡</text>
@@ -702,52 +469,42 @@
   import wepy from 'wepy';
   import newapi from '../../../API/newapi';
   import util from '../../../utils/index';
+  import search from '../../../components/search';
+  import noorder from '../../../components/noOrder';
   export default class newslist extends wepy.page {
     config = {
       navigationBarTitleText: '选择优惠商品'
     };
-    components = {};
+    components = {
+      search,
+      noorder
+    };
     data = {
       parampage: 1,
       ssButton: "取消",
       buttonClass: "",
       keyword: "",
-      list: []
+      list: [],
+      isMoreData: true
     };
     computed = {};
     methods = {
-      toChooseTap: function(id,name) {
+      toChooseTap(id, name) {
         console.log(name);
         console.log(id);
         this.$parent.$pages['/ConsolePages/pages/coupon/addCoupon'].choose_good_name = name;
         this.$parent.$pages['/ConsolePages/pages/coupon/addCoupon'].choose_good_id = id;
         wx.navigateBack();
       },
-      // 当键盘输入时
-      searchIpt: function(e) {
-        if (e.detail.value == "") {
-          this.setData({
-            ssButton: "取消",
-            buttonClass: ""
-          })
-        } else {
-          this.setData({
-            ssButton: "确定",
-            buttonClass: "queding",
-            keyword: e.detail.value
-          })
-        }
-      },
-      buttonTap: function() {
-        if (this.data.ssButton == "确定") {
-          // this.setData({
-          //   goods: [],
-          //   parampage: 1
-          // })
-          this.getGoods(this.data.keyword)
-        } else {
-          //wx.navigateBack();
-        }
+      searchTap(val) {
+        console.log("val", val);
+        // if (this.ssButton == "确定") {
+        this.initdata.page = 1;
+        this.initdata.keyword = val;
+        this.getShopList(this.initdata);
+        // } else {
+        //   //wx.navigateBack();
+        // }
       },
     };
     events = {};

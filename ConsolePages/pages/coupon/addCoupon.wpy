@@ -382,7 +382,7 @@
                                 <view class='moneycancle'>￥{{item.buy_money}}</view>
                                 <view class="free">减{{item.rebate_money}}元</view>
                             </view>
-                            <!-- <view class='txt txt2'>可用金额￥{{item.yj_money}}元</view> -->
+                            <view class='txt txt2'>{{item.promotion_name}}</view>
                         </view>
                         <view class='text'>
                             <view class='btn active ' catchtap="{{item.promotion_state==2?'':'cancleTap'}}" data-promotion_id='{{item.promotion_id}}'>活动终止
@@ -399,7 +399,7 @@
                                 <view class='moneycancle'>￥{{item.buy_money}}</view>
                                 <view class="free">送{{item.rebate_money}}元</view>
                             </view>
-                            <!-- <view class='txt txt2'>可用金额￥{{item.yj_money}}元</view> -->
+                            <view class='txt txt2'>{{item.promotion_name}}</view>
                         </view>
                         <view class='text'>
                             <view class='btn active ' catchtap="{{item.promotion_state==2?'':'cancleTap'}}" data-promotion_id='{{item.promotion_id}}'>终止活动
@@ -507,15 +507,15 @@
                 var moneyman = Number(e.detail.value.moneyman);
                 var moneyfan = Number(e.detail.value.moneyfan);
                 if (youhuiname == '') {
-                    util.showModal('请填写充值金额');
+                    util.showModal('请填写优惠券名称');
                     return;
                 }
                 if (!moneyman) {
-                    util.showModal('请填写充值金额');
+                    util.showModal('请填写满减金额');
                     return;
                 }
                 if (!moneyfan) {
-                    util.showModal('请填写赠送金额');
+                    util.showModal('请填写满减金额');
                     return;
                 }
                 console.log(that.data)
