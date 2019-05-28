@@ -381,13 +381,13 @@
         <!-- </picker> -->
       </view>
     </view>
-    <!-- <view class="jy-top-left">
+    <view class="jy-top-left">
       <picker bindchange="bindPickerChange2" value="{{payIdIndex}}" range="{{payId}}" range-key="name">
         <view class="picker">
           支付方式：{{payId[payIdIndex].name}}
         </view>
       </picker>
-    </view> -->
+    </view>
     <view class="jy-top-left">
       <picker mode="date" value="{{start_time}}" end="{{now_time}}" bindchange="bindStartTimeChange">
         {{start_time}}
