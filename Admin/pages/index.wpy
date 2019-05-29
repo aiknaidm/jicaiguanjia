@@ -186,7 +186,7 @@ export default class newslist extends wepy.page {
     supplierDetail(suppliers_id = '', supplierDetail,index) {
       this.$parent.globalData.suppliers_img = supplierDetail.img;
       this.$parent.globalData.end_time_new = supplierDetail.end_time_new;
-      this.$parent.globalData.suppliers_id = supplierDetail.suppliers_id;
+      // this.$parent.globalData.suppliers_id = supplierDetail.suppliers_id;
       wx.navigateTo({
         url: 'supplierDetail?suppliers_id=' + suppliers_id+'&index='+index
       });

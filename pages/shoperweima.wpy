@@ -133,6 +133,8 @@
         return;
       }
       var yizhanInfo = await this.$parent.getYizhanInfo(suppliers_id);
+      var userInfo =this.$parent.globalData.userInfo?this.$parent.globalData.userInfo: (await this.$parent.getUserInfo(suppliers_id)).userInfo;
+      
       this.yizhanInfo = yizhanInfo;
       let is_yizhan = yizhanInfo.is_yizhan;
       var path;
@@ -191,7 +193,7 @@
           {
             type: 'image',
             //url: 'https://d.funcodeit.com/test/mplogo-430.jpg',
-            url: yizhanInfo.avatar,
+            url: userInfo.avatarUrl,
             top: 270 * a,
             left: 150 * a,
             width: 60 * a,
@@ -211,7 +213,7 @@
           },
           {
             type: 'text',
-            content: that.sales_id == 0 ? '' : '业务员：' + yizhanInfo.user_nickname,
+            content: that.sales_id == 0 ? '' : '业务员：' + userInfo.nickName,
             fontSize: 12 * a,
             width: 180 * a,
             top: 360 * a,

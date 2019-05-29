@@ -151,6 +151,7 @@
           手机号码：{{info.mobile_phone}}
           <text class="iconfont icon-shouji"></text>
         </view>
+        <view >会员等级：{{info.vip_level}}级</view>
          <view catchtap="tocallphone" data-phone="{{info.mobile_phone}}">
         所属业务员：{{info.salesman}}
           
@@ -209,7 +210,6 @@
       <block wx:else>
         <repeat  for="{{expendList}}" key="index" index="index" item="item">
           <expendList :item="item" type="2"></expendList>
-      
         </repeat>
         <view wx:if="{{expendList.length==0}}">
           <noOrder  text="暂无内容"></noOrder>

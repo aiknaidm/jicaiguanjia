@@ -27,7 +27,7 @@ picker {
   height: 43rpx;
 }
 .section .label {
-  width: 100rpx;
+  width: 180rpx;
   text-align: left;
 }
 .goodsname .label {
@@ -94,11 +94,11 @@ picker {
         <input name="realname" class="input" type="text" value="默认型号" disabled='true'/>
       </view>
     </view>
-    <view class="section">
+    <view class="section" wx:for="{{vip_level}}" wx:key="{{index}}">
       <view class="label">
-        批发价</view>
+        {{index+1}}级会员价</view>
       <view class="label-right">
-        <input class="input" name="shop_price" maxlength="18" type="digit" value="{{goodsdetail.shop_price}}" disabled='{{disable_jiage}}' />
+        <input class="input" name="shop_price{{index==0?'':index+1}}" maxlength="18" type="digit" value="{{goodsdetail['shop_price'+(index==0?'':index+1)]}}" disabled='{{disable_jiage}}' />
       </view>
     </view>
 		 <view class="section">
@@ -126,11 +126,11 @@ picker {
         <input name="realname" class="input" type="text" value="{{item.attr_value}}" disabled='true'/>
       </view>
     </view>
-    <view class="section">
+    <view class="section"  wx:for="{{vip_level}}"  wx:for-index='index2' wx:for-item='item2' wx:key="{{index2}}" >
       <view class="label">
-        批发价</view>
+        {{index2+1}}级会员价</view>
       <view class="label-right">
-        <input class="input" data-index='{{index}}' data-goods_attr_id="{{item.goods_attr_id}}" bindinput="bindJiaGeInput" maxlength="18" type="digit" value="{{item.attr_price}}" disabled='{{disable_jiage}}' />
+        <input class="input" data-index='{{index}}' data-goods_attr_id="{{item.goods_attr_id}}" @input="bindJiaGeInput({{item.goods_attr_id}},{{index}},{{index2}})" maxlength="18" type="digit" value="{{item['attr_price'+(index2==0?'':index2+1)]}}" disabled='{{disable_jiage}}' />
       </view>
     </view>
 		 <view class="section">
@@ -177,7 +177,8 @@ export default class newslist extends wepy.page {
     placeholder: '批量修改',
     disable_jiage: false,
     disable_kucun: true,
-    input: {}
+    input: {},
+    vip_level:1
   };
   computed = {};
   methods = {
@@ -196,22 +197,21 @@ export default class newslist extends wepy.page {
           ]
         };
       } else {
+        var inputLists=[]
+        for(var i=0;i<this.vip_level;i++){
+         inputLists.push({
+              name: '',
+              placeholder: '批量修改批发价'+(i+1),
+              inputName: 'attr_price'+(i==0?'':i+1),
+              type: 'digit'
+            })
+        }
         this.popupdata = {
           isshowpopup: true,
           title: '修改价格',
           inputList: [
-            {
-              name: '',
-              placeholder: '批量修改批发价',
-              inputName: 'attr_price',
-              type: 'digit'
-            },
-            {
-              name: '',
-              placeholder: '批量修改零售价',
-              inputName: 'floor_price',
-              type: 'digit'
-            }
+            ...inputLists,
+           
           ]
         };
       }
@@ -226,8 +226,13 @@ export default class newslist extends wepy.page {
         for (var i = 0; i < datas.length; i++) {
           if (floor_price && floor_price != 'NaN')
             datas[i].floor_price = floor_price;
-          if (attr_price && attr_price != 'NaN')
-            datas[i].attr_price = attr_price;
+            for(var j=0;j<this.vip_level;j++){
+              // if (attr_price && attr_price != 'NaN')
+              var k=j==0?'':j+1
+              console.log("value['attr_price'+"+k+"]",value['attr_price'+k]);
+              datas[i]['attr_price'+k] = value['attr_price'+k];
+            }
+          
         }
       } else {
         var goods_number = parseFloat(value.goods_number).toFixed(2);
@@ -242,10 +247,12 @@ export default class newslist extends wepy.page {
       var floor_price = this.goodsdetail.floor_price;
       var goods_attr = this.goodsdetail.properties;
       var goods_number = this.goodsdetail.goods_number;
+      var shop_prices={}
       if (goods_number.length == 0 && goods_attr.length == 0) {
         util.showToast('请填写商品数量');
         return;
       }
+      
       if (
         parseFloat(shop_price) > parseFloat(floor_price) &&
         goods_attr.length == 0
@@ -253,6 +260,16 @@ export default class newslist extends wepy.page {
         util.showToast('批发价不能大于零售价');
         return;
       }
+      if (goods_attr.length == 0)
+        for (var j = 0; j < this.vip_level; j++) {
+          var k = j == 0 ? "" : j + 1;
+          if (e.detail.value["shop_price" + k].length == 0) {
+            util.showToast('请填写批发价格');
+            return;
+          } else {
+            shop_prices["shop_price" + k] = e.detail.value["shop_price" + k]
+          }
+        }
       if (floor_price <= 0 && goods_attr.length == 0) {
         util.showToast('零售价格不能为0');
         return;
@@ -267,9 +284,13 @@ export default class newslist extends wepy.page {
           util.showToast('请填写商品规格');
           return;
         }
-        if (goods_attr[i].attr_price == '') {
-          util.showToast('请填写商品批发价');
-          return;
+        for (var j = 0; j < this.vip_level; j++) {
+          var k = j == 0 ? "" : j + 1;
+          var attr_price = goods_attr[i]["attr_price" + k]
+          if (attr_price == '') {
+            util.showToast('请填写商品批发价');
+            return;
+          }
         }
         if (goods_attr[i].floor_price == '') {
           util.showToast('请填写商品零售价');
@@ -300,8 +321,9 @@ export default class newslist extends wepy.page {
         } else {
           var data = {
             goods_id: this.goodsdetail.goods_id,
-            shop_price: e.detail.value.shop_price,
-            floor_price: e.detail.value.floor_price
+            
+            floor_price: e.detail.value.floor_price,
+            ...shop_prices
           };
         }
         let res = await newapi.changePrice(data);
@@ -369,19 +391,18 @@ export default class newslist extends wepy.page {
       var goods_attr_id = e.currentTarget.dataset.goods_attr_id;
       var jiage = e.detail.value;
       var i = e.currentTarget.dataset.index;
-      var datas = this.data.properties;
+      var datas = this.properties;
       datas[i].floor_price = jiage;
       this.properties = datas;
     },
     //价格修改
-    bindJiaGeInput: function(e) {
-      var goods_attr_id = e.currentTarget.dataset.goods_attr_id;
+    bindJiaGeInput: function(goods_attr_id,index,index2,e) {
       var jiage = e.detail.value;
-      var i = e.currentTarget.dataset.index;
-      var datas = this.data.properties;
-      datas[i].attr_price = jiage;
-
+      var datas = this.properties;
+      index2=index2==0?'':index2+1
+      datas[index]['attr_price'+index2] = jiage;
       this.properties = datas;
+      this.$apply();
     },
 
     //库存修改
@@ -415,8 +436,12 @@ export default class newslist extends wepy.page {
     this.piliangtitle = option.xiugaitype == 'kucun' ? '库存' : '价格';
     this.disable_jiage = option.xiugaitype == 'jiage' ? false : true;
     this.disable_kucun = option.xiugaitype == 'jiage' ? true : false;
+     this.vip_level = this.$parent.globalData.vip_level
+     console.log('vip_level',this.vip_level);
     this.getGoodsDetail(this.goods_id);
+   
     wx.setNavigationBarTitle({ title: '修改' + this.piliangtitle });
+    this.$apply();
   }
 }
 </script>

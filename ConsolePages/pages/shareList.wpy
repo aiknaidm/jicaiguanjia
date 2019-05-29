@@ -156,5 +156,6 @@ export default class newslist extends wepy.page {
     this.zong = option.zong;
     this.ketx = option.ketx;
   }
+  
 }
 </script>

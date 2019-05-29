@@ -233,6 +233,9 @@
           <view class='control-title-txt'>
             代下单：{{supplierDetail.is_friend?"是":"否"}}
           </view>
+           <view class='control-title-txt'>
+            会员等级：{{supplierDetail.vip_level}}级
+          </view>
           <view class='control-title-txt'>
             到期时间：
             <view class="section">
@@ -262,7 +265,7 @@
           </repeat>
         </view>
         <view class="info_list">
-          <navigator url="goodsInfo" open-type="navigate" hover-class="none">
+          <navigator url="goodsInfo?suppliers_id={{suppliers_id}}" open-type="navigate" hover-class="none">
             <image src="/images/console/goods-manage.png" />商品管理
           </navigator>
         </view>
@@ -309,6 +312,7 @@
       is_yizhan:0,
       right: 0,
       ischange: false,
+      suppliers_id:0,
       applicationList: [{
           icon: '/images/console/shenheguanli.png',
           text: '会员',

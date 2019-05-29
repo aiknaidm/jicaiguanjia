@@ -332,6 +332,21 @@
           <switch color="#e50012" checked="{{userDetail.is_friend}}" name="is_friend" />
         </view>
       </view>
+      <view class="section section2">
+        <view class="label">
+          会员</view>
+        <view class="body-view">
+          <switch color="#e50012" checked="{{userDetail.is_friend}}" name="is_friend" />
+        </view>
+      </view>
+       <view class="section section2">
+          <view class="label">
+          会员等级</view>
+          <view class="body-view" style="width:300rpx;">
+             <slider min="1" max="5" selected-color="#e50012" name="vip_level" value="{{userDetail.vip_level}}" show-value />
+          </view>
+        
+      </view>
       <view class="title" style="padding:40rpx;text-align:center">首页轮播图设置</view>
       <view class="cameraBox">
         <view class="camera" wx:for="{{imgSrc}}" wx:key="{{index}}">
@@ -483,6 +498,7 @@
       },
       //表单数据提交
       async formSubmit(e) {
+        console.log("e",e)
         var param = e.detail.value;
         var that = this;
         var flag = that.checkPhone(param.phone) && that.checkSmsCode(param.smscode);
@@ -498,6 +514,7 @@
             // var share_code = param.shareCode;
             var is_picture = param.is_picture ? 0 : 1;
             var is_friend = param.is_friend ? 1 : 0;
+            var vip_level=param.vip_level
             if (realname == '') {
               util.showModal('请填写姓名');
               return;
@@ -552,12 +569,14 @@
               suppliers_desc: storename,
               is_picture,
               is_friend,
-              img_url
+              img_url,
+              vip_level
             };
             let res = await newapi.supplier_upd(data);
             wx.hideLoading();
             if (res.data.code == 0) {
               wx.navigateBack({});
+              this.$parent.globalData.vip_level=vip_level
               //this.isuserDetail = true;
             } else {
               this.issubmit = false;

@@ -12,14 +12,14 @@ const newapi = {
 
     fwfwxpay: (data) => fetch(`${host_pay}/fwfwxpay`, 'GET', data),
     fwfpaysuccess: (data) => fetch(`${host_pay}/fwfpaysuccess`, 'GET', data),
-    kthypay: (data) => fetch(`${host_pay}/kthypay`, 'GET', data),
-    kthypaysuccess: (data) => fetch(`${host_pay}/kthypaysuccess`, 'GET', data),
+    permission_pay: (data) => fetch(`${host_pay}/permission_pay`, 'POST', data),
+    permission_paysuccess: (data) => fetch(`${host_pay}/permission_paysuccess`, 'POST', data),
     wxpay3: (data) => fetch(`${host_pay}/wxpay3`, 'GET', data),
 
     add_form: (data) => fetch(`${host_chk}/add_form`, 'GET', data),
     getUserInfo: (data) => fetch(`${host_chk}/get_user_info`, 'GET', data), //用户信息
     upUserInfo: (data) => fetch(`${host_chk}/up_user_info`, 'GET', data),
-    getYizhanInfo: (data) => fetch(`${host_chk}/jlxx`, 'GET', data),
+    getYizhanInfo: (data) => fetch(`${host_chk}/jlxx_new`, 'GET', data),
     yzm: (data) => fetch(`${host_chk}/yzm`, 'GET', data),
     renzheng: (data) => fetch(`${host_chk}/renzheng`, 'POST', data),
     yizhanIndex: (data) => fetch(`${host_chk}/wdyz`, 'GET', data), //商城首页
@@ -74,7 +74,7 @@ const newapi = {
     upload_goodimg: (data) => fetch(`${host_chk}/upload_goodimg`, 'GET', data),
     //管理员
     suppliers_list: (data) => fetch(`${host_chk}/suppliers_list`, 'GET', data),
-    kthy_price: () => fetch(`${host_chk}/kthy_price`, 'GET'),
+    permission_detail: (data) => fetch(`${host_chk}/permission_detail`, 'GET', data),
     card_add: (data) => fetch(`${host_chk}/card_add`, 'POST', data),
     card_list: (data) => fetch(`${host_chk}/card_list`, 'GET', data),
     card_stop: (data) => fetch(`${host_chk}/card_stop`, 'GET', data),

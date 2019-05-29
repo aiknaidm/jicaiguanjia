@@ -151,22 +151,22 @@ export default class my extends wepy.page {
       this.tabList = [
         {
           icon: '/images/icon_normal.png',
-          text: '注册',
+          display_name: '注册',
           url: '/ConsolePages/pages/renzheng'
         },
         {
           icon: '/images/console.png',
-          text: '管理工作台',
+          display_name: '管理工作台',
           url: '/ConsolePages/pages/index'
         },
         {
           icon: '/images/share.png',
-          text: '分享',
+          display_name: '分享',
           url: '/ConsolePages/pages/share'
         },
         {
           icon: '/images/share.png',
-          text: '管理员界面',
+          display_name: '管理员界面',
           url: '/Admin/pages/index'
         }
       ];

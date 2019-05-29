@@ -42,12 +42,12 @@ button {
 <template>
     <view class="container">
         <view class="title">
-            会员充值功能
+            {{content.display_name}}功能
         </view>
         <view class="content">
-            商家开通会员充值功能后，商家可设置会员卡充值活动，会员可充电子会员卡在店内消费。 比如商家设定充值活动为充1000元送100元。会员充1000元，可得1100元，然后在店内消费。
+            {{content.detail}}
         </view>
-        <view class="num">100人已购</view>
+        <view class="num">{{content.sales_num}}</view>
         <view class="price">售价：<text>￥{{price}}</text></view>
         <button @tap="toPay">立即开通</button>
     </view>
@@ -64,38 +64,41 @@ export default class newslist extends wepy.page {
   };
   components = {};
   data = {
-    price: 0
+    price: 0,
+    content:{}
   };
   computed = {};
   methods = {
     async toPay() {
       var datas = {};
-      datas.goods_id = this.datas.id;
+      datas.permission_id = this.content.id;
       datas.suppliers_id = this.suppliers_id;
-      datas.goods_name = this.datas.goods_name;
-      datas.goods_price = this.datas.goods_price;
+      datas.name = this.content.display_name;
+      datas.money = this.content.money;
       var datas2 = {};
       datas2.suppliers_id = this.suppliers_id;
       var res = await util.pay(datas, datas2);
       util.showToast(res.msg);
-      if (res.code == 1)
-        wx.navigateTo({
-          url: 'setCard'
-        });
+      // if (res.code == 1)
+      //   wx.navigateTo({
+      //     url: 'setCard'
+      //   });
     }
   };
   events = {};
   // 获取费用
-  async getCardPrice() {
-    let res = await newapi.kthy_price();
+  async getCardPrice(id) {
+    let res = await newapi.permission_detail({id});
     if (res.data.code == 0) {
-      this.price = res.data.data.goods_price;
-      this.datas = res.data.data;
+      this.price = res.data.data.money;
+      this.content = res.data.data;
+      wx.setNavigationBarTitle({ title: this.content.display_name+'功能' });
     }
     this.$apply();
   }
   async onLoad(option) {
-    this.getCardPrice();
+    
+    this.getCardPrice(option.id);
     try {
       await this.$parent.loginInfo();
       this.suppliers_id = this.$parent.globalData.suppliers_id

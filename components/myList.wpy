@@ -69,10 +69,11 @@ button {
       <view  wx:else>{{tabItem.num}}</view>
     </view>
     <view class="weui_cell_bd">
-      <view class="weui_cell_bd_p" >{{tabItem.text}}</view>
+      <view class="weui_cell_bd_p" wx:if="{{tabItem.text}}" >{{tabItem.text}}</view>
+      <view class="weui_cell_bd_p" wx:else>{{tabItem.display_name}}</view>
     </view>
     <view wx:if="{{tabItem.unreadNum}}" class="badge">{{tabItem.unreadNum}}</view>
-    <view class="with_arrow" wx:if="{{tabItem.isfufei==1}}">付费</view>
+    <view class="with_arrow" wx:if="{{tabItem.is_fufei==1}}">付费</view>
   </button>
 </template>
 <script>

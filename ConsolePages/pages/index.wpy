@@ -224,7 +224,7 @@
     <view class="container {{right?'active':''}}">
       <view class='control-title'>
         <view class='control-title-img'>
-          <image src='{{yizhanInfo.avatar}}' />
+          <image src='{{yizhanInfo.img}}' />
         </view>
         <view>
           <view class='control-title-txt1'>{{yizhanInfo.user_nickname}}</view>
@@ -265,17 +265,17 @@
           <navigator url="{{}}" open-type="navigate" hover-class="none">
             <image src="/images/console/wdyy.png" />我的应用
           </navigator>
-          <repeat for="{{applicationList}}" wx:key="{{index}}">
-            <block wx:if="{{yizhanInfo.is_yizhan==1&&item.isyizhan==1}}">
-              <myList :tabItem="item"></myList>
-            </block>
-            <block wx:else>
-              <!-- 易站所有者 -->
-              <myList :tabItem="item" wx:if="{{yizhanInfo.is_boss==1&&item.isyizhan!=1}}"></myList>
+          <repeat for="{{permission}}" wx:key="{{index}}">
+             <myList :tabItem="item" ></myList>
+            <!-- <block  > -->
+               <!-- 易站所有者 -->
+              <!-- <myList :tabItem="item" wx:if="{{yizhanInfo.is_boss==1&&item.isyizhan==1&&item.is_boss==1}}"></myList> -->
+              <!-- 店铺所有者 -->
+              <!-- <myList :tabItem="item" wx:elif="{{yizhanInfo.is_boss==1&&item.is_boss==1}}"></myList> -->
               <!-- 管理员 -->
-              <myList :tabItem="item" wx:elif="{{item.isadmin==1&&yizhanInfo.is_admin==1}}"></myList>
+              <!-- <myList :tabItem="item" wx:elif="{{item.is_admin==1&&yizhanInfo.is_admin==1}}"></myList> -->
               <!-- 业务员 -->
-              <myList :tabItem="item" wx:elif="{{item.isyewuyuan==1&&yizhanInfo.is_salesman==1}}"></myList>
+              <!-- <myList :tabItem="item" wx:elif="{{item.is_salesman==1&&yizhanInfo.is_salesman==1}}"></myList> -->
             </block>
           </repeat>
         </view>
@@ -311,50 +311,51 @@
       yizhanInfo: {},
       yizhanlist: [],
       right: 0,
+      permission:[],
       tabList: [{
           num: 0,
-          text: '待付款',
+          display_name: '待付款',
           url: '/ConsolePages/pages/orderList?order_status=0'
         },
         {
           num: 0,
-          text: '待发货',
+          display_name: '待发货',
           url: '/ConsolePages/pages/orderList?order_status=1'
         },
         {
           num: 0,
-          text: '已发货',
+          display_name: '已发货',
           url: '/ConsolePages/pages/orderList?order_status=2'
         },
         {
           num: 0,
-          text: '交易成功',
+          display_name: '交易成功',
           url: '/ConsolePages/pages/orderList?order_status=4'
         },
         {
           num: 0,
-          text: '交易关闭',
+          display_name: '交易关闭',
           url: '/ConsolePages/pages/orderList?order_status=5'
         }
       ],
       shopList: [{
           icon: '/images/console/fabushangpin.png',
           num: 0,
-          text: '发布商品',
+          display_name: '发布商品',
           url: 'addGoodsInfo',
           bgcolor: '#10b3b1'
         },
         {
           icon: '/images/console/shangpinliebiao.png',
           num: 0,
-          text: '商品列表',
+          display_name: '商品列表',
           url: 'goodsList',
           bgcolor: '#f7bf30'
         },
         {
           icon: '/images/console/shangpinliebiao.png',
           num: 0,
-          text: '分类管理',
+          display_name: '分类管理',
           url: 'my_console_catDelete',
           bgcolor: '#f7bf30'
         }
@@ -435,8 +436,7 @@
           text: '优惠券',
           url: 'coupon/addCoupon',
           bgcolor: '#fd7602',
-          isadmin: 1,
-          isfufei: 1
+           isyizhan: 1,
         },
         {
           icon: '/images/console/chakanmyshop.png',
@@ -513,56 +513,56 @@
       }
     }
     // 是否开通会员卡
-    async ishasCard() {
-      let data = {
-        suppliers_id: this.suppliers_id
-      };
-      let res = await newapi.supplier_detail(data);
-      if (res.data.code == 0 && res.data.data.is_kthy == 1) {
-        this.$parent.globalData.is_kthy = res.data.data.is_kthy;
-        this.$parent.globalData.is_yizhan = res.data.data.is_yizhan;
-        this.applicationList.forEach((item, index) => {
-          if (item.text == "会员卡")
-            this.applicationList[index].url = '/ConsolePages/pages/clubCard/setCard';
-        })
-      } else {
-        this.$parent.globalData.is_kthy = res.data.data.is_kthy;
-        this.$parent.globalData.is_yizhan = res.data.data.is_yizhan;
-        this.applicationList.forEach((item, index) => {
-          if (item.text == "会员卡")
-            this.applicationList[index].url = '/ConsolePages/pages/clubCard/payCard';
-        })
-      }
-    }
+    // async ishasCard() {
+    //   let data = {
+    //     suppliers_id: this.suppliers_id
+    //   };
+    //   let res = await newapi.supplier_detail(data);
+    //   if (res.data.code == 0 && res.data.data.is_kthy == 1) {
+    //     this.$parent.globalData.is_kthy = res.data.data.is_kthy;
+    //     this.$parent.globalData.is_yizhan = res.data.data.is_yizhan;
+    //     this.applicationList.forEach((item, index) => {
+    //       if (item.text == "会员卡")
+    //         this.applicationList[index].url = '/ConsolePages/pages/clubCard/setCard';
+    //     })
+    //   } else {
+    //     this.$parent.globalData.is_kthy = res.data.data.is_kthy;
+    //     this.$parent.globalData.is_yizhan = res.data.data.is_yizhan;
+    //     this.applicationList.forEach((item, index) => {
+    //       if (item.text == "会员卡")
+    //         this.applicationList[index].url = '/ConsolePages/pages/clubCard/payCard';
+    //     })
+    //   }
+    // }
     // 是否是业务员
-    isSalesman() {
-      if (this.yizhanInfo.is_salesman == 1 && this.yizhanInfo.is_admin == 0) {
-        this.applicationList[1].url =
-          'my_console_check?sales_id=' +
-          this.user_id +
-          '&sales_name=' +
-          this.yizhanInfo.user_nickname;
-      } else {
-        this.applicationList[1].url = 'my_console_check';
-      }
-      if (this.yizhanInfo.is_salesman == 1) {
-        this.applicationList.forEach((item,index)=>{
-          if(item.text=="查看我的店铺")
-          this.applicationList[index].url = '/pages/shoperweima?sales_id=' +
-          this.user_id +
-          '&sales_name=' +
-          this.yizhanInfo.user_nickname;
-        })
+    // isSalesman() {
+    //   if (this.yizhanInfo.is_salesman == 1 && this.yizhanInfo.is_admin == 0) {
+    //     this.applicationList[1].url =
+    //       'my_console_check?sales_id=' +
+    //       this.user_id +
+    //       '&sales_name=' +
+    //       this.yizhanInfo.user_nickname;
+    //   } else {
+    //     this.applicationList[1].url = 'my_console_check';
+    //   }
+    //   if (this.yizhanInfo.is_salesman == 1) {
+    //     this.applicationList.forEach((item,index)=>{
+    //       if(item.text=="查看我的店铺")
+    //       this.applicationList[index].url = '/pages/shoperweima?sales_id=' +
+    //       this.user_id +
+    //       '&sales_name=' +
+    //       this.yizhanInfo.user_nickname;
+    //     })
     
          
-      } else {
-        this.applicationList.forEach((item,index)=>{
-          if(item.text=="查看我的店铺")
-          this.applicationList[index].url = '/pages/shoperweima'
-        })
+    //   } else {
+    //     this.applicationList.forEach((item,index)=>{
+    //       if(item.text=="查看我的店铺")
+    //       this.applicationList[index].url = '/pages/shoperweima'
+    //     })
        
-      }
-    }
+    //   }
+    // }
     async init(suppliers_id) {
       let yizhanInfo = await this.$parent.getYizhanInfo(suppliers_id);
       if (!yizhanInfo.is_admin && !yizhanInfo.is_salesman) {
@@ -583,16 +583,17 @@
       }
       this.yizhanInfo = yizhanInfo;
       this.suppliers_id = yizhanInfo.suppliers_id;
+      this.permission=yizhanInfo.permission;
       this.orderNum();
       this.getjllist();
       this.isexpired(yizhanInfo);
-      this.isSalesman();
-      this.ishasCard();
+      // this.isSalesman();
+      // this.ishasCard();
       this.height = wx.getSystemInfoSync().windowHeight;
       this.$apply();
     }
     async onShow(option) {
-      await this.$parent.loginInfo();
+      let res=await this.$parent.loginInfo();
       let userInfo = await this.$parent.getUserInfo();
       this.user_id = userInfo.user_id;
       this.suppliers_id = this.$parent.globalData.suppliers_id ?
