@@ -1,0 +1,560 @@
+<style lang="less">
+  .title-box {
+    width: 100%;
+    padding-top: 330rpx;
+    text-align: center;
+    font-size: 28rpx;
+    color: #999;
+    background: url(https://cdn.it120.cc/images/weappshop/icon-cart.png) no-repeat center 205rpx;
+    background-size: 100rpx auto;
+    margin-bottom: 50rpx;
+  }
+  .to-index-btn {
+    color: #fff;
+    background: #e50012;
+    border-radius: 6px;
+    width: 300rpx;
+    height: 70rpx;
+    line-height: 70rpx;
+    text-align: center;
+    font-size: 28rpx;
+    margin: auto;
+  }
+  .list-top {
+    width: 100%;
+    height: 88rpx;
+    line-height: 88rpx;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 30rpx;
+    font-size: 28rpx;
+    align-items: center;
+  }
+  .list-top .label {
+    color: #000;
+  }
+  .list-top .edit-btn {
+    color: #999;
+    height: 100%;
+  }
+  .a-gooods {
+    width: 100%;
+    /* width: 100%; */
+    background-color: #fff;
+    overflow: hidden;
+    padding-bottom: 20rpx;
+    border-top: 8rpx solid #f0f0f0;
+  }
+  .a-gooods-title {
+    padding: 20rpx 40rpx;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .a-goods-conts {
+    display: flex;
+    justify-content: space-between;
+    /* padding-left: 30rpx; */
+    width: 100%;
+    box-sizing: border-box;
+    transition: margin-left 0.2s ease-in-out;
+  }
+  .a-goods-conts.active {
+    background: url(https://lmbge.com/upload/images/3.png) no-repeat 30rpx;
+    background-size: 40rpx auto;
+  }
+  .goods-info {
+    display: flex;
+    justify-content: space-between;
+    padding: 30rpx 0 0 30rpx;
+    flex: 11;
+    box-sizing: border-box;
+    position: relative;
+    /* align-items: center; */
+  }
+  .goods-info .img-box {
+    width: 160rpx;
+    height: 160rpx;
+    overflow: hidden;
+    margin-right: 20rpx;
+    /* background-color: #d8d8d8; */
+  }
+  .goods-info .text-box {
+    flex: 1;
+    position: relative;
+    font-size: 30rpx;
+    justify-content: space-around;
+    /* display: flex; */
+    flex-direction: column;
+    margin-right: 20rpx;
+    padding-bottom: 30rpx;
+  }
+  .goods-info .text-box .goods-title {
+    width: 100%;
+  }
+  .nolist {
+    margin: 20rpx 0;
+    height: 1px;
+  }
+  .xunze view {
+    display: inline-block;
+  }
+  .text-box .xunze {
+    display: inline-block;
+    border: 1px solid #f5f5f9;
+    padding: 10rpx 25rpx;
+    border-radius: 5px;
+    font-size: 24rpx;
+    margin: 20rpx 0;
+  }
+  .text-box .xunze:after {
+    content: ' ';
+    display: inline-block;
+    transform: rotate(-90deg) translate(0rpx, 13rpx);
+    -ms-transform: rotate(-90deg) translate(0rpx, 13rpx);
+    /* IE 9 */
+    -moz-transform: rotate(-90deg) translate(0rpx, 13rpx);
+    /* Firefox */
+    -webkit-transform: rotate(-90deg) translate(0rpx, 13rpx);
+    /* Safari and Chrome */
+    -o-transform: rotate(-90deg) translate(0rpx, 13rpx);
+    /* Opera */
+    color: #ccc;
+  }
+  .goods-info .text-box .goods-price {
+    display: flex;
+    color: #e50112;
+    font-size: 30rpx;
+    justify-content: space-between;
+  }
+  .goods-info .text-box .goods-count {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .goods-info .buy-num {
+    width: 200rpx;
+    height: 48rpx;
+    line-height: 48rpx;
+    display: flex;
+    /*justify-content: space-between;*/
+    font-size: 24rpx;
+    text-align: center;
+  }
+  .goods-info .buy-num .jian-btn {
+    width: 48rpx;
+    height: 100%;
+    border-left: 1rpx solid #ccc;
+    border-bottom: 1rpx solid #ccc;
+    border-top: 1rpx solid #ccc;
+    border-bottom-left-radius: 6rpx;
+    border-top-left-radius: 6rpx;
+    /* padding: 10rpx; */
+  }
+  .goods-info .buy-num .jian-btn.disabled {
+    background-color: #f5f5f9;
+    border-left: 1rpx solid #eee;
+    border-bottom: 1rpx solid #eee;
+    border-top: 1rpx solid #eee;
+    color: #ccc;
+  }
+  .goods-info .buy-num .jia-btn {
+    width: 48rpx;
+    height: 100%;
+    border-right: 1rpx solid #ccc;
+    border-bottom: 1rpx solid #ccc;
+    border-top: 1rpx solid #ccc;
+    border-bottom-right-radius: 6rpx;
+    border-top-right-radius: 6rpx;
+  }
+  .goods-info .buy-num .jia-btn.disabled {
+    background-color: #f5f5f9;
+    border-right: 1rpx solid #eee;
+    border-bottom: 1rpx solid #eee;
+    border-top: 1rpx solid #eee;
+    color: #ccc;
+  }
+  .goods-info .buy-num input {
+    /* width: 68rpx; */
+    height: 48rpx;
+    min-height: 48rpx;
+    line-height: 48rpx;
+    text-align: center;
+    font-size: 24rpx;
+    border: 1rpx solid #ccc;
+    flex: 1;
+    width: 100rpx;
+  }
+  .goods-info .img-box .img {
+    width: 160rpx;
+    height: 100%;
+    margin-left: 10rpx;
+  }
+  .a-goods-conts {
+    position: relative;
+  }
+  .delete-btn {
+    width: 120rpx;
+    height: 100%;
+    text-align: center;
+    background: #e64340;
+    font-size: 24rpx;
+    color: #fff;
+    position: absolute;
+    right: -120rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .jiesuan-box2 {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 100rpx;
+    position: fixed;
+    bottom: 100rpx;
+    left: 0;
+    border-bottom: 1px solid #eee;
+    border-top: 1px solid #eee;
+    background-color: #fff;
+    z-index: 10;
+  }
+  .jiesuan-box {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 100rpx;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    border-bottom: 1px solid #eee;
+    border-top: 1px solid #eee;
+    background-color: #fff;
+    z-index: 10;
+  }
+  .jiesuan-box .left-price {
+    display: flex;
+    justify-content: space-between;
+    line-height: 100rpx;
+    padding: 0 30rpx 0 0;
+    font-size: 28rpx;
+    box-sizing: border-box;
+  }
+  .jiesuan-box .all-selected {
+    padding-left: 90rpx;
+    color: #000;
+    background: url(https://cdn.it120.cc/images/weappshop/gou.png) no-repeat 30rpx center;
+    background-size: 40rpx auto;
+  }
+  .jiesuan-box .all-selected.active {
+    background: url(https://lmbge.com/upload/images/3.png) no-repeat 30rpx;
+    background-size: 40rpx auto;
+  }
+  .jiesuan-box .total {
+    color: #e64340;
+  }
+  .toaddgoods {
+    color: #58bc9c;
+  }
+  page {
+    background-color: #f0f0f0;
+  }
+  button {
+    background: transparent;
+    padding: 0;
+    bottom: 0;
+    line-height: inherit;
+    height: auto;
+    border-radius: 0;
+    color: #fff;
+  }
+  button::after {
+    border: none;
+  }
+  .icon-jiantou {
+    margin-left: 10rpx;
+  }
+  .hidden {
+    position: absolute;
+    height: 100%;
+  }
+  .search-title {
+    display: flex;
+    justify-content: space-between;
+    line-height: 85rpx;
+    font-size: 30rpx;
+    align-items: center;
+    background-color: #fff;
+    position: fixed;
+    width: 100%;
+    z-index: 10;
+    padding: 0 20rpx;
+  }
+  .search-title .active {
+    color: #e50012;
+  }
+  .search-title image {
+    width: 35rpx;
+    height: 35rpx;
+    margin-left: 5rpx;
+  }
+  .search-title .status-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 300rpx;
+    text-align: center;
+    /* border-right: 1px solid #f0f0f0; */
+  }
+  .search-title .search {
+    flex: 1;
+  }
+  .search-title .up .img {
+    transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    /* IE 9 */
+    -webkit-transform: rotate(180deg);
+    /* Safari and Chrome */
+  }
+  .border {
+    display: inline-block;
+    padding: 0 20rpx;
+    line-height: 50rpx;
+    border-right: 1px solid #f0f0f0;
+    max-width: 300rpx;
+  }
+  .search {
+    text-align: right;
+    padding-right: 40rpx;
+  }
+  .search-title .icon-sousuo {
+    font-size: 40rpx;
+  }
+  /*列表样式  */
+  .goods-info .img-box {
+    margin: 0;
+  }
+  .goods-info .text-box {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20rpx;
+  }
+  .goods-info .text-box .goods-num {
+    display: flex;
+    justify-content: space-between;
+    font-size: 26rpx;
+  }
+  .goods-info .text-box .goods-title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    text {
+      border: 1px solid #e50012;
+      padding: 5rpx 10rpx;
+      font-size: 20rpx;
+      margin-left: 10rpx;
+      color: #e50012;
+      border-radius: 50px;
+    }
+  }
+  /*修改标题  */
+  .changeTitle {
+    background-color: #fff;
+    border-radius: 10rpx;
+    font-size: 30rpx;
+    overflow: hidden;
+  }
+  .changeTitle.active {
+    position: relative;
+    top: -200rpx;
+  }
+  .changeTitle .title {
+    padding: 40rpx;
+    padding-bottom: 0;
+    text-align: center;
+  }
+  .changeTitle .content {
+    padding: 40rpx;
+  }
+  .changeTitle .content textarea {
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    width: 400rpx;
+    padding: 10rpx;
+    height: 120rpx;
+    position: relative;
+    z-index: 1000;
+  }
+  .changeTitle .btn {
+    display: flex;
+    position: relative;
+    z-index: 10;
+  }
+  .changeTitle .btn {
+    background-color: #f0f0f0;
+    text-align: center;
+    line-height: 88rpx;
+  }
+  .changeTitle .btn view {
+    flex: 1;
+    border: 1px solid #ccc;
+  }
+  /*选择分类  */
+  .list {
+    background-color: #fff;
+    width: 60%;
+    text-align: center;
+    line-height: 88rpx;
+    font-size: 30rpx;
+    max-height: 450rpx;
+    overflow: scroll;
+  }
+  .list view {
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .jiesuan-box .to-pay-btn {
+    border: 1px solid #e50012;
+    color: #e50012;
+    background-color: #fff;
+    border-radius: 90px;
+    padding: 10rpx 20rpx;
+    margin-right: 40rpx;
+    font-size: 28rpx;
+  }
+  .jiesuan-box .to-pay-btn.no-select {
+    background-color: #ccc;
+  }
+  .jiesuan-box {
+    align-items: center;
+  }
+  .goodsList {
+    z-index: 10;
+    width: 100%;
+    background: #f0f0f0;
+    /* height: 100%; */
+  }
+</style>
+<template>
+  <view class='container'>
+    <search @buttonTap.user="searchTap"></search>
+    <noorder text="暂无商品" wx:if="{{list.length==0}}"></noorder>
+    <view class="goodsList" wx:else>
+      <view class="a-gooods" wx:for="{{list}}" wx:key="{{index}}">
+        <!-- wx:for="{{list}}" wx:key="{{index}}" -->
+        <view class="a-goods-conts " @tap.stop="toChooseTap({{item.goods_id}},{{item.goods_name}})">
+          <view class="goods-info">
+            <view class="img-box">
+              <image src="http://maijia.jicaizx.com/{{item.original_img}}" class="img" wx:if="{{item.original_img1==''}}" />
+              <image src="{{item.original_img1}}" class="img" wx:else/>
+            </view>
+            <view class="text-box">
+              <view class="goods-title" data-id="{{item.goods_id}}">
+                {{item.goods_name}}
+                <text wx:if="{{item.hdky==1}}">支持会员卡</text>
+              </view>
+              <view class='goods-num'>
+                <text class='red'>价格：￥{{item.shop_price}}</text>
+              </view>
+              <view class='goods-num'>
+                <text class='green'>库存：{{item.goods_number}}</text>
+                <text class=''>总销量：{{item.salenum}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import newapi from '../../../API/newapi';
+  import util from '../../../utils/index';
+  import search from '../../../components/search';
+  import noorder from '../../../components/noOrder';
+  export default class newslist extends wepy.page {
+    config = {
+      navigationBarTitleText: '选择优惠商品'
+    };
+    components = {
+      search,
+      noorder
+    };
+    data = {
+      parampage: 1,
+      ssButton: "取消",
+      buttonClass: "",
+      keyword: "",
+      list: [],
+      isMoreData: true
+    };
+    computed = {};
+    methods = {
+      toChooseTap(id, name) {
+        console.log(name);
+        console.log(id);
+        this.$parent.$pages['/ConsolePages/pages/coupon/addCoupon'].choose_good_name = name;
+        this.$parent.$pages['/ConsolePages/pages/coupon/addCoupon'].choose_good_id = id;
+        wx.navigateBack();
+      },
+      searchTap(val) {
+        console.log("val", val);
+        // if (this.ssButton == "确定") {
+        this.initdata.page = 1;
+        this.initdata.keyword = val;
+        this.getShopList(this.initdata);
+        // } else {
+        //   //wx.navigateBack();
+        // }
+      },
+    };
+    events = {};
+    initData() {
+      var data = {
+        keyword: '',
+        page: 1,
+        suppliers_id: this.suppliers_id
+      };
+      return data;
+    }
+    async onLoad(option) {
+      var that = this;
+      this.setData({
+        ssButton: "确定",
+        buttonClass: "queding",
+      })
+      this.suppliers_id = this.$parent.globalData.suppliers_id ?
+        this.$parent.globalData.suppliers_id :
+        (await this.$parent.getYizhanInfo()).suppliers_id;
+      this.initdata = this.initData();
+      this.getShopList(this.initdata);
+    }
+    onReachBottom() {
+      if (this.isMoreData) {
+        util.showLoading();
+        this.initdata.page = this.initdata.page + 1;
+        this.getShopList(this.initdata);
+      }
+    }
+    async getShopList(data) {
+      if (!this.suppliers_id) {
+        util.showToast('获取店铺信息失败，请稍后再试');
+      }
+      util.showLoading();
+      let res = await newapi.search(data);
+      wx.hideLoading();
+      if (res.data.code == 0) {
+        if (this.initdata.page == 1) this.list = res.data.data;
+        else this.list.push(...res.data.data);
+        if (res.data.data.length < 10) {
+          this.isMoreData = false;
+        }
+        console.log(this.list);
+        this.$apply();
+      } else {
+        wx.navigateBack({
+          delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+        });
+      }
+    }
+  }
+</script>

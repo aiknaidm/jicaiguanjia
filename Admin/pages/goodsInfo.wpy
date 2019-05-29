@@ -307,7 +307,7 @@
     justify-content: space-between;
     line-height: 85rpx;
     font-size: 30rpx;
-    top:82rpx;
+    top: 82rpx;
     align-items: center;
     background-color: #fff;
     position: fixed;
@@ -315,21 +315,24 @@
     z-index: 10;
     padding: 0 20rpx;
   }
-  .copy-btn{
+  .copy-btn {
     width: 100%;
     height: 80rpx;
     line-height: 80rpx;
-     position: fixed;
-     top: 0;
-     padding-left: 40rpx;z-index: 10;background-color: #fff;
-     border-bottom: 1px solid #f0f0f0;
+    position: fixed;
+    top: 0;
+    padding-left: 40rpx;
+    z-index: 10;
+    background-color: #fff;
+    border-bottom: 1px solid #f0f0f0;
   }
-  .copy-btn text{
+  .copy-btn text {
     background: #e50012;
     color: #fff;
     font-size: 28rpx;
     padding: 5rpx 20rpx;
     border-radius: 50px;
+    margin-right: 20rpx;
   }
   .search-title .active {
     color: #e50012;
@@ -568,11 +571,11 @@
 </style>
 <template>
   <view class="container {{isshowbiaoti||showSearch||isShowGoodsList?'hidden':''}}">
-    <view class="copy-btn" @tap="showCopyList">
-      <text>复制吉采专营商品</text>
+    <view class="copy-btn">
+      <text @tap="showCopyList(76)">复制吉采专营商品</text>
+      <text @tap="showCopyList(497)">复制黄岛一站购商品</text>
     </view>
     <view class='search-title '>
-      
       <view @tap="statusTap({{index}})" class="status-label {{index == currentType ? 'active' : ''}} {{isclick?'down':'up'}}" wx:for-items="{{statusType}}" wx:key="{{index}}" data-index="{{index}}" data-name="{{item.name}}">
         <view class='border'>{{item}}
           <text class='iconfont icon-jiantou'></text>
@@ -580,8 +583,8 @@
         <!-- <image rc='/images/sanjiao-active.png' class='img'/> -->
       </view>
       <!-- <view class='border' wx:for="{{catList}}" bindtap="statusTap"> 二级分类
-        <text class='iconfont icon-jiantou'></text>
-      </view> -->
+                <text class='iconfont icon-jiantou'></text>
+              </view> -->
       <view class='search' @tap='showSearch'>
         <text class='iconfont icon-sousuo'></text>
       </view>
@@ -601,23 +604,23 @@
           </view>
         </view>
         <button class="ss-my-d button-hover" @tap='buttonTap' form-type='submit'>
-          确定
-        </button>
+                  确定
+                </button>
       </view>
       <mask wx:if="{{showSearch}}" @tap.stop="hiddenSearch"></mask>
     </form>
     <!-- <view class="title-box">
-      购物车空空如也～
-    </view>
-    <view class="to-index-btn" bindtap="toIndexPage">
-      去逛逛
-    </view> -->
+              购物车空空如也～
+            </view>
+            <view class="to-index-btn" bindtap="toIndexPage">
+              去逛逛
+            </view> -->
     <!-- <view class="list">
-      <scroll-view scroll-y> -->
+              <scroll-view scroll-y> -->
     <view class="list-top">
       <!-- <view bindtap="toAddGoods" class='toaddgoods'>
-        +添加其他商品
-      </view> -->
+                +添加其他商品
+              </view> -->
     </view>
     <noorder text="暂无商品" wx:if="{{list.length==0}}"></noorder>
     <view class="goodsList" wx:else>
@@ -644,17 +647,17 @@
         </view>
       </view>
       <!-- </view>
-      </scroll-view> -->
+              </scroll-view> -->
     </view>
     <!-- <view class="jiesuan-box2">
-      
-    </view> -->
+              
+            </view> -->
     <!-- <view class="jiesuan-box" wx:if="{{list.length}}">
-      <view class="left-price">
-        <view class="all-selected  {{isallSelect?'active':''}}" bindtap="bindAllSelect">全选</view>
-      </view>
-      <view class="to-pay-btn " bindtap="deleteSelected" wx:if="{{del}}">删除</view>
-    </view> -->
+              <view class="left-price">
+                <view class="all-selected  {{isallSelect?'active':''}}" bindtap="bindAllSelect">全选</view>
+              </view>
+              <view class="to-pay-btn " bindtap="deleteSelected" wx:if="{{del}}">删除</view>
+            </view> -->
     <!--商品分类显示  -->
     <view class='body-bg' bindtap='hiddenShopList' touchstart='hiddenbg' touchmove="hiddenbg" wx:if="{{ishowfenlei}}">
       <view class='list'>
@@ -720,9 +723,11 @@
       searchIpt(e) {
         this.keyword = e.detail.value;
       },
-      async showCopyList() {
+      async showCopyList(base_supp_id) {
+        this.base_supp_id = base_supp_id;
         let data = {
-          suppliers_id: this.suppliers_id
+          suppliers_id: this.suppliers_id,
+          base_supp_id
         };
         var res = await newapi.copeCartList(data)
         if (res.data.code == 0) {
@@ -743,22 +748,26 @@
         }
         return;
       },
-      async copyGoods(cat_id,cat_name) {
-        var modalRes=await util.showModalBig("你确定要复制'"+cat_name+"'的内容吗")
-        if(!modalRes){
+      async copyGoods(cat_id, cat_name) {
+        var modalRes = await util.showModalBig("你确定要复制'" + cat_name + "'的内容吗")
+        if (!modalRes) {
+          return
+        }
+        if (!this.base_supp_id) {
           return
         }
         let data = {
+          base_supp_id: this.base_supp_id,
           suppliers_id: this.suppliers_id,
           cat_id
         };
-         wx.showLoading({
-           title: '加载中...', //提示的内容,
-           mask: true, //显示透明蒙层，防止触摸穿透,
-           success: res => {}
-         });
+        wx.showLoading({
+          title: '加载中...', //提示的内容,
+          mask: true, //显示透明蒙层，防止触摸穿透,
+          success: res => {}
+        });
         let res = await newapi.copy_goods(data);
-       wx.hideLoading();
+        wx.hideLoading();
         this.iscopy = false;
         this.getShopList(this.initdata);
         this.fenleilist = await this.getFenLei();
