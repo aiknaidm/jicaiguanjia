@@ -112,6 +112,9 @@ const newapi = {
     promotion_add: (data) => fetch(`${host_chk}/promotion_add`, 'GET', data),
     promotion_stop: (data) => fetch(`${host_chk}/promotion_stop`, 'GET', data),
     promotion_list: (data) => fetch(`${host_chk}/promotion_list`, 'GET', data),
+    suppliers_permission: (data) => fetch(`${host_chk}/suppliers_permission`, 'GET', data),
+    edit_permission: (data) => fetch(`${host_chk}/edit_permission`, 'GET', data),
+
 }
 const fetch = async function(url, method, data) {
     return new Promise((resolve, reject) => {

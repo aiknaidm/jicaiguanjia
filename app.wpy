@@ -177,7 +177,8 @@ export default class extends wepy.app {
           'pages/goodsInfo',
           'pages/orderInfo',
           'pages/userInfo',
-          'pages/memberInfo'
+          'pages/memberInfo',
+          'pages/permission'
         ]
       }
     ],

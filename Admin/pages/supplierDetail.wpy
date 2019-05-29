@@ -270,12 +270,17 @@
           </navigator>
         </view>
         <view class="info_list">
+          <navigator url="permission?suppliers_id={{suppliers_id}}" open-type="navigate" hover-class="none">
+            <image src="/images/console/goods-manage.png" />权限管理
+          </navigator>
+        </view>
+        <view class="info_list">
           <navigator url="{{}}" open-type="navigate" hover-class="none">
             <image src="/images/console/wdyy.png" />用户管理
           </navigator>
           <repeat for="{{applicationList}}" wx:key="{{index}}">
             <!-- 店铺所有者 -->
-            <myList :tabItem="item"></myList>
+            <myList :tabItem="item" :suppliers_id.sync="suppliers_id"></myList>
           </repeat>
         </view>
       </form>

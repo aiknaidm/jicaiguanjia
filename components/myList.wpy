@@ -81,7 +81,9 @@ import wepy from 'wepy';
 
 export default class myList extends wepy.component {
   props = {
-    tabItem: { type: Object, default: {}, twoWay: true }
+    tabItem: { type: Object, default: {}, twoWay: true },
+    suppliers_id: { type: String, default: "0" }
+    
   };
   data = {};
 
@@ -100,7 +102,11 @@ export default class myList extends wepy.component {
           }
         });
       } else {
+        if(this.suppliers_id!=0)
+        wx.navigateTo({ url: url+"&suppliers_id="+this.suppliers_id });
+        else
         wx.navigateTo({ url: url });
+
       }
     }
   };

@@ -242,7 +242,7 @@ export default class my_console_check extends wepy.page {
     }
   }
   async onLoad(option) {
-    this.suppliers_id = this.$parent.globalData.suppliers_id;
+    this.suppliers_id = option.suppliers_id;
     this.type = option.type;
     switch (parseInt(option.type)) {
       case 1:

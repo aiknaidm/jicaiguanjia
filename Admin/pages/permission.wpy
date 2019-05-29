@@ -1,0 +1,64 @@
+<style lang="less">
+.section{
+    display: flex;
+    justify-content: space-between;
+    padding: 20rpx 40rpx;
+    align-items: center;
+    border-bottom: 1px solid #f0f0f0
+}
+</style>
+<template>
+    <view class='container'>
+   <view class="section section2" wx:for="{{tabList}}" wx:if="{{item.money!='0.00'}}">
+        <view class="label">
+          {{item.display_name}}</view>
+        <view class="body-view">
+          <switch color="#e50012" checked="{{item.is_fufei==0}}" name="is_fufei" @change="changePermission({{item.is_fufei}},{{item.id}},{{index}})"/>
+        </view>
+      </view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import newapi from '../../API/newapi';
+import noOrder from '../../components/noOrder';
+
+export default class my_console_check extends wepy.page {
+  config = {
+    navigationBarTitleText: '权限管理'
+  };
+  data = {
+tabList:[]
+  };
+  computed = {};
+  components = {  };
+  methods = {
+    async  changePermission(is_fufei,id,index,e){
+             console.log('switch1 发生 change 事件，携带值为', is_fufei)
+             var suppliers_id=this.suppliers_id;
+             var style=is_fufei=='1'?"add":"delete"
+             var permission_id=id
+             this.tabList[index].is_fufei='0'?'1':'0'
+             var res=await newapi.edit_permission({style,permission_id,suppliers_id})
+      }
+  };
+  events = {};
+
+  //   业务员
+  async salesmanList(suppliers_id) {
+
+  }
+  async onLoad(option) {
+      var suppliers_id=option.suppliers_id
+      this.suppliers_id=suppliers_id
+     this.getTabList(suppliers_id)
+  }
+  async getTabList(suppliers_id){
+ var res=await newapi.suppliers_permission({suppliers_id});
+ this.tabList=res.data.data;
+ this.$apply();
+  }
+  async onShow() {}
+}
+</script>
