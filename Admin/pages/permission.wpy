@@ -9,10 +9,10 @@
 </style>
 <template>
     <view class='container'>
-   <view class="section section2" wx:for="{{tabList}}" wx:if="{{item.money!='0.00'}}">
+   <view class="section section2" wx:for="{{tabList}}">
         <view class="label">
           {{item.display_name}}</view>
-        <view class="body-view">
+        <view class="body-view"  wx:if="{{item.money!='0.00'}}">
           <switch color="#e50012" checked="{{item.is_fufei==0}}" name="is_fufei" @change="changePermission({{item.is_fufei}},{{item.id}},{{index}})"/>
         </view>
       </view>
