@@ -79,10 +79,10 @@ export default class newslist extends wepy.page {
       datas2.suppliers_id = this.suppliers_id;
       var res = await util.pay(datas, datas2);
       util.showToast(res.msg);
-      // if (res.code == 1)
-      //   wx.navigateTo({
-      //     url: 'setCard'
-      //   });
+      if (res.code == 1)
+        wx.navigateTo({
+          url:this.content.url
+        });
     }
   };
   events = {};
