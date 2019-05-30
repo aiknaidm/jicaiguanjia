@@ -460,6 +460,8 @@ button::after {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  max-height:100rpx;
+  overflow: hidden;
   text {
     border: 1px solid #e50012;
     padding: 5rpx 10rpx;
@@ -795,6 +797,7 @@ export default class newslist extends wepy.page {
       );
       if (mRes.confirm) {
         this.delGoods(deleteSelectList);
+        
       }
     },
     async clickbtn() {
@@ -943,14 +946,21 @@ export default class newslist extends wepy.page {
     wx.hideLoading();
     var that = this;
     if (res.data.code == 0) {
-      // res.data.data.forEach((item, index) => {
-      //   res.data.data[index].active = that.isallSelect;
-      // });
-      if (this.initdata.page == 1) this.list = res.data.data;
-      else this.list.push(...res.data.data);
-      if (res.data.data.length < 10) {
+     
+      var datas=res.data.data
+      datas.forEach((item, index) => {
+        datas[index].active = this.isallSelect;
+      });
+      if (this.initdata.page == 1) this.list = datas;
+      else this.list.push(...datas);
+      if (datas.length < 10) {
         this.isMoreData = false;
       }
+       if (datas.length== 0) {
+        this.isallSelect=false
+         
+      }
+      this.del = this.isallSelect;
       this.$apply();
     } else {
       wx.navigateBack({

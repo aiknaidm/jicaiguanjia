@@ -89,6 +89,11 @@
   }
   .label-right {
     flex: 1;
+    min-height: 40rpx;
+    background: transparent;
+    text-align: left;
+    margin: 0;
+    padding: 0
   }
   /* 上传身份证 */
   .upImg {
@@ -153,9 +158,12 @@
     border-radius: 0px;
     margin: 0;
     /* height: 84rpx;
-     line-height: 84rpx; */
+       line-height: 84rpx; */
     background-color: #e50012;
   }
+    .smsCode button[disabled]{
+       color: #fff;
+    }
   .register {
     background-color: #e50012;
   }
@@ -173,7 +181,7 @@
     display: flex;
     justify-content: space-between;
     /* border-bottom: 1px solid #ddd;
-    padding-right: 10%; */
+      padding-right: 10%; */
   }
   .smsCode input {
     width: 336rpx;
@@ -225,8 +233,7 @@
   }
   .section2 .label {
     width: 180px;
-  }
-  // 设置banner
+  } // 设置banner
   .cameraBox {
     height: 204rpx;
     background-color: #f2f2f2;
@@ -263,7 +270,6 @@
     right: -15rpx;
     top: -15rpx;
   }
-
 </style>
 <template>
   <view class='container'>
@@ -318,6 +324,14 @@
           </view>
         </picker>
       </view>
+      <view class="section" >
+      <view class="label">
+        详细地址</view>
+       <button wx:if="{{isOpenSetting}}" open-type="openSetting" bindopensetting="getAddressTap" class="label-right" >{{address}} </button>
+        <view wx:else @tap="getAddressTap" class="label-right">
+          <input value="{{address}}" name="address" disabled/>
+        </view>
+    </view>
       <view class="section section2">
         <view class="label">
           商品无图模式</view>
@@ -339,13 +353,18 @@
           <switch color="#e50012" checked="{{userDetail.is_friend}}" name="is_friend" />
         </view>
       </view>
-       <view class="section section2">
-          <view class="label">
+      <view class="section section2">
+        <view class="label">
           会员等级</view>
-          <view class="body-view" style="width:300rpx;">
-             <slider min="1" max="5" selected-color="#e50012" name="vip_level" value="{{userDetail.vip_level}}" show-value />
-          </view>
-        
+        <view class="body-view" style="width:300rpx;">
+          <slider min="1" max="5" selected-color="#e50012" name="vip_level" value="{{userDetail.vip_level}}" show-value />
+        </view>
+      </view>
+      <view class="title" style="padding:40rpx;text-align:center">店铺logo</view>
+      <view class="cameraBox">
+        <view class="camera" @tap='addShopImg'>
+          <image src="{{shopImg.img_url?shopImg.img_url:'/images/add_img.png'}}" />
+        </view>
       </view>
       <view class="title" style="padding:40rpx;text-align:center">首页轮播图设置</view>
       <view class="cameraBox">
@@ -373,6 +392,7 @@
       navigationBarTitleText: '店铺信息修改'
     };
     data = {
+      shopImg: 0,
       userDetail: {},
       region: [],
       userInfo: {},
@@ -423,13 +443,62 @@
       yizhanId: '',
       shenfen: 'jl',
       password: '123456',
-      issubmit: false
+      issubmit: false,
+      isOpenSetting:false,
+      address:''
     };
     computed = {};
     components = {};
     methods = {
+      // openSetting(res) {
+      //   console.log(res)
+      //   this.$parent.checkUserLocation().then(res => {
+      //     if (res) {
+      //       this.isOpenSetting = false;
+      //       this.$apply();
+      //       this.getAddress();
+      //     }
+      //   }).catch(res=>{
+      //     this.isOpenSetting = true;
+      //      this.$apply();
+      //   })
+      // },
+      getAddressTap() {
+
+         this.$parent.checkUserLocation().then(res => {
+          if (res) {
+            this.isOpenSetting = false;
+            this.getAddress();
+          }else{
+            this.isOpenSetting = true;
+            
+          }
+           this.$apply();
+        }).catch(res=>{
+           console.log('res',res)
+        })
+      },
       delImg(i) {
         this.imgSrc.splice(i, 1);
+      },
+      // 上传店铺logo
+      async addShopImg() {
+        wepy
+          .chooseImage({
+            count: 1, // 默认9
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'] // 可以指定来源是相册还是相机，默认二者都有
+          })
+          .then(res => {
+            var that = this;
+            // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+            var tempFilePaths = res.tempFilePaths;
+            this.shopImg={}
+            this.shopImg.img_url = tempFilePaths[0];
+            this.shopImg.upload = true;
+            this.$apply();
+          })
+          .catch(res => {});
       },
       // 上传图片
       async chooseImg() {
@@ -496,9 +565,10 @@
       bindRegionChange(e) {
         this.region = e.detail.value;
       },
+      
       //表单数据提交
       async formSubmit(e) {
-        console.log("e",e)
+        console.log("e", e)
         var param = e.detail.value;
         var that = this;
         var flag = that.checkPhone(param.phone) && that.checkSmsCode(param.smscode);
@@ -514,7 +584,7 @@
             // var share_code = param.shareCode;
             var is_picture = param.is_picture ? 0 : 1;
             var is_friend = param.is_friend ? 1 : 0;
-            var vip_level=param.vip_level
+            var vip_level = param.vip_level
             if (realname == '') {
               util.showModal('请填写姓名');
               return;
@@ -535,6 +605,8 @@
             var shi = this.region[1];
             var qu = this.region[2];
             // 上传图片
+            if(!this.shopImg.upload)  var shopImg=this.shopImg.img_url==0?'':this.shopImg.img_url
+            else var shopImg = await this.upImg(this.shopImg.img_url)
             this.goods_imgs = [];
             if (this.imgSrc != '') {
               if (this.imgSrc.length > 5) {
@@ -545,7 +617,7 @@
             var i = 0;
             for (var i = 0; i < this.imgSrc.length; i++) {
               if (this.imgSrc[i].upload) {
-                var img = await this.upImg(i);
+                var img = await this.upImg(this.imgSrc[i].img_url);
                 if (img) {
                   this.goods_imgs.push(img);
                 }
@@ -555,7 +627,7 @@
             }
             var goods_img = this.goods_imgs[0];
             var img_url = this.goods_imgs.toString();
-            console.log("img_url",img_url);
+            console.log("img_url", img_url);
             util.showLoading();
             let data = {
               suppliers_id,
@@ -570,13 +642,17 @@
               is_picture,
               is_friend,
               img_url,
-              vip_level
+              vip_level,
+              img: shopImg,
+             address: this.address,
+latitude:this.latitude,
+longitude:this.longitude
             };
             let res = await newapi.supplier_upd(data);
             wx.hideLoading();
             if (res.data.code == 0) {
               wx.navigateBack({});
-              this.$parent.globalData.vip_level=vip_level
+              this.$parent.globalData.vip_level = vip_level
               //this.isuserDetail = true;
             } else {
               this.issubmit = false;
@@ -590,16 +666,37 @@
       }
     };
     events = {};
+     getAddress(){
+     wepy.chooseLocation().then(res=>{
+                console.log(res);
+                this.address=res.name
+                this.longitude=res.longitude
+                this.latitude=res.latitude
+                this.$apply();
+              
+            }).catch(res=>{
+
+            });
+  }
     async onLoad(option) {
       await this.$parent.loginInfo();
       let suppliers_id = this.$parent.globalData.suppliers_id ?
         this.$parent.globalData.suppliers_id :
         (await this.$parent.getYizhanInfo()).suppliers_id;
       this.userDetail = await this.getSuppliersDetails(suppliers_id);
-        
       this.region[0] = this.userDetail.sheng;
       this.region[1] = this.userDetail.shi;
       this.region[2] = this.userDetail.qu;
+      this.address=this.userDetail.address
+      this.longitude=this.userDetail.longitude
+      this.latitude=this.userDetail.latitude
+     
+    wepy.getLocation().then(res => {
+        
+        }).catch(res => {
+          this.isOpenSetting = true
+          this.$apply();
+        });
       this.$apply();
     }
     async getSuppliersDetails(suppliers_id) {
@@ -607,22 +704,25 @@
         suppliers_id
       };
       let res = await newapi.supplier_detail(data);
-       this.imgSrc=[];
-
-        res.data.data.banner.forEach((item)=>{
-    
-          this.imgSrc.push({img_url:item.content})
+      this.imgSrc = [];
+      res.data.data.banner.forEach((item) => {
+        this.imgSrc.push({
+          img_url: item.content
         })
-
-          this.$apply();
+      })
+      this.shopImg={}
+      this.shopImg.img_url = res.data.data.img;
+      this.shopImg.upload = false;
+      console.log("this.shopImg",this.shopImg);
+      this.$apply();
       return res.data.data;
     }
-    async upImg(i = 0) {
+    async upImg(img_url) {
       util.showLoading('上传中');
       try {
         var res = await wepy.uploadFile({
           url: api.upload,
-          filePath: this.imgSrc[i].img_url,
+          filePath: img_url,
           name: 'file',
           header: {
             Accept: 'application/json'
@@ -635,11 +735,12 @@
         }
       } catch (error) {
         console.log(error);
+        util.hideLoading();
         let mRes = await util.showModalBig(
-          '图片' + this.imgSrc[i].img_url + '上传失败'
+          '图片' + img_url + '上传失败'
         );
         if (mRes.confirm) {
-          await this.upImg(i);
+          await this.upImg(img_url);
         }
       }
     }

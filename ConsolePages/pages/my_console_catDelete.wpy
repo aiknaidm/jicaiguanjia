@@ -342,6 +342,7 @@
                     parent_id,
                     cat_img
                 });
+                this.page=1;
                 this.getKindList(suppliers_id);
                 this.isShowAddKindV = false;
                 this.$apply();
@@ -383,6 +384,7 @@
             addKindTap() {
                 this.isShowAddKindV = true;
                 this.currentKindType = 1;
+                this.currentParentID =0;
                 this.$apply();
             },
             // 删除分类
