@@ -95,6 +95,9 @@
     margin: 0;
     padding: 0
   }
+  .label-right textarea {
+    width: 100%;
+  }
   /* 上传身份证 */
   .upImg {
     display: flex;
@@ -158,12 +161,12 @@
     border-radius: 0px;
     margin: 0;
     /* height: 84rpx;
-       line-height: 84rpx; */
+         line-height: 84rpx; */
     background-color: #e50012;
   }
-    .smsCode button[disabled]{
-       color: #fff;
-    }
+  .smsCode button[disabled] {
+    color: #fff;
+  }
   .register {
     background-color: #e50012;
   }
@@ -181,7 +184,7 @@
     display: flex;
     justify-content: space-between;
     /* border-bottom: 1px solid #ddd;
-      padding-right: 10%; */
+        padding-right: 10%; */
   }
   .smsCode input {
     width: 336rpx;
@@ -324,14 +327,14 @@
           </view>
         </picker>
       </view>
-      <view class="section" >
-      <view class="label">
-        详细地址</view>
-       <button wx:if="{{isOpenSetting}}" open-type="openSetting" bindopensetting="getAddressTap" class="label-right" >{{address}} </button>
+      <view class="section">
+        <view class="label">
+          详细地址</view>
+        <button wx:if="{{isOpenSetting}}" open-type="openSetting" bindopensetting="getAddressTap" class="label-right">{{address}} </button>
         <view wx:else @tap="getAddressTap" class="label-right">
           <input value="{{address}}" name="address" disabled/>
         </view>
-    </view>
+      </view>
       <view class="section section2">
         <view class="label">
           商品无图模式</view>
@@ -376,6 +379,18 @@
           <image src="/images/add_img.png" mode='aspectFit' />
         </view>
       </view>
+      <view class="section">
+        <view class="label">
+          店铺公告</view>
+        <view class="label-right">
+          <textarea auto-height name="gonggao" value="{{userDetail.gonggao}}"></textarea>
+        </view>
+      </view>
+      <view class="section section2" @tap="toAbout">
+        <view class="label">
+          关于我们</view>
+        <view style="right">{{isSetAbout?'已填写':''}}</view>
+      </view>
       <button class='rz-submit' formType="submit" wx:if="{{!isuserDetail}}" disabled='{{issubmit}}'>提交修改</button>
       <button class='rz-submit' disabled='true' wx:if="{{userDetail.user_status=='0'||isshenhe}}">审核中...</button>
     </form>
@@ -405,6 +420,7 @@
       registDisabled: false,
       smsCodeDisabled: false,
       isuserDetail: false,
+      isSetAbout: false,
       inputPhone: '',
       inputCode: '',
       gotCode: '',
@@ -444,12 +460,18 @@
       shenfen: 'jl',
       password: '123456',
       issubmit: false,
-      isOpenSetting:false,
-      address:''
+      isOpenSetting: false,
+      address: ''
     };
     computed = {};
     components = {};
     methods = {
+      toAbout() {
+        console.log("this.userDetail.jianjie",this.userDetail.jianjie)
+        wx.navigateTo({
+          url: 'my_setShopInfo_about?about=' + this.userDetail.jianjie
+        });
+      },
       // openSetting(res) {
       //   console.log(res)
       //   this.$parent.checkUserLocation().then(res => {
@@ -464,18 +486,16 @@
       //   })
       // },
       getAddressTap() {
-
-         this.$parent.checkUserLocation().then(res => {
+        this.$parent.checkUserLocation().then(res => {
           if (res) {
             this.isOpenSetting = false;
             this.getAddress();
-          }else{
+          } else {
             this.isOpenSetting = true;
-            
           }
-           this.$apply();
-        }).catch(res=>{
-           console.log('res',res)
+          this.$apply();
+        }).catch(res => {
+          console.log('res', res)
         })
       },
       delImg(i) {
@@ -493,7 +513,7 @@
             var that = this;
             // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
             var tempFilePaths = res.tempFilePaths;
-            this.shopImg={}
+            this.shopImg = {}
             this.shopImg.img_url = tempFilePaths[0];
             this.shopImg.upload = true;
             this.$apply();
@@ -565,7 +585,6 @@
       bindRegionChange(e) {
         this.region = e.detail.value;
       },
-      
       //表单数据提交
       async formSubmit(e) {
         console.log("e", e)
@@ -584,7 +603,9 @@
             // var share_code = param.shareCode;
             var is_picture = param.is_picture ? 0 : 1;
             var is_friend = param.is_friend ? 1 : 0;
-            var vip_level = param.vip_level
+            var vip_level = param.vip_level;
+            var gonggao = param.gonggao;
+            var jianjie = this.userDetail.jianjie;
             if (realname == '') {
               util.showModal('请填写姓名');
               return;
@@ -605,7 +626,7 @@
             var shi = this.region[1];
             var qu = this.region[2];
             // 上传图片
-            if(!this.shopImg.upload)  var shopImg=this.shopImg.img_url==0?'':this.shopImg.img_url
+            if (!this.shopImg.upload) var shopImg = this.shopImg.img_url == 0 ? '' : this.shopImg.img_url
             else var shopImg = await this.upImg(this.shopImg.img_url)
             this.goods_imgs = [];
             if (this.imgSrc != '') {
@@ -644,9 +665,11 @@
               img_url,
               vip_level,
               img: shopImg,
-             address: this.address,
-latitude:this.latitude,
-longitude:this.longitude
+              address: this.address,
+              latitude: this.latitude,
+              longitude: this.longitude,
+              gonggao,
+              jianjie
             };
             let res = await newapi.supplier_upd(data);
             wx.hideLoading();
@@ -666,18 +689,16 @@ longitude:this.longitude
       }
     };
     events = {};
-     getAddress(){
-     wepy.chooseLocation().then(res=>{
-                console.log(res);
-                this.address=res.name
-                this.longitude=res.longitude
-                this.latitude=res.latitude
-                this.$apply();
-              
-            }).catch(res=>{
-
-            });
-  }
+    getAddress() {
+      wepy.chooseLocation().then(res => {
+        console.log(res);
+        this.address = res.name
+        this.longitude = res.longitude
+        this.latitude = res.latitude
+        this.$apply();
+      }).catch(res => {
+      });
+    }
     async onLoad(option) {
       await this.$parent.loginInfo();
       let suppliers_id = this.$parent.globalData.suppliers_id ?
@@ -687,16 +708,17 @@ longitude:this.longitude
       this.region[0] = this.userDetail.sheng;
       this.region[1] = this.userDetail.shi;
       this.region[2] = this.userDetail.qu;
-      this.address=this.userDetail.address
-      this.longitude=this.userDetail.longitude
-      this.latitude=this.userDetail.latitude
-     
-    wepy.getLocation().then(res => {
-        
-        }).catch(res => {
-          this.isOpenSetting = true
-          this.$apply();
-        });
+      this.address = this.userDetail.address
+      this.longitude = this.userDetail.longitude
+      this.latitude = this.userDetail.latitude
+      this.suppliers_id = suppliers_id;
+      this.isSetAbout = this.userDetail.jianjie == '' ? false : true
+      this.userDetail.jianjie =util.html_decode(this.userDetail.jianjie);
+      wepy.getLocation().then(res => {
+      }).catch(res => {
+        this.isOpenSetting = true
+        this.$apply();
+      });
       this.$apply();
     }
     async getSuppliersDetails(suppliers_id) {
@@ -710,10 +732,10 @@ longitude:this.longitude
           img_url: item.content
         })
       })
-      this.shopImg={}
+      this.shopImg = {}
       this.shopImg.img_url = res.data.data.img;
       this.shopImg.upload = false;
-      console.log("this.shopImg",this.shopImg);
+      console.log("this.shopImg", this.shopImg);
       this.$apply();
       return res.data.data;
     }

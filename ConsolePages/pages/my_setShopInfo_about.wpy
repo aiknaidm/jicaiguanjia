@@ -1,0 +1,51 @@
+<style lang="less">
+</style>
+<template>
+<view>
+
+ <xing-editor @finish="finish" output-type="html" image-upload-url="https://lmbge.com/wxapi/jcgj/upload" image-upload-name="file" image-upload-key-chain="image.url" html="{{html}}"/>
+
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class newslist extends wepy.page {
+  config = {
+    navigationBarTitleText: '商品描述',
+    usingComponents: {
+      'xing-editor': '/components/editor/xing-editor'
+    }
+  };
+  components = {};
+  data = {
+    html: ''
+  };
+  computed = {};
+  methods = {
+    finish: function(e) {
+        var parent=this.$parent.$pages['/ConsolePages/pages/my_setShopInfo']
+      parent.userDetail.jianjie =e.detail.content;
+        parent.isSetAbout=parent.userDetail.jianjie==''?false:true;
+      wx.navigateBack({
+        delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+      });
+    }
+  };
+  events = {};
+  async getIndexNewsList(id) {}
+  async onLoad(option) {
+     var parent=this.$parent.$pages['/ConsolePages/pages/my_setShopInfo']
+    console.log(option);
+    this.html = parent.userDetail.jianjie;
+      this.$apply();
+  }
+//   thishtml() {
+//     this.setData({
+//       html:
+//         '<p class="xing-p">啥都没有</p>'
+//     });
+//   }
+}
+</script>

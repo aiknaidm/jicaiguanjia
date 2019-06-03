@@ -142,6 +142,7 @@ export default class extends wepy.app {
           'pages/my_console_renew',
           'pages/my_console_renewRecord',
           'pages/my_setShopInfo',
+          'pages/my_setShopInfo_about',
           'pages/my_setSalesman',
           'pages/my_console_catManage',
           'pages/my_console_catDelete',
