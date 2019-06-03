@@ -208,23 +208,23 @@
         } else {
           res = this.thisBrandImg
         }
-        var cat_img = res;
+        var brand_img = res;
         var res = await newapi.add_brands({
           brand_id: this.thisBrandId,
           brand_name: brand_name,
-          brand_logo: cat_img
+          brand_logo: brand_img
         });
         // this.page = 1;
         // this.getBrandList();
         if (res.data.code == 0) {
           if (this.thisBrandId) {
             this.brandList[this.x].brand_name = brand_name;
-            this.brandList[this.x].brand_logo = cat_img;
+            this.brandList[this.x].brand_logo = brand_img;
           } else {
             let newline = {
               brand_id: res.data.data,
               brand_name: brand_name,
-              brand_logo: cat_img
+              brand_logo: brand_img
             }
             this.brandList.unshift(newline);
           }
@@ -237,34 +237,36 @@
       showUptBrand: function() {},
       hiddenUptBrand: function() {
         this.isShowUptBrand = false;
+        this.thisBrandId = 0;
         this.thisBrandName = '';
+        this.imgSrc = [];
         this.$apply();
       },
       brandNameIpt: function(e) {
-        this.thisBrandName = e.detail.value
+        this.thisBrandName = e.detail.value;
       },
       addBrandTap: function() {
+        this.isShowUptBrand = true;
         this.thisBrandId = 0;
         this.thisBrandName = "";
-        this.isShowUptBrand = true;
         this.imgSrc = [];
         this.$apply();
       },
       // 长按事件
-      async showActionSheet(x, brandId, brandName, brandImg) {
+      async showActionSheet(x, brand_id, brand_name, brand_img) {
         this.x = x;
-        this.thisBrandName = brandName;
-        this.thisBrandId = brandId;
-        this.thisBrandImg = brandImg;
+        this.thisBrandName = brand_name;
+        this.thisBrandId = brand_id;
+        this.thisBrandImg = brand_img;
         let mRes = await util.showActionSheet([
           "删除品牌", "编辑品牌"
         ]);
         switch (mRes.tapIndex) {
           case 0:
-            this.delBrandTap(brandId);
+            this.delBrandTap(brand_id);
             break;
           case 1:
-            this.updateBrandTap(brandId, brandName, brandImg);
+            this.updateBrandTap();
             break;
         }
       },
@@ -296,23 +298,22 @@
       },
     };
     events = {};
-    updateBrandTap(id, name, logo) {
-      // this.thisBrandId = id;
-      // this.thisBrandName = name;
-      if (logo == '') this.imgSrc = []
-      else {
+    updateBrandTap() {
+      if (this.thisBrandImg == '') {
+        this.imgSrc = [];
+      } else {
         this.imgSrc[0] = {}
         this.imgSrc[0].upload = false;
-        this.imgSrc[0].img_url = logo;
+        this.imgSrc[0].img_url = this.thisBrandImg;
       }
       console.log("this.imgSrc", this.imgSrc)
       this.isShowUptBrand = true;
       this.$apply();
     };
-    async delBrandTap(id) {
-      var modalRes = await util.showModalBig("你确定删除吗，一旦删除无法撤销")
+    async delBrandTap(brand_id) {
+      var modalRes = await util.showModalBig("你确定删除吗，一旦删除无法撤销");
       if (modalRes.confirm) {
-        this.sureTap(id);
+        this.sureTap(brand_id);
       }
     };
     //确定删除
@@ -325,7 +326,7 @@
         this.isShowUptBrand = false;
         this.$apply();
       } else {
-        util.showToast(res.data.message)
+        util.showToast(res.data.message);
       }
     }
     async upImg(i = 0) {
@@ -377,7 +378,7 @@
     onReachBottom() {
       if (this.isMoreData) {
         this.page = this.page + 1;
-        this.getBrandList()
+        this.getBrandList();
       }
     }
     async onLoad(option) {
@@ -386,7 +387,7 @@
       this.getBrandList();
     }
     onUnload() {
-      this.page = 1
+      this.page = 1;
     }
   }
 </script>
