@@ -276,7 +276,7 @@
               <!-- <myList :tabItem="item" wx:elif="{{item.is_admin==1&&yizhanInfo.is_admin==1}}"></myList> -->
               <!-- 业务员 -->
               <!-- <myList :tabItem="item" wx:elif="{{item.is_salesman==1&&yizhanInfo.is_salesman==1}}"></myList> -->
-            </block>
+            <!-- </block> -->
           </repeat>
         </view>
       </form>

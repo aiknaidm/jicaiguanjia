@@ -1,0 +1,392 @@
+<style lang="less">
+  .container {
+    margin-bottom: 150rpx;
+  }
+  .kind {
+    border-bottom: 8rpx solid #f0f0f0;
+  }
+  .kind-1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2rpx solid #f0f0f0;
+    padding: 20rpx 40rpx;
+  }
+  .kind-1 text {
+    color: #999999;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+    -webkit-transition: transform 0.2s;
+    -moz-transition: transform 0.2s;
+    -ms-transition: transform 0.2s;
+    -o-transition: transform 0.2s;
+    transition: transform 0.2s;
+  }
+  .kind-1 view {
+    display: inline-block;
+    line-height: 50rpx;
+    image {
+      width: 50rpx;
+      height: 50rpx;
+      margin: 0 20rpx;
+    }
+  }
+  .add {
+    position: fixed;
+    bottom: 10px;
+    width: 80%;
+    left: 10%;
+    margin: auto;
+    background-color: #e50012;
+    text-align: center;
+    line-height: 80rpx;
+    border-radius: 50px;
+    color: #fff;
+  }
+  .delete {
+    text-align: center;
+    background-color: #e50012;
+    color: #eee;
+    line-height: 80rpx;
+  }
+  .add-box {
+    background: #fff;
+    border-top: 3px solid #e50012;
+    width: 85%;
+    position: relative;
+    z-index: 15;
+  }
+  .add-box .title {
+    padding: 20rpx 40rpx;
+    font-size: 35rpx;
+  }
+  .add-box .content {
+    padding: 20rpx 40rpx;
+  }
+  .add-box .content input {
+    font-size: 30rpx;
+    width: 100%;
+    min-width: 450rpx;
+  }
+  .add-box .btn {
+    display: flex;
+    border: 1px solid #f0f0f0;
+  }
+  .add-box .btn view {
+    flex: 1;
+    text-align: center;
+    font-size: 30rpx;
+    line-height: 80rpx;
+    border-right: 1px solid #f0f0f0;
+  }
+  .opacity {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+  } //   上传图片
+  .cameraBox {
+    height: 204rpx;
+    background-color: #f2f2f2;
+    line-height: 204rpx;
+    display: flex; // flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    overflow-x: scroll;
+  }
+  .camera {
+    width: 102rpx;
+    height: 106rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-right: 30rpx;
+  }
+  .camera image {
+    width: 102rpx;
+    height: 106rpx;
+  }
+  .close {
+    width: 35rpx;
+    height: 35rpx;
+    background-color: #e50012;
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+    line-height: 30rpx;
+    position: absolute;
+    right: -15rpx;
+    top: -15rpx;
+  }
+</style>
+<template>
+  <view class='container'>
+    <view>
+      <view class="delete opacity">
+        长按编辑
+      </view>
+      <view class='kind' wx:for="{{brandList}}" wx:key="{{index}}" bindlongpress='showActionSheet({{index}},{{item.brand_id}},{{item.brand_name}},{{item.brand_logo}})'>
+        <view class="kind-1">
+          <view>
+            <image src='{{item.brand_logo}}' /> {{item.brand_name}} </view>
+          <!-- <view class='del' bindtap='showActionSheet({{index}},{{item.brand_id}},{{item.brand_name}},{{item.brand_logo}})'> 编辑</view> -->
+        </view>
+      </view>
+      <view class="add" bindtap='addBrandTap'>
+        添加品牌
+      </view>
+    </view>
+    <!--添加修改品牌-->
+    <view class="body-bg" hidden="{{!isShowUptBrand}}" bindtouchmove='hiddenUptBrand' bindtap='hiddenUptBrand'>
+      <view class="add-box" catchtap='showUptBrand'>
+        <view class="title">
+          请输入品牌名称
+        </view>
+        <view class="content">
+          <input type="text" name="" value="{{thisBrandName}}" bindinput='brandNameIpt' placeholder='请输入' />
+          <view class="cameraBox">
+            <view class="camera" wx:for="{{imgSrc}}" wx:key="{{index}}">
+              <image src="{{item.img_url}}" />
+              <text class="close" @tap='delImg({{index}})'>x</text>
+            </view>
+            <view class="camera" @tap='chooseImg' wx:if="{{imgSrc.length<1}}">
+              <image src="/images/add_img.png" mode='aspectFit' />
+            </view>
+          </view>
+        </view>
+        <view class="btn">
+          <view data-type='0' catchtap='hiddenUptBrand'>取消</view>
+          <view data-type='2' catchtap='addTap'>确定</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import newapi from '../../API/newapi';
+  import api from '../../API/api';
+  import util from '../../utils/index';
+  export default class brand_Manage extends wepy.page {
+    config = {
+      navigationBarTitleText: '品牌管理'
+    };
+    data = {
+      brandList: [],
+      isShowUptBrand: '',
+      thisBrandName: '',
+      thisBrandId: '',
+      thisBrandImg: '',
+      imgSrc: [],
+      page: 1
+    };
+    computed = {};
+    components = {};
+    methods = {
+      async addTap() {
+        var brand_name = this.thisBrandName;
+        if (brand_name.length == 0) {
+          wx.showToast({
+            title: '名称不能为空哦',
+          })
+          return;
+        } else if (brand_name.length >= 12) {
+          wx.showToast({
+            title: '不能超过12个字',
+          })
+          return;
+        }
+        if (this.imgSrc.length == 0) {
+          res = ""
+        } else if (this.imgSrc[0].upload) {
+          res = await this.upImg();
+        } else {
+          res = this.thisBrandImg
+        }
+        var cat_img = res;
+        var res = await newapi.add_brands({
+          brand_id: this.thisBrandId,
+          brand_name: brand_name,
+          brand_logo: cat_img
+        });
+        // this.page = 1;
+        // this.getBrandList();
+        if (res.data.code == 0) {
+          if (this.thisBrandId) {
+            this.brandList[this.x].brand_name = brand_name;
+            this.brandList[this.x].brand_logo = cat_img;
+          } else {
+            let newline = {
+              brand_id: res.data.data,
+              brand_name: brand_name,
+              brand_logo: cat_img
+            }
+            this.brandList.unshift(newline);
+          }
+        } else {
+          util.showToast(res.data.message);
+        }
+        this.isShowUptBrand = false;
+        this.$apply();
+      },
+      showUptBrand: function() {},
+      hiddenUptBrand: function() {
+        this.isShowUptBrand = false;
+        this.thisBrandName = '';
+        this.$apply();
+      },
+      brandNameIpt: function(e) {
+        this.thisBrandName = e.detail.value
+      },
+      addBrandTap: function() {
+        this.thisBrandId = 0;
+        this.thisBrandName = "";
+        this.isShowUptBrand = true;
+        this.imgSrc = [];
+        this.$apply();
+      },
+      // 长按事件
+      async showActionSheet(x, brandId, brandName, brandImg) {
+        this.x = x;
+        this.thisBrandName = brandName;
+        this.thisBrandId = brandId;
+        this.thisBrandImg = brandImg;
+        let mRes = await util.showActionSheet([
+          "删除品牌", "编辑品牌"
+        ]);
+        switch (mRes.tapIndex) {
+          case 0:
+            this.delBrandTap(brandId);
+            break;
+          case 1:
+            this.updateBrandTap(brandId, brandName, brandImg);
+            break;
+        }
+      },
+      // 删除图片
+      delImg(i) {
+        this.imgSrc.splice(i, 1);
+      },
+      // 上传图片
+      async chooseImg() {
+        wepy
+          .chooseImage({
+            count: 1, // 默认9
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'] // 可以指定来源是相册还是相机，默认二者都有
+          })
+          .then(res => {
+            var that = this;
+            // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+            var tempFilePaths = res.tempFilePaths;
+            tempFilePaths.forEach(function(item, index) {
+              that.imgSrc.push({});
+              that.imgSrc[that.imgSrc.length - 1].upload = true;
+              that.imgSrc[that.imgSrc.length - 1].img_url = item;
+              console.log("that.imgSrc", that.imgSrc);
+            });
+            this.$apply();
+          })
+          .catch(res => {});
+      },
+    };
+    events = {};
+    updateBrandTap(id, name, logo) {
+      // this.thisBrandId = id;
+      // this.thisBrandName = name;
+      if (logo == '') this.imgSrc = []
+      else {
+        this.imgSrc[0] = {}
+        this.imgSrc[0].upload = false;
+        this.imgSrc[0].img_url = logo;
+      }
+      console.log("this.imgSrc", this.imgSrc)
+      this.isShowUptBrand = true;
+      this.$apply();
+    };
+    async delBrandTap(id) {
+      var modalRes = await util.showModalBig("你确定删除吗，一旦删除无法撤销")
+      if (modalRes.confirm) {
+        this.sureTap(id);
+      }
+    };
+    //确定删除
+    async sureTap(brand_id) {
+      var res = await newapi.del_brands({
+        brand_id,
+      });
+      if (res.data.code == 0) {
+        this.brandList.splice(this.x, 1)
+        this.isShowUptBrand = false;
+        this.$apply();
+      } else {
+        util.showToast(res.data.message)
+      }
+    }
+    async upImg(i = 0) {
+      util.showLoading('上传中');
+      try {
+        var res = await wepy.uploadFile({
+          url: api.upload,
+          filePath: this.imgSrc[i].img_url,
+          name: 'file',
+          header: {
+            Accept: 'application/json'
+          }
+        });
+        wx.hideLoading();
+        var datas = JSON.parse(res.data.trim());
+        if (datas.code == 0) {
+          return datas.data.pic_url;
+        }
+      } catch (error) {
+        wx.hideLoading();
+        let mRes = await util.showModalBig(
+          '图片' + this.imgSrc[i].img_url + '上传失败'
+        );
+        if (mRes.confirm) {
+          if (i < this.imgSrc.length) {
+            await this.upImg(i);
+          }
+        }
+      }
+    }
+    async getBrandList() {
+      util.showLoading();
+      let data = {
+        page: this.page
+      }
+      var res = await newapi.all_brands(data);
+      var datas = res.data.data
+      if (this.page == 1) {
+        this.brandList = datas;
+      } else {
+        this.brandList.push(...datas)
+      }
+      if (datas.length < 20) {
+        this.isMoreData = false;
+      }
+      util.hideLoading();
+      this.$apply();
+    }
+    onReachBottom() {
+      if (this.isMoreData) {
+        this.page = this.page + 1;
+        this.getBrandList()
+      }
+    }
+    async onLoad(option) {
+      this.isMoreData = true;
+      this.page = 1;
+      this.getBrandList();
+    }
+    onUnload() {
+      this.page = 1
+    }
+  }
+</script>

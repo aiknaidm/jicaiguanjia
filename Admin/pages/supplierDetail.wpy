@@ -270,6 +270,11 @@
           </navigator>
         </view>
         <view class="info_list">
+          <navigator url="brandManage?suppliers_id={{suppliers_id}}" open-type="navigate" hover-class="none">
+            <image src="/images/console/goods-manage.png" />品牌管理
+          </navigator>
+        </view>
+        <view class="info_list">
           <navigator url="permission?suppliers_id={{suppliers_id}}" open-type="navigate" hover-class="none">
             <image src="/images/console/goods-manage.png" />权限管理
           </navigator>
