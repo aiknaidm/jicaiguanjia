@@ -90,7 +90,8 @@ export default class my_setServiceInfo extends wepy.page {
   data = {
     items: [],
     values: [],
-    popupdata: {}
+    popupdata: {},
+   
   };
   components = {
     popupbox

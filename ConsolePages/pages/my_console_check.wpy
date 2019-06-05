@@ -446,6 +446,7 @@
       let res = await newapi.jcgx(data);
       if (res.data.code == 0) {
         util.showToast('解除关系成功');
+        this.yhData.page=0;
         this.getShenheList();
         this.getNum();
       } else {
@@ -467,6 +468,7 @@
       let res = await newapi.yhsh(data);
       wx.hideLoading();
       if (res.data.code == 0) {
+        this.yhData.page=0;
         this.getShenheList();
         this.getNum();
       }
