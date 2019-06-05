@@ -129,6 +129,7 @@
       <view class="delete opacity">
         长按编辑
       </view>
+      <search @buttonTap.user="searchTap"></search>
       <view class='kind' wx:for="{{brandList}}" wx:key="{{index}}" bindlongpress='showActionSheet({{index}},{{item.brand_id}},{{item.brand_name}},{{item.brand_logo}})'>
         <view class="kind-1">
           <view>
@@ -172,6 +173,7 @@
   import newapi from '../../API/newapi';
   import api from '../../API/api';
   import util from '../../utils/index';
+  import search from '../../components/search';
   export default class brand_Manage extends wepy.page {
     config = {
       navigationBarTitleText: '品牌管理'
@@ -183,10 +185,13 @@
       thisBrandId: '',
       thisBrandImg: '',
       imgSrc: [],
+      keyword: '',
       page: 1
     };
     computed = {};
-    components = {};
+    components = {
+      search,
+    };
     methods = {
       async addTap() {
         var brand_name = this.thisBrandName;
@@ -296,6 +301,12 @@
           })
           .catch(res => {});
       },
+      searchTap(val) {
+        this.isMoreData = true;
+        this.keyword = val;
+        this.page = 1;
+        this.getBrandList();
+      },
     };
     events = {};
     updateBrandTap() {
@@ -360,6 +371,7 @@
     async getBrandList() {
       util.showLoading();
       let data = {
+        keyword: this.keyword,
         page: this.page
       }
       var res = await newapi.all_brands(data);
