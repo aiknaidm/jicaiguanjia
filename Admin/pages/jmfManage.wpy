@@ -1,0 +1,450 @@
+<style lang="less">
+  .container {
+    margin-bottom: 150rpx;
+  }
+  .kind {
+    border-bottom: 8rpx solid #f0f0f0;
+  }
+  .kind-1 {
+    align-items: center;
+    border-bottom: 2rpx solid #f0f0f0;
+    padding: 20rpx 40rpx;
+  }
+  .kind-1 .line1 {
+    color: #FD8D2D;
+  }
+  .kind-1 .line2 {
+    color: #e50012;
+  }
+  .kind-1 text {
+    color: #999999;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+    -webkit-transition: transform 0.2s;
+    -moz-transition: transform 0.2s;
+    -ms-transition: transform 0.2s;
+    -o-transition: transform 0.2s;
+    transition: transform 0.2s;
+  }
+  .kind-1 view {
+    // display: inline-block;
+    line-height: 50rpx;
+    image {
+      width: 50rpx;
+      height: 50rpx;
+      margin: 0 20rpx;
+    }
+  }
+  .add {
+    position: fixed;
+    bottom: 10px;
+    width: 80%;
+    left: 10%;
+    margin: auto;
+    background-color: #e50012;
+    text-align: center;
+    line-height: 80rpx;
+    border-radius: 50px;
+    color: #fff;
+  }
+  .delete {
+    text-align: center;
+    background-color: #e50012;
+    color: #eee;
+    line-height: 80rpx;
+  }
+  .add-box {
+    background: #fff;
+    border-top: 3px solid #e50012; // width: 85%;
+    position: relative;
+    z-index: 15;
+    font-size: 30rpx;
+  }
+  .add-box .title {
+    padding: 20rpx 40rpx;
+    background: #eeeeee;
+  }
+  .add-box .content {
+    padding: 20rpx 40rpx;
+  }
+  .add-box .content input {
+    font-size: 30rpx;
+    width: 100%;
+    min-width: 450rpx;
+  }
+  .add-box .btn {
+    display: flex;
+    border: 1px solid #f0f0f0;
+  }
+  .add-box .btn view {
+    flex: 1;
+    text-align: center;
+    font-size: 30rpx;
+    line-height: 80rpx;
+    border-right: 1px solid #f0f0f0;
+  }
+  .add-box .btn button {
+    flex: 1; // border: 1px solid #ccc;
+    padding: 0;
+    margin: 0;
+    border-radius: 0;
+  }
+  button::after {
+    border: none;
+  }
+  .opacity {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+  } //   上传图片
+  .cameraBox {
+    height: 204rpx;
+    background-color: #f2f2f2;
+    line-height: 204rpx;
+    display: flex; // flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    overflow-x: scroll;
+  }
+  .camera {
+    width: 102rpx;
+    height: 106rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-right: 30rpx;
+  }
+  .camera image {
+    width: 102rpx;
+    height: 106rpx;
+  }
+  .close {
+    width: 35rpx;
+    height: 35rpx;
+    background-color: #e50012;
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+    line-height: 30rpx;
+    position: absolute;
+    right: -15rpx;
+    top: -15rpx;
+  }
+  .inputList {
+    display: flex;
+    align-items: center;
+  }
+  .inputList text {
+    width: 150rpx;
+    padding: 0 10rpx;
+  }
+  .inputList input {
+    flex: 1;
+    border: 1px solid #f0f0f0;
+    margin-bottom: 20rpx;
+    line-height: 88rpx;
+    height: 88rpx;
+    padding: 0 20rpx;
+  }
+</style>
+<template>
+  <view class='container'>
+    <view>
+      <search @buttonTap.user="searchTap"></search>
+      <view class='kind' wx:for="{{joinfeeList}}" wx:key="{{index}}" bindlongpress='showActionSheet({{index}},{{item}})'>
+        <view class="kind-1">
+          <view class="line1"> {{item.sheng}}-{{item.shi}}-{{item.qu}} </view>
+          <view class="line2"> 人口：{{item.renkou}}万人 </view>
+          <view> 加盟费：{{item.join_fee}}万元 </view>
+          <view> 平台软件服务费：{{item.fuwu_fee}}元/年 </view>
+          <view> 售后服务保证金：{{item.margin_fee}}万元 </view>
+          <!-- <view class='del' bindtap='showActionSheet({{index}},{{item.joinfee_id}},{{item.join_fee}},{{item.joinfee_logo}})'> 编辑</view> -->
+        </view>
+      </view>
+    </view>
+    <!--添加修改加盟费-->
+    <view class="body-bg" hidden="{{!isShowUptBrand}}" bindtouchmove='hiddenUptJoinfee' bindtap='hiddenUptJoinfee'>
+      <form bindsubmit='formSubmit'>
+        <view class="add-box" catchtap='showUptJoinfee'>
+          <view class="title">
+            {{popupdata.shengshiqu}}
+          </view>
+          <view class="content">
+            <block wx:for="{{popupdata.inputList}}" wx:key="{{index}}">
+              <view class='inputList' hidden='{{item.hidden?item.hidden:false}}'>
+                <text wx:if="{{item.name}}">{{item.name?item.name:""}}</text> <input placeholder='{{item.placeholder}}' value="{{item.value?item.value:''}}" type="{{item.type?item.type:'text'}}" name="{{item.inputName}}" />
+              </view>
+            </block>
+          </view>
+          <view class="btn">
+            <view data-type='0' catchtap='hiddenUptJoinfee'>取消</view>
+            <button form-type='submit'>确定</button>
+          </view>
+        </view>
+      </form>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import newapi from '../../API/newapi';
+  import api from '../../API/api';
+  import util from '../../utils/index';
+  import search from '../../components/search';
+  export default class joinfee_Manage extends wepy.page {
+    config = {
+      navigationBarTitleText: '加盟费管理'
+    };
+    data = {
+      joinfeeList: [],
+      isShowUptBrand: '',
+      thisJoinfeeId: '',
+      thisjoinFeae: '',
+      thisfuwuFee: '',
+      thismarginFee: '',
+      thisrenkou: '',
+      thisJoinfeeImg: '',
+      imgSrc: [],
+      keyword: '',
+      page: 1,
+      popupdata: {}
+    };
+    computed = {};
+    components = {
+      search,
+    };
+    methods = {
+      async formSubmit(e) {
+        if (e.detail.value.renkou <= 0) {
+          util.showToast('请填写人口');
+          return;
+        }
+        if (e.detail.value.join_fee <= 0) {
+          util.showToast('请填写加盟费');
+          return;
+        }
+        if (e.detail.value.fuwu_fee <= 0) {
+          util.showToast('请填写平台软件服务费');
+          return;
+        }
+        if (e.detail.value.margin_fee <= 0) {
+          util.showToast('请填写售后服务保证金');
+          return;
+        }
+        //console.log(e);
+        //return;
+        var res = await newapi.add_joinfee({
+          joinfee_id: e.detail.value.joinfee_id,
+          renkou: e.detail.value.renkou,
+          join_fee: e.detail.value.join_fee,
+          fuwu_fee: e.detail.value.fuwu_fee,
+          margin_fee: e.detail.value.margin_fee,
+        });
+        // this.page = 1;
+        // this.getJoinfeeList();
+        if (res.data.code == 0) {
+          this.page = 1;
+          this.getJoinfeeList();
+        } else {
+          util.showToast(res.data.message);
+        }
+        this.isShowUptBrand = false;
+        this.$apply();
+      },
+      showUptJoinfee: function() {},
+      hiddenUptJoinfee: function() {
+        this.isShowUptBrand = false;
+        this.thisJoinfeeId = 0;
+        this.thisjoinFeae = '';
+        this.imgSrc = [];
+        this.$apply();
+      },
+      addJoinfeeTap: function() {
+        this.isShowUptBrand = true;
+        this.thisJoinfeeId = 0;
+        this.thisjoinFeae = "";
+        this.imgSrc = [];
+        this.$apply();
+      },
+      // 长按事件
+      async showActionSheet(x, item) {
+        this.x = x;
+        this.thisJoinfeeId = item.joinfee_id;
+        var popupdata = {
+          title: '加盟费编辑',
+          shengshiqu: item.sheng + '-' + item.shi + '-' + item.qu,
+          inputList: [{
+              name: 'id',
+              inputName: 'joinfee_id',
+              type: 'number',
+              value: item.joinfee_id,
+              hidden: true
+            }, {
+              name: '人口（万人）',
+              placeholder: '请填写人口',
+              inputName: 'renkou',
+              type: 'number',
+              value: item.renkou
+            },
+            {
+              name: '加盟费（万元）',
+              placeholder: '请填写加盟费',
+              inputName: 'join_fee',
+              type: 'number',
+              value: item.join_fee
+            },
+            {
+              name: '服务费（元/年）',
+              placeholder: '请填写平台软件服务费',
+              inputName: 'fuwu_fee',
+              type: 'number',
+              value: item.fuwu_fee
+            },
+            {
+              name: '保证金（万元）',
+              placeholder: '请填写售后服务保证金',
+              inputName: 'margin_fee',
+              type: 'number',
+              value: item.margin_fee
+            }
+          ]
+        };
+        this.popupdata = popupdata;
+        let mRes = await util.showActionSheet([
+          "删除加盟费", "编辑加盟费"
+        ]);
+        switch (mRes.tapIndex) {
+          case 0:
+            this.delJoinfeeTap(item.joinfee_id);
+            break;
+          case 1:
+            this.updateJoinfeeTap();
+            break;
+        }
+      },
+      // 删除图片
+      delImg(i) {
+        this.imgSrc.splice(i, 1);
+      },
+      // 上传图片
+      async chooseImg() {
+        wepy
+          .chooseImage({
+            count: 1, // 默认9
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'] // 可以指定来源是相册还是相机，默认二者都有
+          })
+          .then(res => {
+            var that = this;
+            // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+            var tempFilePaths = res.tempFilePaths;
+            tempFilePaths.forEach(function(item, index) {
+              that.imgSrc.push({});
+              that.imgSrc[that.imgSrc.length - 1].upload = true;
+              that.imgSrc[that.imgSrc.length - 1].img_url = item;
+              console.log("that.imgSrc", that.imgSrc);
+            });
+            this.$apply();
+          })
+          .catch(res => {});
+      },
+      searchTap(val) {
+        this.isMoreData = true;
+        this.keyword = val;
+        this.page = 1;
+        this.getJoinfeeList();
+      },
+    };
+    events = {};
+    updateJoinfeeTap() {
+      this.isShowUptBrand = true;
+      this.$apply();
+    };
+    async delJoinfeeTap(joinfee_id) {
+      var modalRes = await util.showModalBig("你确定删除吗，一旦删除无法撤销");
+      if (modalRes.confirm) {
+        this.sureTap(joinfee_id);
+      }
+    };
+    //确定删除
+    async sureTap(joinfee_id) {
+      var res = await newapi.del_joinfee({
+        joinfee_id,
+      });
+      if (res.data.code == 0) {
+        this.joinfeeList.splice(this.x, 1)
+        this.isShowUptBrand = false;
+        this.$apply();
+      } else {
+        util.showToast(res.data.message);
+      }
+    }
+    async upImg(i = 0) {
+      util.showLoading('上传中');
+      try {
+        var res = await wepy.uploadFile({
+          url: api.upload,
+          filePath: this.imgSrc[i].img_url,
+          name: 'file',
+          header: {
+            Accept: 'application/json'
+          }
+        });
+        wx.hideLoading();
+        var datas = JSON.parse(res.data.trim());
+        if (datas.code == 0) {
+          return datas.data.pic_url;
+        }
+      } catch (error) {
+        wx.hideLoading();
+        let mRes = await util.showModalBig(
+          '图片' + this.imgSrc[i].img_url + '上传失败'
+        );
+        if (mRes.confirm) {
+          if (i < this.imgSrc.length) {
+            await this.upImg(i);
+          }
+        }
+      }
+    }
+    async getJoinfeeList() {
+      util.showLoading();
+      let data = {
+        keyword: this.keyword,
+        page: this.page
+      }
+      var res = await newapi.joinfee_list(data);
+      var datas = res.data.data
+      if (this.page == 1) {
+        this.joinfeeList = datas;
+      } else {
+        this.joinfeeList.push(...datas)
+      }
+      if (datas.length < 20) {
+        this.isMoreData = false;
+      }
+      util.hideLoading();
+      this.$apply();
+    }
+    onReachBottom() {
+      if (this.isMoreData) {
+        this.page = this.page + 1;
+        this.getJoinfeeList();
+      }
+    }
+    async onLoad(option) {
+      this.isMoreData = true;
+      this.page = 1;
+      this.getJoinfeeList();
+    }
+    onUnload() {
+      this.page = 1;
+    }
+  }
+</script>

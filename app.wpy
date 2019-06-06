@@ -181,6 +181,7 @@ export default class extends wepy.app {
           'pages/memberInfo',
           'pages/permission',
           'pages/brandManage',
+          'pages/jmfManage',
         ]
       }
     ],

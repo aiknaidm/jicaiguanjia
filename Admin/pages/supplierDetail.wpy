@@ -275,6 +275,11 @@
           </navigator>
         </view>
         <view class="info_list">
+          <navigator url="jmfManage" open-type="navigate" hover-class="none">
+            <image src="/images/console/goods-manage.png" />收费标准查询
+          </navigator>
+        </view>
+        <view class="info_list">
           <navigator url="permission?suppliers_id={{suppliers_id}}" open-type="navigate" hover-class="none">
             <image src="/images/console/goods-manage.png" />权限管理
           </navigator>
