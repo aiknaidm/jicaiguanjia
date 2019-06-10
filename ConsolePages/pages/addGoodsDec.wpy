@@ -3,22 +3,23 @@
 <template>
 <view>
 
- <xing-editor @finish="finish" output-type="html" image-upload-url="https://lmbge.com/wxapi/jcgj/upload" image-upload-name="file" image-upload-key-chain="image.url" html="{{html}}"/>
-
+ <!-- <xing-editor @finish="finish" output-type="html" image-upload-url="https://lmbge.com/wxapi/jcgj/upload" image-upload-name="file" image-upload-key-chain="image.url" html="{{html}}"/> -->
+<wxeditor :content.sync="html" @getContent.user="finish" ></wxeditor>
 </view>
 </template>
 
 <script>
 import wepy from 'wepy';
+import wxeditor from '../../components/wx-editor';
 
 export default class newslist extends wepy.page {
   config = {
     navigationBarTitleText: '商品描述',
-    usingComponents: {
-      'xing-editor': '/components/editor/xing-editor'
-    }
+    // usingComponents: {
+    //   'editor': '/components/wx-editor'
+    // }
   };
-  components = {};
+  components = {wxeditor};
   data = {
     html: ''
   };
@@ -26,18 +27,19 @@ export default class newslist extends wepy.page {
   methods = {
     finish: function(e) {
       this.$parent.$pages['/ConsolePages/pages/addGoodsInfo'].goods_desc =
-        e.detail.content;
+        e.html;
       wx.navigateBack({
         delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
       });
-    }
+    },
+ 
   };
   events = {};
   async getIndexNewsList(id) {}
   async onLoad(option) {
-    (this.html = this.$parent.$pages[
+    this.html = this.$parent.$pages[
       '/ConsolePages/pages/addGoodsInfo'
-    ].goods_desc),
+    ].goods_desc;
       this.$apply();
   }
   thishtml() {

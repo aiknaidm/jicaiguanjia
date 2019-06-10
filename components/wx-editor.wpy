@@ -1,0 +1,252 @@
+<style lang="">
+  @import '../common/lib/weui.wxss';
+  @import './assets/iconfont.wxss';
+  .wrapper {
+    padding: 5px;
+  }
+  .iconfont {
+    display: inline-block;
+    padding: 8px 8px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    font-size: 20px;
+  }
+  .toolbar {
+    box-sizing: border-box;
+    /* border: 1px solid #ccc; */
+    border-bottom: 0;
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  }
+  .ql-container {
+    box-sizing: border-box;
+    padding: 12px 15px;
+    width: 100%;
+    min-height: 30vh;
+    height: auto;
+    /* border-top: 1px solid #ccc;
+          border-bottom: 1px solid #ccc; */
+    background: #fff;
+    margin-top: 20px;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .ql-active {
+    color: #06c;
+  }
+</style>
+<template>
+  <view class="container">
+    <form @submit="formSubmit" bindreset="formReset">
+      <!-- <template is="head" data="{{title: 'editor'}}"/> -->
+      <view class="page-body">
+        <view class="wrapper">
+          <view class="toolbar" bindtap="format">
+            <i class="iconfont icon-zitijiacu {{formats.bold ? 'ql-active' : ''}}" data-name="bold"></i>
+            <i class="iconfont icon-zitixieti {{formats.italic ? 'ql-active' : ''}}" data-name="italic"></i>
+            <i class="iconfont icon-zitixiahuaxian {{formats.underline ? 'ql-active' : ''}}" data-name="underline"></i>
+            <i class="iconfont icon-zitishanchuxian {{formats.strike ? 'ql-active' : ''}}" data-name="strike"></i>
+            <i class="iconfont icon-zuoduiqi {{formats.align === 'left' ? 'ql-active' : ''}}" data-name="align" data-value="left"></i>
+            <i class="iconfont icon-juzhongduiqi {{formats.align === 'center' ? 'ql-active' : ''}}" data-name="align" data-value="center"></i>
+            <i class="iconfont icon-youduiqi {{formats.align === 'right' ? 'ql-active' : ''}}" data-name="align" data-value="right"></i>
+            <i class="iconfont icon-zuoyouduiqi {{formats.align === 'justify' ? 'ql-active' : ''}}" data-name="align" data-value="justify"></i>
+            <i class="iconfont icon-line-height {{formats.lineHeight ? 'ql-active' : ''}}" data-name="lineHeight" data-value="2"></i>
+            <i class="iconfont icon-Character-Spacing {{formats.letterSpacing ? 'ql-active' : ''}}" data-name="letterSpacing" data-value="2em"></i>
+            <i class="iconfont icon-722bianjiqi_duanqianju {{formats.marginTop ? 'ql-active' : ''}}" data-name="marginTop" data-value="20px"></i>
+            <i class="iconfont icon-723bianjiqi_duanhouju {{formats.micon-previewarginBottom ? 'ql-active' : ''}}" data-name="marginBottom" data-value="20px"></i>
+            <i class="iconfont icon-clearedformat" bindtap="removeFormat"></i>
+            <i class="iconfont icon-font {{formats.fontFamily ? 'ql-active' : ''}}" data-name="fontFamily" data-value="Pacifico"></i>
+            <i class="iconfont icon-fontsize {{formats.fontSize === '24px' ? 'ql-active' : ''}}" data-name="fontSize" data-value="24px"></i>
+            <i class="iconfont icon-text_color {{formats.color === '#0000ff' ? 'ql-active' : ''}}" data-name="color" data-value="#0000ff"></i>
+            <i class="iconfont icon-fontbgcolor {{formats.backgroundColor === '#00ff00' ? 'ql-active' : ''}}" data-name="backgroundColor" data-value="#00ff00"></i>
+            <i class="iconfont icon-date" bindtap="insertDate"></i>
+            <i class="iconfont icon--checklist" data-name="list" data-value="check"></i>
+            <i class="iconfont icon-youxupailie {{formats.list === 'ordered' ? 'ql-active' : ''}}" data-name="list" data-value="ordered"></i>
+            <i class="iconfont icon-wuxupailie {{formats.list === 'bullet' ? 'ql-active' : ''}}" data-name="list" data-value="bullet"></i>
+            <i class="iconfont icon-undo" bindtap="undo"></i>
+            <i class="iconfont icon-redo" bindtap="redo"></i>
+            <i class="iconfont icon-outdent" data-name="indent" data-value="-1"></i>
+            <i class="iconfont icon-indent" data-name="indent" data-value="+1"></i>
+            <i class="iconfont icon-fengexian" bindtap="insertDivider"></i>
+            <i class="iconfont icon-charutupian" bindtap="insertImage"></i>
+            <i class="iconfont icon-format-header-1 {{formats.header === 1 ? 'ql-active' : ''}}" data-name="header" data-value="{{1}}"></i>
+            <i class="iconfont icon-zitixiabiao {{formats.script === 'sub' ? 'ql-active' : ''}}" data-name="script" data-value="sub"></i>
+            <i class="iconfont icon-zitishangbiao {{formats.script === 'super' ? 'ql-active' : ''}}" data-name="script" data-value="super"></i>
+            <!-- <i class="iconfont icon-quanping"></i> -->
+            <i class="iconfont icon-shanchu" bindtap="clear"></i>
+            <i class="iconfont icon-direction-rtl {{formats.direction === 'rtl' ? 'ql-active' : ''}}" data-name="direction" data-value="rtl"></i>
+          </view>
+          <editor name="dec" id="editor" @input="inputChange" class="ql-container" placeholder="{{placeholder}}" showImgSize showImgToolbar showImgResize bindstatuschange="onStatusChange" read-only="{{readOnly}}" bindready="onEditorReady"></editor>
+          <view>
+            <button form-type="submit">完成</button>
+          </view>
+        </view>
+      </view>
+    </form>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy';
+  import util from '../utils/index';
+  import api from '../API/api';
+  export default class wxeditor extends wepy.component {
+    data = {
+      formats: {},
+      bottom: 0,
+      readOnly: false,
+      placeholder: '开始输入...',
+      _focus: false
+    };
+    props = {
+      content: {
+        type: String,
+        default: "",
+        twoWay: true
+      }
+    };
+    methods = {
+      async formSubmit(e) {
+        var ops = this.html.delta.ops;
+        for (var i = 0; i < ops.length; i++) {
+          var item = ops[i]
+          if (item.insert.image && item.insert.image.indexOf("http://tmp/") != -1) {
+            var res = await this.upImg(item.insert.image);
+            console.log(item.insert.image, res);
+            this.html.html = this.html.html.replace(item.insert.image, res)
+          }
+        }
+        this.$emit("getContent", this.html)
+        // console.log(new DOMParser().parseFromString(this.html.html,'text/html').body.childNodes[0]);
+      },
+      readOnlyChange() {
+        this.setData({
+          readOnly: !this.data.readOnly
+        });
+      },
+      onEditorReady() {
+        const that = this;
+        wx.createSelectorQuery()
+          .select('#editor')
+          .context(function(res) {
+            console.log(res.context, that.content);
+            that.editorCtx = res.context;
+            that.editorCtx.setContents({
+              html: that.content
+            })
+          })
+          .exec();
+      },
+      inputChange(e) {
+        console.log(e);
+        this.html = e.detail;
+        this.$apply();
+      },
+      undo() {
+        this.editorCtx.undo();
+      },
+      redo() {
+        this.editorCtx.redo();
+      },
+      format(e) {
+        let {
+          name,
+          value
+        } = e.target.dataset;
+        if (!name) return;
+        console.log('format', name, value);
+        this.editorCtx.format(name, value);
+      },
+      onStatusChange(e) {
+        const formats = e.detail;
+        this.setData({
+          formats
+        });
+      },
+      insertDivider() {
+        this.editorCtx.insertDivider({
+          success: function() {
+            console.log('insert divider success');
+          }
+        });
+      },
+      clear() {
+        this.editorCtx.clear({
+          success: function(res) {
+            console.log('clear success');
+          }
+        });
+      },
+      removeFormat() {
+        this.editorCtx.removeFormat();
+      },
+      insertDate() {
+        const date = new Date();
+        const formatDate = `${date.getFullYear()}/${date.getMonth() +
+                1}/${date.getDate()}`;
+        this.editorCtx.insertText({
+          text: formatDate
+        });
+      },
+      async insertImage() {
+        const that = this;
+        var res = await wepy.chooseImage();
+        console.log("res.tempFilePaths", res.tempFilePaths)
+        for (var i = 0; i < res.tempFilePaths.length; i++) {
+          // var imgRes = await this.upImg(res.tempFilePaths[i]);
+          that.editorCtx.insertImage({
+            src: res.tempFilePaths[i],
+            data: {
+              id: 'abcd',
+              role: 'god'
+            },
+            success: function() {
+              console.log(that.editorCtx, 'insert image success');
+            }
+          });
+          // that.upImg(item.insert.image).then(res=>{
+          //            wx.hideLoading();
+        }
+        // res.tempFilePaths.forEach((item, index) => {
+        // //     wx.showLoading({
+        // //   title: '图片插入中。。。', //提示的内容,
+        // //   mask: true, //显示透明蒙层，防止触摸穿透,
+        // // });
+        // });
+      }
+    };
+    async upImg(img_url) {
+      util.showLoading('上传中');
+      try {
+        var res = await wepy.uploadFile({
+          url: api.upload,
+          filePath: img_url,
+          name: 'file',
+          header: {
+            Accept: 'application/json'
+          }
+        });
+        wx.hideLoading();
+        var datas = JSON.parse(res.data.trim());
+        if (datas.code == 0) {
+          return datas.data.pic_url;
+        }
+      } catch (error) {
+        console.log("error", error);
+        wx.hideLoading();
+        let mRes = await util.showModalBig(
+          '图片' + img_url + '上传失败'
+        );
+        if (mRes.confirm) {
+          await this.upImg(img_url);
+        }
+      }
+    }
+    onLoad() {
+      wx.loadFontFace({
+        family: 'Pacifico',
+        source: 'url("https://sungd.github.io/Pacifico.ttf")',
+        success: console.log
+      });
+    }
+  }
+</script>
