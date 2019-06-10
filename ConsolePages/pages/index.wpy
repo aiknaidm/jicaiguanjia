@@ -238,7 +238,7 @@
           <form report-submit bindsubmit='getFormId'>
             <navigator url='/ConsolePages/pages/share'>
               <button form-type="submit">
-                  <text class='iconfont icon-fenxiang'></text>分享好友</button>
+                        <text class='iconfont icon-fenxiang'></text>分享好友</button>
             </navigator>
           </form>
         </view>
@@ -266,16 +266,16 @@
             <image src="/images/console/wdyy.png" />我的应用
           </navigator>
           <repeat for="{{permission}}" wx:key="{{index}}">
-             <myList :tabItem="item" ></myList>
+            <myList :tabItem="item"></myList>
             <!-- <block  > -->
-               <!-- 易站所有者 -->
-              <!-- <myList :tabItem="item" wx:if="{{yizhanInfo.is_boss==1&&item.isyizhan==1&&item.is_boss==1}}"></myList> -->
-              <!-- 店铺所有者 -->
-              <!-- <myList :tabItem="item" wx:elif="{{yizhanInfo.is_boss==1&&item.is_boss==1}}"></myList> -->
-              <!-- 管理员 -->
-              <!-- <myList :tabItem="item" wx:elif="{{item.is_admin==1&&yizhanInfo.is_admin==1}}"></myList> -->
-              <!-- 业务员 -->
-              <!-- <myList :tabItem="item" wx:elif="{{item.is_salesman==1&&yizhanInfo.is_salesman==1}}"></myList> -->
+            <!-- 易站所有者 -->
+            <!-- <myList :tabItem="item" wx:if="{{yizhanInfo.is_boss==1&&item.isyizhan==1&&item.is_boss==1}}"></myList> -->
+            <!-- 店铺所有者 -->
+            <!-- <myList :tabItem="item" wx:elif="{{yizhanInfo.is_boss==1&&item.is_boss==1}}"></myList> -->
+            <!-- 管理员 -->
+            <!-- <myList :tabItem="item" wx:elif="{{item.is_admin==1&&yizhanInfo.is_admin==1}}"></myList> -->
+            <!-- 业务员 -->
+            <!-- <myList :tabItem="item" wx:elif="{{item.is_salesman==1&&yizhanInfo.is_salesman==1}}"></myList> -->
             <!-- </block> -->
           </repeat>
         </view>
@@ -311,7 +311,7 @@
       yizhanInfo: {},
       yizhanlist: [],
       right: 0,
-      permission:[],
+      permission: [],
       tabList: [{
           num: 0,
           display_name: '待付款',
@@ -431,12 +431,12 @@
           isadmin: 1,
           isfufei: 1
         },
-         {
+        {
           icon: '/images/console/hyk.png',
           text: '优惠券',
           url: 'coupon/addCoupon',
           bgcolor: '#fd7602',
-           isyizhan: 1,
+          isyizhan: 1,
         },
         {
           icon: '/images/console/chakanmyshop.png',
@@ -553,14 +553,11 @@
     //       '&sales_name=' +
     //       this.yizhanInfo.user_nickname;
     //     })
-    
-         
     //   } else {
     //     this.applicationList.forEach((item,index)=>{
     //       if(item.text=="查看我的店铺")
     //       this.applicationList[index].url = '/pages/shoperweima'
     //     })
-       
     //   }
     // }
     async init(suppliers_id) {
@@ -583,7 +580,61 @@
       }
       this.yizhanInfo = yizhanInfo;
       this.suppliers_id = yizhanInfo.suppliers_id;
-      this.permission=yizhanInfo.permission;
+      this.permission = yizhanInfo.permission;
+      if (this.suppliers_id == 255) {
+        this.shopList = [{
+            icon: '/images/console/fabushangpin.png',
+            num: 0,
+            display_name: '发布商品',
+            url: 'addGoodsInfo',
+            bgcolor: '#10b3b1'
+          },
+          {
+            icon: '/images/console/shangpinliebiao.png',
+            num: 0,
+            display_name: '商品列表',
+            url: 'goodsList',
+            bgcolor: '#f7bf30'
+          },
+          {
+            icon: '/images/console/shangpinliebiao.png',
+            num: 0,
+            display_name: '分类管理',
+            url: 'my_console_catDelete',
+            bgcolor: '#f7bf30'
+          }, {
+            icon: '/images/console/shangpinliebiao.png',
+            num: 0,
+            display_name: '加盟费管理',
+            url: '/Admin/pages/jmfManage',
+            bgcolor: '#f7bf30'
+          }
+        ];
+        // this.shopList.push();
+      } else {
+        this.shopList = [{
+            icon: '/images/console/fabushangpin.png',
+            num: 0,
+            display_name: '发布商品',
+            url: 'addGoodsInfo',
+            bgcolor: '#10b3b1'
+          },
+          {
+            icon: '/images/console/shangpinliebiao.png',
+            num: 0,
+            display_name: '商品列表',
+            url: 'goodsList',
+            bgcolor: '#f7bf30'
+          },
+          {
+            icon: '/images/console/shangpinliebiao.png',
+            num: 0,
+            display_name: '分类管理',
+            url: 'my_console_catDelete',
+            bgcolor: '#f7bf30'
+          }
+        ];
+      }
       this.orderNum();
       this.getjllist();
       this.isexpired(yizhanInfo);
@@ -593,7 +644,7 @@
       this.$apply();
     }
     async onShow(option) {
-      let res=await this.$parent.loginInfo();
+      let res = await this.$parent.loginInfo();
       let userInfo = await this.$parent.getUserInfo();
       this.user_id = userInfo.user_id;
       this.suppliers_id = this.$parent.globalData.suppliers_id ?
