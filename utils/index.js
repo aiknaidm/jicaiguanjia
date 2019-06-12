@@ -272,7 +272,7 @@ const showModalBig = async function(content, title = '提示') {
     });
     return res;
 }
-const showActionSheet = async function(itemList) {
+const showActionSheet = function(itemList) {
     return new Promise((resolve, reject) => {
         wx.showActionSheet({
             itemList: itemList,

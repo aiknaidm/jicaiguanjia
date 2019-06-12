@@ -206,17 +206,18 @@
       <!--未审核  -->
       <view class='check-list' wx:if="{{currentStatu==0}}" wx:for="{{shenheList}}" wx:key="{{index}}" data-id="{{item.user_id}}" @tap='toCheckDetail'>
         <view class='check-list-img'>
-          <image src='{{item.avatar}}' />
+          <image src='{{item.img}}' />
         </view>
         <view class='check-list-content'>
-          <view>姓名：{{item.user_name}}</view>
-          <view @tap.stop='tocallphone' data-phone="{{item.mobile_phone}}">手机号码：{{item.mobile_phone}}
+          <view>姓名：{{item.username}}</view>
+          <view>店铺名称：{{item.suppliers_name}}</view>
+          <view @tap.stop='tocallphone' data-phone="{{item.mobile_phone}}">手机号码：{{item.mobile}}
             <text class='iconfont icon-shouji'></text>
           </view>
         </view>
         <view class='check-list-btn'>
           <form report-submit bindsubmit='getFormId'>
-            <button @tap.stop='toShenhe' data-id="{{item.user_id}}">审核</button>
+            <button @tap.stop='toShenhe' data-id="{{item.id}}">审核</button>
           </form>
         </view>
       </view>
@@ -237,7 +238,7 @@
           <view wx:if="{{item.amount&&item.amount!=0}}">会员卡余额：￥{{item.amount}}</view>
         </view>
         <view class='check-list-btn'>
-          <text class='iconfont icon-youcecaidan' @tap.stop='toJiechu({{item.amount}})' data-id="{{item.user_id}}"></text>
+          <text class='iconfont icon-youcecaidan' @tap.stop='toJiechu({{item.amount}})' data-id="{{item.id}}"></text>
         </view>
       </view>
     </view>
@@ -284,11 +285,7 @@
     computed = {};
     components = {};
     methods = {
-      searchTap(val){
-          this.yhData.keyword=val;
-          this.yhData.page=1;
-          this.getShenheList();
-      },
+
       toSureList() {
         wx.navigateTo({
           url: 'my_console_toSureList'
@@ -313,14 +310,15 @@
         util.submitFormId(e.detail.formId);
       },
       statusTap: function(e) {
-        this.yhData.shenhe = e.currentTarget.dataset.index
-        this.yhData.page = 1
+      
+        this.page = 1
         this.shenheList=[];
-        this.getShenheList();
+       
         var curType = e.currentTarget.dataset.index;
         var curStatu = e.currentTarget.dataset.statu;
         this.currentType = curType;
         this.currentStatu = curStatu;
+         this.getShenheList(this.suppliers_id,curType);
       },
       //需要审核提示
       async toShenhe(e) {
@@ -328,24 +326,24 @@
         var id = e.currentTarget.dataset.id;
         let mRes = await util.showActionSheet(['通过', '拒绝']);
         if (mRes.tapIndex == 0) {  
-          let mRes2 = await util.showActionSheet(this.list);
-          this.shenhe(id, 'tongguo',mRes2.tapIndex+1);
+          
+          this.shenhe(id, '1');
         } else if (mRes.tapIndex == 1) {
-          this.shenhe(id, 'jujue');
+          this.shenhe(id, '2');
         }
       },
       //解除关系提示
       async toJiechu(money, e) {
         //审核人的id
         var id = e.currentTarget.dataset.id;
-        let mRes = await util.showActionSheet(['解除关系','设置会员等级']);
+        let mRes = await util.showActionSheet(['解除关系']);
         if (mRes.tapIndex == 0) {
-          this.jiechu(id, money);
+          this.shenhe(id, 0);
         }else{
-          console.log("this.list",this.list);
-           let mRes2 = await util.showActionSheet(this.list);
+        //   console.log("this.list",this.list);
+        //    let mRes2 = await util.showActionSheet(this.list);
 
-           this.shenhe(id, 'tongguo',mRes2.tapIndex+1);
+        //    this.shenhe(id, 'tongguo',mRes2.tapIndex+1);
         }
       },
       tocallphone: function(e) {
@@ -372,25 +370,21 @@
         this.isShowSalesList = false;
       },
       changeShopList: function(sales_id, name) {
-        this.isShowSalesList = false;
-        this.salesmanName = name;
-        this.yhData.sales_id = sales_id;
-        this.getShenheList();
-        this.getNum();
-        this.getPaycardMsg();
+     
       }
     };
     events = {};
     //审核列表
-    async getShenheList() {
+    async getShenheList(suppliers_id,shenhe) {
       wx.showLoading({
         mask: true, //显示透明蒙层，防止触摸穿透,
       });
-      let res = await newapi.suppliers_join_list({suppliers_id:this.suppliers_id});
+    //   shenhe 0 未审核 1已审核
+      let res = await newapi.suppliers_join_list({suppliers_id,shenhe});
       wx.hideLoading();
       if (res.data.code == 0) {
         var datas = res.data.data.data
-        if (this.yhData.page ==1) {
+        if (this.page ==1) {
           this.shenheList = datas
         } else {
           this.shenheList.push(...datas)
@@ -404,62 +398,63 @@
        this.$apply();
     }
     //解除关系
-    async jiechu(id, money) {
-      let user_id = id;
-      let suppliers_id = this.$parent.globalData.suppliers_id;
-      if (money > 0) {
-        util.showModal('此会员是充值用户，暂不能解除会员关系');
-        return;
-      }
-      let data = {
-        user_id,
-        suppliers_id
-      };
-      let res = await newapi.jcgx(data);
-      if (res.data.code == 0) {
-        util.showToast('解除关系成功');
-        this.yhData.page=1;
-        this.getShenheList();
-        this.getNum();
-      } else {
-        util.showToast(res.data.message);
-      }
-    }
+    // async jiechu(id, money) {
+    
+    //   let suppliers_id = this.$parent.globalData.suppliers_id;
+    //   if (money > 0) {
+    //     util.showModal('此会员是充值用户，暂不能解除会员关系');
+    //     return;
+    //   }
+    //   let data = {
+    //     id,
+    //     shenhe
+    //   };
+    //   let res = await newapi.shenhe_suppliers_join(data);
+    //   if (res.data.code == 0) {
+    //     util.showToast('解除关系成功');
+    //     this.page=1;
+    //     this.getShenheList(this.suppliers_id);
+        
+    //   } else {
+    //     util.showToast(res.data.message);
+    //   }
+    // }
     //审核
-    async shenhe(id, type,vip_level) {
+    async shenhe(id, shenhe) {
       util.showLoading('审核中...');
-      let user_id = id;
       let suppliers_id = this.suppliers_id;
-      var type = type;
+      var shenhe = shenhe;
       let data = {
-        user_id,
-        suppliers_id,
-        type,
-        vip_level
+        id,
+        shenhe
+        
       };
-      let res = await newapi.yhsh(data);
+      let res = await newapi.shenhe_suppliers_join(data);
       wx.hideLoading();
       if (res.data.code == 0) {
-        this.yhData.page=1;
-        this.getShenheList();
-        this.getNum();
+        this.page=1;
+        this.getShenheList(this.suppliers_id,0);
       }
     }
    
     
    
     async onLoad(option) {
-     
+     this.page=1;
+       this.suppliers_id = this.$parent.globalData.suppliers_id ?
+          this.$parent.globalData.suppliers_id :
+          (await this.$parent.getYizhanInfo()).suppliers_id;
+    this.shenhe=0
+     this.getShenheList(this.suppliers_id,this.shenhe)
     }
     async onShow() {
-      this.getPaycardMsg();
-      this.getNum();
+   
     }
     onReachBottom() {
      
       if (this.isMoreData) {
-        this.yhData.page = this.yhData.page + 1;
-        this.getShenheList();
+        this.page = this.page + 1;
+        this.getShenheList(this.suppliers_id,this.shenhe);
       }
     }
   }

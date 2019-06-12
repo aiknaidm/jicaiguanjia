@@ -70,7 +70,6 @@
     flex: 1;
     border-bottom: 6rpx solid #eee;
     position: relative;
-    background: #fff;
   }
   .status-box .status-label.active {
     color: #e50012;
@@ -194,63 +193,9 @@
 </style>
 <template>
   <view class='container'>
-    <view class="status-box">
-      <view @tap="statusTap" class="status-label {{index == currentType ? 'active' : ''}}" wx:for-items="{{statusType}}" wx:key="{{index}}" data-index="{{index}}" data-statu="{{statusKey[index]}}">
-        {{item}}
-        <view class="{{tabClass[index]}}"></view>
-      </view>
-    </view>
-
-    
-    <view class='checkLists'>
-      <!--未审核  -->
-      <view class='check-list' wx:if="{{currentStatu==0}}" wx:for="{{shenheList}}" wx:key="{{index}}" data-id="{{item.user_id}}" @tap='toCheckDetail'>
-        <view class='check-list-img'>
-          <image src='{{item.avatar}}' />
-        </view>
-        <view class='check-list-content'>
-          <view>姓名：{{item.user_name}}</view>
-          <view @tap.stop='tocallphone' data-phone="{{item.mobile_phone}}">手机号码：{{item.mobile_phone}}
-            <text class='iconfont icon-shouji'></text>
-          </view>
-        </view>
-        <view class='check-list-btn'>
-          <form report-submit bindsubmit='getFormId'>
-            <button @tap.stop='toShenhe' data-id="{{item.user_id}}">审核</button>
-          </form>
-        </view>
-      </view>
-      <!--已审核  -->
-      <view class='check-list checked-list' wx:if="{{currentStatu==1}}" wx:for="{{shenheList}}" wx:key="{{index}}" @tap='toCheckDetail' data-id="{{item.user_id}}">
-        <view class='check-list-img'>
-          <image src='{{item.avatar}}' />
-        </view>
-        <view class='check-list-content'>
-          <view>姓名：{{item.user_name}}</view>
-          <view @tap.stop='tocallphone' data-phone="{{item.mobile_phone}}">手机号码：{{item.mobile_phone}}
-            <text class='iconfont icon-shouji'></text>
-          </view>
-          <view >会员等级：{{item.vip_level}}级
-       
-          </view>
-          
-          <view wx:if="{{item.amount&&item.amount!=0}}">会员卡余额：￥{{item.amount}}</view>
-        </view>
-        <view class='check-list-btn'>
-          <text class='iconfont icon-youcecaidan' @tap.stop='toJiechu({{item.amount}})' data-id="{{item.user_id}}"></text>
-        </view>
-      </view>
-    </view>
-    <navigator url='/ConsolePages/pages/my_addManagerInfo?type=member&sales_id={{sales_id}}'>
-      <view class='addmember'>+添加会员</view>
-    </navigator>
-    <view class='body-bg' wx:if="{{isShowSalesList}}" bindtap='hiddenSalesList' touchstart='hiddenbg' touchmove="hiddenbg">
-      <view class='list'>
-        <view wx:for="{{adminList}}" wx:key="{{index}}" @tap='changeShopList({{item.id}},{{item.user_nickname}})'>
-          {{item.user_nickname}}
-        </view>
-      </view>
-    </view>
+    <button @tap="apply" wx:if="{{shenhe==0}}">加盟易站</button>
+    <button  wx:if="{{shenhe==2}}">等待审核中~</button>
+    <button  wx:if="{{shenhe==1}}">查看本地易站</button>
   </view>
 </template>
 
@@ -265,259 +210,34 @@
       navigationBarTitleText: '会员管理'
     };
     data = {
-      statusType: ['未审核', '已审核'],
-      statusKey: ['0', '1'],
-      currentType: 0,
-      currentStatu: '0',
-      shenheList: [],
-      sales_id: 0,
-      isShowSalesList: false,
-      adminList: [],
-      salesmanName: '选择业务员',
-      showName: false,
-      num: 0,
-      money: {},
-      is_kthy: 0,
-      qurenNum: 0,
+    shenhe:0
       
     };
     computed = {};
     components = {};
     methods = {
-      searchTap(val){
-          this.yhData.keyword=val;
-          this.yhData.page=1;
-          this.getShenheList();
-      },
-      toSureList() {
-        wx.navigateTo({
-          url: 'my_console_toSureList'
-        });
-      },
-      toExpendDetails() {
-        wx.navigateTo({
-          url: 'my_console_cardExpendDetail?money=' + this.money.zhichu
-        });
-      },
-      tobalanceDetail() {
-        wx.navigateTo({
-          url: 'my_console_tobalanceDetail?money=' + this.money.yue
-        });
-      },
-      toPayDetails() {
-        wx.navigateTo({
-          url: 'my_console_cardPayDetail?money=' + this.money.zong
-        });
-      },
-      getFormId: function(e) {
-        util.submitFormId(e.detail.formId);
-      },
-      statusTap: function(e) {
-        this.yhData.shenhe = e.currentTarget.dataset.index
-        this.yhData.page = 1
-        this.shenheList=[];
-        this.getShenheList();
-        var curType = e.currentTarget.dataset.index;
-        var curStatu = e.currentTarget.dataset.statu;
-        this.currentType = curType;
-        this.currentStatu = curStatu;
-      },
-      //需要审核提示
-      async toShenhe(e) {
-        //审核人的id
-        var id = e.currentTarget.dataset.id;
-        let mRes = await util.showActionSheet(['通过', '拒绝']);
-        if (mRes.tapIndex == 0) {  
-          let mRes2 = await util.showActionSheet(this.list);
-          this.shenhe(id, 'tongguo',mRes2.tapIndex+1);
-        } else if (mRes.tapIndex == 1) {
-          this.shenhe(id, 'jujue');
-        }
-      },
-      //解除关系提示
-      async toJiechu(money, e) {
-        //审核人的id
-        var id = e.currentTarget.dataset.id;
-        let mRes = await util.showActionSheet(['解除关系','设置会员等级']);
-        if (mRes.tapIndex == 0) {
-          this.jiechu(id, money);
-        }else{
-          console.log("this.list",this.list);
-           let mRes2 = await util.showActionSheet(this.list);
+   async apply(){
+       var res= await  newapi.suppliers_join({suppliers_id:this.suppliers_id,yizhan_suppliers_id:this.yizhan_suppliers_id});
+    if(res.data.code==0){
+util.showModal("申请成功请耐心等待易站经理审核通过")
+this.shenhe=2
+this.$apply()
 
-           this.shenhe(id, 'tongguo',mRes2.tapIndex+1);
-        }
-      },
-      tocallphone: function(e) {
-        var phone = e.currentTarget.dataset.phone;
-        wx.makePhoneCall({
-          phoneNumber: phone
-        });
-      },
-      toCheckDetail: function(e) {
-        //审核人的id
-        var id = e.currentTarget.dataset.id;
-        var currentStatu = this.currentStatu;
-        wx.navigateTo({
-          url: '/ConsolePages/pages/my_console_checkDetail?id=' +
-            id +
-            '&currentStatu=' +
-            currentStatu
-        });
-      },
-      buttonTap: function() {
-        this.isShowSalesList = true;
-      },
-      hiddenSalesList: function() {
-        this.isShowSalesList = false;
-      },
-      changeShopList: function(sales_id, name) {
-        this.isShowSalesList = false;
-        this.salesmanName = name;
-        this.yhData.sales_id = sales_id;
-        this.getShenheList();
-        this.getNum();
-        this.getPaycardMsg();
-      }
+    }else{
+
+    }
+    }
     };
-    events = {};
-    //审核列表
-    async getShenheList() {
-      wx.showLoading({
-        mask: true, //显示透明蒙层，防止触摸穿透,
-      });
-      let res = await newapi.yhlb(this.yhData);
-      wx.hideLoading();
-      if (res.data.code == 0) {
-        var datas = res.data.data.data
-        if (this.yhData.page ==1) {
-          this.shenheList = datas
-        } else {
-          this.shenheList.push(...datas)
-        }
-        if (datas.length < 20)
-          this.isMoreData = false;
-        else
-          this.isMoreData = true;
-       
-      }
-       this.$apply();
-    }
-    //解除关系
-    async jiechu(id, money) {
-      let user_id = id;
-      let suppliers_id = this.$parent.globalData.suppliers_id;
-      if (money > 0) {
-        util.showModal('此会员是充值用户，暂不能解除会员关系');
-        return;
-      }
-      let data = {
-        user_id,
-        suppliers_id
-      };
-      let res = await newapi.jcgx(data);
-      if (res.data.code == 0) {
-        util.showToast('解除关系成功');
-        this.yhData.page=1;
-        this.getShenheList();
-        this.getNum();
-      } else {
-        util.showToast(res.data.message);
-      }
-    }
-    //审核
-    async shenhe(id, type,vip_level) {
-      util.showLoading('审核中...');
-      let user_id = id;
-      let suppliers_id = this.suppliers_id;
-      var type = type;
-      let data = {
-        user_id,
-        suppliers_id,
-        type,
-        vip_level
-      };
-      let res = await newapi.yhsh(data);
-      wx.hideLoading();
-      if (res.data.code == 0) {
-        this.yhData.page=1;
-        this.getShenheList();
-        this.getNum();
-      }
-    }
-    async salesmanList(suppliers_id) {
-      let data = {
-        suppliers_id,
-        getall: 1
-      };
-      let res = await newapi.findSalesman(data);
-      if (res.data.code == 0) {
-        this.adminList = res.data.data;
-        this.$apply();
-      }
-    }
-    // 会员充值信息
-    async getPaycardMsg() {
-      let data = {
-        suppliers_id: this.suppliers_id,
-        sales_id:this.yhData.sales_id
-      };
-      let res = await newapi.hycz(data);
-      this.money = res.data.data;
-      this.$apply();
-    }
-    // 会员人数
-    async getNum() {
-      let res = await newapi.yh_num({suppliers_id:this.suppliers_id,sales_id:this.yhData.sales_id});
-    var datas=res.data.data
-    this.num=datas.num
-    this.qurenNum=datas.num1
+  async  onLoad(){
 
-      this.$apply();
+ this.suppliers_id = this.$parent.globalData.suppliers_id ?
+          this.$parent.globalData.suppliers_id :
+          (await this.$parent.getYizhanInfo()).suppliers_id;
+this.yizhan_suppliers_id=this.$parent.globalData.yizhanInfo.yizhan_suppliers_id;
+this.shenhe=this.$parent.globalData.yizhanInfo.is_join;
+this.$apply()
     }
-    initData(suppliers_id, sales_id = 0, shenhe = 0, keyword = '') {
-      let data = {
-        suppliers_id,
-        sales_id,
-        shenhe,
-        keyword,
-        page: 1
-      };
-      this.isMoreData = true;
-      this.yhData = data;
-    }
-    async onLoad(option) {
-      var yizhanInfo=this.$parent.globalData.yizhanInfo
-      this.is_kthy =yizhanInfo.is_kthy;
-      this.suppliers_id =yizhanInfo.suppliers_id ?
-        yizhanInfo.suppliers_id :
-        (await this.$parent.getYizhanInfo()).suppliers_id;
-      if (option.sales_id) {
-        this.sales_id = option.sales_id ? option.sales_id : 0;
-        this.salesmanName = option.sales_name;
-        this.showName = true;
-      } else this.salesmanList(this.suppliers_id);
-      this.initData(this.suppliers_id, this.sales_id);
-      this.getShenheList();
-      var vip_level=this.$parent.globalData.vip_level;
-      console.log(this.$parent.globalData.vip_level);
-           var list=[]
-          for(var i=0;i<vip_level;i++){
-           list.push("会员等级"+(i+1));
-          }
-          this.list=list
-      this.$apply();
-    }
-    async onShow() {
-      this.getPaycardMsg();
-      this.getNum();
-    }
-    onReachBottom() {
-     
-      if (this.isMoreData) {
-        this.yhData.page = this.yhData.page + 1;
-        this.getShenheList();
-      }
-    }
+    events = {};
+   
   }
 </script>

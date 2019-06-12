@@ -245,7 +245,6 @@
         </view>
       </view>
       <form report-submit bindsubmit='getFormId'>
-        <view></view>
         <view class="info_list order_list" wx:if="{{yizhanInfo.is_admin==1}}">
           <navigator url="{{}}" open-type="navigate" hover-class="none">
             <image src="/images/console/transaction-manage.png" />交易管理

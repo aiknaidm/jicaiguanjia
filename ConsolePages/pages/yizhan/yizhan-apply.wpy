@@ -193,7 +193,7 @@
 </style>
 <template>
   <view class='container'>
-    <button>加盟易站</button>
+    <button @tap="apply">加盟易站</button>
   </view>
 </template>
 
@@ -214,7 +214,9 @@
     computed = {};
     components = {};
     methods = {
-     
+     apply(){
+         
+     }
     };
     events = {};
    
