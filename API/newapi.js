@@ -77,6 +77,7 @@ const newapi = {
     xgbt: (data) => fetch(`${host_chk}/xgbt`, 'GET', data),
     supplier_detail: (data) => fetch(`${host_chk}/supplier_detail`, 'GET', data),
     upload_goodimg: (data) => fetch(`${host_chk}/upload_goodimg`, 'GET', data),
+    yizhan_join_list: (data) => fetch(`${host_chk}/yizhan_join_list`, 'GET', data),
     //管理员
     suppliers_list: (data) => fetch(`${host_chk}/suppliers_list`, 'GET', data),
     permission_detail: (data) => fetch(`${host_chk}/permission_detail`, 'GET', data),

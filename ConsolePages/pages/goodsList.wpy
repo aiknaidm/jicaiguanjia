@@ -1,552 +1,554 @@
 <style lang="less">
-page {
-  height: 100%;
-  background-color: #fff;
-}
-.container {
-  background-color: #f0f0f0;
-}
-.title-box {
-  width: 100%;
-  padding-top: 330rpx;
-  text-align: center;
-  font-size: 28rpx;
-  color: #999;
-  background: url(https://cdn.it120.cc/images/weappshop/icon-cart.png) no-repeat
-    center 205rpx;
-  background-size: 100rpx auto;
-  margin-bottom: 50rpx;
-}
-.to-index-btn {
-  color: #fff;
-  background: #e50012;
-  border-radius: 6px;
-  width: 300rpx;
-  height: 70rpx;
-  line-height: 70rpx;
-  text-align: center;
-  font-size: 28rpx;
-  margin: auto;
-}
-.list-top {
-  width: 100%;
-  height: 88rpx;
-  line-height: 88rpx;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 30rpx;
-  font-size: 28rpx;
-  align-items: center;
-}
-.list-top .label {
-  color: #000;
-}
-.list-top .edit-btn {
-  color: #999;
-  height: 100%;
-}
-.goodsList {
-  width: 100%;
-  padding-bottom: 150rpx;
-  /* height: 100%; */
-}
-.a-gooods {
-  width: 100%;
-  /* width: 100%; */
-  background-color: #fff;
-  overflow: hidden;
-  padding-bottom: 20rpx;
-  border-top: 8rpx solid #f0f0f0;
-}
-.a-gooods-title {
-  padding: 20rpx 40rpx;
-  border-bottom: 1px solid #f0f0f0;
-}
-.a-goods-conts {
-  display: flex;
-  justify-content: space-between;
-  /* padding-left: 30rpx; */
-  width: 100%;
-  box-sizing: border-box;
-  transition: margin-left 0.2s ease-in-out;
-  background: url(https://cdn.it120.cc/images/weappshop/gou.png) no-repeat 30rpx
-    center;
-  background-size: 40rpx auto;
-}
-.a-goods-conts.active {
-  background: url(https://lmbge.com/upload/images/3.png) no-repeat 30rpx;
-  background-size: 40rpx auto;
-}
-.goods-info {
-  display: flex;
-  justify-content: space-between;
-  padding: 30rpx 0 0 90rpx;
-  flex: 11;
-  box-sizing: border-box;
-  position: relative;
-  /* align-items: center; */
-}
-.goods-info .img-box {
-  width: 160rpx;
-  height: 160rpx;
-  overflow: hidden;
-  margin-right: 20rpx;
-  /* background-color: #d8d8d8; */
-}
-.goods-info .text-box {
-  flex: 1;
-  position: relative;
-  font-size: 30rpx;
-  justify-content: space-around;
-  /* display: flex; */
-  flex-direction: column;
-  margin-right: 20rpx;
-  padding-bottom: 30rpx;
-}
-.goods-info .text-box .goods-title {
-  width: 100%;
-}
-.nolist {
-  margin: 20rpx 0;
-  height: 1px;
-}
-.xunze view {
-  display: inline-block;
-}
-.text-box .xunze {
-  display: inline-block;
-  border: 1px solid #f5f5f9;
-  padding: 10rpx 25rpx;
-  border-radius: 5px;
-  font-size: 24rpx;
-  margin: 20rpx 0;
-}
-.text-box .xunze:after {
-  content: ' ';
-  display: inline-block;
-  transform: rotate(-90deg) translate(0rpx, 13rpx);
-  -ms-transform: rotate(-90deg) translate(0rpx, 13rpx);
-  /* IE 9 */
-  -moz-transform: rotate(-90deg) translate(0rpx, 13rpx);
-  /* Firefox */
-  -webkit-transform: rotate(-90deg) translate(0rpx, 13rpx);
-  /* Safari and Chrome */
-  -o-transform: rotate(-90deg) translate(0rpx, 13rpx);
-  /* Opera */
-  color: #ccc;
-}
-.goods-info .text-box .goods-price {
-  display: flex;
-  color: #e50112;
-  font-size: 30rpx;
-  justify-content: space-between;
-}
-.goods-info .text-box .goods-count {
-  display: flex;
-  justify-content: flex-end;
-}
-.goods-info .buy-num {
-  width: 200rpx;
-  height: 48rpx;
-  line-height: 48rpx;
-  display: flex;
-  /*justify-content: space-between;*/
-  font-size: 24rpx;
-  text-align: center;
-}
-.goods-info .buy-num .jian-btn {
-  width: 48rpx;
-  height: 100%;
-  border-left: 1rpx solid #ccc;
-  border-bottom: 1rpx solid #ccc;
-  border-top: 1rpx solid #ccc;
-  border-bottom-left-radius: 6rpx;
-  border-top-left-radius: 6rpx;
-  /* padding: 10rpx; */
-}
-.goods-info .buy-num .jian-btn.disabled {
-  background-color: #f5f5f9;
-  border-left: 1rpx solid #eee;
-  border-bottom: 1rpx solid #eee;
-  border-top: 1rpx solid #eee;
-  color: #ccc;
-}
-.goods-info .buy-num .jia-btn {
-  width: 48rpx;
-  height: 100%;
-  border-right: 1rpx solid #ccc;
-  border-bottom: 1rpx solid #ccc;
-  border-top: 1rpx solid #ccc;
-  border-bottom-right-radius: 6rpx;
-  border-top-right-radius: 6rpx;
-}
-.goods-info .buy-num .jia-btn.disabled {
-  background-color: #f5f5f9;
-  border-right: 1rpx solid #eee;
-  border-bottom: 1rpx solid #eee;
-  border-top: 1rpx solid #eee;
-  color: #ccc;
-}
-.goods-info .buy-num input {
-  /* width: 68rpx; */
-  height: 48rpx;
-  min-height: 48rpx;
-  line-height: 48rpx;
-  text-align: center;
-  font-size: 24rpx;
-  border: 1rpx solid #ccc;
-  flex: 1;
-  width: 100rpx;
-}
-.goods-info .img-box .img {
-  width: 160rpx;
-  height: 100%;
-  margin-left: 10rpx;
-}
-.a-goods-conts {
-  position: relative;
-}
-.delete-btn {
-  width: 120rpx;
-  height: 100%;
-  text-align: center;
-  background: #e64340;
-  font-size: 24rpx;
-  color: #fff;
-  position: absolute;
-  right: -120rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.jiesuan-box2 {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  height: 100rpx;
-  position: fixed;
-  bottom: 100rpx;
-  left: 0;
-  border-bottom: 1px solid #eee;
-  border-top: 1px solid #eee;
-  background-color: #fff;
-  z-index: 10;
-}
-.jiesuan-box {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  height: 100rpx;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  border-bottom: 1px solid #eee;
-  border-top: 1px solid #eee;
-  background-color: #fff;
-  z-index: 10;
-}
-.jiesuan-box .left-price {
-  display: flex;
-  justify-content: space-between;
-  line-height: 100rpx;
-  padding: 0 30rpx 0 0;
-  font-size: 28rpx;
-  box-sizing: border-box;
-}
-.jiesuan-box .all-selected {
-  padding-left: 90rpx;
-  color: #000;
-  background: url(https://cdn.it120.cc/images/weappshop/gou.png) no-repeat 30rpx
-    center;
-  background-size: 40rpx auto;
-}
-.jiesuan-box .all-selected.active {
-  background: url(https://lmbge.com/upload/images/3.png) no-repeat 30rpx;
-  background-size: 40rpx auto;
-}
-.jiesuan-box .total {
-  color: #e64340;
-}
-.toaddgoods {
-  color: #58bc9c;
-}
-page {
-  background-color: #f0f0f0;
-}
-button {
-  background: transparent;
-  padding: 0;
-  bottom: 0;
-  line-height: inherit;
-  height: auto;
-  border-radius: 0;
-  color: #fff;
-}
-button::after {
-  border: none;
-}
-.icon-jiantou {
-  margin-left: 10rpx;
-}
-.hidden {
-  position: absolute;
-  height: 100%;
-}
-.search-title {
-  display: flex;
-  justify-content: space-between;
-  line-height: 85rpx;
-  font-size: 30rpx;
-  align-items: center;
-  background-color: #fff;
-  position: fixed;
-  width: 100%;
-  z-index: 10;
-  padding: 0 20rpx;
-}
-.search-title .active {
-  color: #e50012;
-}
-.search-title image {
-  width: 35rpx;
-  height: 35rpx;
-  margin-left: 5rpx;
-}
-.search-title .status-label {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  max-width: 300rpx;
-  text-align: center;
-  /* border-right: 1px solid #f0f0f0; */
-}
-.search-title .search {
-  flex: 1;
-}
-.search-title .up .img {
-  transform: rotate(180deg);
-  -ms-transform: rotate(180deg);
-  /* IE 9 */
-  -webkit-transform: rotate(180deg);
-  /* Safari and Chrome */
-}
-.border {
-  display: inline-block;
-  padding: 0 20rpx;
-  line-height: 50rpx;
-  border-right: 1px solid #f0f0f0;
-  max-width: 300rpx;
-}
-.search {
-  text-align: right;
-  padding-right: 40rpx;
-}
-.search-title .icon-sousuo {
-  font-size: 40rpx;
-}
-/*搜索框  */
-.ss-my {
-  display: none;
-  background-color: #f0f0f0;
-  text-align: center;
-  width: 100%;
-  height: 92rpx;
-  position: fixed;
-  z-index: 100;
-  justify-content: center;
-  align-items: center;
-}
-.ss-my.active {
-  display: flex;
-}
-.ss-my-c {
-  display: flex;
-  flex: 1;
-  margin-left: 10px;
-}
-.ss-my-c image {
-  width: 30rpx;
-  height: 30rpx;
-}
-.ss-my-c-img {
-  background-color: #fff;
-  width: 60rpx;
-  height: 60rpx;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 3px 0 0 3px;
-}
-.ss-my-c-ipt {
-  background-color: #fff;
-  height: 60rpx;
-  line-height: 60rpx;
-  flex: 1;
-}
-.ss-my-c-ipt input {
-  width: 100%;
-  height: 100%;
-  font-size: 30rpx;
-}
-.ss-my-c-x {
-  background-color: #fff;
-  width: 60rpx;
-  height: 60rpx;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 0px 3px 3px 0px;
-}
-.ss-my-d {
-  width: 100rpx;
-  height: 60rpx;
-  border: 1px solid #f0f0f0;
-  text-align: center;
-  line-height: 60rpx;
-  border-radius: 10rpx;
-  font-size: 28rpx;
-  background-color: #fff;
-  margin-left: 10rpx;
-  margin-right: 10px;
-  color: #e50012;
-}
-.ss-hot {
-  padding: 24rpx;
-  background-color: #fff;
-}
-.ss-title {
-  display: flex;
-  justify-content: space-between;
-  font-size: 30rpx;
-}
-.ss-title view:last-child {
-  font-size: 28rpx;
-  color: #e50112;
-}
-.ss-content {
-  display: flex;
-  margin-top: 24rpx;
-  flex-wrap: wrap;
-  flex: 1;
-}
-.ss-content view {
-  margin-right: 24rpx;
-  padding: 15rpx 20rpx;
-  background-color: #f0f0f0;
-  margin-bottom: 24rpx;
-  border-radius: 10rpx;
-  font-size: 30rpx;
-}
-.queding {
-  background-color: #fff;
-  color: #333;
-}
-/*列表样式  */
-.goods-info .img-box {
-  margin: 0;
-}
-.goods-info .text-box {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 20rpx;
-}
-.goods-info .text-box .goods-num {
-  display: flex;
-  justify-content: space-between;
-  font-size: 26rpx;
-}
-.goods-info .text-box .goods-title {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  max-height:100rpx;
-  overflow: hidden;
-  text {
-    border: 1px solid #e50012;
-    padding: 5rpx 10rpx;
-    font-size: 20rpx;
-    margin-left: 10rpx;
-    color: #e50012;
-    border-radius: 50px;
+  page {
+    height: 100%;
+    background-color: #fff;
   }
-}
-/*修改标题  */
-.changeTitle {
-  background-color: #fff;
-  border-radius: 10rpx;
-  font-size: 30rpx;
-  overflow: hidden;
-}
-.changeTitle.active {
-  position: relative;
-  top: -200rpx;
-}
-.changeTitle .title {
-  padding: 40rpx;
-  padding-bottom: 0;
-  text-align: center;
-}
-.changeTitle .content {
-  padding: 40rpx;
-}
-.changeTitle .content textarea {
-  border: 1px solid #aaa;
-  border-radius: 5px;
-  width: 400rpx;
-  padding: 10rpx;
-  height: 120rpx;
-  position: relative;
-  z-index: 1000;
-}
-.changeTitle .btn {
-  display: flex;
-  position: relative;
-  z-index: 10;
-}
-.changeTitle .btn {
-  background-color: #f0f0f0;
-  text-align: center;
-  line-height: 88rpx;
-}
-.changeTitle .btn view {
-  flex: 1;
-  border: 1px solid #ccc;
-}
-/*选择分类  */
-.list {
-  background-color: #fff;
-  width: 60%;
-  text-align: center;
-  line-height: 88rpx;
-  font-size: 30rpx;
-  max-height: 450rpx;
-  overflow: scroll;
-}
-.list view {
-  border-bottom: 1px solid #f0f0f0;
-}
-.jiesuan-box .to-pay-btn {
-  border: 1px solid #e50012;
-  color: #e50012;
-  background-color: #fff;
-  border-radius: 90px;
-  padding: 10rpx 20rpx;
-  margin-right: 40rpx;
-  font-size: 28rpx;
-}
-.jiesuan-box .to-pay-btn.no-select {
-  background-color: #ccc;
-}
-.jiesuan-box {
-  align-items: center;
-}
-.goodsList {
-  width: 100%;
-  padding-bottom: 150rpx;
-  background: #f0f0f0;
-  /* height: 100%; */
-}
+  .container {
+    background-color: #f0f0f0;
+  }
+  .title-box {
+    width: 100%;
+    padding-top: 330rpx;
+    text-align: center;
+    font-size: 28rpx;
+    color: #999;
+    background: url(https://cdn.it120.cc/images/weappshop/icon-cart.png) no-repeat center 205rpx;
+    background-size: 100rpx auto;
+    margin-bottom: 50rpx;
+  }
+  .to-index-btn {
+    color: #fff;
+    background: #e50012;
+    border-radius: 6px;
+    width: 300rpx;
+    height: 70rpx;
+    line-height: 70rpx;
+    text-align: center;
+    font-size: 28rpx;
+    margin: auto;
+  }
+  .list-top {
+    width: 100%;
+    height: 88rpx;
+    line-height: 88rpx;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 30rpx;
+    font-size: 28rpx;
+    align-items: center;
+  }
+  .list-top .label {
+    color: #000;
+  }
+  .list-top .edit-btn {
+    color: #999;
+    height: 100%;
+  }
+  .goodsList {
+    width: 100%;
+    padding-bottom: 150rpx;
+    /* height: 100%; */
+  }
+  .a-gooods {
+    width: 100%;
+    /* width: 100%; */
+    background-color: #fff;
+    overflow: hidden;
+    padding-bottom: 20rpx;
+    border-top: 8rpx solid #f0f0f0;
+  }
+  .a-gooods-title {
+    padding: 20rpx 40rpx;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .a-goods-conts {
+    display: flex;
+    justify-content: space-between;
+    /* padding-left: 30rpx; */
+    width: 100%;
+    box-sizing: border-box;
+    transition: margin-left 0.2s ease-in-out;
+    background: url(https://cdn.it120.cc/images/weappshop/gou.png) no-repeat 30rpx center;
+    background-size: 40rpx auto;
+  }
+  .a-goods-conts.active {
+    background: url(https://lmbge.com/upload/images/3.png) no-repeat 30rpx;
+    background-size: 40rpx auto;
+  }
+  .goods-info {
+    display: flex;
+    justify-content: space-between;
+    padding: 30rpx 0 0 90rpx;
+    flex: 11;
+    box-sizing: border-box;
+    position: relative;
+    /* align-items: center; */
+  }
+  .goods-info .img-box {
+    width: 160rpx;
+    height: 160rpx;
+    overflow: hidden;
+    margin-right: 20rpx;
+    /* background-color: #d8d8d8; */
+  }
+  .goods-info .text-box {
+    flex: 1;
+    position: relative;
+    font-size: 30rpx;
+    justify-content: space-around;
+    /* display: flex; */
+    flex-direction: column;
+    margin-right: 20rpx;
+    padding-bottom: 30rpx;
+  }
+  .goods-info .text-box .goods-title {
+    width: 100%;
+  }
+  .nolist {
+    margin: 20rpx 0;
+    height: 1px;
+  }
+  .xunze view {
+    display: inline-block;
+  }
+  .text-box .xunze {
+    display: inline-block;
+    border: 1px solid #f5f5f9;
+    padding: 10rpx 25rpx;
+    border-radius: 5px;
+    font-size: 24rpx;
+    margin: 20rpx 0;
+  }
+  .text-box .xunze:after {
+    content: ' ';
+    display: inline-block;
+    transform: rotate(-90deg) translate(0rpx, 13rpx);
+    -ms-transform: rotate(-90deg) translate(0rpx, 13rpx);
+    /* IE 9 */
+    -moz-transform: rotate(-90deg) translate(0rpx, 13rpx);
+    /* Firefox */
+    -webkit-transform: rotate(-90deg) translate(0rpx, 13rpx);
+    /* Safari and Chrome */
+    -o-transform: rotate(-90deg) translate(0rpx, 13rpx);
+    /* Opera */
+    color: #ccc;
+  }
+  .goods-info .text-box .goods-price {
+    display: flex;
+    color: #e50112;
+    font-size: 30rpx;
+    justify-content: space-between;
+  }
+  .goods-info .text-box .goods-count {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .goods-info .buy-num {
+    width: 200rpx;
+    height: 48rpx;
+    line-height: 48rpx;
+    display: flex;
+    /*justify-content: space-between;*/
+    font-size: 24rpx;
+    text-align: center;
+  }
+  .goods-info .buy-num .jian-btn {
+    width: 48rpx;
+    height: 100%;
+    border-left: 1rpx solid #ccc;
+    border-bottom: 1rpx solid #ccc;
+    border-top: 1rpx solid #ccc;
+    border-bottom-left-radius: 6rpx;
+    border-top-left-radius: 6rpx;
+    /* padding: 10rpx; */
+  }
+  .goods-info .buy-num .jian-btn.disabled {
+    background-color: #f5f5f9;
+    border-left: 1rpx solid #eee;
+    border-bottom: 1rpx solid #eee;
+    border-top: 1rpx solid #eee;
+    color: #ccc;
+  }
+  .goods-info .buy-num .jia-btn {
+    width: 48rpx;
+    height: 100%;
+    border-right: 1rpx solid #ccc;
+    border-bottom: 1rpx solid #ccc;
+    border-top: 1rpx solid #ccc;
+    border-bottom-right-radius: 6rpx;
+    border-top-right-radius: 6rpx;
+  }
+  .goods-info .buy-num .jia-btn.disabled {
+    background-color: #f5f5f9;
+    border-right: 1rpx solid #eee;
+    border-bottom: 1rpx solid #eee;
+    border-top: 1rpx solid #eee;
+    color: #ccc;
+  }
+  .goods-info .buy-num input {
+    /* width: 68rpx; */
+    height: 48rpx;
+    min-height: 48rpx;
+    line-height: 48rpx;
+    text-align: center;
+    font-size: 24rpx;
+    border: 1rpx solid #ccc;
+    flex: 1;
+    width: 100rpx;
+  }
+  .goods-info .img-box .img {
+    width: 160rpx;
+    height: 100%;
+    margin-left: 10rpx;
+  }
+  .a-goods-conts {
+    position: relative;
+  }
+  .delete-btn {
+    width: 120rpx;
+    height: 100%;
+    text-align: center;
+    background: #e64340;
+    font-size: 24rpx;
+    color: #fff;
+    position: absolute;
+    right: -120rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .jiesuan-box2 {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 100rpx;
+    position: fixed;
+    bottom: 100rpx;
+    left: 0;
+    border-bottom: 1px solid #eee;
+    border-top: 1px solid #eee;
+    background-color: #fff;
+    z-index: 10;
+  }
+  .jiesuan-box {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 100rpx;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    border-bottom: 1px solid #eee;
+    border-top: 1px solid #eee;
+    background-color: #fff;
+    z-index: 10;
+  }
+  .jiesuan-box .left-price {
+    display: flex;
+    justify-content: space-between;
+    line-height: 100rpx;
+    padding: 0 30rpx 0 0;
+    font-size: 28rpx;
+    box-sizing: border-box;
+  }
+  .jiesuan-box .all-selected {
+    padding-left: 90rpx;
+    color: #000;
+    background: url(https://cdn.it120.cc/images/weappshop/gou.png) no-repeat 30rpx center;
+    background-size: 40rpx auto;
+  }
+  .jiesuan-box .all-selected.active {
+    background: url(https://lmbge.com/upload/images/3.png) no-repeat 30rpx;
+    background-size: 40rpx auto;
+  }
+  .jiesuan-box .total {
+    color: #e64340;
+  }
+  .toaddgoods {
+    color: #58bc9c;
+  }
+  page {
+    background-color: #f0f0f0;
+  }
+  button {
+    background: transparent;
+    padding: 0;
+    bottom: 0;
+    line-height: inherit;
+    height: auto;
+    border-radius: 0;
+    color: #fff;
+  }
+  button::after {
+    border: none;
+  }
+  .icon-jiantou {
+    margin-left: 10rpx;
+  }
+  .hidden {
+    position: absolute;
+    height: 100%;
+  }
+  .search-title {
+    display: flex;
+    justify-content: space-between;
+    line-height: 85rpx;
+    font-size: 30rpx;
+    align-items: center;
+    background-color: #fff;
+    position: fixed;
+    width: 100%;
+    z-index: 10;
+    padding: 0 20rpx;
+  }
+  .search-title .active {
+    color: #e50012;
+  }
+  .search-title image {
+    width: 35rpx;
+    height: 35rpx;
+    margin-left: 5rpx;
+  }
+  .search-title .status-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 300rpx;
+    text-align: center;
+    /* border-right: 1px solid #f0f0f0; */
+  }
+  .search-title .search {
+    flex: 1;
+  }
+  .search-title .up .img {
+    transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    /* IE 9 */
+    -webkit-transform: rotate(180deg);
+    /* Safari and Chrome */
+  }
+  .border {
+    display: inline-block;
+    padding: 0 20rpx;
+    line-height: 50rpx;
+    border-right: 1px solid #f0f0f0;
+    max-width: 300rpx;
+  }
+  .search {
+    text-align: right;
+    padding-right: 40rpx;
+  }
+  .search-title .icon-sousuo {
+    font-size: 40rpx;
+  }
+  /*搜索框  */
+  .ss-my {
+    display: none;
+    background-color: #f0f0f0;
+    text-align: center;
+    width: 100%;
+    height: 92rpx;
+    position: fixed;
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+  }
+  .ss-my.active {
+    display: flex;
+  }
+  .ss-my-c {
+    display: flex;
+    flex: 1;
+    margin-left: 10px;
+  }
+  .ss-my-c image {
+    width: 30rpx;
+    height: 30rpx;
+  }
+  .ss-my-c-img {
+    background-color: #fff;
+    width: 60rpx;
+    height: 60rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px 0 0 3px;
+  }
+  .ss-my-c-ipt {
+    background-color: #fff;
+    height: 60rpx;
+    line-height: 60rpx;
+    flex: 1;
+  }
+  .ss-my-c-ipt input {
+    width: 100%;
+    height: 100%;
+    font-size: 30rpx;
+  }
+  .ss-my-c-x {
+    background-color: #fff;
+    width: 60rpx;
+    height: 60rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0px 3px 3px 0px;
+  }
+  .ss-my-d {
+    width: 100rpx;
+    height: 60rpx;
+    border: 1px solid #f0f0f0;
+    text-align: center;
+    line-height: 60rpx;
+    border-radius: 10rpx;
+    font-size: 28rpx;
+    background-color: #fff;
+    margin-left: 10rpx;
+    margin-right: 10px;
+    color: #e50012;
+  }
+  .ss-hot {
+    padding: 24rpx;
+    background-color: #fff;
+  }
+  .ss-title {
+    display: flex;
+    justify-content: space-between;
+    font-size: 30rpx;
+  }
+  .ss-title view:last-child {
+    font-size: 28rpx;
+    color: #e50112;
+  }
+  .ss-content {
+    display: flex;
+    margin-top: 24rpx;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+  .ss-content view {
+    margin-right: 24rpx;
+    padding: 15rpx 20rpx;
+    background-color: #f0f0f0;
+    margin-bottom: 24rpx;
+    border-radius: 10rpx;
+    font-size: 30rpx;
+  }
+  .queding {
+    background-color: #fff;
+    color: #333;
+  }
+  /*列表样式  */
+  .goods-info .img-box {
+    margin: 0;
+  }
+  .goods-info .text-box {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20rpx;
+  }
+  .goods-info .text-box .goods-num {
+    display: flex;
+    justify-content: space-between;
+    font-size: 26rpx;
+  }
+  .goods-info .text-box .goods-title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    max-height: 100rpx;
+    overflow: hidden;
+    text {
+      border: 1px solid #e50012;
+      padding: 5rpx 10rpx;
+      font-size: 20rpx;
+      margin-left: 10rpx;
+      color: #e50012;
+      border-radius: 50px;
+    }
+  }
+  /*修改标题  */
+  .changeTitle {
+    background-color: #fff;
+    border-radius: 10rpx;
+    font-size: 30rpx;
+    overflow: hidden;
+  }
+  .changeTitle.active {
+    position: relative;
+    top: -200rpx;
+  }
+  .changeTitle .title {
+    padding: 40rpx;
+    padding-bottom: 0;
+    text-align: center;
+  }
+  .changeTitle .content {
+    padding: 40rpx;
+  }
+  .changeTitle .content textarea {
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    width: 400rpx;
+    padding: 10rpx;
+    height: 120rpx;
+    position: relative;
+    z-index: 1000;
+  }
+  .changeTitle .btn {
+    display: flex;
+    position: relative;
+    z-index: 10;
+  }
+  .changeTitle .btn {
+    background-color: #f0f0f0;
+    text-align: center;
+    line-height: 88rpx;
+  }
+  .changeTitle .btn view {
+    flex: 1;
+    border: 1px solid #ccc;
+  }
+  /*选择分类  */
+  .list {
+    background-color: #fff;
+    width: 60%;
+    text-align: center;
+    line-height: 88rpx;
+    font-size: 30rpx;
+    max-height: 450rpx;
+    overflow: scroll;
+  }
+  .list view {
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .jiesuan-box .to-pay-btn {
+    border: 1px solid #e50012;
+    color: #e50012;
+    background-color: #fff;
+    border-radius: 90px;
+    padding: 10rpx 20rpx;
+    margin-right: 40rpx;
+    font-size: 28rpx;
+  }
+  .jiesuan-box .to-pay-btn.no-select {
+    background-color: #ccc;
+  }
+  .jiesuan-box {
+    align-items: center;
+  }
+  .goodsList {
+    width: 100%;
+    padding-bottom: 150rpx;
+    background: #f0f0f0;
+    /* height: 100%; */
+  }
+  .viewjoin {
+    background-color: #fff;
+    width: 100%;
+    padding: 20rpx 40rpx;
+  }
 </style>
 <template>
   <view class="container {{isshowbiaoti||showSearch||isShowGoodsList?'hidden':''}}">
@@ -558,8 +560,8 @@ button::after {
         <!-- <image rc='/images/sanjiao-active.png' class='img'/> -->
       </view>
       <!-- <view class='border' wx:for="{{catList}}" bindtap="statusTap"> 二级分类
-                <text class='iconfont icon-jiantou'></text>
-              </view> -->
+                                          <text class='iconfont icon-jiantou'></text>
+                                        </view> -->
       <view class='search' @tap='showSearch'>
         <text class='iconfont icon-sousuo'></text>
       </view>
@@ -569,33 +571,38 @@ button::after {
       <view class="ss-my {{showSearch?'active':''}}">
         <view class='ss-my-c'>
           <view class='ss-my-c-img'>
-            <image src='/images/s.png'/>
+            <image src='/images/s.png' />
           </view>
           <view class='ss-my-c-ipt'>
-            <input value='{{keyword}}' placeholder='输入关键词' @input="searchIpt"/>
+            <input value='{{keyword}}' placeholder='输入关键词' @input="searchIpt" />
           </view>
           <view class='ss-my-c-x'>
             <text hidden='true'></text>
           </view>
         </view>
         <button class="ss-my-d button-hover" @tap='buttonTap' form-type='submit'>
-                  确定
-                </button>
+                                            确定
+                                          </button>
       </view>
       <mask wx:if="{{showSearch}}" @tap.stop="hiddenSearch"></mask>
     </form>
     <!-- <view class="title-box">
-              购物车空空如也～
-            </view>
-            <view class="to-index-btn" bindtap="toIndexPage">
-              去逛逛
-            </view> -->
+                                        购物车空空如也～
+                                      </view>
+                                      <view class="to-index-btn" bindtap="toIndexPage">
+                                        去逛逛
+                                      </view> -->
     <!-- <view class="list">
-              <scroll-view scroll-y> -->
+                                        <scroll-view scroll-y> -->
     <view class="list-top">
       <!-- <view bindtap="toAddGoods" class='toaddgoods'>
-                +添加其他商品
-              </view> -->
+                                          +添加其他商品
+                                        </view> -->
+    </view>
+    <view class="viewjoin">
+      <view bindtap="statusTap2"> 查看店铺
+        <text class='iconfont icon-jiantou'></text>
+      </view>
     </view>
     <noorder text="暂无商品" wx:if="{{list.length==0}}"></noorder>
     <view class="goodsList" wx:else>
@@ -624,11 +631,11 @@ button::after {
         </view>
       </view>
       <!-- </view>
-              </scroll-view> -->
+                                        </scroll-view> -->
     </view>
     <!-- <view class="jiesuan-box2">
-              
-            </view> -->
+                                        
+                                      </view> -->
     <view class="jiesuan-box" wx:if="{{list.length}}">
       <view class="left-price">
         <view class="all-selected  {{isallSelect?'active':''}}" bindtap="bindAllSelect">全选</view>
@@ -637,14 +644,21 @@ button::after {
         <text class="to-pay-btn " bindtap="deleteSelected" wx:if="{{del}}">删除</text>
         <text class="to-pay-btn" bindtap="clickbtn" wx:if="{{del}}">设置会员卡</text>
         <!-- <text class="to-pay-btn" bindtap="setSelected(0)" wx:if="{{del}}">设置会员卡不可用</text>
-          <text class="to-pay-btn" bindtap="setSelected(1)" wx:if="{{del}}">设置会员卡可用</text> -->
+                                    <text class="to-pay-btn" bindtap="setSelected(1)" wx:if="{{del}}">设置会员卡可用</text> -->
       </view>
     </view>
     <!--商品分类显示  -->
-    <view class='body-bg' bindtap='hiddenShopList' touchstart='hiddenbg' touchmove="hiddenbg" wx:if="{{ishowfenlei}}">
+    <view class='body-bg' bindtap='hiddenFenleiList' touchstart='hiddenbg' touchmove="hiddenbg" wx:if="{{ishowfenlei}}">
       <view class='list'>
         <view wx:for="{{fenleilist}}" wx:key="{{index}}" bindtap='changeShopList({{item.cat_id}},{{item.cat_name}})'>
           {{item.cat_name}}
+        </view>
+      </view>
+    </view>
+    <view class='body-bg' bindtap='hiddenJoinList' touchstart='hiddenbg' touchmove="hiddenbg" wx:if="{{ishowjoinlist}}">
+      <view class='list'>
+        <view wx:for="{{joinlist}}" wx:key="{{index}}" bindtap='changeJoinList({{item.suppliers_id}},{{item.suppliers_name}})'>
+          {{item.suppliers_name}}
         </view>
       </view>
     </view>
@@ -653,367 +667,406 @@ button::after {
 </template>
 
 <script>
-import wepy from 'wepy';
-import api from '../../API/api';
-import newapi from '../../API/newapi';
-import util from '../../utils/index';
-import noorder from '../../components/noOrder';
-import panel from '../../components/panel';
-export default class newslist extends wepy.page {
-  config = {
-    navigationBarTitleText: '商品管理'
-  };
-  components = {
-    noorder,
-    panel
-  };
-  data = {
-    list: [],
-    statusType: ['暂无数据'],
-    statusid: [],
-    currentIndex: 0,
-    fenleilist: [],
-    ishowfenlei: false, //分类 选择
-    isallSelect: false, //全选
-    del: false,
-    isshowBox: false,
-    title: '改标题',
-    placeholder: '请输入需要修改的内容',
-    showSearch: false,
-    keyword: '',
-    buttonText: '设置会员卡可用',
-    is_hdky: false
-  };
-  computed = {};
-  methods = {
-    statusTap(index) {
-      this.currentIndex = index;
-      this.fenleilist = this.fenleiLists[index];
-      this.ishowfenlei = true;
-    },
-    //搜索商品
-    showSearch: function() {
-      this.showSearch = true;
-    },
-    searchIpt(e) {
-      this.keyword = e.detail.value;
-    },
-    buttonTap() {
-      this.showSearch = false;
-      this.initdata.keyword = this.keyword;
-      this.initdata.page = 1;
-      this.isMoreData = true;
-      var title = this.keyword == '' ? '商品管理' : '商品管理-' + this.keyword;
-      wx.setNavigationBarTitle({
-        title: title
-      });
-      this.isallSelect = false;
-      this.del = false;
-      this.getShopList(this.initdata);
-    },
-    hiddenSearch() {
-      this.showSearch = false;
-    },
-    //改变分类
-    async changeShopList(parent_id, cat_name) {
-      this.statusType[this.currentIndex] = cat_name;
-      this.fenleiLists.splice(
-        this.currentIndex + 1,
-        this.currentIndex.length - (this.currentIndex + 1)
-      );
-      this.statusType.splice(
-        this.currentIndex + 1,
-        this.statusType.length - (this.currentIndex + 1)
-      );
-      this.statusid.splice(
-        this.currentIndex,
-        this.statusType.length - this.currentIndex
-      );
-      var fenleiList = await this.getFenLei(parent_id);
-      if (fenleiList.length > 1 && parent_id != 0) {
-        this.fenleiLists[this.currentIndex + 1] = fenleiList;
-        this.statusType[this.currentIndex + 1] = fenleiList[0].cat_name;
-        this.statusid[this.currentIndex] = parent_id;
+  import wepy from 'wepy';
+  import api from '../../API/api';
+  import newapi from '../../API/newapi';
+  import util from '../../utils/index';
+  import noorder from '../../components/noOrder';
+  import panel from '../../components/panel';
+  export default class newslist extends wepy.page {
+    config = {
+      navigationBarTitleText: '商品管理'
+    };
+    components = {
+      noorder,
+      panel
+    };
+    data = {
+      list: [],
+      statusType: ['暂无数据'],
+      statusid: [],
+      currentIndex: 0,
+      fenleilist: [],
+      ishowfenlei: false, //分类 选择
+      isallSelect: false, //全选
+      del: false,
+      isshowBox: false,
+      title: '改标题',
+      placeholder: '请输入需要修改的内容',
+      showSearch: false,
+      keyword: '',
+      buttonText: '设置会员卡可用',
+      is_hdky: false,
+      ishowjoinlist: false,
+      joinlist: []
+    };
+    computed = {};
+    methods = {
+      statusTap(index) {
+        this.currentIndex = index;
+        this.fenleilist = this.fenleiLists[index];
+        this.ishowfenlei = true;
+      },
+      statusTap2(index) {
+        this.ishowjoinlist = true;
+      },
+      //搜索商品
+      showSearch: function() {
+        this.showSearch = true;
+      },
+      searchIpt(e) {
+        this.keyword = e.detail.value;
+      },
+      buttonTap() {
+        this.showSearch = false;
+        this.initdata.keyword = this.keyword;
+        this.initdata.page = 1;
+        this.isMoreData = true;
+        var title = this.keyword == '' ? '商品管理' : '商品管理-' + this.keyword;
+        wx.setNavigationBarTitle({
+          title: title
+        });
+        this.isallSelect = false;
+        this.del = false;
+        this.getShopList(this.initdata);
+      },
+      hiddenSearch() {
+        this.showSearch = false;
+      },
+      //改变分类
+      async changeShopList(parent_id, cat_name) {
+        this.statusType[this.currentIndex] = cat_name;
+        this.fenleiLists.splice(
+          this.currentIndex + 1,
+          this.currentIndex.length - (this.currentIndex + 1)
+        );
+        this.statusType.splice(
+          this.currentIndex + 1,
+          this.statusType.length - (this.currentIndex + 1)
+        );
+        this.statusid.splice(
+          this.currentIndex,
+          this.statusType.length - this.currentIndex
+        );
+        var fenleiList = await this.getFenLei(parent_id);
+        if (fenleiList.length > 1 && parent_id != 0) {
+          this.fenleiLists[this.currentIndex + 1] = fenleiList;
+          this.statusType[this.currentIndex + 1] = fenleiList[0].cat_name;
+          this.statusid[this.currentIndex] = parent_id;
+        }
+        this.ishowfenlei = false;
+        this.initdata.page = 1;
+        this.initdata.cat_id =
+          parent_id == 0 && this.currentIndex > 0 ?
+          this.statusid[this.currentIndex - 1] :
+          parent_id;
+        this.isMoreData = true;
+        this.isallSelect = false;
+        this.del = false;
+        this.getShopList(this.initdata);
+        this.$apply();
+      },
+      async changeJoinList(suppliers_id, suppliers_name) {
+        this.cur_suppliers_id = suppliers_id;
+        this.fenleiList_new = await this.getFenLei();
+        this.fenleiLists = [];
+        this.fenleiLists.length = 0;
+        this.isMoreData = true;
+        this.fenleiLists.push(this.fenleiList_new);
+        this.statusType = [];
+        this.statusType[0] = this.fenleiList_new[0].cat_name;
+        this.ishowfenlei = false;
+        this.initdata.page = 1;
+        this.isMoreData = true;
+        this.isallSelect = false;
+        this.del = false;
+        this.initdata.cat_id = '';
+        this.initdata.suppliers_id = suppliers_id;
+        this.getShopList(this.initdata);
+        this.$apply();
+      },
+      hiddenFenleiList() {
+        this.ishowfenlei = false;
+      },
+      hiddenJoinList() {
+        this.ishowjoinlist = false;
+      },
+      // 全选
+      bindAllSelect: function() {
+        var that = this;
+        this.isallSelect = !this.isallSelect;
+        this.list.forEach((item, index) => {
+          that.list[index].active = that.isallSelect;
+        });
+        this.del = this.isallSelect;
+        this.$apply();
+      },
+      // 选择
+      selectTap: function(index) {
+        var that = this;
+        this.list[index].active = !this.list[index].active;
+        var active = true;
+        this.del = false;
+        this.list.forEach((item, index) => {
+          if (!item.active) {
+            active = false;
+          }
+          if (item.active) {
+            that.del = true;
+          }
+        });
+        this.isallSelect = active;
+      },
+      // 删除
+      async deleteSelected() {
+        var deleteSelectList = [];
+        var deleteSelectName = '';
+        this.list.forEach((item, index) => {
+          if (item.active) {
+            deleteSelectList.push(item.goods_id);
+            if (deleteSelectList.length == 1) {
+              deleteSelectName += item.goods_name;
+            } else if (deleteSelectList.length <= 3) {
+              deleteSelectName += ',' + item.goods_name;
+            } else if (deleteSelectList.length == 4) {
+              deleteSelectName += '...';
+            }
+          }
+        });
+        let mRes = await util.showModalBig(
+          '你确定要删除 ' + deleteSelectName + ' 吗'
+        );
+        if (mRes.confirm) {
+          this.delGoods(deleteSelectList);
+        }
+      },
+      async clickbtn() {
+        let mRes = await util.showActionSheet([
+          '设置为不可用会员卡购买',
+          '设置为可用会员卡购买'
+        ]);
+        this.setSelected(mRes.tapIndex);
+      },
+      // 修改
+      async toGoodDetailsTap(id, name, index, e) {
+        var that = this;
+        // wx.navigateTo({
+        // 	url: '/pages/my-console/publish/index?id=' + id,
+        // })
+        this.goods_id = id;
+        this.index = index;
+        this.$parent.globalData.goodsInfo = this.list[index];
+        let mRes = await util.showActionSheet([
+          '改标题',
+          '改价格',
+          '改库存',
+          '改全部'
+        ]);
+        switch (mRes.tapIndex) {
+          case 0:
+            // 改标题
+            that.isshowBox = true;
+            that.title = '改标题';
+            that.placeholder = '请输入需要修改的内容';
+            that.$apply();
+            break;
+          case 1:
+            // 改价格
+            wx.navigateTo({
+              url: 'changeGoodsInfo?id=' + id + '&xiugaitype=jiage&index=' + index
+            });
+            break;
+          case 2:
+            // 改库存
+            wx.navigateTo({
+              url: 'changeGoodsInfo?id=' + id + '&xiugaitype=kucun&index=' + index
+            });
+            break;
+          case 3:
+            // 改全部
+            wx.navigateTo({
+              url: 'addGoodsInfo?id=' + id + '&index=' + index
+            });
+            break;
+          default:
+        }
+      },
+      // 修改标题
+      async tapSure(value) {
+        var that = this;
+        if (!value || value == '') {
+          util.showToast('请填写标题');
+          return;
+        }
+        this.isshowBox = false;
+        let data = {
+          goods_id: this.goods_id,
+          goods_name: value
+        };
+        let res = await newapi.xgbt(data);
+        if (res.data.code == 0) {
+          util.showToast('修改成功');
+          this.list[this.index].goods_name = value;
+          this.$apply();
+        }
       }
-      this.ishowfenlei = false;
-      this.initdata.page = 1;
-      this.initdata.cat_id =
-        parent_id == 0 && this.currentIndex > 0
-          ? this.statusid[this.currentIndex - 1]
-          : parent_id;
-      this.isMoreData = true;
-      this.isallSelect = false;
-      this.del = false;
-      this.getShopList(this.initdata);
-      this.$apply();
-    },
-    hiddenShopList() {
-      this.ishowfenlei = false;
-    },
-    // 全选
-    bindAllSelect: function() {
-      var that = this;
-      this.isallSelect = !this.isallSelect;
-      this.list.forEach((item, index) => {
-        that.list[index].active = that.isallSelect;
-      });
-      this.del = this.isallSelect;
-      this.$apply();
-    },
-    // 选择
-    selectTap: function(index) {
-      var that = this;
-      this.list[index].active = !this.list[index].active;
-      var active = true;
-      this.del = false;
-      this.list.forEach((item, index) => {
-        if (!item.active) {
-          active = false;
-        }
-        if (item.active) {
-          that.del = true;
-        }
-      });
-      this.isallSelect = active;
-    },
-    // 删除
-    async deleteSelected() {
-      var deleteSelectList = [];
-      var deleteSelectName = '';
+    };
+    events = {};
+    //获取商品列表
+    async delGoods(deleteSelectList) {
+      let data = {
+        goods_id: deleteSelectList
+      };
+      let res = await newapi.del_goods(data);
+      if (res.data.code == 0) {
+        await util.showModal('删除成功');
+        this.isMoreData = true;
+        this.initdata.page = 1;
+        this.del = false;
+        this.getShopList(this.initdata);
+      } else {
+        util.showToast(res.data.message);
+      }
+    }
+    // 设置会员卡
+    async setCardGoods(goods_id, hdky, callBack) {
+      let data = {
+        goods_id,
+        hdky
+      };
+      let res = await newapi.goods_hdky(data);
+      if (res.data.code == 0) {
+        util.showToast('设置会员卡成功');
+        if (callBack) callBack();
+      } else {
+        util.showToast(res.data.message);
+      }
+    }
+    // 设置会员卡方式
+    async setSelected(type) {
+      var setSelectList = [];
+      var setSelectName = '';
       this.list.forEach((item, index) => {
         if (item.active) {
-          deleteSelectList.push(item.goods_id);
-          if (deleteSelectList.length == 1) {
-            deleteSelectName += item.goods_name;
-          } else if (deleteSelectList.length <= 3) {
-            deleteSelectName += ',' + item.goods_name;
-          } else if (deleteSelectList.length == 4) {
-            deleteSelectName += '...';
+          setSelectList.push(item.goods_id);
+          if (setSelectList.length == 1) {
+            setSelectName += item.goods_name;
+          } else if (setSelectList.length <= 3) {
+            setSelectName += ',' + item.goods_name;
+          } else if (setSelectList.length == 4) {
+            setSelectName += '...';
           }
         }
       });
-      let mRes = await util.showModalBig(
-        '你确定要删除 ' + deleteSelectName + ' 吗'
-      );
+      if (type == 0)
+        var msg = '你确定要把 ' + setSelectName + ' 设置为不可用会员卡购买吗';
+      else var msg = '你确定要把 ' + setSelectName + ' 设置为可用会员卡购买吗';
+      let mRes = await util.showModalBig(msg);
       if (mRes.confirm) {
-        this.delGoods(deleteSelectList);
-        
-      }
-    },
-    async clickbtn() {
-      let mRes = await util.showActionSheet([
-        '设置为不可用会员卡购买',
-        '设置为可用会员卡购买'
-      ]);
-      this.setSelected(mRes.tapIndex);
-    },
-    // 修改
-    async toGoodDetailsTap(id, name, index, e) {
-      var that = this;
-      // wx.navigateTo({
-      // 	url: '/pages/my-console/publish/index?id=' + id,
-      // })
-      this.goods_id = id;
-      this.index = index;
-      this.$parent.globalData.goodsInfo = this.list[index];
-      let mRes = await util.showActionSheet([
-        '改标题',
-        '改价格',
-        '改库存',
-        '改全部'
-      ]);
-      switch (mRes.tapIndex) {
-        case 0:
-          // 改标题
-          that.isshowBox = true;
-          that.title = '改标题';
-          that.placeholder = '请输入需要修改的内容';
+        var that = this;
+        this.setCardGoods(setSelectList, type, function(res) {
+          that.list.forEach((item, index) => {
+            setSelectList.forEach((item2, index2) => {
+              if (item.goods_id == item2) {
+                that.list[index].hdky = type;
+              }
+            });
+          });
           that.$apply();
-          break;
-        case 1:
-          // 改价格
-          wx.navigateTo({
-            url: 'changeGoodsInfo?id=' + id + '&xiugaitype=jiage&index=' + index
-          });
-          break;
-        case 2:
-          // 改库存
-          wx.navigateTo({
-            url: 'changeGoodsInfo?id=' + id + '&xiugaitype=kucun&index=' + index
-          });
-          break;
-        case 3:
-          // 改全部
-          wx.navigateTo({
-            url: 'addGoodsInfo?id=' + id + '&index=' + index
-          });
-          break;
-        default:
+        });
       }
-    },
-    // 修改标题
-    async tapSure(value) {
-      var that = this;
-      if (!value || value == '') {
-        util.showToast('请填写标题');
+    }
+    async getShopList(data) {
+      if (!this.suppliers_id) {
+        util.showToast('获取店铺信息失败，请稍后再试');
         return;
       }
-      this.isshowBox = false;
-      let data = {
-        goods_id: this.goods_id,
-        goods_name: value
-      };
-      let res = await newapi.xgbt(data);
-      if (res.data.code == 0) {
-        util.showToast('修改成功');
-        this.list[this.index].goods_name = value;
-        this.$apply();
-      }
-    }
-  };
-  events = {};
-  //获取商品列表
-  async delGoods(deleteSelectList) {
-    let data = {
-      goods_id: deleteSelectList
-    };
-    let res = await newapi.del_goods(data);
-    if (res.data.code == 0) {
-      await util.showModal('删除成功');
-      this.isMoreData = true;
-      this.initdata.page = 1;
-      this.del = false;
-      this.getShopList(this.initdata);
-    } else {
-      util.showToast(res.data.message);
-    }
-  }
-  // 设置会员卡
-  async setCardGoods(goods_id, hdky, callBack) {
-    let data = {
-      goods_id,
-      hdky
-    };
-    let res = await newapi.goods_hdky(data);
-    if (res.data.code == 0) {
-      util.showToast('设置会员卡成功');
-      if (callBack) callBack();
-    } else {
-      util.showToast(res.data.message);
-    }
-  }
-  // 设置会员卡方式
-  async setSelected(type) {
-    var setSelectList = [];
-    var setSelectName = '';
-    this.list.forEach((item, index) => {
-      if (item.active) {
-        setSelectList.push(item.goods_id);
-        if (setSelectList.length == 1) {
-          setSelectName += item.goods_name;
-        } else if (setSelectList.length <= 3) {
-          setSelectName += ',' + item.goods_name;
-        } else if (setSelectList.length == 4) {
-          setSelectName += '...';
-        }
-      }
-    });
-    if (type == 0)
-      var msg = '你确定要把 ' + setSelectName + ' 设置为不可用会员卡购买吗';
-    else var msg = '你确定要把 ' + setSelectName + ' 设置为可用会员卡购买吗';
-    let mRes = await util.showModalBig(msg);
-    if (mRes.confirm) {
+      util.showLoading();
+      let res = await newapi.search(data);
+      wx.hideLoading();
       var that = this;
-      this.setCardGoods(setSelectList, type, function(res) {
-        that.list.forEach((item, index) => {
-          setSelectList.forEach((item2, index2) => {
-            if (item.goods_id == item2) {
-              that.list[index].hdky = type;
-            }
-          });
+      if (res.data.code == 0) {
+        var datas = res.data.data
+        datas.forEach((item, index) => {
+          datas[index].active = this.isallSelect;
         });
-        that.$apply();
-      });
-    }
-  }
-  async getShopList(data) {
-    if (!this.suppliers_id) {
-      util.showToast('获取店铺信息失败，请稍后再试');
-      return;
-    }
-    util.showLoading();
-    let res = await newapi.search(data);
-    wx.hideLoading();
-    var that = this;
-    if (res.data.code == 0) {
-     
-      var datas=res.data.data
-      datas.forEach((item, index) => {
-        datas[index].active = this.isallSelect;
-      });
-      if (this.initdata.page == 1) this.list = datas;
-      else this.list.push(...datas);
-      if (datas.length < 10) {
-        this.isMoreData = false;
+        if (this.initdata.page == 1) this.list = datas;
+        else this.list.push(...datas);
+        if (datas.length < 10) {
+          this.isMoreData = false;
+        }
+        if (datas.length == 0) {
+          this.isallSelect = false
+        }
+        this.del = this.isallSelect;
+        this.$apply();
+      } else {
+        wx.navigateBack({
+          delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+        });
       }
-       if (datas.length== 0) {
-        this.isallSelect=false
-         
+    }
+    //   商品分类
+    async getFenLei(parent_id = '', suppliers_id = this.cur_suppliers_id) {
+      let data = {
+        suppliers_id,
+        parent_id
+      };
+      let res = await newapi.allcats(data);
+      var datas = res.data.data;
+      if (res.data.code == 0) {
+        return datas;
       }
-      this.del = this.isallSelect;
-      this.$apply();
-    } else {
-      wx.navigateBack({
-        delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
-      });
+    }
+    //   加盟店铺
+    async yizhan_join_list() {
+      let data = {
+        suppliers_id: this.suppliers_id,
+      };
+      let res = await newapi.yizhan_join_list(data);
+      var datas = res.data.data;
+      if (res.data.code == 0) {
+        return datas;
+      }
+    }
+    initData() {
+      var data = {
+        cat_id: '',
+        paixuid: '',
+        keyword: '',
+        page: 1,
+        suppliers_id: this.suppliers_id
+      };
+      return data;
+    }
+    async onLoad(option) {
+      try {
+        await this.$parent.loginInfo();
+        this.suppliers_id = this.$parent.globalData.suppliers_id ?
+          this.$parent.globalData.suppliers_id :
+          (await this.$parent.getYizhanInfo()).suppliers_id;
+        this.is_hdky =
+          this.$parent.globalData.yizhanInfo.hdky == 1 ? true : false;
+        this.buttonText = this.is_hdky ? '设置会员卡不可用' : '设置会员卡可用';
+        this.initdata = this.initData();
+        this.getShopList(this.initdata);
+        this.cur_suppliers_id = this.suppliers_id;
+        this.fenleilist = await this.getFenLei();
+        this.fenleiLists = [];
+        this.isMoreData = true;
+        this.fenleiLists.push(this.fenleilist);
+        this.statusType[0] = this.fenleilist[0].cat_name;
+        if (this.$parent.globalData.yizhanInfo.is_yizhan == 1) {
+          this.joinlist = await this.yizhan_join_list();
+        }
+        this.$apply();
+      } catch (error) {}
+    }
+    onReachBottom() {
+      if (this.isMoreData) {
+        this.initdata.page = this.initdata.page + 1;
+        this.getShopList(this.initdata);
+      }
     }
   }
-  //   商品分类
-  async getFenLei(parent_id = '') {
-    let data = {
-      suppliers_id: this.suppliers_id,
-      parent_id
-    };
-    let res = await newapi.allcats(data);
-    var datas = res.data.data;
-    if (res.data.code == 0) {
-      return datas;
-    }
-  }
-  initData() {
-    var data = {
-      cat_id: '',
-      paixuid: '',
-      keyword: '',
-      page: 1,
-      suppliers_id: this.suppliers_id
-    };
-    return data;
-  }
-  async onLoad(option) {
-    try {
-      await this.$parent.loginInfo();
-      this.suppliers_id = this.$parent.globalData.suppliers_id
-        ? this.$parent.globalData.suppliers_id
-        : (await this.$parent.getYizhanInfo()).suppliers_id;
-      this.is_hdky =
-        this.$parent.globalData.yizhanInfo.hdky == 1 ? true : false;
-      this.buttonText = this.is_hdky ? '设置会员卡不可用' : '设置会员卡可用';
-      this.initdata = this.initData();
-      this.getShopList(this.initdata);
-      this.fenleilist = await this.getFenLei();
-      this.fenleiLists = [];
-      this.isMoreData = true;
-      this.fenleiLists.push(this.fenleilist);
-      this.statusType[0] = this.fenleilist[0].cat_name;
-      this.$apply();
-    } catch (error) {}
-  }
-  onReachBottom() {
-    if (this.isMoreData) {
-      this.initdata.page = this.initdata.page + 1;
-      this.getShopList(this.initdata);
-    }
-  }
-}
 </script>
