@@ -1,0 +1,222 @@
+<style lang="less">
+  .status-label {
+    background: #f0f0f0;
+    border-left: 5rpx solid #e4e4e4;
+  }
+  .icon-shouji {
+    color: #44b8f4;
+    font-size: 35rpx;
+  }
+  .icon-youcecaidan {
+    color: #e50012;
+  }
+  .green {
+    color: #10b3b1;
+  }
+  .num {
+    font-size: 26rpx;
+    line-height: 35rpx;
+    padding-left: 20rpx;
+    color: #888;
+  }
+  .check-list {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20rpx 40rpx;
+    border-top: 8rpx solid #f0f0f0;
+    background: #fff;
+  }
+  .check-list-img {
+    width: 100rpx;
+    height: 100rpx;
+    margin-right: 10rpx;
+  }
+  .check-list-img image {
+    width: 100%;
+    height: 100%;
+  }
+  .check-list-content {
+    line-height: 40rpx;
+    flex: 1;
+  }
+  .check-list-btn {
+    // width: 60rpx;
+    text-align: right;
+  }
+  .check-list-btn button {
+    height: 55rpx;
+    color: #fff;
+    background-color: #e50012;
+    line-height: 55rpx;
+    font-size: 26rpx;
+    border-radius: 50px;
+    padding: 0 40rpx;
+  }
+  .status-box {
+    width: 100%;
+    height: 100rpx;
+    line-height: 100rpx;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-top: 1rpx solid #eee;
+  }
+  .status-box .status-label {
+    border-right: 1px solid #f0f0f0;
+    text-align: center;
+    font-size: 30rpx;
+    padding: 0px 40rpx;
+    flex: 1;
+    border-bottom: 6rpx solid #eee;
+    position: relative;
+  }
+  .status-box .status-label.active {
+    color: #e50012;
+    border-bottom: 6rpx solid #e50012;
+  }
+  .status-box .status-label .red-dot {
+    width: 16rpx;
+    height: 16rpx;
+    position: absolute;
+    left: 116rpx;
+    top: 23rpx;
+    background-color: #f43530;
+    border-radius: 50%;
+  }
+  /* 添加会员 */
+  .checkLists {
+    padding-bottom: 80rpx;
+    background: #f0f0f0;
+  }
+  .addmember {
+    text-align: center;
+    line-height: 80rpx;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    background: #e50012;
+    color: #fff;
+  }
+  .search-title {
+    display: flex;
+    justify-content: space-between;
+    line-height: 55rpx;
+    font-size: 28rpx;
+    align-items: center;
+    background-color: #fff;
+    z-index: 10;
+    padding: 20rpx;
+    .sure-btn {
+      border-radius: 50px;
+      padding: 0 20rpx;
+      border: 1px solid #e50012;
+      color: #e50012;
+      font-size: 26rpx;
+    }
+    .sure-btn2 {
+      border: 1px solid #aaa;
+      color: #aaa;
+    }
+  }
+  .border {
+    display: inline-block;
+    padding: 0 20rpx;
+    background: #fff; // border-right: 1px solid #f0f0f0;
+    // max-width: 300rpx;
+  }
+  .search {
+    text-align: right;
+    padding-right: 40rpx;
+  }
+  .body-bg {
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+  .list {
+    background-color: #fff;
+    width: 60%;
+    text-align: center;
+    line-height: 88rpx;
+    font-size: 30rpx;
+    max-height: 450rpx;
+    overflow: scroll;
+  }
+  .list view {
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .icon-jiantou {
+    font-size: 12px;
+    margin-left: 10rpx;
+    color: #e50012;
+  }
+  .top {
+    background: #e50012;
+    .money {
+      text-align: center;
+      color: #fff;
+      .text-m {
+        font-size: 45rpx;
+        line-height: 55rpx;
+        font-weight: bold;
+      }
+      .icon-jiantou {
+        color: #fff;
+      }
+    }
+    .border2 {
+      border-left: 1px solid rgba(255, 255, 255, 0.5);
+    }
+    .money-list {
+      display: flex;
+      justify-content: space-around;
+      padding: 20rpx 40rpx;
+      font-size: 28rpx;
+      .money {
+        flex: 1;
+      }
+      .text-m {
+        font-weight: bold;
+        font-size: 35rpx;
+        line-height: 35rpx;
+      }
+    }
+  }
+</style>
+<template>
+  <view class='container'>
+    <button>加盟易站</button>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import newapi from '../../../API/newapi';
+  import util from '../../../utils/index';
+//   import search from '../../components/search';
+  
+  export default class my_console_check extends wepy.page {
+    config = {
+      navigationBarTitleText: '会员管理'
+    };
+    data = {
+    
+      
+    };
+    computed = {};
+    components = {};
+    methods = {
+     
+    };
+    events = {};
+   
+  }
+</script>

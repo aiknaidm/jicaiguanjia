@@ -55,8 +55,8 @@ const newapi = {
     add_categorys: (data) => fetch(`${host_chk}/add_categorys`, 'GET', data), //添加分类
     del_categorys: (data) => fetch(`${host_chk}/del_categorys`, 'GET', data), //删除分类
     del_brands: (data) => fetch(`${host_chk}/del_brands`, 'GET', data), //删除品牌
-    add_brands: (data) => fetch(`${host_chk}/add_brands`, 'GET', data), 
-    all_brands: (data) => fetch(`${host_chk}/all_brands`, 'GET', data), 
+    add_brands: (data) => fetch(`${host_chk}/add_brands`, 'GET', data),
+    all_brands: (data) => fetch(`${host_chk}/all_brands`, 'GET', data),
     brands: (data) => fetch(`${host_chk}/brands`, 'GET', data),
     joinfee_list: (data) => fetch(`${host_chk}/joinfee_list`, 'GET', data),
     add_joinfee: (data) => fetch(`${host_chk}/add_joinfee`, 'GET', data),
@@ -119,6 +119,10 @@ const newapi = {
     promotion_list: (data) => fetch(`${host_chk}/promotion_list`, 'GET', data),
     suppliers_permission: (data) => fetch(`${host_chk}/suppliers_permission`, 'GET', data),
     edit_permission: (data) => fetch(`${host_chk}/edit_permission`, 'GET', data),
+    suppliers_join_list: (data) => fetch(`${host_chk}/suppliers_join_list`, 'GET', data), //加入易站
+    shenhe_suppliers_join: (data) => fetch(`${host_chk}/shenhe_suppliers_join`, 'GET', data), //加入易站
+    suppliers_join: (data) => fetch(`${host_chk}/suppliers_join`, 'GET', data), //加入易站
+
 
 }
 const fetch = async function(url, method, data) {

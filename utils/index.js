@@ -189,28 +189,28 @@ const html_decode = function(str) {
         s = s.replace(/&amp;/g, "&");
         s = s.replace(/&lt;/g, "<");
         s = s.replace(/&gt;/g, ">");
-        s = s.replace(/\/>/g, '></img>');
+        // s = s.replace(/\/>/g, '></img>');
 
-        s = "<p>" + s + "</p>"
+        // s = "<p>" + s + "</p>"
 
         // if (s.substr(s.length - 5, 5) == "/img>") {
         // }
-        s = s.replace(/<img/g, '</p><img');
-        s = s.replace(/<\/img>/g, '<\/img><p>');
+        // s = s.replace(/<img/g, '</p><img');
+        // s = s.replace(/<\/img>/g, '<\/img><p>');
 
-        s = s.replace(/\/>/g, '/></p>');
-        s = s.replace(/\/><\/p>/g, '/>');
-        s = s.replace(/<\/p><\/p>/g, '</p>');
-        s = s.replace(/<\/p>\/n<\/p>/g, '</p>');
-        s = s.replace(/<\/p>\/r<\/p>/g, '</p>');
-        s = s.replace(/<\/p>\/n\/r<\/p>/g, '</p>');
-        s = s.replace(/<\/p>\/r\/n<\/p>/g, '</p>');
-        s = s.replace(/<p><\/p>/g, '');
+        // s = s.replace(/\/>/g, '/></p>');
+        // s = s.replace(/\/><\/p>/g, '/>');
+        // s = s.replace(/<\/p><\/p>/g, '</p>');
+        // s = s.replace(/<\/p>\/n<\/p>/g, '</p>');
+        // s = s.replace(/<\/p>\/r<\/p>/g, '</p>');
+        // s = s.replace(/<\/p>\/n\/r<\/p>/g, '</p>');
+        // s = s.replace(/<\/p>\/r\/n<\/p>/g, '</p>');
+        // s = s.replace(/<p><\/p>/g, '');
         // s = s.replace(/>\/n<p><\/p><img/g, '><img');
         // s = s.replace(/>\/r<p><\/p><img/g, '><img');
         // s = s.replace(/>\/r\/n<p><\/p><img/g, '><img');
         // s = s.replace(/>\/n\/r<p><\/p><img/g, '><img');
-        s = s.replace(/<p><p/g, '<p');
+        // s = s.replace(/<p><p/g, '<p');
 
 
 

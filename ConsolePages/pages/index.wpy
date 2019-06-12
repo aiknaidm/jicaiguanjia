@@ -220,6 +220,7 @@
 </style>
 <template>
   <view style='position:relative;' class="list {{right?'active':''}}">
+
     <view class=" {{right?'mask':''}}" catchtouchmove="{{right?'stopscroll':''}}" bindtap='hiddenyizhan'></view>
     <view class="container {{right?'active':''}}">
       <view class='control-title'>
@@ -244,6 +245,7 @@
         </view>
       </view>
       <form report-submit bindsubmit='getFormId'>
+        <view></view>
         <view class="info_list order_list" wx:if="{{yizhanInfo.is_admin==1}}">
           <navigator url="{{}}" open-type="navigate" hover-class="none">
             <image src="/images/console/transaction-manage.png" />交易管理

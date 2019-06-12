@@ -70,6 +70,7 @@
     flex: 1;
     border-bottom: 6rpx solid #eee;
     position: relative;
+    background: #fff;
   }
   .status-box .status-label.active {
     color: #e50012;
@@ -193,44 +194,13 @@
 </style>
 <template>
   <view class='container'>
-    <view class="top" wx:if="{{is_kthy==1}}">
-      <view class="money-list">
-        <view class="money" @tap="toPayDetails">
-          <view class="text-m">￥{{money.zong}}</view>
-          <view class="text-t">会员充值总额</view>
-          <view class="iconfont icon-jiantou"></view>
-        </view>
-        <view class="money border2" @tap="tobalanceDetail">
-          <view class="text-m">￥{{money.yue}}</view>
-          <view>会员充值余额</view>
-          <view class="iconfont icon-jiantou"></view>
-        </view>
-      </view>
-    </view>
     <view class="status-box">
       <view @tap="statusTap" class="status-label {{index == currentType ? 'active' : ''}}" wx:for-items="{{statusType}}" wx:key="{{index}}" data-index="{{index}}" data-statu="{{statusKey[index]}}">
         {{item}}
         <view class="{{tabClass[index]}}"></view>
       </view>
     </view>
-      <search @buttonTap.user="searchTap"></search>
-    <view class='search-title ' wx:if="{{showName}}">
-      <view class="up">
-        <view class='border'>业务员：{{salesmanName}}
-        </view>
-      </view>
-    
-    </view>
-  
-    <view class='search-title ' wx:elif="{{adminList.length!=0}}">
-      <view bindtap="buttonTap" class=" up">
-        <view class='border'>{{salesmanName}}
-          <text class='iconfont icon-jiantou'></text>
-        </view>
-        <view class="num">会员<text class="green">{{num}}</text>名</view>
-      </view>
-      <view class="sure-btn {{qurenNum==0?'sure-btn2':''}}" @tap="{{qurenNum==0?'':'toSureList'}}" wx:if="{{is_kthy==1&&sales_id==0}}">充值待确认</view>
-    </view>
+
     
     <view class='checkLists'>
       <!--未审核  -->
@@ -286,9 +256,9 @@
 
 <script>
   import wepy from 'wepy';
-  import newapi from '../../API/newapi';
-  import util from '../../utils/index';
-  import search from '../../components/search';
+  import newapi from '../../../API/newapi';
+  import util from '../../../utils/index';
+//   import search from '../../components/search';
   
   export default class my_console_check extends wepy.page {
     config = {
@@ -312,7 +282,7 @@
       
     };
     computed = {};
-    components = {search};
+    components = {};
     methods = {
       searchTap(val){
           this.yhData.keyword=val;

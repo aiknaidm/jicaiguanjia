@@ -375,13 +375,13 @@
         <view class="listOption">商品活动</view>
         <textarea class="shownnum" type='text' value="{{goodsdetail.goods_brief}}" name="goods_brief"></textarea>
       </view>
-      <view class="listBox listBox3" wx:if="{{is_yizhan==1}}">
+      <view class="listBox listBox3" >
         <view class="listOption">设为特供商品</view>
         <view class="listOptionImages goodsDetail">
           <switch checked="{{is_best}}" name="is_best" bindchange="switch1Change" color="#e50012" />
         </view>
       </view>
-      <view class="listBox listBox3" wx:if="{{is_yizhan==1}}">
+      <view class="listBox listBox3" >
         <view class="listOption">设为活动商品</view>
         <view class="listOptionImages goodsDetail">
           <switch checked="{{is_hot}}" name="is_hot" bindchange="switch1Change" color="#e50012" />
