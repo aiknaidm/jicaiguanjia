@@ -194,8 +194,8 @@
 <template>
   <view class='container'>
     <button @tap="apply" wx:if="{{shenhe==0}}">加盟易站</button>
-    <button  wx:if="{{shenhe==2}}">等待审核中~</button>
-    <button  wx:if="{{shenhe==1}}">查看本地易站</button>
+    <button wx:if="{{shenhe==2}}">等待审核中~</button>
+    <button wx:if="{{shenhe==1}}">查看本地易站</button>
   </view>
 </template>
 
@@ -203,41 +203,38 @@
   import wepy from 'wepy';
   import newapi from '../../../API/newapi';
   import util from '../../../utils/index';
-//   import search from '../../components/search';
-  
+  //   import search from '../../components/search';
   export default class my_console_check extends wepy.page {
     config = {
-      navigationBarTitleText: '会员管理'
+      navigationBarTitleText: '加入一站购'
     };
     data = {
-    shenhe:0
-      
+      shenhe: 0
     };
     computed = {};
     components = {};
     methods = {
-   async apply(){
-       var res= await  newapi.suppliers_join({suppliers_id:this.suppliers_id,yizhan_suppliers_id:this.yizhan_suppliers_id});
-    if(res.data.code==0){
-util.showModal("申请成功请耐心等待易站经理审核通过")
-this.shenhe=2
-this.$apply()
-
-    }else{
-
-    }
-    }
+      async apply() {
+        var res = await newapi.suppliers_join({
+          suppliers_id: this.suppliers_id,
+          yizhan_suppliers_id: this.yizhan_suppliers_id
+        });
+        if (res.data.code == 0) {
+          util.showModal("申请成功，请耐心等待易站经理审核通过")
+          this.shenhe = 2
+          this.$apply()
+        } else {
+        }
+      }
     };
-  async  onLoad(){
-
- this.suppliers_id = this.$parent.globalData.suppliers_id ?
-          this.$parent.globalData.suppliers_id :
-          (await this.$parent.getYizhanInfo()).suppliers_id;
-this.yizhan_suppliers_id=this.$parent.globalData.yizhanInfo.yizhan_suppliers_id;
-this.shenhe=this.$parent.globalData.yizhanInfo.is_join;
-this.$apply()
+    async onLoad() {
+      this.suppliers_id = this.$parent.globalData.suppliers_id ?
+        this.$parent.globalData.suppliers_id :
+        (await this.$parent.getYizhanInfo()).suppliers_id;
+      this.yizhan_suppliers_id = this.$parent.globalData.yizhanInfo.yizhan_suppliers_id;
+      this.shenhe = this.$parent.globalData.yizhanInfo.is_join;
+      this.$apply()
     }
     events = {};
-   
   }
 </script>

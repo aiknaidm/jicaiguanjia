@@ -53,38 +53,6 @@
     border-radius: 50px;
     padding: 0 40rpx;
   }
-  .status-box {
-    width: 100%;
-    height: 100rpx;
-    line-height: 100rpx;
-    display: flex;
-    align-items: center;
-    background-color: #fff;
-    border-top: 1rpx solid #eee;
-  }
-  .status-box .status-label {
-    border-right: 1px solid #f0f0f0;
-    text-align: center;
-    font-size: 30rpx;
-    padding: 0px 40rpx;
-    flex: 1;
-    border-bottom: 6rpx solid #eee;
-    position: relative;
-    background: #fff;
-  }
-  .status-box .status-label.active {
-    color: #e50012;
-    border-bottom: 6rpx solid #e50012;
-  }
-  .status-box .status-label .red-dot {
-    width: 16rpx;
-    height: 16rpx;
-    position: absolute;
-    left: 116rpx;
-    top: 23rpx;
-    background-color: #f43530;
-    border-radius: 50%;
-  }
   /* 添加会员 */
   .checkLists {
     padding-bottom: 80rpx;
@@ -99,26 +67,8 @@
     background: #e50012;
     color: #fff;
   }
-  .search-title {
-    display: flex;
-    justify-content: space-between;
-    line-height: 55rpx;
-    font-size: 28rpx;
-    align-items: center;
+  .status-label {
     background-color: #fff;
-    z-index: 10;
-    padding: 20rpx;
-    .sure-btn {
-      border-radius: 50px;
-      padding: 0 20rpx;
-      border: 1px solid #e50012;
-      color: #e50012;
-      font-size: 26rpx;
-    }
-    .sure-btn2 {
-      border: 1px solid #aaa;
-      color: #aaa;
-    }
   }
   .border {
     display: inline-block;
@@ -194,57 +144,50 @@
 </style>
 <template>
   <view class='container'>
-    <view class="status-box">
-      <view @tap="statusTap" class="status-label {{index == currentType ? 'active' : ''}}" wx:for-items="{{statusType}}" wx:key="{{index}}" data-index="{{index}}" data-statu="{{statusKey[index]}}">
-        {{item}}
-        <view class="{{tabClass[index]}}"></view>
-      </view>
-    </view>
-
-    
+    <statusTap :statusType="statusType" :currentType.sync="status" @statusTap.user="statusTap">
+    </statusTap>
     <view class='checkLists'>
       <!--未审核  -->
-      <view class='check-list' wx:if="{{currentStatu==0}}" wx:for="{{shenheList}}" wx:key="{{index}}" data-id="{{item.user_id}}" @tap='toCheckDetail'>
+      <view class='check-list' wx:if="{{currentStatu==0}}" wx:for="{{shenheList}}" wx:key="{{index}}">
         <view class='check-list-img'>
           <image src='{{item.img}}' />
         </view>
         <view class='check-list-content'>
           <view>姓名：{{item.username}}</view>
           <view>店铺名称：{{item.suppliers_name}}</view>
-          <view @tap.stop='tocallphone' data-phone="{{item.mobile_phone}}">手机号码：{{item.mobile}}
+          <view @tap.stop='tocallphone({{item.mobile}})'>手机号码：{{item.mobile}}
             <text class='iconfont icon-shouji'></text>
           </view>
         </view>
         <view class='check-list-btn'>
           <form report-submit bindsubmit='getFormId'>
-            <button @tap.stop='toShenhe' data-id="{{item.id}}">审核</button>
+            <button @tap.stop='toShenhe({{item.id}})'>审核</button>
           </form>
         </view>
       </view>
       <!--已审核  -->
-      <view class='check-list checked-list' wx:if="{{currentStatu==1}}" wx:for="{{shenheList}}" wx:key="{{index}}" @tap='toCheckDetail' data-id="{{item.user_id}}">
+      <view class='check-list checked-list' wx:if="{{currentStatu==1}}" wx:for="{{shenheList}}" wx:key="{{index}}">
         <view class='check-list-img'>
-          <image src='{{item.avatar}}' />
+          <image src='{{item.img}}' />
         </view>
         <view class='check-list-content'>
-          <view>姓名：{{item.user_name}}</view>
-          <view @tap.stop='tocallphone' data-phone="{{item.mobile_phone}}">手机号码：{{item.mobile_phone}}
+          <view>姓名：{{item.username}}</view>
+          <view>店铺名称：{{item.suppliers_name}}</view>
+          <view @tap.stop='tocallphone({{item.mobile}})'>手机号码：{{item.mobile}}
             <text class='iconfont icon-shouji'></text>
           </view>
-          <view >会员等级：{{item.vip_level}}级
-       
-          </view>
-          
-          <view wx:if="{{item.amount&&item.amount!=0}}">会员卡余额：￥{{item.amount}}</view>
         </view>
         <view class='check-list-btn'>
-          <text class='iconfont icon-youcecaidan' @tap.stop='toJiechu({{item.amount}})' data-id="{{item.id}}"></text>
+          <text class='iconfont icon-youcecaidan' @tap.stop='toJiechu({{item.id}})'></text>
         </view>
       </view>
     </view>
-    <navigator url='/ConsolePages/pages/my_addManagerInfo?type=member&sales_id={{sales_id}}'>
-      <view class='addmember'>+添加会员</view>
-    </navigator>
+    <view wx:if="{{shenheList.length==0}}">
+      <noOrder text="暂无店铺"></noOrder>
+    </view>
+    <!-- <navigator url='/ConsolePages/pages/my_addManagerInfo?type=member&sales_id={{sales_id}}'>
+                  <view class='addmember'>+添加会员</view>
+                </navigator> -->
     <view class='body-bg' wx:if="{{isShowSalesList}}" bindtap='hiddenSalesList' touchstart='hiddenbg' touchmove="hiddenbg">
       <view class='list'>
         <view wx:for="{{adminList}}" wx:key="{{index}}" @tap='changeShopList({{item.id}},{{item.user_nickname}})'>
@@ -257,13 +200,14 @@
 
 <script>
   import wepy from 'wepy';
+  import statusTap from '../../../components/statusTap';
+  import noOrder from '../../../components/noOrder';
   import newapi from '../../../API/newapi';
   import util from '../../../utils/index';
-//   import search from '../../components/search';
-  
+  //   import search from '../../components/search';
   export default class my_console_check extends wepy.page {
     config = {
-      navigationBarTitleText: '会员管理'
+      navigationBarTitleText: '管理加盟店铺'
     };
     data = {
       statusType: ['未审核', '已审核'],
@@ -280,12 +224,13 @@
       money: {},
       is_kthy: 0,
       qurenNum: 0,
-      
     };
     computed = {};
-    components = {};
+    components = {
+      statusTap,
+      noOrder
+    };
     methods = {
-
       toSureList() {
         wx.navigateTo({
           url: 'my_console_toSureList'
@@ -309,58 +254,35 @@
       getFormId: function(e) {
         util.submitFormId(e.detail.formId);
       },
-      statusTap: function(e) {
-      
+      statusTap(index) {
         this.page = 1
-        this.shenheList=[];
-       
-        var curType = e.currentTarget.dataset.index;
-        var curStatu = e.currentTarget.dataset.statu;
-        this.currentType = curType;
-        this.currentStatu = curStatu;
-         this.getShenheList(this.suppliers_id,curType);
+        this.shenheList = [];
+        this.currentStatu = index;
+        this.getShenheList(this.suppliers_id, this.currentStatu);
       },
       //需要审核提示
-      async toShenhe(e) {
-        //审核人的id
-        var id = e.currentTarget.dataset.id;
+      async toShenhe(id) {
         let mRes = await util.showActionSheet(['通过', '拒绝']);
-        if (mRes.tapIndex == 0) {  
-          
-          this.shenhe(id, '1');
+        if (mRes.tapIndex == 0) {
+          this.doshenhe(id, '1');
         } else if (mRes.tapIndex == 1) {
-          this.shenhe(id, '2');
+          this.doshenhe(id, '2');
         }
       },
       //解除关系提示
-      async toJiechu(money, e) {
-        //审核人的id
-        var id = e.currentTarget.dataset.id;
+      async toJiechu(id) {
         let mRes = await util.showActionSheet(['解除关系']);
         if (mRes.tapIndex == 0) {
-          this.shenhe(id, 0);
-        }else{
-        //   console.log("this.list",this.list);
-        //    let mRes2 = await util.showActionSheet(this.list);
-
-        //    this.shenhe(id, 'tongguo',mRes2.tapIndex+1);
+          this.doshenhe(id, 0);
+        } else {
+          //   console.log("this.list",this.list);
+          //    let mRes2 = await util.showActionSheet(this.list);
+          //    this.doshenhe(id, 'tongguo',mRes2.tapIndex+1);
         }
       },
-      tocallphone: function(e) {
-        var phone = e.currentTarget.dataset.phone;
+      tocallphone: function(phone) {
         wx.makePhoneCall({
           phoneNumber: phone
-        });
-      },
-      toCheckDetail: function(e) {
-        //审核人的id
-        var id = e.currentTarget.dataset.id;
-        var currentStatu = this.currentStatu;
-        wx.navigateTo({
-          url: '/ConsolePages/pages/my_console_checkDetail?id=' +
-            id +
-            '&currentStatu=' +
-            currentStatu
         });
       },
       buttonTap: function() {
@@ -369,22 +291,23 @@
       hiddenSalesList: function() {
         this.isShowSalesList = false;
       },
-      changeShopList: function(sales_id, name) {
-     
-      }
+      changeShopList: function(sales_id, name) {}
     };
     events = {};
     //审核列表
-    async getShenheList(suppliers_id,shenhe) {
+    async getShenheList(suppliers_id, shenhe) {
       wx.showLoading({
         mask: true, //显示透明蒙层，防止触摸穿透,
       });
-    //   shenhe 0 未审核 1已审核
-      let res = await newapi.suppliers_join_list({suppliers_id,shenhe});
+      //   shenhe 0 未审核 1已审核
+      let res = await newapi.suppliers_join_list({
+        suppliers_id,
+        shenhe
+      });
       wx.hideLoading();
       if (res.data.code == 0) {
         var datas = res.data.data.data
-        if (this.page ==1) {
+        if (this.page == 1) {
           this.shenheList = datas
         } else {
           this.shenheList.push(...datas)
@@ -393,13 +316,11 @@
           this.isMoreData = false;
         else
           this.isMoreData = true;
-       
       }
-       this.$apply();
+      this.$apply();
     }
     //解除关系
     // async jiechu(id, money) {
-    
     //   let suppliers_id = this.$parent.globalData.suppliers_id;
     //   if (money > 0) {
     //     util.showModal('此会员是充值用户，暂不能解除会员关系');
@@ -414,47 +335,39 @@
     //     util.showToast('解除关系成功');
     //     this.page=1;
     //     this.getShenheList(this.suppliers_id);
-        
     //   } else {
     //     util.showToast(res.data.message);
     //   }
     // }
     //审核
-    async shenhe(id, shenhe) {
+    async doshenhe(id, shenhe) {
       util.showLoading('审核中...');
       let suppliers_id = this.suppliers_id;
       var shenhe = shenhe;
       let data = {
         id,
         shenhe
-        
       };
       let res = await newapi.shenhe_suppliers_join(data);
       wx.hideLoading();
       if (res.data.code == 0) {
-        this.page=1;
-        this.getShenheList(this.suppliers_id,0);
+        this.page = 1;
+        this.getShenheList(this.suppliers_id, 0);
       }
     }
-   
-    
-   
     async onLoad(option) {
-     this.page=1;
-       this.suppliers_id = this.$parent.globalData.suppliers_id ?
-          this.$parent.globalData.suppliers_id :
-          (await this.$parent.getYizhanInfo()).suppliers_id;
-    this.shenhe=0
-     this.getShenheList(this.suppliers_id,this.shenhe)
+      this.page = 1;
+      this.suppliers_id = this.$parent.globalData.suppliers_id ?
+        this.$parent.globalData.suppliers_id :
+        (await this.$parent.getYizhanInfo()).suppliers_id;
+      this.currentStatu = 0
+      this.getShenheList(this.suppliers_id, this.currentStatu)
     }
-    async onShow() {
-   
-    }
+    async onShow() {}
     onReachBottom() {
-     
       if (this.isMoreData) {
         this.page = this.page + 1;
-        this.getShenheList(this.suppliers_id,this.shenhe);
+        this.getShenheList(this.suppliers_id, this.currentStatu);
       }
     }
   }
