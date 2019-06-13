@@ -612,6 +612,36 @@
           }
         ];
         // this.shopList.push();
+      } else if (this.suppliers_id == 76) {
+        this.shopList = [{
+            icon: '/images/console/fabushangpin.png',
+            num: 0,
+            display_name: '发布商品',
+            url: 'addGoodsInfo',
+            bgcolor: '#10b3b1'
+          },
+          {
+            icon: '/images/console/shangpinliebiao.png',
+            num: 0,
+            display_name: '商品列表',
+            url: 'goodsList',
+            bgcolor: '#f7bf30'
+          },
+          {
+            icon: '/images/console/shangpinliebiao.png',
+            num: 0,
+            display_name: '分类管理',
+            url: 'my_console_catDelete',
+            bgcolor: '#f7bf30'
+          }, {
+            icon: '/images/console/shangpinliebiao.png',
+            num: 0,
+            display_name: '品牌管理',
+            url: '/Admin/pages/brandManage',
+            bgcolor: '#f7bf30'
+          }
+        ];
+        // this.shopList.push();
       } else {
         this.shopList = [{
             icon: '/images/console/fabushangpin.png',
