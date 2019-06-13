@@ -349,13 +349,13 @@
           <switch color="#e50012" checked="{{userDetail.is_friend}}" name="is_friend" />
         </view>
       </view>
-      <view class="section section2">
+      <!-- <view class="section section2">
         <view class="label">
           会员</view>
         <view class="body-view">
           <switch color="#e50012" checked="{{userDetail.is_friend}}" name="is_friend" />
         </view>
-      </view>
+      </view> -->
       <view class="section section2">
         <view class="label">
           会员等级</view>
