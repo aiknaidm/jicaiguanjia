@@ -238,13 +238,13 @@
           <form report-submit bindsubmit='getFormId'>
             <navigator url='/ConsolePages/pages/share'>
               <button form-type="submit">
-                          <text class='iconfont icon-fenxiang'></text>分享好友</button>
+                            <text class='iconfont icon-fenxiang'></text>分享好友</button>
             </navigator>
           </form>
         </view>
       </view>
       <form report-submit bindsubmit='getFormId'>
-        <view class="info_list order_list" wx:if="{{yizhanInfo.is_admin==1}}">
+        <view class="info_list order_list" wx:if="{{yizhanInfo.is_admin==1 && guoqi==0}}">
           <navigator url="{{}}" open-type="navigate" hover-class="none">
             <image src="/images/console/transaction-manage.png" />交易管理
             <view class='hui_txt'> (您当前最多可收到{{yizhanInfo.msg_num}}条通知)</view>
@@ -253,7 +253,7 @@
             <myList :tabItem="item"></myList>
           </repeat>
         </view>
-        <view class="info_list" wx:if="{{yizhanInfo.is_admin==1}}">
+        <view class="info_list" wx:if="{{yizhanInfo.is_admin==1 && guoqi==0}}">
           <navigator url="{{}}" open-type="navigate" hover-class="none">
             <image src="/images/console/goods-manage.png" />商品管理
           </navigator>
@@ -447,7 +447,8 @@
           isadmin: 1
         }
       ],
-      height: 0
+      height: 0,
+      guoqi: 0
     };
     computed = {};
     methods = {
@@ -487,6 +488,7 @@
     }
     // 是否过期
     async isexpired(yizhanInfo) {
+      this.guoqi = 0;
       var new_time = new Date().getTime();
       var shiyong_time = 7 * 24 * 3600 * 1000;
       var end_time = yizhanInfo.end_time * 1000;
@@ -495,9 +497,11 @@
       }
       if (new_time > end_time) {
         await util.showModal('您的小程序已到期');
-        wx.navigateTo({
-          url: '/ConsolePages/pages/my_console_renew'
-        });
+        this.guoqi = 1;
+        this.$apply();
+        // wx.navigateTo({
+        //   url: '/ConsolePages/pages/my_console_renew'
+        // });
       } else if (new_time + shiyong_time > end_time) {
         var time = Math.floor((end_time - new_time) / 1000 / 3600 / 24);
         let mRes = await util.showModalBig(

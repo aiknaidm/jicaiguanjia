@@ -150,15 +150,15 @@
       }
     };
     events = {};
-    onUnload() {
-      var new_time = new Date().getTime();
-      if (this.yizhanInfo.end_time_bk && new_time > this.yizhanInfo.end_time_bk) {
-        this.$parent.globalData.suppliers_id = 0;
-        wx.switchTab({
-            url: '/pages/my'
-          });
-      }
-    }
+    // onUnload() {
+    //   var new_time = new Date().getTime();
+    //   if (this.yizhanInfo.end_time_bk && new_time > this.yizhanInfo.end_time_bk) {
+    //     this.$parent.globalData.suppliers_id = 0;
+    //     wx.switchTab({
+    //         url: '/pages/my'
+    //       });
+    //   }
+    // }
     async onLoad(options) {
       await this.$parent.loginInfo();
       this.suppliers_id = this.$parent.globalData.suppliers_id;
