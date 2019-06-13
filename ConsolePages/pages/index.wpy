@@ -220,7 +220,6 @@
 </style>
 <template>
   <view style='position:relative;' class="list {{right?'active':''}}">
-
     <view class=" {{right?'mask':''}}" catchtouchmove="{{right?'stopscroll':''}}" bindtap='hiddenyizhan'></view>
     <view class="container {{right?'active':''}}">
       <view class='control-title'>
@@ -239,7 +238,7 @@
           <form report-submit bindsubmit='getFormId'>
             <navigator url='/ConsolePages/pages/share'>
               <button form-type="submit">
-                        <text class='iconfont icon-fenxiang'></text>分享好友</button>
+                          <text class='iconfont icon-fenxiang'></text>分享好友</button>
             </navigator>
           </form>
         </view>
@@ -637,7 +636,7 @@
             icon: '/images/console/shangpinliebiao.png',
             num: 0,
             display_name: '品牌管理',
-            url: '/Admin/pages/brandManage',
+            url: '/Admin/pages/brandManage?suppliers_id=' + this.suppliers_id,
             bgcolor: '#f7bf30'
           }
         ];

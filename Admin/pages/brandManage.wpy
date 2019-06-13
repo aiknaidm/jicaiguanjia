@@ -186,6 +186,7 @@
       thisBrandImg: '',
       imgSrc: [],
       keyword: '',
+      suppliers_id: 0,
       page: 1
     };
     computed = {};
@@ -371,6 +372,7 @@
     async getBrandList() {
       util.showLoading();
       let data = {
+        suppliers_id: this.suppliers_id,
         keyword: this.keyword,
         page: this.page
       }
@@ -394,6 +396,7 @@
       }
     }
     async onLoad(option) {
+      this.suppliers_id = option.suppliers_id;
       this.isMoreData = true;
       this.page = 1;
       this.getBrandList();
