@@ -342,20 +342,21 @@
           <switch color="#e50012" checked="{{!userDetail.is_picture}}" name="is_picture" />
         </view>
       </view>
-      <view class="section section2">
+      
+      <view class="section section2" wx:if="{{userDetail.is_yizhan==0}}">
+        <view class="label">
+        非会员查看商品</view>
+        <view class="body-view">
+          <switch color="#e50012" @change="changeIsChakan"  checked="{{userDetail.is_chakan}}" name="is_chakan" />
+        </view>
+      </view>
+      <view class="section section2" wx:if="{{userDetail.is_yizhan==0}}">
         <view class="label">
           代下单</view>
         <view class="body-view">
-          <switch color="#e50012" checked="{{userDetail.is_friend}}" name="is_friend" />
+          <switch color="#e50012"  @change="changeIsFriend"  disabled="{{is_friend_disabled}}" checked="{{userDetail.is_friend}}" name="is_friend" />
         </view>
       </view>
-      <!-- <view class="section section2">
-        <view class="label">
-          会员</view>
-        <view class="body-view">
-          <switch color="#e50012" checked="{{userDetail.is_friend}}" name="is_friend" />
-        </view>
-      </view> -->
       <view class="section section2">
         <view class="label">
           会员等级</view>
@@ -461,11 +462,33 @@
       password: '123456',
       issubmit: false,
       isOpenSetting: false,
-      address: ''
+      address: '',
+      is_friend_disabled:false
     };
     computed = {};
     components = {};
     methods = {
+      // 非会员查看商品选择
+      changeIsChakan(e){
+         console.log("changeIsChakan",e,this.is_friend_disabled)
+         this.userDetail.is_chakan=e.detail.value
+        if(!e.detail.value){
+           this.is_friend_disabled=true
+            this.userDetail.is_friend=0;
+           
+            this.$apply();
+        }else{
+          this.is_friend_disabled=false
+        }
+      },
+      changeIsFriend(e){
+        console.log("changeIsFriend",e,this.is_friend_disabled)
+        if(!this.is_friend_disabled){
+          this.userDetail.is_friend= !this.userDetail.is_friend;
+         this.$apply();
+        }
+        
+      },
       toAbout() {
         console.log("this.userDetail.jianjie",this.userDetail.jianjie)
         wx.navigateTo({
@@ -602,7 +625,9 @@
             var password = param.password == '123456' ? '' : param.password;
             // var share_code = param.shareCode;
             var is_picture = param.is_picture ? 0 : 1;
-            var is_friend = param.is_friend ? 1 : 0;
+            var is_friend =  param.is_friend ? 1 : 0;
+            var is_chakan =  param.is_chakan ? 1 : 0;
+
             var vip_level = param.vip_level;
             var gonggao = param.gonggao;
             var jianjie = this.userDetail.jianjie;
@@ -662,6 +687,7 @@
               suppliers_desc: storename,
               is_picture,
               is_friend,
+              is_chakan,
               img_url,
               vip_level,
               img: shopImg,
