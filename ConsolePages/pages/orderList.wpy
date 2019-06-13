@@ -1,230 +1,306 @@
 
 <style lang="less">
-button {
-  background: transparent;
-  padding: 0;
-  bottom: 0;
-  line-height: inherit;
-  height: auto;
-  border-radius: 0;
-}
-
-button::after {
-  border: none;
-}
-.nav {
-  width: 100%;
-  /* overflow: hidden; */
-}
-
-.scroll-view_H {
-  white-space: nowrap;
-  background-color: #fff;
-  height: 105rpx;
-  overflow: hidden;
-}
-
-.scroll-view-item_H {
-  display: inline-block;
-  text-align: center;
-  font-size: 30rpx;
-  padding: 30rpx 45rpx;
-  border-bottom: 6rpx solid #f0f0f0;
-  /* display: flex; */
-  position: relative;
-  height: 105rpx;
-}
-.scroll-view_H .active {
-  color: #e50012;
-  border-bottom: 6rpx solid #e50012;
-}
-.btn {
-  box-sizing: border-box;
-  text-align: center;
-  line-height: 60rpx;
-  border-radius: 6rpx;
-  margin: 20rpx;
-  width: 164rpx;
-  display: inline-block;
-}
-.topay-btn {
-  background-color: #e50012;
-  color: #fff;
-}
-.price-box {
-  border-bottom: 1px solid #f0f0f0;
-}
-.price-box .name,
-.price-box .total-price {
-  padding-bottom: 10rpx;
-}
+  button {
+    background: transparent;
+    padding: 0;
+    bottom: 0;
+    line-height: inherit;
+    height: auto;
+    border-radius: 0;
+  }
+  button::after {
+    border: none;
+  }
+  .nav {
+    width: 100%;
+    /* overflow: hidden; */
+  }
+  .scroll-view_H {
+    white-space: nowrap;
+    background-color: #fff;
+    height: 105rpx;
+    overflow: hidden;
+  }
+  .scroll-view-item_H {
+    display: inline-block;
+    text-align: center;
+    font-size: 30rpx;
+    padding: 30rpx 45rpx;
+    border-bottom: 6rpx solid #f0f0f0;
+    /* display: flex; */
+    position: relative;
+    height: 105rpx;
+  }
+  .scroll-view_H .active {
+    color: #e50012;
+    border-bottom: 6rpx solid #e50012;
+  }
+  .btn {
+    box-sizing: border-box;
+    text-align: center;
+    line-height: 60rpx;
+    border-radius: 6rpx;
+    margin: 20rpx;
+    width: 164rpx;
+    display: inline-block;
+  }
+  .topay-btn {
+    background-color: #e50012;
+    color: #fff;
+  }
+  .price-box {
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .price-box .name,
+  .price-box .total-price {
+    padding-bottom: 10rpx;
+  }
+  /*选择分类  */
+  .list {
+    background-color: #fff;
+    width: 60%;
+    text-align: center;
+    line-height: 88rpx;
+    font-size: 30rpx;
+    max-height: 450rpx;
+    overflow: scroll;
+  }
+  .list view {
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .viewjoin {
+    background-color: #fff;
+    width: 100%;
+    padding: 20rpx 40rpx;
+    border-bottom: 1px solid #eee;
+  }
 </style>
 <template>
   <view class="container">
+    <view class="viewjoin" wx:if="{{is_yizhan}}">
+      <view bindtap="statusTap2"> {{cur_suppliers_name}}
+        <text class='iconfont icon-jiantou'></text>
+      </view>
+    </view>
     <scroll-view class="scroll-view_H" scroll-x style="width: 100%">
-     
-		  <button form-type='submit' @tap="statusTap({{index}})" class="scroll-view-item_H {{index == thisindex ? 'active' : ''}}" wx:for-items="{{statusType}}" wx:key="{{index}}" data-index="{{index}}" data-type="{{statusType[index]}}">
-      {{statusType[index]}}
-       <text class='goodsListnum' wx:if="{{goodsListnum[index]}}">{{goodsListnum[index]}}</text>
-      </button>
-		 
+      <button form-type='submit' @tap="statusTap({{index}})" class="scroll-view-item_H {{index == thisindex ? 'active' : ''}}" wx:for-items="{{statusType}}" wx:key="{{index}}" data-index="{{index}}" data-type="{{statusType[index]}}">
+                  {{statusType[index]}}
+                   <text class='goodsListnum' wx:if="{{goodsListnum[index]}}">{{goodsListnum[index]}}</text>
+                  </button>
     </scroll-view>
     <noorder show="2" wx:if="{{orderList.length==0}}" text="暂无订单"></noorder>
     <!-- 订单列表  -->
     <repeat for="{{orderList}}" wx:key="{{index}}">
-      <orderList
-        :orderList.sync="item"
-        :goodsMap.sync="goodsMap[index]"
-        @orderDetail.user="orderDetail"
-      >
-        <view slot="btn" class="price-box price-box2" >
-          <view wx:if="{{thisindex==1}}" class="btn topay-btn" @tap="orderDetail({{item.order_id}})">去发货</view>
+      <orderList :orderList.sync="item" :goodsMap.sync="goodsMap[index]" @orderDetail.user="orderDetail">
+        <view slot="btn" class="price-box price-box2">
+          <view wx:if="{{thisindex==1 && suppliers_id == cur_suppliers_id}}" class="btn topay-btn" @tap="orderDetail({{item.order_id}})">去发货</view>
         </view>
-
       </orderList>
     </repeat>
+    <view class='body-bg' bindtap='hiddenJoinList' touchstart='hiddenbg' touchmove="hiddenbg" wx:if="{{ishowjoinlist}}">
+      <view class='list'>
+        <view wx:for="{{joinlist}}" wx:key="{{index}}" bindtap='changeJoinList({{item.suppliers_id}},{{item.suppliers_name}})'>
+          {{item.suppliers_name}}
+        </view>
+      </view>
+    </view>
   </view>
 </template>
 
 <script>
-import wepy from 'wepy';
-import newapi from '../../API/newapi';
-import statusTap from '../../components/statusTap';
-import noorder from '../../components/noOrder';
-import orderList from '../../components/shop/orderList';
-import orderbutton from '../../components/shop/orderbutton';
-import util from '../../utils/index';
-export default class orderlist extends wepy.page {
-  config = {
-    navigationBarTitleText: '订单列表'
-  };
-  components = { statusTap, noorder, orderList, orderbutton };
-
-  data = {
-    statusType: [
-      '待付款',
-      '待发货',
-      '已发货',
-      '交易成功',
-      '交易关闭'
-    ],
-    orderList: [],
-    goodsMap: [],
-    thisindex: '0',
-    goodsListnum: []
-  };
-
-  computed = {};
-  events = {
-    // 取消订单
-    cancelOrderTap: res => {
-      this.page = 1;
-      this.isMoreData = true;
-      this.getOrderList(this.thisindex, 1);
-    },
-    // 确认订单
-    confirmBtnTap: res => {
-      this.page = 1;
-      this.isMoreData = true;
-      this.getOrderList(this.thisindex, 1);
-    }
-  };
-  methods = {
-    // 选择
-    statusTap(index) {
-      util.showLoading();
-      this.thisindex = index;
-      this.page = 1;
-      this.isMoreData = true;
-      this.getOrderList(this.thisindex, this.page);
-    },
-    // 订单详情
-    orderDetail(id, evt) {
-      wx.navigateTo({
-        url: 'orderDetail?id=' + id
-      });
-    }
-  };
-  //  订单列表
-  async getOrderList(
-    order_status = '0',
-    page = 1,
-    suppliers_id = this.suppliers_id
-  ) {
-    util.showLoading();
-    switch (parseInt(order_status)) {
-      case 0:
-        var type = 'daifukuan';
-        break;
-      case 1:
-        var type = 'daifahuo';
-        break;
-      case 2:
-        var type = 'yifahuo';
-        break;
-      case 3:
-        var type = 'chenggong';
-        break;
-      case 4:
-        var type = 'guanbi';
-        break;
-      default:
-        var type = 'daifukuan';
-        break;
-    }
-    let data = {
-      type,
-      page,
-      suppliers_id
+  import wepy from 'wepy';
+  import newapi from '../../API/newapi';
+  import statusTap from '../../components/statusTap';
+  import noorder from '../../components/noOrder';
+  import orderList from '../../components/shop/orderList';
+  import orderbutton from '../../components/shop/orderbutton';
+  import util from '../../utils/index';
+  export default class orderlist extends wepy.page {
+    config = {
+      navigationBarTitleText: '订单列表'
     };
-    let res = await newapi.orderList(data);
-    wx.hideLoading();
-    var orderList = res.data.data.orderList;
-    var goodsMap = res.data.data.goodsMap;
-
-    orderList.forEach((item, index) => {
-      orderList[index].add_time = util.formatDate(item.add_time);
-    });
-    if (page == 1) {
-      this.orderList = orderList;
-      this.goodsMap = goodsMap;
-    } else {
-      this.orderList.push(...orderList);
-      this.goodsMap.push(...goodsMap);
-    }
-    if (orderList.length < 10) {
-      this.isMoreData = false;
-    }
-
-    let data2 = { suppliers_id };
-    let res2 = await newapi.orderNum(data2);
-    this.goodsListnum[0] = res2.data.data.daifukuan;
-    this.goodsListnum[1] = res2.data.data.daifahuo;
-    this.goodsListnum[2] = res2.data.data.yifahuo;
-    this.goodsListnum[3] = res2.data.data.chenggong;
-    this.goodsListnum[4] = res2.data.data.guanbi;
-
-    this.$apply();
-  }
-  async onLoad(option) {
-    util.showLoading();
-    await this.$parent.loginInfo();
-    this.suppliers_id = option.suppliers_id
-      ? option.suppliers_id
-      : this.$parent.globalData.suppliers_id;
-    this.currentType = option.order_status;
-    this.thisindex = option.order_status;
-    this.isMoreData = true;
-    this.page = 1;
-    this.getOrderList(option.order_status, this.page);
-  }
-  onReachBottom() {
-    if (this.isMoreData) {
+    components = {
+      statusTap,
+      noorder,
+      orderList,
+      orderbutton
+    };
+    data = {
+      statusType: [
+        '待付款',
+        '待发货',
+        '已发货',
+        '交易成功',
+        '交易关闭'
+      ],
+      orderList: [],
+      goodsMap: [],
+      thisindex: '0',
+      goodsListnum: [],
+      ishowjoinlist: false,
+      is_yizhan: 0,
+      cur_suppliers_name: "查看本店",
+      joinlist: []
+    };
+    computed = {};
+    events = {
+      // 取消订单
+      cancelOrderTap: res => {
+        this.page = 1;
+        this.isMoreData = true;
+        this.getOrderList(this.thisindex, 1);
+      },
+      // 确认订单
+      confirmBtnTap: res => {
+        this.page = 1;
+        this.isMoreData = true;
+        this.getOrderList(this.thisindex, 1);
+      }
+    };
+    methods = {
+      // 选择
+      statusTap(index) {
+        util.showLoading();
+        this.thisindex = index;
+        this.page = 1;
+        this.isMoreData = true;
+        this.getOrderList(this.thisindex, this.page);
+      },
+      statusTap2(index) {
+        this.ishowjoinlist = true;
+      },
+      // 订单详情
+      orderDetail(id, evt) {
+        if (this.suppliers_id != this.cur_suppliers_id) {
+          util.showToast("非本店订单，不可操作");
+          return;
+        }
+        wx.navigateTo({
+          url: 'orderDetail?id=' + id
+        });
+      },
+      async changeJoinList(suppliers_id, suppliers_name) {
+        this.cur_suppliers_id = suppliers_id;
+        this.cur_suppliers_name = suppliers_name;
+        // this.fenleiList_new = await this.getFenLei();
+        // this.fenleiLists = [];
+        // this.fenleiLists.length = 0;
+        // this.isMoreData = true;
+        // this.fenleiLists.push(this.fenleiList_new);
+        // this.statusType = [];
+        // this.statusType[0] = this.fenleiList_new[0].cat_name;
+        // this.ishowfenlei = false;
+        // this.initdata.page = 1;
+        // this.isMoreData = true;
+        // this.isallSelect = false;
+        // this.del = false;
+        // this.initdata.cat_id = '';
+        // this.initdata.suppliers_id = suppliers_id;
+        // this.getShopList(this.initdata);
+        this.page = 1;
+        this.isMoreData = true;
+        this.getOrderList(this.thisindex, this.page, this.cur_suppliers_id);
+        this.$apply();
+      },
+      hiddenJoinList() {
+        this.ishowjoinlist = false;
+      },
+    };
+    //  订单列表
+    async getOrderList(
+      order_status = '0',
+      page = 1,
+      suppliers_id = this.cur_suppliers_id
+    ) {
       util.showLoading();
-      this.page = this.page + 1;
-      this.getOrderList(this.thisindex, this.page);
+      switch (parseInt(order_status)) {
+        case 0:
+          var type = 'daifukuan';
+          break;
+        case 1:
+          var type = 'daifahuo';
+          break;
+        case 2:
+          var type = 'yifahuo';
+          break;
+        case 3:
+          var type = 'chenggong';
+          break;
+        case 4:
+          var type = 'guanbi';
+          break;
+        default:
+          var type = 'daifukuan';
+          break;
+      }
+      let data = {
+        type,
+        page,
+        suppliers_id
+      };
+      let res = await newapi.orderList(data);
+      wx.hideLoading();
+      var orderList = res.data.data.orderList;
+      var goodsMap = res.data.data.goodsMap;
+      orderList.forEach((item, index) => {
+        orderList[index].add_time = util.formatDate(item.add_time);
+      });
+      if (page == 1) {
+        this.orderList = orderList;
+        this.goodsMap = goodsMap;
+      } else {
+        this.orderList.push(...orderList);
+        this.goodsMap.push(...goodsMap);
+      }
+      if (orderList.length < 10) {
+        this.isMoreData = false;
+      }
+      let data2 = {
+        suppliers_id
+      };
+      let res2 = await newapi.orderNum(data2);
+      this.goodsListnum[0] = res2.data.data.daifukuan;
+      this.goodsListnum[1] = res2.data.data.daifahuo;
+      this.goodsListnum[2] = res2.data.data.yifahuo;
+      this.goodsListnum[3] = res2.data.data.chenggong;
+      this.goodsListnum[4] = res2.data.data.guanbi;
+      this.$apply();
+    }
+    //   加盟店铺
+    async yizhan_join_list() {
+      let data = {
+        suppliers_id: this.suppliers_id,
+      };
+      let res = await newapi.yizhan_join_list(data);
+      var datas = res.data.data;
+      if (res.data.code == 0) {
+        return datas;
+      }
+    }
+    async onLoad(option) {
+      util.showLoading();
+      await this.$parent.loginInfo();
+      this.suppliers_id = option.suppliers_id ?
+        option.suppliers_id :
+        this.$parent.globalData.suppliers_id;
+      this.cur_suppliers_id = this.suppliers_id;
+      this.currentType = option.order_status;
+      this.thisindex = option.order_status;
+      this.isMoreData = true;
+      this.page = 1;
+      this.is_yizhan = this.$parent.globalData.yizhanInfo.is_yizhan;
+      if (this.is_yizhan == 1) {
+        this.joinlist = await this.yizhan_join_list();
+      }
+      this.getOrderList(option.order_status, this.page);
+    }
+    onReachBottom() {
+      if (this.isMoreData) {
+        util.showLoading();
+        this.page = this.page + 1;
+        this.getOrderList(this.thisindex, this.page);
+      }
     }
   }
-}
 </script>
  

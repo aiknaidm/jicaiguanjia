@@ -560,8 +560,8 @@
         <!-- <image rc='/images/sanjiao-active.png' class='img'/> -->
       </view>
       <!-- <view class='border' wx:for="{{catList}}" bindtap="statusTap"> 二级分类
-                                          <text class='iconfont icon-jiantou'></text>
-                                        </view> -->
+                                                <text class='iconfont icon-jiantou'></text>
+                                              </view> -->
       <view class='search' @tap='showSearch'>
         <text class='iconfont icon-sousuo'></text>
       </view>
@@ -581,26 +581,26 @@
           </view>
         </view>
         <button class="ss-my-d button-hover" @tap='buttonTap' form-type='submit'>
-                                            确定
-                                          </button>
+                                                  确定
+                                                </button>
       </view>
       <mask wx:if="{{showSearch}}" @tap.stop="hiddenSearch"></mask>
     </form>
     <!-- <view class="title-box">
-                                        购物车空空如也～
-                                      </view>
-                                      <view class="to-index-btn" bindtap="toIndexPage">
-                                        去逛逛
-                                      </view> -->
+                                              购物车空空如也～
+                                            </view>
+                                            <view class="to-index-btn" bindtap="toIndexPage">
+                                              去逛逛
+                                            </view> -->
     <!-- <view class="list">
-                                        <scroll-view scroll-y> -->
+                                              <scroll-view scroll-y> -->
     <view class="list-top">
       <!-- <view bindtap="toAddGoods" class='toaddgoods'>
-                                          +添加其他商品
-                                        </view> -->
+                                                +添加其他商品
+                                              </view> -->
     </view>
-    <view class="viewjoin">
-      <view bindtap="statusTap2"> 查看店铺
+    <view class="viewjoin" wx:if="{{is_yizhan}}">
+      <view bindtap="statusTap2"> {{cur_suppliers_name}}
         <text class='iconfont icon-jiantou'></text>
       </view>
     </view>
@@ -631,11 +631,11 @@
         </view>
       </view>
       <!-- </view>
-                                        </scroll-view> -->
+                                              </scroll-view> -->
     </view>
     <!-- <view class="jiesuan-box2">
-                                        
-                                      </view> -->
+                                              
+                                            </view> -->
     <view class="jiesuan-box" wx:if="{{list.length}}">
       <view class="left-price">
         <view class="all-selected  {{isallSelect?'active':''}}" bindtap="bindAllSelect">全选</view>
@@ -644,7 +644,7 @@
         <text class="to-pay-btn " bindtap="deleteSelected" wx:if="{{del}}">删除</text>
         <text class="to-pay-btn" bindtap="clickbtn" wx:if="{{del}}">设置会员卡</text>
         <!-- <text class="to-pay-btn" bindtap="setSelected(0)" wx:if="{{del}}">设置会员卡不可用</text>
-                                    <text class="to-pay-btn" bindtap="setSelected(1)" wx:if="{{del}}">设置会员卡可用</text> -->
+                                          <text class="to-pay-btn" bindtap="setSelected(1)" wx:if="{{del}}">设置会员卡可用</text> -->
       </view>
     </view>
     <!--商品分类显示  -->
@@ -698,6 +698,8 @@
       buttonText: '设置会员卡可用',
       is_hdky: false,
       ishowjoinlist: false,
+      is_yizhan: 0,
+      cur_suppliers_name: "查看本店",
       joinlist: []
     };
     computed = {};
@@ -768,6 +770,7 @@
       },
       async changeJoinList(suppliers_id, suppliers_name) {
         this.cur_suppliers_id = suppliers_id;
+        this.cur_suppliers_name = suppliers_name;
         this.fenleiList_new = await this.getFenLei();
         this.fenleiLists = [];
         this.fenleiLists.length = 0;
@@ -793,6 +796,10 @@
       },
       // 全选
       bindAllSelect: function() {
+        if (this.suppliers_id != this.cur_suppliers_id) {
+          util.showToast("非本店商品，不可操作");
+          return;
+        }
         var that = this;
         this.isallSelect = !this.isallSelect;
         this.list.forEach((item, index) => {
@@ -803,6 +810,10 @@
       },
       // 选择
       selectTap: function(index) {
+        if (this.suppliers_id != this.cur_suppliers_id) {
+          util.showToast("非本店商品，不可操作");
+          return;
+        }
         var that = this;
         this.list[index].active = !this.list[index].active;
         var active = true;
@@ -849,6 +860,10 @@
       },
       // 修改
       async toGoodDetailsTap(id, name, index, e) {
+        if (this.suppliers_id != this.cur_suppliers_id) {
+          util.showToast("非本店商品，不可操作");
+          return;
+        }
         var that = this;
         // wx.navigateTo({
         // 	url: '/pages/my-console/publish/index?id=' + id,
@@ -1056,7 +1071,8 @@
         this.isMoreData = true;
         this.fenleiLists.push(this.fenleilist);
         this.statusType[0] = this.fenleilist[0].cat_name;
-        if (this.$parent.globalData.yizhanInfo.is_yizhan == 1) {
+        this.is_yizhan = this.$parent.globalData.yizhanInfo.is_yizhan;
+        if (this.is_yizhan == 1) {
           this.joinlist = await this.yizhan_join_list();
         }
         this.$apply();
