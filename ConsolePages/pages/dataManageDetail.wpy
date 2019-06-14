@@ -101,17 +101,6 @@
     background-color: #50b569;
     color: #fff;
   }
-  .container {
-    width: 100%;
-    background-color: #fff;
-    /* overflow: hidden; */
-    height: 100%;
-    overflow-x: hidden;
-  }
-  page {
-    height: 100%;
-    background-color: #fff;
-  }
   .nav {
     width: 100%;
     /* overflow: hidden; */
@@ -425,16 +414,16 @@
       </view>
     </view>
     <!-- <view  class='img-box1'>
-                                                      <image src="{{item.goods_imgs}}" class="goods-img"/>
-                                                      <view class='img-box1-1'>
-                                                        <view>{{item.goods_name}}</view>
-                                                        <view class='img-box1-guige'>{{item.goods_attr}}</view>
-                                                      </view>
-                                                      <view class='img-box1-2'>
-                                                        <view>{{item.pay_time}}</view>
-                                                        <view class='red'>￥{{item.goods_price}}</view>
-                                                      </view>
-                                                    </view> -->
+                                                        <image src="{{item.goods_imgs}}" class="goods-img"/>
+                                                        <view class='img-box1-1'>
+                                                          <view>{{item.goods_name}}</view>
+                                                          <view class='img-box1-guige'>{{item.goods_attr}}</view>
+                                                        </view>
+                                                        <view class='img-box1-2'>
+                                                          <view>{{item.pay_time}}</view>
+                                                          <view class='red'>￥{{item.goods_price}}</view>
+                                                        </view>
+                                                      </view> -->
     <popupbox :popupdata.sync="popupdata" @formSubmit.user="formSubmit">
       <view slot="other" class="checkbox">
         <checkbox-group class="radio-group" bindchange="radioChange">
@@ -529,6 +518,7 @@
         this.start_time = e.detail.value;
         this.datas.page = 1;
         this.datas.keyword = '';
+        this.isMoreData = true;
         this.getMoneyData(this.datas);
       },
       bindEndTimeChange(e) {
@@ -536,6 +526,7 @@
         this.end_time = e.detail.value;
         this.datas.page = 1;
         this.datas.keyword = '';
+        this.isMoreData = true;
         this.getMoneyData(this.datas);
       },
       bindPickerChange(e) {
@@ -543,6 +534,7 @@
         this.datas.type = this.orderStatus[this.orderStatusIndex].value;
         this.datas.page = 1;
         this.datas.keyword = '';
+        this.isMoreData = true;
         this.getMoneyData(this.datas);
       },
       bindPickerChange2(e) {
@@ -550,6 +542,7 @@
         this.datas.pay_id = this.payId[this.payIdIndex].value;
         this.datas.page = 1;
         this.datas.keyword = '';
+        this.isMoreData = true;
         this.getMoneyData(this.datas);
       },
       radioChange(e) {
@@ -625,11 +618,12 @@
         this.orderList.push(...datas.orderList);
         this.goodsMap.push(...datas.goodsMap);
       }
-      if (res.data.data.length == 0) {
+      if (datas.orderList.length < 10) {
         this.isMoreData = false;
       } else {
         this.isMoreData = true;
       }
+      wx.hideLoading();
       this.$apply();
     }
     init(suppliers_id) {
