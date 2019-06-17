@@ -599,11 +599,11 @@
                                                 +添加其他商品
                                               </view> -->
     </view>
-    <view class="viewjoin" wx:if="{{is_yizhan}}">
+    <!-- <view class="viewjoin" wx:if="{{is_yizhan}}">
       <view bindtap="statusTap2"> {{cur_suppliers_name}}
         <text class='iconfont icon-jiantou'></text>
       </view>
-    </view>
+    </view> -->
     <noorder text="暂无商品" wx:if="{{list.length==0}}"></noorder>
     <view class="goodsList" wx:else>
       <view class="a-gooods" wx:for="{{list}}" wx:key="{{index}}">
