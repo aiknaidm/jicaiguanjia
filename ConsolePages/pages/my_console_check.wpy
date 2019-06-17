@@ -352,8 +352,9 @@
         //审核人的id
         var id = e.currentTarget.dataset.id;
         let mRes = await util.showActionSheet(['通过', '拒绝']);
+
         if (mRes.tapIndex == 0) {
-          if (this.list.length == 0) this.shenhe(id, 'tongguo', 1);
+          if (this.list.length <= 1) this.shenhe(id, 'tongguo', 1);
           else {
             let mRes2 = await util.showActionSheet(this.list);
             this.shenhe(id, 'tongguo', mRes2.tapIndex + 1);
