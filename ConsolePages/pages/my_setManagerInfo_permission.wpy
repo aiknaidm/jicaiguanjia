@@ -1,0 +1,81 @@
+<style lang="less">
+  
+  .container{
+      padding: 40rpx;
+  }
+  .radio{
+      padding: 0 20rpx;
+      line-height: 80rpx;
+  }
+  .btn{
+      margin-top: 40rpx;
+      background: #e50012;
+      color: #fff;
+  }
+  input{
+      border-bottom: 1px solid #eee;
+      margin-bottom: 20rpx;
+  }
+</style>
+<template>
+  <view class='container'>
+
+  <form
+    report-submit="true"
+    @submit="submit"
+    @reset="reset"
+    >
+         
+   <view> 
+       <radio-group class="radio-group" bindchange="radioChange">
+   选择身份:<label class="radio" wx:for="{{items}}">
+   <radio value="{{item.name}}" />{{item.name}}
+  </label>
+  <label class="radio" >
+   <radio value="zidingyi" />自定义
+  </label>
+</radio-group>
+<checkbox-group  wx:if="{{is_zidingyi}}">
+    <input name=""/>
+  <label class="checkbox" wx:for="{{permission}}">
+    <checkbox value="{{item.value}}" />{{item.name}}
+  </label>
+</checkbox-group>
+   </view>
+  </form>
+  <button class="btn">提交</button>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import newapi from '../../API/newapi';
+  import util from '../../utils/index';
+  export default class my_setManagerInfo extends wepy.page {
+    config = {
+      navigationBarTitleText: '权限设置'
+    };
+    data = {
+  items:[{name:"管理员"},{name:"业务员"},{name:"财务"}],
+  permission:[{name:"管理员",value:"1"},{name:"业务员",value:"2"},{name:"财务",value:"3"}],
+  is_zidingyi:false
+    };
+    computed = {};
+    components = {};
+    methods = {
+     radioChange(e){
+        console.log("e",e.detail.value)
+        if(e.detail.value=="zidingyi"){
+            this.is_zidingyi=true;
+        }else{
+            this.is_zidingyi=false;
+        }
+     }
+    };
+    events = {};
+    async onShow() {
+   
+    }
+
+  }
+</script>

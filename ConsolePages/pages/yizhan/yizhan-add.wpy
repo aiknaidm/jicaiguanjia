@@ -224,7 +224,9 @@
           this.shenhe = 2
           this.$apply()
         } else {
+          util.showModal(res.data.message)
         }
+
       }
     };
     async onLoad() {

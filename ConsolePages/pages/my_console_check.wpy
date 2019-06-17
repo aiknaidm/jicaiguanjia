@@ -213,15 +213,13 @@
         <view class="{{tabClass[index]}}"></view>
       </view>
     </view>
-      <search @buttonTap.user="searchTap"></search>
+    <search @buttonTap.user="searchTap"></search>
     <view class='search-title ' wx:if="{{showName}}">
       <view class="up">
         <view class='border'>业务员：{{salesmanName}}
         </view>
       </view>
-    
     </view>
-  
     <view class='search-title ' wx:elif="{{adminList.length!=0}}">
       <view bindtap="buttonTap" class=" up">
         <view class='border'>{{salesmanName}}
@@ -231,7 +229,6 @@
       </view>
       <view class="sure-btn {{qurenNum==0?'sure-btn2':''}}" @tap="{{qurenNum==0?'':'toSureList'}}" wx:if="{{is_kthy==1&&sales_id==0}}">充值待确认</view>
     </view>
-    
     <view class='checkLists'>
       <!--未审核  -->
       <view class='check-list' wx:if="{{currentStatu==0}}" wx:for="{{shenheList}}" wx:key="{{index}}" data-id="{{item.user_id}}" @tap='toCheckDetail'>
@@ -260,10 +257,8 @@
           <view @tap.stop='tocallphone' data-phone="{{item.mobile_phone}}">手机号码：{{item.mobile_phone}}
             <text class='iconfont icon-shouji'></text>
           </view>
-          <view >会员等级：{{item.vip_level}}级
-       
+          <view>会员等级：{{item.vip_level}}级
           </view>
-          
           <view wx:if="{{item.amount&&item.amount!=0}}">会员卡余额：￥{{item.amount}}</view>
         </view>
         <view class='check-list-btn'>
@@ -289,7 +284,6 @@
   import newapi from '../../API/newapi';
   import util from '../../utils/index';
   import search from '../../components/search';
-  
   export default class my_console_check extends wepy.page {
     config = {
       navigationBarTitleText: '会员管理'
@@ -309,15 +303,16 @@
       money: {},
       is_kthy: 0,
       qurenNum: 0,
-      
     };
     computed = {};
-    components = {search};
+    components = {
+      search
+    };
     methods = {
-      searchTap(val){
-          this.yhData.keyword=val;
-          this.yhData.page=1;
-          this.getShenheList();
+      searchTap(val) {
+        this.yhData.keyword = val;
+        this.yhData.page = 1;
+        this.getShenheList();
       },
       toSureList() {
         wx.navigateTo({
@@ -345,7 +340,7 @@
       statusTap: function(e) {
         this.yhData.shenhe = e.currentTarget.dataset.index
         this.yhData.page = 1
-        this.shenheList=[];
+        this.shenheList = [];
         this.getShenheList();
         var curType = e.currentTarget.dataset.index;
         var curStatu = e.currentTarget.dataset.statu;
@@ -357,9 +352,12 @@
         //审核人的id
         var id = e.currentTarget.dataset.id;
         let mRes = await util.showActionSheet(['通过', '拒绝']);
-        if (mRes.tapIndex == 0) {  
-          let mRes2 = await util.showActionSheet(this.list);
-          this.shenhe(id, 'tongguo',mRes2.tapIndex+1);
+        if (mRes.tapIndex == 0) {
+          if (this.list.length == 0) this.shenhe(id, 'tongguo', 1);
+          else {
+            let mRes2 = await util.showActionSheet(this.list);
+            this.shenhe(id, 'tongguo', mRes2.tapIndex + 1);
+          }
         } else if (mRes.tapIndex == 1) {
           this.shenhe(id, 'jujue');
         }
@@ -368,14 +366,17 @@
       async toJiechu(money, e) {
         //审核人的id
         var id = e.currentTarget.dataset.id;
-        let mRes = await util.showActionSheet(['解除关系','设置会员等级']);
+        if(this.list.length<=1)
+          var mRes = await util.showActionSheet(['解除关系']);
+        else
+        var mRes = await util.showActionSheet(['解除关系', '设置会员等级']);
         if (mRes.tapIndex == 0) {
           this.jiechu(id, money);
-        }else{
-          console.log("this.list",this.list);
-           let mRes2 = await util.showActionSheet(this.list);
-
-           this.shenhe(id, 'tongguo',mRes2.tapIndex+1);
+        } else {
+         
+            let mRes2 = await util.showActionSheet(this.list);
+            this.shenhe(id, 'tongguo', mRes2.tapIndex + 1);
+          
         }
       },
       tocallphone: function(e) {
@@ -420,7 +421,7 @@
       wx.hideLoading();
       if (res.data.code == 0) {
         var datas = res.data.data.data
-        if (this.yhData.page ==1) {
+        if (this.yhData.page == 1) {
           this.shenheList = datas
         } else {
           this.shenheList.push(...datas)
@@ -429,9 +430,8 @@
           this.isMoreData = false;
         else
           this.isMoreData = true;
-       
       }
-       this.$apply();
+      this.$apply();
     }
     //解除关系
     async jiechu(id, money) {
@@ -448,7 +448,7 @@
       let res = await newapi.jcgx(data);
       if (res.data.code == 0) {
         util.showToast('解除关系成功');
-        this.yhData.page=1;
+        this.yhData.page = 1;
         this.getShenheList();
         this.getNum();
       } else {
@@ -456,7 +456,7 @@
       }
     }
     //审核
-    async shenhe(id, type,vip_level) {
+    async shenhe(id, type, vip_level) {
       util.showLoading('审核中...');
       let user_id = id;
       let suppliers_id = this.suppliers_id;
@@ -470,7 +470,7 @@
       let res = await newapi.yhsh(data);
       wx.hideLoading();
       if (res.data.code == 0) {
-        this.yhData.page=1;
+        this.yhData.page = 1;
         this.getShenheList();
         this.getNum();
       }
@@ -490,7 +490,7 @@
     async getPaycardMsg() {
       let data = {
         suppliers_id: this.suppliers_id,
-        sales_id:this.yhData.sales_id
+        sales_id: this.yhData.sales_id
       };
       let res = await newapi.hycz(data);
       this.money = res.data.data;
@@ -498,11 +498,13 @@
     }
     // 会员人数
     async getNum() {
-      let res = await newapi.yh_num({suppliers_id:this.suppliers_id,sales_id:this.yhData.sales_id});
-    var datas=res.data.data
-    this.num=datas.num
-    this.qurenNum=datas.num1
-
+      let res = await newapi.yh_num({
+        suppliers_id: this.suppliers_id,
+        sales_id: this.yhData.sales_id
+      });
+      var datas = res.data.data
+      this.num = datas.num
+      this.qurenNum = datas.num1
       this.$apply();
     }
     initData(suppliers_id, sales_id = 0, shenhe = 0, keyword = '') {
@@ -517,9 +519,9 @@
       this.yhData = data;
     }
     async onLoad(option) {
-      var yizhanInfo=this.$parent.globalData.yizhanInfo
-      this.is_kthy =yizhanInfo.is_kthy;
-      this.suppliers_id =yizhanInfo.suppliers_id ?
+      var yizhanInfo = this.$parent.globalData.yizhanInfo
+      this.is_kthy = yizhanInfo.is_kthy;
+      this.suppliers_id = yizhanInfo.suppliers_id ?
         yizhanInfo.suppliers_id :
         (await this.$parent.getYizhanInfo()).suppliers_id;
       if (option.sales_id) {
@@ -529,13 +531,13 @@
       } else this.salesmanList(this.suppliers_id);
       this.initData(this.suppliers_id, this.sales_id);
       this.getShenheList();
-      var vip_level=this.$parent.globalData.vip_level;
+      var vip_level = this.$parent.globalData.vip_level;
       console.log(this.$parent.globalData.vip_level);
-           var list=[]
-          for(var i=0;i<vip_level;i++){
-           list.push("会员等级"+(i+1));
-          }
-          this.list=list
+      var list = []
+      for (var i = 0; i < vip_level; i++) {
+        list.push("会员等级" + (i + 1));
+      }
+      this.list = list
       this.$apply();
     }
     async onShow() {
@@ -543,7 +545,6 @@
       this.getNum();
     }
     onReachBottom() {
-     
       if (this.isMoreData) {
         this.yhData.page = this.yhData.page + 1;
         this.getShenheList();

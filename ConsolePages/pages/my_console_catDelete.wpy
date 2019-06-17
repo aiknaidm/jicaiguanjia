@@ -217,13 +217,13 @@
                         <view class="lists {{kind[indexx].open?'active':''}}">
                             <label wx:for="{{item.xiaofenlei}}" class="list" wx:for-item="itemName" wx:for-index="indexy" wx:key="{{indexy}}" data-indexx="{{indexx}}" data-indexy="{{indexy}}" data-catid="{{itemName.cat_id}}" @tap='clickxiaolei({{indexx}},{{indexy}},{{itemName.cat_id}},{{itemName.cat_name}},{{itemName.cat_img}})'>
                                                                 <radio value="{{itemName.cat_id}}" checked="{{itemName.checked}}"/><image src="{{itemName.cat_img}}"></image>{{itemName.cat_name}}({{itemName.goods_num}})</label>
-                            <view class="addGoods" bindtap='addLittleKindTap' data-parent_id='{{item.cat_id}}'>
-                                <text class="iconfont icon-tianjia-copy mian-color"></text>添加分类
+                            <view wx:if="{{is_join!=1}}" class="addGoods" bindtap='addLittleKindTap' data-parent_id='{{item.cat_id}}'>
+                                <text class="iconfont icon-tianjia-copy mian-color" ></text>添加分类
                             </view>
                         </view>
                     </view>
                 </radio-group>
-                <view class="add">
+                <view class="add" wx:if="{{is_join!=1}}">
                     <button class='del' formType="submit">删除分类</button>
                     <button class='del' bindtap="addKindTap">添加分类</button>
                     <button class='del' bindtap='isshowbox'>编辑分类</button>
@@ -314,7 +314,8 @@
             thisCatName: '',
             thisCatId: '',
             thisCatImg: '',
-            imgSrc: []
+            imgSrc: [],
+            is_join:0
         };
         methods = {
             async addTap() {
@@ -496,7 +497,9 @@
         }
         onLoad() {
             var suppliers_id = this.$parent.globalData.suppliers_id
+            var is_join = this.$parent.globalData.yizhanInfo.is_join
             this.suppliers_id = suppliers_id
+            this.is_join = is_join
             
             this.x = -1;
             this.y = -1;

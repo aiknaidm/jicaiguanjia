@@ -161,7 +161,7 @@
     border-radius: 0px;
     margin: 0;
     /* height: 84rpx;
-         line-height: 84rpx; */
+             line-height: 84rpx; */
     background-color: #e50012;
   }
   .smsCode button[disabled] {
@@ -184,7 +184,7 @@
     display: flex;
     justify-content: space-between;
     /* border-bottom: 1px solid #ddd;
-        padding-right: 10%; */
+            padding-right: 10%; */
   }
   .smsCode input {
     width: 336rpx;
@@ -277,79 +277,49 @@
 <template>
   <view class='container'>
     <form bindsubmit="formSubmit" report-submit>
-      <view class="input-area">
-        <view class="input-log section">
-          <view class="label">
-            <text>*</text>手机号码</view>
-          <input value='{{userDetail.mobile}}' name="phone" maxlength='11' type="number" placeholder="手机号" bindinput="listenerPhoneInput" disabled='{{isuserDetail}}' />
-        </view>
-        <view class="section smsCode " wx:if="{{!isuserDetail}}">
-          <view class="label">
-            <text>*</text>验证码</view>
-          <input name="smscode" maxlength='4' type="number" placeholder="验证码" bindinput="listenerSmsCodeInput" disabled='{{isuserDetail}}' />
-          <button bindtap="getSmsCode({{userDetail.mobile}})" disabled="{{smsCodeDisabled}}" style="background-color:{{getSmsCodeBtnColor}}" class="getSmsCodeBtn">{{getSmsCodeBtnTxt}}</button>
+      <view class="title" style="padding:40rpx;text-align:center">店铺logo</view>
+      <view class="cameraBox">
+        <view class="camera" @tap='addShopImg'>
+          <image src="{{shopImg.img_url?shopImg.img_url:'/images/add_img.png'}}" />
         </view>
       </view>
-      <view class="section">
-        <view class="label">
-          <text>*</text>真实姓名</view>
-        <view class="label-right">
-          <input name="realname" class="input" type="text" value="{{userDetail.username}}" />
+      <view class="title" style="padding:40rpx;text-align:center">首页轮播图设置</view>
+      <view class="cameraBox">
+        <view class="camera" wx:for="{{imgSrc}}" wx:key="{{index}}">
+          <image src="{{item.img_url}}" />
+          <text class="close" @tap='delImg({{index}})'>x</text>
+        </view>
+        <view class="camera" @tap='chooseImg' wx:if="{{imgSrc.length<5}}">
+          <image src="/images/add_img.png" mode='aspectFit' />
         </view>
       </view>
-      <view class="section">
-        <view class="label">
-          <text>*</text>店铺名</view>
-        <view class="label-right">
-          <input name="storename" class="input" type="text" value="{{userDetail.suppliers_desc}}" disabled='{{isuserDetail}}' />
+    
+        <view class="title" style="padding:40rpx;text-align:center">添加背景图</view>
+        <view class="cameraBox">
+          <view class="camera" @tap='chooseBgImg'>
+          <image src="{{bgImg.img_url?bgImg.img_url:'/images/add_img.png'}}" />
         </view>
-      </view>
-      <!-- <view class="section">
-        <view class="label">
-          <text>*</text>所属地区</view>
-        <picker mode="region" disabled="{{isuserDetail}}" @change="bindRegionChange">
-          <view class="picker">
-            {{region[0]}}-{{region[1]}}-{{region[2]}}
-          </view>
-        </picker>
-      </view> -->
-      <view class="section">
-        <view class="label">
-          选择地址</view>
-        <button wx:if="{{isOpenSetting}}" open-type="openSetting" bindopensetting="getAddressTap" class="label-right">{{region[0]}}-{{region[1]}}-{{region[2]}} </button>
-        <view wx:else @tap="getAddressTap" class="label-right">
-          <input value="{{region[0]}}-{{region[1]}}-{{region[2]}}" name="address" disabled/>
         </view>
-      </view>
-       <view class="section">
-        <view class="label">
-          详细地址</view>
-        <view  @tap="getAddressTap" class="label-right">
-         {{address}}
-        </view>
-      </view>
-      <view class="section section2" wx:if="{{userDetail.is_yizhan==0}}">
-        <view class="label">
-        非会员查看商品</view>
-        <view class="body-view">
-          <switch color="#e50012" @change="changeIsChakan"  checked="{{userDetail.is_chakan}}" name="is_chakan" />
-        </view>
-      </view>
-      <view class="section section2" wx:if="{{userDetail.is_yizhan==0}}">
-        <view class="label">
-          代下单</view>
-        <view class="body-view">
-          <switch color="#e50012"  @change="changeIsFriend"  disabled="{{!userDetail.is_chakan}}" checked="{{userDetail.is_friend}}" name="is_friend" />
-        </view>
-      </view>
+      
       <view class="section section2">
         <view class="label">
-          会员等级</view>
-        <view class="body-view" style="width:300rpx;">
-          <slider min="1" max="5" selected-color="#e50012" name="vip_level" value="{{userDetail.vip_level}}" show-value />
+          商品无图模式</view>
+        <view class="body-view">
+          <switch color="#e50012" checked="{{!userDetail.is_picture}}" name="is_picture" />
         </view>
       </view>
-     
+      <view class="section">
+        <view class="label">
+          店铺公告</view>
+        <view class="label-right">
+          <textarea auto-height name="gonggao" value="{{userDetail.gonggao}}"></textarea>
+        </view>
+      </view>
+      <view class="section section2" @tap="toAbout">
+        <view class="label">
+          关于我们</view>
+        <view style="right">{{isSetAbout?'已填写':''}}</view>
+      </view>
       <button class='rz-submit' formType="submit" wx:if="{{!isuserDetail}}" disabled='{{issubmit}}'>提交修改</button>
       <button class='rz-submit' disabled='true' wx:if="{{userDetail.user_status=='0'||isshenhe}}">审核中...</button>
     </form>
@@ -361,15 +331,9 @@
   import newapi from '../../API/newapi';
   import api from '../../API/api';
   import util from '../../utils/index';
-    // 引入SDK核心类
-  var QQMapWX = require('../../utils/qqmap-wx-jssdk.min.js');
-  // 实例化API核心类
-  var qqmapsdk = new QQMapWX({
-    key: 'XRWBZ-H7JLS-H37O7-6S45H-SEJRK-FJB7R' // 必填
-  });
   export default class my_setShopInfo extends wepy.page {
     config = {
-      navigationBarTitleText: '店铺信息修改'
+      navigationBarTitleText: '店铺装修'
     };
     data = {
       shopImg: 0,
@@ -427,34 +391,14 @@
       issubmit: false,
       isOpenSetting: false,
       address: '',
-      is_friend_disabled:false
+      is_friend_disabled: false,
+      bgImg:0
     };
     computed = {};
     components = {};
     methods = {
-      // 非会员查看商品选择
-      changeIsChakan(e){
-         console.log("changeIsChakan",e,this.is_friend_disabled)
-         this.userDetail.is_chakan=e.detail.value
-        if(!e.detail.value){
-           this.is_friend_disabled=true
-            this.userDetail.is_friend=0;
-           
-            this.$apply();
-        }else{
-          this.is_friend_disabled=false
-        }
-      },
-      changeIsFriend(e){
-        console.log("changeIsFriend",e,this.is_friend_disabled)
-        if(!this.is_friend_disabled){
-          this.userDetail.is_friend= !this.userDetail.is_friend;
-         this.$apply();
-        }
-        
-      },
       toAbout() {
-        console.log("this.userDetail.jianjie",this.userDetail.jianjie)
+        console.log("this.userDetail.jianjie", this.userDetail.jianjie)
         wx.navigateTo({
           url: 'my_setShopInfo_about?about=' + this.userDetail.jianjie
         });
@@ -472,18 +416,23 @@
       //      this.$apply();
       //   })
       // },
-      getAddressTap() {
-        this.$parent.checkUserLocation().then(res => {
-          if (res) {
-            this.isOpenSetting = false;
-            this.getAddress();
-          } else {
-            this.isOpenSetting = true;
-          }
-          this.$apply();
-        }).catch(res => {
-          console.log('res', res)
-        })
+      chooseBgImg() {
+        wepy
+          .chooseImage({
+            count: 1, // 默认9
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'] // 可以指定来源是相册还是相机，默认二者都有
+          })
+          .then(res => {
+            var that = this;
+            // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+            var tempFilePaths = res.tempFilePaths;
+            this.bgImg = {}
+            this.bgImg.img_url = tempFilePaths[0];
+            this.bgImg.upload = true;
+            this.$apply();
+          })
+          .catch(res => {});
       },
       delImg(i) {
         this.imgSrc.splice(i, 1);
@@ -572,111 +521,65 @@
       bindRegionChange(e) {
         this.region = e.detail.value;
       },
-
       //表单数据提交
       async formSubmit(e) {
-        console.log("e", e)
         var param = e.detail.value;
         var that = this;
-        var flag = that.checkPhone(param.phone) && that.checkSmsCode(param.smscode);
-        if (flag) {
-          if (this.inputCode == this.code) {
-            var suppliers_id = this.$parent.globalData.suppliers_id;
-            var phone = param.phone;
-            var smscode = param.smscode;
-            var realname = param.realname;
-            var storename = param.storename;
-            // var pcusername = param.pcusername;
-            // var password = param.password == '123456' ? '' : param.password;
-            // var share_code = param.shareCode;
-            // var is_picture = param.is_picture ? 0 : 1;
-            var is_friend =  param.is_friend ? 1 : 0;
-            var is_chakan =  param.is_chakan ? 1 : 0;
-
-            var vip_level = param.vip_level;
-            // var gonggao = param.gonggao;
-            // var jianjie = this.userDetail.jianjie;
-            if (realname == '') {
-              util.showModal('请填写姓名');
-              return;
-            }
-            if (storename == '') {
-              util.showModal('请填写店铺名');
-              return;
-            }
-            // if (pcusername == '') {
-            //   util.showModal('请填写后台用户名');
-            //   return;
-            // }
-            if (this.region.length == 0) {
-              util.showModal('请填写地区');
-              return;
-            }
-            var sheng = this.region[0];
-            var shi = this.region[1];
-            var qu = this.region[2];
-            // 上传图片
-            if (!this.shopImg.upload) var shopImg = this.shopImg.img_url == 0 ? '' : this.shopImg.img_url
-            else var shopImg = await this.upImg(this.shopImg.img_url)
-            this.goods_imgs = [];
-            if (this.imgSrc != '') {
-              if (this.imgSrc.length > 5) {
-                util.showModal('上传图片不能大于五张');
-                return;
-              }
-            }
-            var i = 0;
-            for (var i = 0; i < this.imgSrc.length; i++) {
-              if (this.imgSrc[i].upload) {
-                var img = await this.upImg(this.imgSrc[i].img_url);
-                if (img) {
-                  this.goods_imgs.push(img);
-                }
-              } else {
-                this.goods_imgs.push(this.imgSrc[i].img_url);
-              }
-            }
-            var goods_img = this.goods_imgs[0];
-            var img_url = this.goods_imgs.toString();
-            console.log("img_url", img_url);
-            util.showLoading();
-            let data = {
-              suppliers_id,
-              mobile: phone,
-              realname: realname,
-              sheng,
-              shi,
-              qu,
-              // suppliers_name: pcusername,
-              // password,
-              suppliers_desc: storename,
-              // is_picture,
-              is_friend,
-              is_chakan,
-              // img_url,
-              vip_level,
-              // img: shopImg,
-              address: this.address,
-              latitude: this.latitude,
-              longitude: this.longitude,
-              // gonggao,
-              // jianjie
-            };
-            let res = await newapi.supplier_upd(data);
-            wx.hideLoading();
-            if (res.data.code == 0) {
-              wx.navigateBack({});
-              this.$parent.globalData.vip_level = vip_level
-              //this.isuserDetail = true;
-            } else {
-              this.issubmit = false;
-              util.showModal(res.data.message);
-            }
-            this.$apply();
-          } else {
-            util.showModal('输入的验证码有误');
+        var suppliers_id = this.$parent.globalData.suppliers_id;
+        console.log("param.is_picture ", param.is_picture);
+        var is_picture = param.is_picture ? 0 : 1;
+        // var is_friend = param.is_friend ? 1 : 0;
+        // var is_chakan = param.is_chakan ? 1 : 0;
+        var gonggao = param.gonggao;
+        var jianjie = this.userDetail.jianjie;
+        // 上传图片
+        if (!this.shopImg.upload) var shopImg = this.shopImg.img_url == 0 ? '' : this.shopImg.img_url
+        else var shopImg = await this.upImg(this.shopImg.img_url)
+         if (!this.bgImg.upload) var bgImg = this.bgImg.img_url == 0 ? '' : this.bgImg.img_url
+        else var bgImg = await this.upImg(this.bgImg.img_url)
+        this.goods_imgs = [];
+        if (this.imgSrc != '') {
+          if (this.imgSrc.length > 5) {
+            util.showModal('上传图片不能大于五张');
+            return;
           }
         }
+        var i = 0;
+        for (var i = 0; i < this.imgSrc.length; i++) {
+          if (this.imgSrc[i].upload) {
+            var img = await this.upImg(this.imgSrc[i].img_url);
+            if (img) {
+              this.goods_imgs.push(img);
+            }
+          } else {
+            this.goods_imgs.push(this.imgSrc[i].img_url);
+          }
+        }
+        var goods_img = this.goods_imgs[0];
+        var img_url = this.goods_imgs.toString();
+        util.showLoading();
+        let data = {
+          suppliers_id,
+          is_picture,
+          // is_friend,
+          // is_chakan,
+          img_url,
+          img: shopImg,
+          gonggao,
+          jianjie,
+          bg_img:bgImg
+        };
+        let res = await newapi.supplier_upd(data);
+        wx.hideLoading();
+        if (res.data.code == 0) {
+          wx.navigateBack({});
+          // this.$parent.globalData.vip_level = vip_level
+          //this.isuserDetail = true;
+        } else {
+          this.issubmit = false;
+          util.showModal(res.data.message);
+        }
+        this.$apply();
       }
     };
     events = {};
@@ -686,24 +589,8 @@
         this.address = res.name
         this.longitude = res.longitude
         this.latitude = res.latitude
-       var that = this;
-          qqmapsdk.reverseGeocoder({
-            location: {
-              latitude: this.latitude,
-              longitude: this.longitude,
-            },
-            success: function(res) {
-              var newAddress = res.result.address_component
-              that.region = [newAddress.province, newAddress.city, newAddress.district]
-              console.log(that.region);
-              that.$apply();
-            },
-            fail: function(res) {
-            },
-          });
         this.$apply();
-      }).catch(res => {
-      });
+      }).catch(res => {});
     }
     async onLoad(option) {
       await this.$parent.loginInfo();
@@ -719,9 +606,8 @@
       this.latitude = this.userDetail.latitude
       this.suppliers_id = suppliers_id;
       this.isSetAbout = this.userDetail.jianjie == '' ? false : true
-      this.userDetail.jianjie =util.html_decode(this.userDetail.jianjie);
-      wepy.getLocation().then(res => {
-      }).catch(res => {
+      this.userDetail.jianjie = util.html_decode(this.userDetail.jianjie);
+      wepy.getLocation().then(res => {}).catch(res => {
         this.isOpenSetting = true
         this.$apply();
       });
@@ -741,6 +627,9 @@
       this.shopImg = {}
       this.shopImg.img_url = res.data.data.img;
       this.shopImg.upload = false;
+      this.bgImg = {}
+      this.bgImg.img_url = res.data.data.bg_img;
+      this.bgImg.upload = false;
       console.log("this.shopImg", this.shopImg);
       this.$apply();
       return res.data.data;

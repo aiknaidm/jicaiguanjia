@@ -330,12 +330,12 @@
         {
           num: 0,
           display_name: '交易成功',
-          url: '/ConsolePages/pages/orderList?order_status=4'
+          url: '/ConsolePages/pages/orderList?order_status=3'
         },
         {
           num: 0,
           display_name: '交易关闭',
-          url: '/ConsolePages/pages/orderList?order_status=5'
+          url: '/ConsolePages/pages/orderList?order_status=4'
         }
       ],
       shopList: [{
