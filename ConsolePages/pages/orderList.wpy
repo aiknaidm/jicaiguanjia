@@ -77,11 +77,11 @@
 </style>
 <template>
   <view class="container">
-    <view class="viewjoin" wx:if="{{is_yizhan}}">
+    <!-- <view class="viewjoin" wx:if="{{is_yizhan}}">
       <view bindtap="statusTap2"> {{cur_suppliers_name}}
         <text class='iconfont icon-jiantou'></text>
       </view>
-    </view>
+    </view> -->
     <scroll-view class="scroll-view_H" scroll-x style="width: 100%">
       <button form-type='submit' @tap="statusTap({{index}})" class="scroll-view-item_H {{index == thisindex ? 'active' : ''}}" wx:for-items="{{statusType}}" wx:key="{{index}}" data-index="{{index}}" data-type="{{statusType[index]}}">
                   {{statusType[index]}}
