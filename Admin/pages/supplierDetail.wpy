@@ -257,7 +257,7 @@
       </view>
       <form report-submit bindsubmit='getFormId'>
         <view class="info_list order_list">
-          <navigator url="/ConsolePages/pages/dataManage" open-type="navigate" hover-class="none">
+          <navigator url="/ConsolePages/pages/dataManage?suppliers_id={{suppliers_id}}" open-type="navigate" hover-class="none">
             <image src="/images/console/transaction-manage.png" />交易管理
           </navigator>
           <repeat for="{{tabList}}" wx:key="{{index}}">

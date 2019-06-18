@@ -650,7 +650,12 @@
     async onLoad(option) {
       this.isMoreData = true;
       this.page = 1;
-      this.suppliers_id = this.$parent.globalData.suppliers_id;
+      if (option.suppliers_id) {
+        this.suppliers_id = option.suppliers_id;
+      } else {
+        this.suppliers_id = this.$parent.globalData.suppliers_id;
+      }
+      
       this.datas = this.init(this.suppliers_id);
       this.getMoneyData(this.datas);
       this.now_time = this.datas.end_time;
