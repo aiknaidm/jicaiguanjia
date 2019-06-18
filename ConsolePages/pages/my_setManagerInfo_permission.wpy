@@ -1,49 +1,47 @@
 <style lang="less">
-  
-  .container{
-      padding: 40rpx;
+  .container {
+    padding: 40rpx;
   }
-  .radio{
-      padding: 0 20rpx;
-      line-height: 80rpx;
+  .radio {
+    padding: 0 20rpx;
+    line-height: 80rpx;
   }
-  .btn{
-      margin-top: 40rpx;
-      background: #e50012;
-      color: #fff;
+  .btn {
+    margin-top: 40rpx;
+    background: #e50012;
+    color: #fff;
   }
-  input{
-      border-bottom: 1px solid #eee;
-      margin-bottom: 20rpx;
+  input {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 20rpx;
   }
 </style>
 <template>
   <view class='container'>
-
-  <form
-    report-submit="true"
-    @submit="submit"
-    @reset="reset"
-    >
-         
-   <view> 
-       <radio-group class="radio-group" bindchange="radioChange">
-   选择身份:<label class="radio" wx:for="{{items}}">
-   <radio value="{{item.name}}" />{{item.name}}
-  </label>
-  <label class="radio" >
-   <radio value="zidingyi" />自定义
-  </label>
-</radio-group>
-<checkbox-group  wx:if="{{is_zidingyi}}">
-    <input name=""/>
-  <label class="checkbox" wx:for="{{permission}}">
-    <checkbox value="{{item.value}}" />{{item.name}}
-  </label>
-</checkbox-group>
-   </view>
-  </form>
-  <button class="btn">提交</button>
+    <form report-submit="true" @submit="submit" @reset="reset">
+      <view>
+        <radio-group class="radio-group">
+          选择身份:
+          <label class="radio" wx:for="{{items}}" @tap="radioChange({{item}})">
+                      <radio checked="{{item.checked}}"/>{{item.name}}
+                </label>
+        </radio-group>
+        <checkbox-group wx:if="{{is_zidingyi}}" name="permission">
+          身份：<input name="juese" value="{{this_value}}" placeholder="别名" />
+          <!-- <view wx:if="{{this_permission=='all'}}">
+              <label class="checkbox" wx:for="{{permission}}" wx:for-item="item2" wx:for-index="index2">
+                    <checkbox checked="true"/>{{item2.name}}
+                  </label>
+            </view> -->
+          <block>
+            <label class="checkbox" wx:for="{{permission}}" wx:for-item="item2" wx:for-index="index2">
+                      <checkbox checked="{{item2.checked}}" value="{{item2.id}}" />{{item2.display_name}}
+                  </label>
+          </block>
+        </checkbox-group>
+      </view>
+      <button class="btn" form-type="submit">提交</button>
+    </form>
   </view>
 </template>
 
@@ -56,26 +54,137 @@
       navigationBarTitleText: '权限设置'
     };
     data = {
-  items:[{name:"管理员"},{name:"业务员"},{name:"财务"}],
-  permission:[{name:"管理员",value:"1"},{name:"业务员",value:"2"},{name:"财务",value:"3"}],
-  is_zidingyi:false
+      items: [{
+          name: "管理员",
+          bieming: "",
+          permission: ["all"]
+        },
+        {
+          name: "销售人员",
+          bieming: "",
+          permission: [23]
+        },
+        {
+          name: "客服人员",
+          bieming: "",
+          permission: [24, 25, 26, 27]
+        },
+        {
+          name: "市场部",
+          bieming: "",
+          permission: [20, 21, 22]
+        },
+        {
+          name: "财务",
+          bieming: "",
+          permission: [11]
+        },
+        {
+          name: "自定义",
+          bieming: "",
+          permission: []
+        },
+      ],
+      permission: [],
+      is_zidingyi: false,
+      this_permission: [],
+      this_value: ""
     };
     computed = {};
     components = {};
     methods = {
-     radioChange(e){
-        console.log("e",e.detail.value)
-        if(e.detail.value=="zidingyi"){
-            this.is_zidingyi=true;
-        }else{
-            this.is_zidingyi=false;
+      submit(e) {
+        var permission_list = e.detail.value.permission;
+        permission_list.toString()
+        console.log("permission_list", permission_list.toString());
+        var juese = e.detail.value.juese;
+        var id = this.id
+        var suppliers_id = this.suppliers_id
+        if (this.type == "edit") {
+          newapi.editManager({
+            permission_list: permission_list.toString(),
+            juese,
+            id,
+            suppliers_id
+          }).then(res => {
+            if (res.data.code == 0) util.showToast("提交成功")
+            else util.showToast(res.data.messages)
+          })
+        } else {
+          newapi.addManager({
+            permission_list: permission_list.toString(),
+            juese,
+            id
+          }).then(res => {
+            if (res.data.code == 0){
+              util.showToast("提交成功")
+             this.$parent.$pages['/ConsolePages/pages/my_setManagerInfo'].managerList(this.suppliers_id);
+            } 
+            else util.showToast(res.data.messages)
+          })
         }
-     }
+      },
+      radioChange(item) {
+        console.log("e", item)
+        this.is_zidingyi = true;
+        // this.this_permission = item.permission
+        var permission = this.permission;
+        var this_permission = item.permission;
+        this.this_value = item.name
+        this.permission = this.setPermission(permission, this_permission)
+        this.$apply();
+      }
     };
     events = {};
-    async onShow() {
-   
+    setPermission(permission, this_permission) {
+      for (var j = 0; j < permission.length; j++) {
+        permission[j].checked = false;
+        for (var i = 0; i < this_permission.length; i++) {
+          if (this_permission[i] == permission[j].id || this_permission[i] == "all") {
+            permission[j].checked = true;
+            break;
+          }
+        }
+      }
+      return permission
     }
-
+    async onShow() {}
+    async onLoad(option) {
+      console.log(option);
+      this.suppliers_id = this.$parent.globalData.suppliers_id;
+      this.id = option.id;
+      this.type = option.type;
+      if (!this.suppliers_id) {
+        util.showToast("登录失败")
+        wx.navigateTo({
+          url: '/ConsolePages/pages/index'
+        });
+      }
+      var res = await this.getPermission(this.suppliers_id);
+    }
+    async getPermission(suppliers_id) {
+      var res = await newapi.admin_permission({
+        suppliers_id
+      })
+      this.permission = res.data.data;
+      if (this.type = "edit") {
+        this.getThisPermission(this.id)
+        this.items[this.items.length - 1].checked = true;
+      }
+      this.$apply();
+    }
+    async getThisPermission(id) {
+      var res = await newapi.managers_detail({
+        id
+      })
+      this.this_permission = [];
+      res.data.data[0].permission_list.forEach((item, index) => {
+        this.this_permission[index] = item.id
+      })
+      this.this_value = res.data.data[0].juese
+      this.is_zidingyi = true;
+      this.permission = this.setPermission(this.permission, this.this_permission)
+      this.$apply();
+    }
   }
 </script>

@@ -31,7 +31,7 @@
       right: 0;
       bottom: 0;
       view {
-        width: 100rpx;
+        padding: 0 20rpx;
         line-height: 60rpx;
         background: #e50012;
         color: #fff;
@@ -66,11 +66,11 @@
           </view>
           <view class='text'>
             <view>姓名：{{item.user_nickname?item.user_nickname:'jc'+item.id}}</view>
-            <view>身份：{{item.user_nickname?item.user_nickname:'jc'+item.id}}</view>
-            <view>权限：{{item.user_nickname?item.user_nickname:'jc'+item.id}}</view>
+            <view>身份：{{item.juese}}</view>
+            <!-- <view>权限：{{item.user_nickname?item.user_nickname:'jc'+item.id}}</view> -->
           </view>
           <view class="btn">
-            <view class="edit" catchtap='editManager'>编辑</view>
+            <view class="edit" catchtap='editManager({{item.id}})'>编辑权限</view>
             <view class="del" data-user_id='{{item.id}}' catchtap='delManager'>删除</view>
           </view>
         </view>
@@ -122,12 +122,12 @@
       },
       addManager: function() {
         wx.navigateTo({
-          url: '/ConsolePages/pages/my_addManagerInfo'
+          url: '/ConsolePages/pages/my_addManagerInfo?type=manager'
         });
       },
-      editManager(){
+      editManager(id){
          wx.navigateTo({
-          url: '/ConsolePages/pages/my_setManagerInfo_permission'
+          url: '/ConsolePages/pages/my_setManagerInfo_permission?type=edit&id='+id
         });
       },
       hiddenclose: function() {
@@ -139,10 +139,11 @@
     };
     events = {};
     async onShow() {
-      this.managerList();
+       let suppliers_id = this.$parent.globalData.suppliers_id;
+      this.managerList(suppliers_id);
     }
-    async managerList() {
-      let suppliers_id = this.$parent.globalData.suppliers_id;
+    async managerList(suppliers_id) {
+     
       let data = {
         suppliers_id
       };

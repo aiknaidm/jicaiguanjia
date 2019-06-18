@@ -16,6 +16,7 @@
 
     margin-right: 20rpx;
   }
+   
   .weui_cell_hd image {
     width: 50rpx;
     height: 50rpx;
@@ -64,9 +65,12 @@ button {
 <template>
 
   <button form-type="submit" class="weui_cell" @tap="toUrl({{tabItem.url}},{{tabItem.type}})" tabItem="列表内容">
-    <view class="weui_cell_hd" style="background:{{tabItem.bgcolor}}">
-      <image src="{{tabItem.icon}}" wx:if="{{tabItem.icon}}"/>
-      <view  wx:else>{{tabItem.num}}</view>
+    <view class="weui_cell_hd" style="background:{{tabItem.bgcolor}}" wx:if="{{tabItem.icon&&tabItem.icon!=''}}">
+      <image src="{{tabItem.icon}}" />
+     
+    </view>
+    <view class="weui_cell_hd weui_cell_hd2" wx:else>
+      <view  >{{tabItem.num}}</view>
     </view>
     <view class="weui_cell_bd">
       <view class="weui_cell_bd_p" wx:if="{{tabItem.text}}" >{{tabItem.text}}</view>

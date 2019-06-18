@@ -41,8 +41,13 @@ const newapi = {
     find_users: (data) => fetch(`${host_chk}/find_users`, 'GET', data),
     find_users_c: (data) => fetch(`${host_chk}/find_users_c`, 'GET', data),
     addMember: (data) => fetch(`${host_chk}/tjhy`, 'GET', data),
-    addManager: (data) => fetch(`${host_chk}/manager_add`, 'GET', data),
-    delManager: (data) => fetch(`${host_chk}/manager_del`, 'GET', data),
+    addManager: (data) => fetch(`${host_chk}/manager_add`, 'GET', data), //添加管理员
+    delManager: (data) => fetch(`${host_chk}/manager_del`, 'GET', data), //删除管理员
+    editManager: (data) => fetch(`${host_chk}/manager_edit`, 'GET', data), //编辑管理员
+    managers_detail: (data) => fetch(`${host_chk}/managers_detail`, 'GET', data), //权限
+    // 判断管理员显示权限功能的接口   managers_permission  参数  suppliers_id店铺ID
+    managers_permission: (data) => fetch(`${host_chk}/managers_permission`, 'GET', data), //权限
+
     yhxq: (data) => fetch(`${host_chk}/yhxq`, 'GET', data),
     findManagers: (data) => fetch(`${host_chk}/find_managers`, 'GET', data),
     verifyCode: (data) => fetch(`${host_chk}/chk_share_code`, 'GET', data),
@@ -123,6 +128,7 @@ const newapi = {
     suppliers_join_list: (data) => fetch(`${host_chk}/suppliers_join_list`, 'GET', data), //加入易站
     shenhe_suppliers_join: (data) => fetch(`${host_chk}/shenhe_suppliers_join`, 'GET', data), //加入易站
     suppliers_join: (data) => fetch(`${host_chk}/suppliers_join`, 'GET', data), //加入易站
+    admin_permission: (data) => fetch(`${host_chk}/admin_permission`, 'GET', data), //权限
 
 
 }

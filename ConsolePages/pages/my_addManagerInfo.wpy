@@ -259,7 +259,7 @@ export default class my_addManagerInfo extends wepy.page {
       var user_id = e.currentTarget.dataset.user_id;
       var suppliers_id = this.$parent.globalData.suppliers_id;
       var sales_id = this.sales_id ? this.sales_id : '';
-      let mRes = await util.showModalBig('确定要添加吗');
+      let mRes = await util.showModalBig('确定要添加吗');console.log("user_id",user_id,"sales_id",sales_id);
       if (mRes.confirm) {
         let data = {
           user_id,
@@ -272,7 +272,8 @@ export default class my_addManagerInfo extends wepy.page {
         } else if (this.type == 'salesman') {
           res = await newapi.addSalesman(data);
         } else {
-          res = await newapi.addManager(data);
+        wx.navigateTo({ url: '/ConsolePages/pages/my_setManagerInfo_permission?id='+user_id  });
+          return
         }
 
         if (res.data.code == 0) {
@@ -284,43 +285,48 @@ export default class my_addManagerInfo extends wepy.page {
             wx.navigateBack({
               delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
             });
-          } else if (this.type == 'salesman') {
-            let mRes = await util.showModalBig(
-              '业务员添加成功，同时将改用户设为管理员吗'
-            );
-            if (mRes.confirm) {
-              let data = {
-                user_id,
-                suppliers_id
-              };
-              let res0 = await newapi.addManager(data);
-              if (res0.data.code == 0) {
-                util.showToast('设置成功');
-              } else {
-                util.showToast(res0.message);
-              }
-            }
-            wx.navigateBack({
-              delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
-            });
-          } else {
-            let mRes = await util.showModalBig(
-              '管理员添加成功，同时将改用户设为业务员吗'
-            );
-            if (mRes.confirm) {
-              let data = {
-                user_id,
-                suppliers_id
-              };
-              let res0 = await newapi.addSalesman(data);
+          } 
+          // else if (this.type == 'salesman') {
+          //   let mRes = await util.showModalBig(
+          //     '业务员添加成功，同时将改用户设为管理员吗'
+          //   );
+          //   if (mRes.confirm) {
+          //     let data = {
+          //       user_id,
+          //       suppliers_id
+          //     };
+          //     let res0 = await newapi.addManager(data);
+          //     if (res0.data.code == 0) {
+          //       util.showToast('设置成功');
+          //     } else {
+          //       util.showToast(res0.message);
+          //     }
+          //   }
+          //   wx.navigateBack({
+          //     delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+          //   });
+          // } 
+          // else if(this.type == 'manager'){
+          //   wx.navigateTo({ url: 'my_setManagerInfo_permission?id='+user_id });
+          // }
+          // else {
+          //   let mRes = await util.showModalBig(
+          //     '管理员添加成功，同时将改用户设为业务员吗'
+          //   );
+          //   if (mRes.confirm) {
+          //     let data = {
+          //       user_id,
+          //       suppliers_id
+          //     };
+          //     let res0 = await newapi.addSalesman(data);
 
-              if (res0.data.code == 0) util.showToast('设置成功');
-              else util.showToast(res0.message);
-            }
-            wx.navigateBack({
-              delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
-            });
-          }
+          //     if (res0.data.code == 0) util.showToast('设置成功');
+          //     else util.showToast(res0.message);
+          //   }
+          //   wx.navigateBack({
+          //     delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+          //   });
+          // }
         } else {
           util.showToast(res.data.message);
         }
