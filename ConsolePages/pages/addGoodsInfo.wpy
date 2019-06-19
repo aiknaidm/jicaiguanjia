@@ -332,7 +332,8 @@
       </view>
       <block wx:if='{{goods_attr.length==0}}'>
         <view class="listBox" wx:for="{{vip_level}}" wx:key="{{index}}">
-         <view class="listOption">{{index+1}}级会员价</view>
+         <view class="listOption" wx:if="{{lev==1}}">会员价</view>
+         <view class="listOption" wx:else>{{index+1}}级会员价</view>
           <input class="shownnum" type='digit' value="{{goodsdetail['shop_price'+(index==0?'':index+1)]}}" name="shop_price{{index==0?'':index+1}}" />
         </view>
         <view class="listBox" wx:if="{{is_chakan==1||is_yizhan==1}}">
@@ -356,11 +357,12 @@
               <input class="shownnum" @input='getAttrName({{index}})' value='{{item.attr_value}}' />
             </view>
             <view class="listBox" wx:for="{{vip_level}}" wx:for-index="index2" wx:for-item="item2">
-              <view class="listOption">{{index2+1}}级会员价</view>
+              <view class="listOption" wx:if="{{lev==1}}">会员价</view>
+              <view class="listOption" wx:else>{{index+1}}级会员价</view>
               <input class="shownnum" @change="getAttrhyPrice({{index}},{{index2}})" type='digit' value="{{item['attr_price'+(index2==0?'':index2+1)]}}" name="attr_value{{index2==0?'':index2+1}}" />
             </view>
-            <view class="listBox">
-              <view class="listOption" wx:if="{{is_chakan==1||is_yizhan==1}}">零售价</view>
+            <view class="listBox" wx:if="{{is_chakan==1||is_yizhan==1}}">
+              <view class="listOption">零售价</view>
               <input class="shownnum" @input='getAttrPrice({{index}})' type='digit' value='{{item.floor_price}}' />
             </view>
             <view class="listBox">
@@ -444,7 +446,8 @@
       is_hot: false,
       is_best: false,
       is_yizhan: 0,
-      vip_level: 1,
+      vip_level: [],
+      lev: 1,
       is_join:0,
       is_chakan:1
     };
@@ -949,7 +952,8 @@
         this.vip_level = this.$parent.globalData.yizhanInfo.vip_level
        this.is_join = this.$parent.globalData.yizhanInfo.is_join
        this.is_chakan = this.$parent.globalData.yizhanInfo.is_chakan
-       
+       this.lev = this.vip_level.length;
+
         this.hdky = this.$parent.globalData.yizhanInfo.hdky == 1 ? true : false;
         if (option.id) this.setGoodsInfo(option.id);
         else {
