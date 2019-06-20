@@ -62,17 +62,17 @@
         {
           name: "销售人员",
           bieming: "",
-          permission: [23]
+          permission: [24]
         },
         {
           name: "客服人员",
           bieming: "",
-          permission: [24, 25, 26, 27]
+          permission: [24, 25]
         },
         {
           name: "市场部",
           bieming: "",
-          permission: [20, 21, 22]
+          permission: [20, 21]
         },
         {
           name: "财务",

@@ -331,7 +331,7 @@
   import newapi from '../../API/newapi';
   import api from '../../API/api';
   import util from '../../utils/index';
-  export default class my_setShopInfo extends wepy.page {
+  export default class my_setShopStyle extends wepy.page {
     config = {
       navigationBarTitleText: '店铺装修'
     };
@@ -398,7 +398,7 @@
     components = {};
     methods = {
       toAbout() {
-        console.log("this.userDetail.jianjie", this.userDetail.jianjie)
+  
         wx.navigateTo({
           url: 'my_setShopInfo_about?about=' + this.userDetail.jianjie
         });
@@ -607,6 +607,7 @@
       this.suppliers_id = suppliers_id;
       this.isSetAbout = this.userDetail.jianjie == '' ? false : true
       this.userDetail.jianjie = util.html_decode(this.userDetail.jianjie);
+      console.log("this.userDetail",this.userDetail);
       wepy.getLocation().then(res => {}).catch(res => {
         this.isOpenSetting = true
         this.$apply();

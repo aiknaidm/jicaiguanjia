@@ -25,7 +25,7 @@ export default class newslist extends wepy.page {
   computed = {};
   methods = {
     finish: function(e) {
-        var parent=this.$parent.$pages['/ConsolePages/pages/my_setShopInfo']
+        var parent=this.$parent.$pages['/ConsolePages/pages/my_setShopStyle']
       parent.userDetail.jianjie =e.detail.content;
         parent.isSetAbout=parent.userDetail.jianjie==''?false:true;
       wx.navigateBack({
@@ -36,8 +36,7 @@ export default class newslist extends wepy.page {
   events = {};
   async getIndexNewsList(id) {}
   async onLoad(option) {
-     var parent=this.$parent.$pages['/ConsolePages/pages/my_setShopInfo']
-    console.log(option);
+     var parent=this.$parent.$pages['/ConsolePages/pages/my_setShopStyle']
     this.html = parent.userDetail.jianjie;
       this.$apply();
   }

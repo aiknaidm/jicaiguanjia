@@ -78,22 +78,22 @@
 <template>
   <view class="container">
     <!-- <view class="viewjoin" wx:if="{{is_yizhan}}">
-      <view bindtap="statusTap2"> {{cur_suppliers_name}}
-        <text class='iconfont icon-jiantou'></text>
-      </view>
-    </view> -->
+            <view bindtap="statusTap2"> {{cur_suppliers_name}}
+              <text class='iconfont icon-jiantou'></text>
+            </view>
+          </view> -->
     <scroll-view class="scroll-view_H" scroll-x style="width: 100%">
       <button form-type='submit' @tap="statusTap({{index}})" class="scroll-view-item_H {{index == thisindex ? 'active' : ''}}" wx:for-items="{{statusType}}" wx:key="{{index}}" data-index="{{index}}" data-type="{{statusType[index]}}">
-                  {{statusType[index]}}
-                   <text class='goodsListnum' wx:if="{{goodsListnum[index]}}">{{goodsListnum[index]}}</text>
-                  </button>
+                        {{statusType[index]}}
+                         <text class='goodsListnum' wx:if="{{goodsListnum[index]}}">{{goodsListnum[index]}}</text>
+                        </button>
     </scroll-view>
     <noorder show="2" wx:if="{{orderList.length==0}}" text="暂无订单"></noorder>
     <!-- 订单列表  -->
     <repeat for="{{orderList}}" wx:key="{{index}}">
       <orderList :orderList.sync="item" :goodsMap.sync="goodsMap[index]" @orderDetail.user="orderDetail">
         <view slot="btn" class="price-box price-box2">
-          <view wx:if="{{thisindex==1 && suppliers_id == cur_suppliers_id}}" class="btn topay-btn" @tap="orderDetail({{item.order_id}})">去发货</view>
+          <view wx:if="{{thisindex==1 && suppliers_id == cur_suppliers_id}}" class="btn topay-btn" @tap="orderDetail({{item}})">去发货</view>
         </view>
       </orderList>
     </repeat>
@@ -170,14 +170,24 @@
         this.ishowjoinlist = true;
       },
       // 订单详情
-      orderDetail(id, evt) {
-        if (this.suppliers_id != this.cur_suppliers_id) {
+      orderDetail(orderList, evt) {
+        console.log(orderList);
+        var order_id = orderList.order_id
+        var single_id = orderList.single_id
+        if (this.suppliers_id != this.cur_suppliers_id)
           util.showToast("非本店订单，不可操作");
-          return;
-        }
-        wx.navigateTo({
-          url: 'orderDetail?id=' + id
-        });
+        else if (this.is_yizhan == 1)
+          wx.navigateTo({
+            url: 'orderYizhanDetail?id=' + order_id
+          });
+        else if (single_id)
+          wx.navigateTo({
+            url: 'orderYizhanDetail2?id=' + single_id
+          });
+        else
+          wx.navigateTo({
+            url: 'orderDetail?id=' + order_id
+          });
       },
       async changeJoinList(suppliers_id, suppliers_name) {
         this.cur_suppliers_id = suppliers_id;

@@ -1,0 +1,277 @@
+
+<style lang="less">
+  .section {
+    display: flex;
+    padding: 20rpx 40rpx;
+    align-items: center;
+    .name {
+      width: 200rpx;
+      text-align: left
+    }
+    .input {
+      flex: 1;
+      width: auto;
+      text-align: left
+    }
+  }
+  .select-shop {
+    display: flex;
+    justify-content: space-between;
+    padding: 20rpx 30rpx;
+    align-items: center;
+    .confirm-btn {
+      margin: 0
+    }
+  }
+  .queren {
+    text-align: right
+  }
+</style>
+<template>
+  <view class="container">
+    <form @reset="reset">
+      <orderDetail :orderDetail.sync="orderDetail" :goodsMap.sync="goodsMap" @cancelOrderTap.user="cancelOrderTap" @confirmBtnTap.user="confirmBtnTap">
+        <view slot="goodsList">
+          <checkbox-group @change="checkboxChange">
+            <block wx:for-items="{{goodsMap}}" wx:key="{{index}}">
+              <view class="a-goods" data-id="{{item.goods_id}}">
+                <view>
+                  <checkbox value="{{item.rec_id}}" disabled="{{item.suppliers_id!=0}}" wx:if="{{orderDetail.order_status==2 && orderDetail.shipping_status==0}}" />
+                </view>
+                <view class="img-box">
+                  <image src="{{item.goods_imgs}}" class="img" />
+                </view>
+                <view class="text-box">
+                  <view class="arow01">
+                    <view class="goods-name">{{item.goods_name}}</view>
+                    <view class="goods-label">{{item.goods_attr}}</view>
+                    <view class="goods-label" wx:if="{{item.suppliers_id!=0}}">由{{item.suppliers_name}}发货</view>
+                  </view>
+                  <view class="arow02">
+                    <view class="goods-price">¥ {{item.goods_price}}</view>
+                    <view class="goods-num">x {{item.goods_number}}</view>
+                  </view>
+                </view>
+              </view>
+            </block>
+          </checkbox-group>
+        </view>
+      </orderDetail>
+      <view class="select-shop" wx:if="{{goodsList.length>0&&orderDetail.order_status==2 && orderDetail.shipping_status==0}}">
+        <view>{{select_suppliers_name}}</view>
+        <button class="confirm-btn" @tap="toShopList">分配店铺 </button>
+      </view>
+      <view wx:if="{{select_suppliers_name&&select_suppliers_name!='易站发货'}}" class="queren">
+        <button class="confirm-btn"  data-order_id="{{orderDetail.order_id}}" form-type="reset">确认</button>
+      </view>
+    </form>
+    <form @submit="fahuoSubmit" wx:if="{{select_suppliers_name=='易站发货'}}">
+      <view class="">
+        <view class="section">
+          <view class="name">预计送达时间</view>
+          <picker disabled="{{orderDetail.order_status!=2 || orderDetail.shipping_status!=0}}" class="input" mode="date" name="time" value="{{time}}" start="2015-09-01" end="2020-09-01" bindchange="bindDateChange">
+            <view class="picker">
+              {{time}}
+            </view>
+          </picker>
+        </view>
+        <view class="section">
+          <view class="name">配送员信息</view>
+          <input class="input" name="info" placeholder="配送员姓名电话" disabled="{{orderDetail.order_status!=2 || orderDetail.shipping_status!=0}}" />
+        </view>
+      </view>
+      <view class="btn-row" wx:if="{{orderDetail.order_status==2 && orderDetail.shipping_status==0}}">
+        <radio-group class="radio-group" name="fahuo" @change="radioChange">
+          是否需要发货单：
+          <label class="radio">
+                  <radio value="1" checked="true" color='red' />是
+                </label>
+          <label class="radio">
+                  <radio value="0" checked="false" color='red' />否
+                </label>
+        </radio-group>
+        <button class="confirm-btn" form-type="submit" data-order_id="{{orderDetail.order_id}}">发货</button>
+      </view>
+    </form>
+    <!-- <view>
+         店铺：xxxx
+         <view class="a-goods" data-id="{{item.goods_id}}">
+                <view class="img-box">
+                  <image src="{{item.goods_imgs}}" class="img" />
+                </view>
+                <view class="text-box">
+                  <view class="arow01">
+                    <view class="goods-name">{{item.goods_name}}</view>
+                    <view class="goods-label">{{item.goods_attr}}</view>
+                  </view>
+                  <view class="arow02">
+                    <view class="goods-price">¥ {{item.goods_price}}</view>
+                    <view class="goods-num">x {{item.goods_number}}</view>
+                  </view>
+                </view>
+              </view>
+       </view> -->
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import api from '../../API/api';
+  import newapi from '../../API/newapi';
+  import orderDetail from '../../components/shop/orderDetail';
+  import util from '../../utils/index';
+  export default class orderYizhanDetail extends wepy.page {
+    config = {
+      navigationBarTitleText: '订单详情'
+    };
+    components = {
+      orderDetail
+    };
+    data = {
+      orderDetail: {},
+      goodsMap: [],
+      goodsList: [],
+      is_fahuodan: false,
+      time: 0,
+      select_suppliers_id: "",
+      select_suppliers_name: ""
+    };
+    computed = {};
+    methods = {
+      async reset() {
+        var data = {
+          suppliers_id: this.select_suppliers_id,
+          rec_id: this.goodsList.toString(),
+          order_id: this.id
+        }
+        var res = await newapi.fenpei(data);
+        if (res.data.code == 0) {
+          util.showToast("分配成功");
+          this.getOrderDetail(this.id);
+          this.goodsList = []
+        }
+      },
+      toShopList() {
+        wx.navigateTo({
+          url: '/ConsolePages/pages/orderYizhanDetailShop'
+        });
+      },
+      checkboxChange(e) {
+        console.log('发送选择改变，携带值为', e)
+        this.goodsList = e.detail.value;
+      },
+      bindDateChange: function(e) {
+        this.time = e.detail.value
+      },
+      radioChange(e) {
+        console.log(e.detail.value)
+        if (e.detail.value) {
+          this.is_fahuodan = e.detail.value
+        }
+      },
+      async fahuoSubmit(e) {
+        var fahuo = e.detail.value.fahuo;
+        var yujisongda = e.detail.value.time;
+        var peisongyuan = e.detail.value.info;
+        var order_id = this.id
+        let mRes = await util.showModalBig('你确定要发货吗');
+        if (mRes.confirm) {
+          var res = await newapi.fenpei(data);
+          if (fahuo == 1) var fahuodan = await this.upfahuoimg();
+          else fahuodan = '';
+          this.orderDetail.fahuodan = fahuodan;
+          var data = {
+            yujisongda,
+            peisongyuan,
+            fahuodan,
+            rec_id: this.goodsList.toString(),
+            order_id
+          }
+          this.fahuo(data);
+        }
+      }
+    };
+    events = {
+      cancelOrderTap: res => {
+        this.$parent.$pages['/Shop/pages/orderList'].events.cancelOrderTap(
+          this.id
+        );
+        this.getOrderDetail(this.id);
+      },
+      confirmBtnTap: res => {
+        this.$parent.$pages['/Shop/pages/orderList'].events.confirmBtnTap(
+          this.id
+        );
+        this.getOrderDetail(this.id);
+      }
+    };
+    // 上传发货图片
+    async upfahuoimg() {
+      var res = await wepy
+        .chooseImage({
+          count: 1, // 默认9
+          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+          sourceType: ['album', 'camera'] // 可以指定来源是相册还是相机，默认二者都有
+        })
+      var tempFilePaths = res.tempFilePaths;
+      var imgRes = await wepy
+        .uploadFile({
+          url: api.upload,
+          filePath: tempFilePaths + '',
+          name: 'file',
+          header: {
+            Accept: 'application/json'
+          }
+        })
+      var datas = JSON.parse(imgRes.data.trim());
+      console.log(datas);
+      if (datas.code == 0) {
+        return datas.data.pic_url
+      }
+    }
+    // 发货
+    async fahuo(data) {
+      // let data = {
+      //   order_id: orderId
+      // };
+      let res = await newapi.yizhan_fahuo(data);
+      if (res.data.code == 0) {
+        this.orderDetail.shipping_status = 1;
+        var order_status = this.$parent.$pages['/ConsolePages/pages/orderList']
+          .thisindex;
+        this.$parent.$pages['/ConsolePages/pages/orderList'].getOrderList(
+          order_status,
+          1
+        );
+        this.$apply();
+      }
+    }
+    async getOrderDetail(id) {
+      let data = {
+        order_id: id,
+        suppliers_id: this.suppliers_id
+      };
+      let res = await newapi.orderDetail(data);
+      wx.hideLoading();
+      this.orderDetail = res.data.data.orderList;
+      this.goodsMap = res.data.data.goodsMap;
+      this.orderDetail.add_time = util.formatTime(this.orderDetail.add_time);
+      this.orderDetail.pay_time = util.formatTime(this.orderDetail.pay_time);
+      this.orderDetail.confirm_time = util.formatTime(this.orderDetail.confirm_time);
+      this.$apply();
+    }
+    async onLoad(option) {
+      this.id = option.id;
+      await this.$parent.loginInfo();
+      this.suppliers_id = this.$parent.globalData.suppliers_id ?
+        this.$parent.globalData.suppliers_id :
+        (await this.$parent.getYizhanInfo()).suppliers_id;
+      this.getOrderDetail(this.id);
+      var time = util.formatDate(new Date().getTime() / 1000)
+      this.time = time;
+      console.log("time,", time)
+      this.$apply();
+      util.showLoading();
+    }
+  }
+</script>

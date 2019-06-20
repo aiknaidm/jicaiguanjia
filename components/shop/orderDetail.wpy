@@ -179,9 +179,10 @@ page {
   /* width: 720rpx; */
   /* margin-left: 30rpx; */
   display: flex;
+  align-items: center;
   justify-content: space-between;
   border-top: 1px solid #eee;
-  padding: 30rpx 30rpx 30rpx 0;
+  padding: 30rpx 30rpx 30rpx 10rpx;
   background-color: #f0f0f0;
 }
 .goods-list .a-goods .img-box {
@@ -458,6 +459,7 @@ page {
     </view>
     <view class="goods-list">
       <view class="list-title">商品信息</view>
+      <slot name="goodsList">
       <form bindsubmit="submitReputation">
         <block wx:for-items="{{goodsMap}}" wx:key="{{index}}">
           <view class="a-goods" data-id="{{item.goods_id}}">
@@ -477,12 +479,14 @@ page {
           </view>
         </block>
       </form>
+      </slot>
     </view>
     <view class="row-box row-box2" wx:if="{{orderDetail.other}}">
       <view class="row-label">买家留言：</view>
       <view class="right-text"> {{orderDetail.other}}</view>
     </view>
     <view class="goods-info">
+      <block wx:if="{{!orderDetail.single_id}}">
       <view class="row-box">
         <view class="row-label">商品金额</view>
         <view class="right-text">¥ {{orderDetail.order_amount}}</view>
@@ -495,6 +499,7 @@ page {
         <view class="row-label">优惠券</view>
         <view class="right-text">- ¥ {{orderDetail.bonus_money}}</view>
       </view>
+      </block>
       <view class="row-box2 red">合计 ¥ {{orderDetail.heji_money}}</view>
     </view>
     <!-- order_status 1.待付款 2.已付款 3.已确认收货 -->

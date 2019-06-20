@@ -172,7 +172,10 @@ export default class extends wepy.app {
           'pages/coupon/goodsList',
           'pages/yizhan/yizhan-check',
           'pages/yizhan/yizhan-add',
-          'pages/yizhan/yizhan-apply'
+          'pages/yizhan/yizhan-apply',
+          'pages/orderYizhanDetail',
+          'pages/orderYizhanDetailShop',
+          'pages/orderYizhanDetail2'
         ]
       },
       {

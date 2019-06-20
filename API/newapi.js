@@ -129,7 +129,10 @@ const newapi = {
     shenhe_suppliers_join: (data) => fetch(`${host_chk}/shenhe_suppliers_join`, 'GET', data), //加入易站
     suppliers_join: (data) => fetch(`${host_chk}/suppliers_join`, 'GET', data), //加入易站
     admin_permission: (data) => fetch(`${host_chk}/admin_permission`, 'GET', data), //权限
-
+    // 吉采管家易站站长分配商品  fenpei     参数 rec_id 多个ID用 1,2,3字符串方式    suppliers_id 分配的店铺ID
+    fenpei: (data) => fetch(`${host_chk}/fenpei`, 'GET', data), //权限
+    // 易站和加盟店铺发货接口  yizhan_fahuo   参数 rec_id 多个ID用 1,2,3字符串方式    order_id 订单ID  peisongyuan   yujisongda     fahuodan
+    yizhan_fahuo: (data) => fetch(`${host_chk}/yizhan_fahuo`, 'GET', data), //权限
 
 }
 const fetch = async function(url, method, data) {
@@ -154,7 +157,14 @@ const fetch = async function(url, method, data) {
                     return;
                 }
                 if (res.statusCode < 400) {
-                    resolve(res);
+                    if (res.data.code != 0 && res.data.code != 4) {
+                        wx.showToast({
+                            title: res.data.message, //提示的内容,
+                            icon: 'none', //图标,
+                        });
+                        reject(res)
+                    } else
+                        resolve(res);
                 } else {
                     wx.hideLoading();
                     wx.showModal({

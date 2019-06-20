@@ -1,4 +1,7 @@
 <style lang="less">
+.container{
+  height: 100%;
+}
   .status-label {
     background: #f0f0f0;
     border-left: 5rpx solid #e4e4e4;
@@ -190,12 +193,48 @@
       }
     }
   }
+  .img{
+    text-align: center;
+    line-height: 100rpx;
+    font-size: 38rpx;
+    image{
+
+      width: 100%;
+      margin-bottom: 150rpx;
+     
+    }
+    button{
+      width: 50%;
+     
+      margin: auto;
+      margin-top: 60rpx;
+      color: #fff;
+    }
+  }
 </style>
 <template>
   <view class='container'>
-    <button @tap="apply" wx:if="{{shenhe==0}}">加盟易站</button>
-    <button wx:if="{{shenhe==2}}">等待审核中~</button>
-    <button wx:if="{{shenhe==1}}">查看本地易站</button>
+    <view class="img" wx:if="{{shenhe==0}}">
+      <image src="https://lmbge.com/upload/1234/join_1.png" mode="widthFix" >
+
+      </image>
+      <view >申请加入当地易站</view>
+      <button @tap="apply" wx:if="{{shenhe==0}}" style="background-color:#eb4b45">加盟易站</button>
+    </view>
+    <view class="img" wx:if="{{shenhe==2}}">
+      <image src="https://lmbge.com/upload/1234/join_3.png">
+
+      </image>
+      <view >申请加入当地易站</view>
+      <button @tap="apply" style="background-color:#5777e1">等待审核中~</button>
+    </view>
+   <view class="img" wx:if="{{shenhe==1}}">
+      <image src="https://lmbge.com/upload/1234/join_2.png">
+
+      </image>
+      <view>恭喜你，你的账号审核成功</view>
+      <button @tap="toyizhangou" style="background-color:#71a154" >查看本地易站</button>
+    </view>
   </view>
 </template>
 
@@ -214,6 +253,23 @@
     computed = {};
     components = {};
     methods = {
+      toyizhangou(){
+        var appId = "wx87bfbcfe887faf4d";
+        var path = "pages/home";
+
+        wx.navigateToMiniProgram({
+          appId,
+          path,
+          // extraData: {
+          // 	suppliers_id: suppliers_id,
+          // },
+          // envVersion: 'release',
+          envVersion: 'trial',
+          success(res) {
+            // 打开成功
+          }
+        });
+      },
       async apply() {
         var res = await newapi.suppliers_join({
           suppliers_id: this.suppliers_id,
