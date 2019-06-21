@@ -943,7 +943,7 @@
           (await this.$parent.getYizhanInfo()).suppliers_id;
         this.vip_level = this.$parent.globalData.yizhanInfo.vip_level
        this.is_join = this.$parent.globalData.yizhanInfo.is_join
-       this.lev = this.vip_level.length;
+       this.lev = this.vip_level;
 
         this.hdky = this.$parent.globalData.yizhanInfo.hdky == 1 ? true : false;
         if (option.id) this.setGoodsInfo(option.id);

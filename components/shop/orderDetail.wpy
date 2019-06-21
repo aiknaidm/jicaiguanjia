@@ -436,7 +436,8 @@ page {
               <view wx:elif="{{orderDetail.order_status==2&&orderDetail.shipping_status==1}}" class="order-status-bg">待收货</view>
               <view wx:elif="{{orderDetail.order_status==3&&orderDetail.shipping_status==1}}" class="order-status-bg">已完成</view>
               <view class="wuliu-text wuliu-date" wx:if="{{orderDetail.order_status==1}}">{{orderDetail.add_time}}</view>
-              <view class="wuliu-text wuliu-date" wx:if="{{orderDetail.order_status==2}}">{{orderDetail.pay_time}}</view>
+              <view class="wuliu-text wuliu-date" wx:if="{{orderDetail.order_status==2&&orderDetail.shipping_status==0}}">{{orderDetail.pay_time}}</view>
+              <view class="wuliu-text wuliu-date" wx:if="{{orderDetail.order_status==2&&orderDetail.shipping_status==1}}">{{orderDetail.shipping_time}}</view>
               <view class="wuliu-text wuliu-date" wx:if="{{orderDetail.order_status==3}}">{{orderDetail.confirm_time}}</view>
             </view>
           </slot>
@@ -507,7 +508,7 @@ page {
       <view class="wuliu-text wuliu-date" wx:if="{{orderDetail.order_status>=1}}">订单编号：{{orderDetail.order_sn}}</view>
       <view class="wuliu-text wuliu-date" wx:if="{{orderDetail.order_status>=1}}">创建时间：{{orderDetail.add_time}}</view>
       <view class="wuliu-text wuliu-date" wx:if="{{orderDetail.order_status>=2}}">付款时间：{{orderDetail.pay_time}}</view>
-      <view class="wuliu-text wuliu-date" wx:if="{{orderDetail.order_status>=3}}">发货时间：{{orderDetail.confirm_time}}</view>
+      <view class="wuliu-text wuliu-date" wx:if="{{orderDetail.order_status>=3}}">发货时间：{{orderDetail.shipping_time}}</view>
       <view class='wuliu-text wuliu-date' wx:if="{{orderDetail.pay_id==2}}">支付方式：线下支付 请注意核对订单</view>
       <view class='wuliu-text wuliu-date' wx:if="{{orderDetail.pay_id==0}}">支付方式：线上支付</view>
       <view class='wuliu-text wuliu-date' wx:if="{{orderDetail.pay_id==4}}">支付方式：会员卡支付</view>

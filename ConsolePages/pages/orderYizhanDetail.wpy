@@ -36,7 +36,7 @@
             <block wx:for-items="{{goodsMap}}" wx:key="{{index}}">
               <view class="a-goods" data-id="{{item.goods_id}}">
                 <view>
-                  <checkbox value="{{item.rec_id}}" disabled="{{item.suppliers_id!=0}}" wx:if="{{orderDetail.order_status==2 && orderDetail.shipping_status==0}}" />
+                  <checkbox value="{{item.rec_id}}"  wx:if="{{orderDetail.order_status==2&&item.suppliers_id==0 }}" />
                 </view>
                 <view class="img-box">
                   <image src="{{item.goods_imgs}}" class="img" />
@@ -46,6 +46,7 @@
                     <view class="goods-name">{{item.goods_name}}</view>
                     <view class="goods-label">{{item.goods_attr}}</view>
                     <view class="goods-label" wx:if="{{item.suppliers_id!=0}}">由{{item.suppliers_name}}发货</view>
+                    <view class="goods-label" wx:if="{{item.shipping_status!=0}}">已发货</view>
                   </view>
                   <view class="arow02">
                     <view class="goods-price">¥ {{item.goods_price}}</view>
@@ -57,11 +58,11 @@
           </checkbox-group>
         </view>
       </orderDetail>
-      <view class="select-shop" wx:if="{{goodsList.length>0&&orderDetail.order_status==2 && orderDetail.shipping_status==0}}">
+      <view class="select-shop" wx:if="{{goodsList.length>0&&orderDetail.order_status==2 }}">
         <view>{{select_suppliers_name}}</view>
         <button class="confirm-btn" @tap="toShopList">分配店铺 </button>
       </view>
-      <view wx:if="{{select_suppliers_name&&select_suppliers_name!='易站发货'}}" class="queren">
+      <view wx:if="{{goodsList.length>0&&select_suppliers_name&&select_suppliers_name!='易站发货'}}" class="queren">
         <button class="confirm-btn"  data-order_id="{{orderDetail.order_id}}" form-type="reset">确认</button>
       </view>
     </form>
@@ -69,7 +70,7 @@
       <view class="">
         <view class="section">
           <view class="name">预计送达时间</view>
-          <picker disabled="{{orderDetail.order_status!=2 || orderDetail.shipping_status!=0}}" class="input" mode="date" name="time" value="{{time}}" start="2015-09-01" end="2020-09-01" bindchange="bindDateChange">
+          <picker disabled="{{orderDetail.order_status!=2 || shipping_status!=0}}" class="input" mode="date" name="time" value="{{time}}" start="2015-09-01" end="2020-09-01" bindchange="bindDateChange">
             <view class="picker">
               {{time}}
             </view>
@@ -77,10 +78,10 @@
         </view>
         <view class="section">
           <view class="name">配送员信息</view>
-          <input class="input" name="info" placeholder="配送员姓名电话" disabled="{{orderDetail.order_status!=2 || orderDetail.shipping_status!=0}}" />
+          <input class="input" name="info" placeholder="配送员姓名电话" disabled="{{orderDetail.order_status!=2 || shipping_status!=0}}" />
         </view>
       </view>
-      <view class="btn-row" wx:if="{{orderDetail.order_status==2 && orderDetail.shipping_status==0}}">
+      <view class="btn-row" wx:if="{{orderDetail.order_status==2 && shipping_status==0}}">
         <radio-group class="radio-group" name="fahuo" @change="radioChange">
           是否需要发货单：
           <label class="radio">
@@ -127,6 +128,13 @@
     components = {
       orderDetail
     };
+    // watch= {
+    //   select_suppliers_name(a,b){
+    //     console.log(a,b)
+    //     if(a=="易站发货") this.shipping_status
+
+    //   }
+    // }
     data = {
       orderDetail: {},
       goodsMap: [],
@@ -134,7 +142,8 @@
       is_fahuodan: false,
       time: 0,
       select_suppliers_id: "",
-      select_suppliers_name: ""
+      select_suppliers_name: "",
+      shipping_status:0,
     };
     computed = {};
     methods = {
@@ -144,7 +153,12 @@
           rec_id: this.goodsList.toString(),
           order_id: this.id
         }
+        wx.showLoading({
+          title: '加载中...', //提示的内容,
+          mask: true, //显示透明蒙层，防止触摸穿透,
+        });
         var res = await newapi.fenpei(data);
+        wx.hideLoading();
         if (res.data.code == 0) {
           util.showToast("分配成功");
           this.getOrderDetail(this.id);
@@ -176,17 +190,25 @@
         var order_id = this.id
         let mRes = await util.showModalBig('你确定要发货吗');
         if (mRes.confirm) {
-          var res = await newapi.fenpei(data);
-          if (fahuo == 1) var fahuodan = await this.upfahuoimg();
-          else fahuodan = '';
-          this.orderDetail.fahuodan = fahuodan;
           var data = {
             yujisongda,
             peisongyuan,
             fahuodan,
             rec_id: this.goodsList.toString(),
-            order_id
+            order_id,
+            suppliers_id: this.select_suppliers_id,
           }
+             wx.showLoading({
+          title: '加载中...', //提示的内容,
+          mask: true, //显示透明蒙层，防止触摸穿透,
+        });
+          var res = await newapi.fenpei(data);
+          wx.hideLoading();
+          data.single_id=res.data.data.single_id
+          if (fahuo == 1) var fahuodan = await this.upfahuoimg();
+          else fahuodan = '';
+          this.orderDetail.fahuodan = fahuodan;
+          
           this.fahuo(data);
         }
       }
@@ -234,15 +256,23 @@
       // let data = {
       //   order_id: orderId
       // };
+      wx.showLoading({
+        title: '加载中...', //提示的内容,
+        mask: true, //显示透明蒙层，防止触摸穿透,
+        success: res => {}
+      });
       let res = await newapi.yizhan_fahuo(data);
       if (res.data.code == 0) {
-        this.orderDetail.shipping_status = 1;
+        this.shipping_status = 1;
+        this.getOrderDetail(this.id);
+          this.goodsList = []
         var order_status = this.$parent.$pages['/ConsolePages/pages/orderList']
           .thisindex;
         this.$parent.$pages['/ConsolePages/pages/orderList'].getOrderList(
           order_status,
           1
         );
+        wx.hideLoading();
         this.$apply();
       }
     }
@@ -258,6 +288,8 @@
       this.orderDetail.add_time = util.formatTime(this.orderDetail.add_time);
       this.orderDetail.pay_time = util.formatTime(this.orderDetail.pay_time);
       this.orderDetail.confirm_time = util.formatTime(this.orderDetail.confirm_time);
+      this.orderDetail.shipping_time = util.formatTime(this.orderDetail.shipping_time);
+
       this.$apply();
     }
     async onLoad(option) {

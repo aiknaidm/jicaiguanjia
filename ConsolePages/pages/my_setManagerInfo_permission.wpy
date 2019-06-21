@@ -15,6 +15,11 @@
     border-bottom: 1px solid #eee;
     margin-bottom: 20rpx;
   }
+  .checkbox{
+    width: 48%;
+    display: inline-block;
+    margin-bottom: 10rpx;
+  }
 </style>
 <template>
   <view class='container'>

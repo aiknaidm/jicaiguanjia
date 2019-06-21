@@ -46,6 +46,10 @@
     width: 200rpx;
     text-align: left;
   }
+  .section .checklabel {
+    display: block;
+    text-align: left;
+  }
   .yzm {
     display: flex;
     flex-direction: row;
@@ -93,7 +97,7 @@
     background: transparent;
     text-align: left;
     margin: 0;
-    padding: 0
+    padding: 0;
   }
   .label-right textarea {
     width: 100%;
@@ -161,7 +165,7 @@
     border-radius: 0px;
     margin: 0;
     /* height: 84rpx;
-         line-height: 84rpx; */
+             line-height: 84rpx; */
     background-color: #e50012;
   }
   .smsCode button[disabled] {
@@ -184,7 +188,7 @@
     display: flex;
     justify-content: space-between;
     /* border-bottom: 1px solid #ddd;
-        padding-right: 10%; */
+            padding-right: 10%; */
   }
   .smsCode input {
     width: 336rpx;
@@ -275,83 +279,99 @@
   }
 </style>
 <template>
-  <view class='container'>
+  <view class="container">
     <form bindsubmit="formSubmit" report-submit>
       <view class="input-area">
         <view class="input-log section">
           <view class="label">
-            <text>*</text>手机号码</view>
-          <input value='{{userDetail.mobile}}' name="phone" maxlength='11' type="number" placeholder="手机号" bindinput="listenerPhoneInput" disabled='{{isuserDetail}}' />
+            <text>*</text>手机号码
+          </view>
+          <input value="{{userDetail.mobile}}" name="phone" maxlength="11" type="number" placeholder="手机号" bindinput="listenerPhoneInput" disabled="{{isuserDetail}}">
         </view>
-        <view class="section smsCode " wx:if="{{!isuserDetail}}">
+        <view class="section smsCode" wx:if="{{!isuserDetail}}">
           <view class="label">
-            <text>*</text>验证码</view>
-          <input name="smscode" maxlength='4' type="number" placeholder="验证码" bindinput="listenerSmsCodeInput" disabled='{{isuserDetail}}' />
+            <text>*</text>验证码
+          </view>
+          <input name="smscode" maxlength="4" type="number" placeholder="验证码" bindinput="listenerSmsCodeInput" disabled="{{isuserDetail}}">
           <button bindtap="getSmsCode({{userDetail.mobile}})" disabled="{{smsCodeDisabled}}" style="background-color:{{getSmsCodeBtnColor}}" class="getSmsCodeBtn">{{getSmsCodeBtnTxt}}</button>
         </view>
       </view>
       <view class="section">
         <view class="label">
-          <text>*</text>真实姓名</view>
+          <text>*</text>真实姓名
+        </view>
         <view class="label-right">
-          <input name="realname" class="input" type="text" value="{{userDetail.username}}" />
+          <input name="realname" class="input" type="text" value="{{userDetail.username}}">
         </view>
       </view>
       <view class="section">
         <view class="label">
-          <text>*</text>店铺名</view>
+          <text>*</text>店铺名
+        </view>
         <view class="label-right">
-          <input name="storename" class="input" type="text" value="{{userDetail.suppliers_desc}}" disabled='{{isuserDetail}}' />
+          <input name="storename" class="input" type="text" value="{{userDetail.suppliers_desc}}" disabled="{{isuserDetail}}">
         </view>
       </view>
       <!-- <view class="section">
-        <view class="label">
-          <text>*</text>所属地区</view>
-        <picker mode="region" disabled="{{isuserDetail}}" @change="bindRegionChange">
-          <view class="picker">
-            {{region[0]}}-{{region[1]}}-{{region[2]}}
-          </view>
-        </picker>
-      </view> -->
+            <view class="label">
+              <text>*</text>所属地区</view>
+            <picker mode="region" disabled="{{isuserDetail}}" @change="bindRegionChange">
+              <view class="picker">
+                {{region[0]}}-{{region[1]}}-{{region[2]}}
+              </view>
+            </picker>
+        </view>-->
       <view class="section">
-        <view class="label">
-          选择地址</view>
-        <button wx:if="{{isOpenSetting}}" open-type="openSetting" bindopensetting="getAddressTap" class="label-right">{{region[0]}}-{{region[1]}}-{{region[2]}} </button>
+        <view class="label">选择地址</view>
+        <button wx:if="{{isOpenSetting}}" open-type="openSetting" bindopensetting="getAddressTap" class="label-right">{{region[0]}}-{{region[1]}}-{{region[2]}}</button>
         <view wx:else @tap="getAddressTap" class="label-right">
-          <input value="{{region[0]}}-{{region[1]}}-{{region[2]}}" name="address" disabled/>
+          <input value="{{region[0]}}-{{region[1]}}-{{region[2]}}" name="address" disabled>
         </view>
       </view>
-       <view class="section">
-        <view class="label">
-          详细地址</view>
-        <view  @tap="getAddressTap" class="label-right">
-         {{address}}
+      <view class="section">
+        <view class="label">详细地址</view>
+        <view @tap="getAddressTap" class="label-right">{{address}}</view>
+      </view>
+      <view class="section section2" wx:if="{{userDetail.is_yizhan==0}}">
+        <view class="label">非会员查看商品</view>
+        <view class="body-view">
+          <switch color="#e50012" @change="changeIsChakan" checked="{{userDetail.is_chakan}}" name="is_chakan" />
         </view>
       </view>
       <view class="section section2" wx:if="{{userDetail.is_yizhan==0}}">
-        <view class="label">
-        非会员查看商品</view>
+        <view class="label">代下单</view>
         <view class="body-view">
-          <switch color="#e50012" @change="changeIsChakan"  checked="{{userDetail.is_chakan}}" name="is_chakan" />
-        </view>
-      </view>
-      <view class="section section2" wx:if="{{userDetail.is_yizhan==0}}">
-        <view class="label">
-          代下单</view>
-        <view class="body-view">
-          <switch color="#e50012"  @change="changeIsFriend"  disabled="{{!userDetail.is_chakan}}" checked="{{userDetail.is_friend}}" name="is_friend" />
+          <switch color="#e50012" @change="changeIsFriend" disabled="{{!userDetail.is_chakan}}" checked="{{userDetail.is_friend}}" name="is_friend" />
         </view>
       </view>
       <view class="section section2">
-        <view class="label">
-          会员等级</view>
+        <view class="label">支付方式</view>
+        <view class="body-view" style="width:300rpx;" @tap="setPayStyle">
+          <checkbox-group bindchange="checkboxChange" name="payStyle">
+            <label class="checklabel" wx:for="{{items}}">
+                <checkbox value="{{item.val}}" checked="{{item.checked}}"/>
+                {{item.name}}
+              </label>
+           
+          </checkbox-group>
+           <label class="checklabel">
+                <checkbox
+                  value="3"
+                  checked="{{is_kthy==1}}"
+                  disabled="{{is_kthy==1}}"
+                  wx:if="{{is_kthy==1}}"
+                />会员卡支付
+              </label>
+        </view>
+      </view>
+      <view class="section section2">
+        <view class="label">会员等级</view>
         <view class="body-view" style="width:300rpx;">
           <slider min="1" max="5" selected-color="#e50012" name="vip_level" value="{{userDetail.vip_level}}" show-value />
         </view>
       </view>
-     
-      <button class='rz-submit' formType="submit" wx:if="{{!isuserDetail}}" disabled='{{issubmit}}'>提交修改</button>
-      <button class='rz-submit' disabled='true' wx:if="{{userDetail.user_status=='0'||isshenhe}}">审核中...</button>
+      <button class="rz-submit" formType="submit" wx:if="{{!isuserDetail}}" disabled="{{issubmit}}">提交修改</button>
+      <button class="rz-submit" disabled="true" wx:if="{{userDetail.user_status=='0'||isshenhe}}">审核中...</button>
     </form>
   </view>
 </template>
@@ -361,7 +381,7 @@
   import newapi from '../../API/newapi';
   import api from '../../API/api';
   import util from '../../utils/index';
-    // 引入SDK核心类
+  // 引入SDK核心类
   var QQMapWX = require('../../utils/qqmap-wx-jssdk.min.js');
   // 实例化API核心类
   var qqmapsdk = new QQMapWX({
@@ -398,6 +418,13 @@
       //上传图片
       index: 0,
       imgSrc: [],
+      items: [{
+        name: "微信支付",
+        val: '1'
+      }, {
+        name: "线下支付",
+        val: '2'
+      }],
       img: [{
           imgSrc: '',
           content: '身份证正面'
@@ -427,34 +454,34 @@
       issubmit: false,
       isOpenSetting: false,
       address: '',
-      is_friend_disabled:false
+      is_friend_disabled: false,
+      is_kthy: 0
     };
     computed = {};
     components = {};
     methods = {
+      setPayStyle() {},
       // 非会员查看商品选择
-      changeIsChakan(e){
-         console.log("changeIsChakan",e,this.is_friend_disabled)
-         this.userDetail.is_chakan=e.detail.value
-        if(!e.detail.value){
-           this.is_friend_disabled=true
-            this.userDetail.is_friend=0;
-           
-            this.$apply();
-        }else{
-          this.is_friend_disabled=false
+      changeIsChakan(e) {
+        console.log('changeIsChakan', e, this.is_friend_disabled);
+        this.userDetail.is_chakan = e.detail.value;
+        if (!e.detail.value) {
+          this.is_friend_disabled = true;
+          this.userDetail.is_friend = 0;
+          this.$apply();
+        } else {
+          this.is_friend_disabled = false;
         }
       },
-      changeIsFriend(e){
-        console.log("changeIsFriend",e,this.is_friend_disabled)
-        if(!this.is_friend_disabled){
-          this.userDetail.is_friend= !this.userDetail.is_friend;
-         this.$apply();
+      changeIsFriend(e) {
+        console.log('changeIsFriend', e, this.is_friend_disabled);
+        if (!this.is_friend_disabled) {
+          this.userDetail.is_friend = !this.userDetail.is_friend;
+          this.$apply();
         }
-        
       },
       toAbout() {
-        console.log("this.userDetail.jianjie",this.userDetail.jianjie)
+        console.log('this.userDetail.jianjie', this.userDetail.jianjie);
         wx.navigateTo({
           url: 'my_setShopInfo_about?about=' + this.userDetail.jianjie
         });
@@ -473,17 +500,20 @@
       //   })
       // },
       getAddressTap() {
-        this.$parent.checkUserLocation().then(res => {
-          if (res) {
-            this.isOpenSetting = false;
-            this.getAddress();
-          } else {
-            this.isOpenSetting = true;
-          }
-          this.$apply();
-        }).catch(res => {
-          console.log('res', res)
-        })
+        this.$parent
+          .checkUserLocation()
+          .then(res => {
+            if (res) {
+              this.isOpenSetting = false;
+              this.getAddress();
+            } else {
+              this.isOpenSetting = true;
+            }
+            this.$apply();
+          })
+          .catch(res => {
+            console.log('res', res);
+          });
       },
       delImg(i) {
         this.imgSrc.splice(i, 1);
@@ -500,7 +530,7 @@
             var that = this;
             // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
             var tempFilePaths = res.tempFilePaths;
-            this.shopImg = {}
+            this.shopImg = {};
             this.shopImg.img_url = tempFilePaths[0];
             this.shopImg.upload = true;
             this.$apply();
@@ -572,13 +602,13 @@
       bindRegionChange(e) {
         this.region = e.detail.value;
       },
-
       //表单数据提交
       async formSubmit(e) {
-        console.log("e", e)
+        console.log('e', e);
         var param = e.detail.value;
         var that = this;
-        var flag = that.checkPhone(param.phone) && that.checkSmsCode(param.smscode);
+        var flag =
+          that.checkPhone(param.phone) && that.checkSmsCode(param.smscode);
         if (flag) {
           if (this.inputCode == this.code) {
             var suppliers_id = this.$parent.globalData.suppliers_id;
@@ -590,10 +620,11 @@
             // var password = param.password == '123456' ? '' : param.password;
             // var share_code = param.shareCode;
             // var is_picture = param.is_picture ? 0 : 1;
-            var is_friend =  param.is_friend ? 1 : 0;
-            var is_chakan =  param.is_chakan ? 1 : 0;
-
+            var is_friend = param.is_friend ? 1 : 0;
+            var is_chakan = param.is_chakan ? 1 : 0;
             var vip_level = param.vip_level;
+            var zhifu = param.payStyle.toString();
+         
             // var gonggao = param.gonggao;
             // var jianjie = this.userDetail.jianjie;
             if (realname == '') {
@@ -616,8 +647,9 @@
             var shi = this.region[1];
             var qu = this.region[2];
             // 上传图片
-            if (!this.shopImg.upload) var shopImg = this.shopImg.img_url == 0 ? '' : this.shopImg.img_url
-            else var shopImg = await this.upImg(this.shopImg.img_url)
+            if (!this.shopImg.upload)
+              var shopImg = this.shopImg.img_url == 0 ? '' : this.shopImg.img_url;
+            else var shopImg = await this.upImg(this.shopImg.img_url);
             this.goods_imgs = [];
             if (this.imgSrc != '') {
               if (this.imgSrc.length > 5) {
@@ -638,7 +670,7 @@
             }
             var goods_img = this.goods_imgs[0];
             var img_url = this.goods_imgs.toString();
-            console.log("img_url", img_url);
+            console.log('img_url', img_url);
             util.showLoading();
             let data = {
               suppliers_id,
@@ -659,6 +691,8 @@
               address: this.address,
               latitude: this.latitude,
               longitude: this.longitude,
+
+              zhifu
               // gonggao,
               // jianjie
             };
@@ -666,7 +700,7 @@
             wx.hideLoading();
             if (res.data.code == 0) {
               wx.navigateBack({});
-              this.$parent.globalData.vip_level = vip_level
+              this.$parent.globalData.vip_level = vip_level;
               //this.isuserDetail = true;
             } else {
               this.issubmit = false;
@@ -681,50 +715,59 @@
     };
     events = {};
     getAddress() {
-      wepy.chooseLocation().then(res => {
-        console.log(res);
-        this.address = res.name
-        this.longitude = res.longitude
-        this.latitude = res.latitude
-       var that = this;
+      wepy
+        .chooseLocation()
+        .then(res => {
+          console.log(res);
+          this.address = res.name;
+          this.longitude = res.longitude;
+          this.latitude = res.latitude;
+          var that = this;
           qqmapsdk.reverseGeocoder({
             location: {
               latitude: this.latitude,
-              longitude: this.longitude,
+              longitude: this.longitude
             },
             success: function(res) {
-              var newAddress = res.result.address_component
-              that.region = [newAddress.province, newAddress.city, newAddress.district]
+              var newAddress = res.result.address_component;
+              that.region = [
+                newAddress.province,
+                newAddress.city,
+                newAddress.district
+              ];
               console.log(that.region);
               that.$apply();
             },
-            fail: function(res) {
-            },
+            fail: function(res) {}
           });
-        this.$apply();
-      }).catch(res => {
-      });
+          this.$apply();
+        })
+        .catch(res => {});
     }
     async onLoad(option) {
       await this.$parent.loginInfo();
       let suppliers_id = this.$parent.globalData.suppliers_id ?
         this.$parent.globalData.suppliers_id :
         (await this.$parent.getYizhanInfo()).suppliers_id;
+      var yizhanInfo = this.$parent.globalData.yizhanInfo
       this.userDetail = await this.getSuppliersDetails(suppliers_id);
+      this.is_kthy = yizhanInfo.is_kthy;
       this.region[0] = this.userDetail.sheng;
       this.region[1] = this.userDetail.shi;
       this.region[2] = this.userDetail.qu;
-      this.address = this.userDetail.address
-      this.longitude = this.userDetail.longitude
-      this.latitude = this.userDetail.latitude
+      this.address = this.userDetail.address;
+      this.longitude = this.userDetail.longitude;
+      this.latitude = this.userDetail.latitude;
       this.suppliers_id = suppliers_id;
-      this.isSetAbout = this.userDetail.jianjie == '' ? false : true
-      this.userDetail.jianjie =util.html_decode(this.userDetail.jianjie);
-      wepy.getLocation().then(res => {
-      }).catch(res => {
-        this.isOpenSetting = true
-        this.$apply();
-      });
+      this.isSetAbout = this.userDetail.jianjie == '' ? false : true;
+      this.userDetail.jianjie = util.html_decode(this.userDetail.jianjie);
+      wepy
+        .getLocation()
+        .then(res => {})
+        .catch(res => {
+          this.isOpenSetting = true;
+          this.$apply();
+        });
       this.$apply();
     }
     async getSuppliersDetails(suppliers_id) {
@@ -733,15 +776,29 @@
       };
       let res = await newapi.supplier_detail(data);
       this.imgSrc = [];
-      res.data.data.banner.forEach((item) => {
+      res.data.data.banner.forEach(item => {
         this.imgSrc.push({
           img_url: item.content
-        })
-      })
-      this.shopImg = {}
+        });
+      });
+      this.shopImg = {};
       this.shopImg.img_url = res.data.data.img;
       this.shopImg.upload = false;
-      console.log("this.shopImg", this.shopImg);
+      this.payStyle = res.data.data.zhifu.split(",")
+      console.log(this.payStyle);
+      for (var j = 0; j < this.items.length; j++) {
+        for (var i = 0; i < this.payStyle.length; i++) {
+          if (this.items[j].val == this.payStyle[i]) {
+            this.items[i].checked=true;
+            break;
+          }
+        }
+      }
+      this.items
+      // this.items[0].checked=res.data.data.is_weixin==1?true:false;
+      // this.items[1].checked=res.data.data.is_xianxia==1?true:false;
+      if (this.items) {
+      }
       this.$apply();
       return res.data.data;
     }
@@ -764,9 +821,7 @@
       } catch (error) {
         console.log(error);
         util.hideLoading();
-        let mRes = await util.showModalBig(
-          '图片' + img_url + '上传失败'
-        );
+        let mRes = await util.showModalBig('图片' + img_url + '上传失败');
         if (mRes.confirm) {
           await this.upImg(img_url);
         }

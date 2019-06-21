@@ -1,12 +1,15 @@
 
 <style lang="less">
-
+.shop-list{
+    padding: 20rpx 40rpx;
+    border-bottom: 1px solid #f0f0f0;
+}
 </style>
 <template>
     <view class="container">
-        <view wx:for="{{shopList}}" wx:key="{{index}}">
+        <view wx:for="{{shopList}}" wx:key="{{index}}" class="shop-list">
             <view wx:if="{{index==0}}" @tap="getFahuoShop({{item.suppliers_id}},'易站发货')">易站发货</view>
-            <view wx:else @tap="getFahuoShop({{item.suppliers_id}},{{item.suppliers_name}})">{{item.suppliers_name}}</view>
+            <view wx:else @tap="getFahuoShop({{item.suppliers_id}},{{item.suppliers_name}})">店铺名：{{item.suppliers_name}}</view>
         </view>
     </view>
 </template>
