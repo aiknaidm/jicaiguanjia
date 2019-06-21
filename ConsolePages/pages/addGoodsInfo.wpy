@@ -329,7 +329,7 @@
           </view>
         </view>
       </navigator>
-      <view class="listBox" wx:if="{{is_chakan==1||is_yizhan==1}}">
+      <view class="listBox">
         <view class="listOption">起订量</view>
         <input class="shownnum" value='{{goodsdetail.qidingliang}}' placeholder="请输入起订量" type='number' placeholder-class="holder" name="qidingliang" />
       </view>
@@ -339,7 +339,7 @@
          <view class="listOption" wx:else>{{index+1}}级会员价</view>
           <input class="shownnum" type='digit' value="{{goodsdetail['shop_price'+(index==0?'':index+1)]}}" name="shop_price{{index==0?'':index+1}}" />
         </view>
-        <view class="listBox" wx:if="{{is_chakan==1||is_yizhan==1}}">
+        <view class="listBox">
           <view class="listOption">零售价</view>
           <input class="shownnum" type='digit' value='{{goodsdetail.floor_price}}' name="floor_price" />
         </view>
@@ -364,7 +364,7 @@
               <view class="listOption" wx:else>{{index+1}}级会员价</view>
               <input class="shownnum" @change="getAttrhyPrice({{index}},{{index2}})" type='digit' value="{{item['attr_price'+(index2==0?'':index2+1)]}}" name="attr_value{{index2==0?'':index2+1}}" />
             </view>
-            <view class="listBox" wx:if="{{is_chakan==1||is_yizhan==1}}">
+            <view class="listBox">
               <view class="listOption">零售价</view>
               <input class="shownnum" @input='getAttrPrice({{index}})' type='digit' value='{{item.floor_price}}' />
             </view>
@@ -448,11 +448,9 @@
       hdky: false,
       is_hot: false,
       is_best: false,
-      is_yizhan: 0,
       vip_level: [],
       lev: 1,
       is_join:0,
-      is_chakan:1
     };
     computed = {};
     methods = {
@@ -544,7 +542,7 @@
       getAttrhyPrice(index, index2, e) {
         index2 = index2 == 0 ? '' : index2+1
         this.goods_attr[index]["attr_price" + index2] = e.detail.value;
-        this.goods_attr[index].floor_price =this.is_yizhan==1||this.is_chakan==1? this.goods_attr[index].floor_price:e.detail.value;
+        // this.goods_attr[index].floor_price =this.is_yizhan==1||this.is_chakan==1? this.goods_attr[index].floor_price:e.detail.value;
       },
       // 获取规格的零售价格
       getAttrPrice(index, e) {
@@ -703,13 +701,11 @@
       var goods_number = e.detail.value.goods_number ?
         e.detail.value.goods_number :
         '';
-      var floor_price = this.is_yizhan==1||this.is_chakan==1 ?
-        (e.detail.value.floor_price||''):(e.detail.value.shop_price||''); //零售价
-     
+      var floor_price = e.detail.value.floor_price ? e.detail.value.floor_price : '';
       var shop_price = e.detail.value.shop_price ? e.detail.value.shop_price : '';
       var weight = e.detail.value.weight ? e.detail.value.weight : 0;
       var ch_cat_id = this.ch_cat_id ? this.ch_cat_id : ''; //二级分类
-      var qidingliang = this.is_yizhan==1||this.is_chakan==1 ?e.detail.value.qidingliang:1;
+      var qidingliang = e.detail.value.qidingliang;
       var goods_desc = this.goods_desc ? this.goods_desc : ''; //描述
       var goods_brief = e.detail.value.goods_brief;
       this.hdky = e.detail.value.hdky;
@@ -945,10 +941,8 @@
         this.suppliers_id = this.$parent.globalData.suppliers_id ?
           this.$parent.globalData.suppliers_id :
           (await this.$parent.getYizhanInfo()).suppliers_id;
-        this.is_yizhan = this.$parent.globalData.yizhanInfo.is_yizhan
         this.vip_level = this.$parent.globalData.yizhanInfo.vip_level
        this.is_join = this.$parent.globalData.yizhanInfo.is_join
-       this.is_chakan = this.$parent.globalData.yizhanInfo.is_chakan
        this.lev = this.vip_level.length;
 
         this.hdky = this.$parent.globalData.yizhanInfo.hdky == 1 ? true : false;
