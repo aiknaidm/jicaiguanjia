@@ -211,6 +211,9 @@
       color: #fff;
     }
   }
+  .no-order{
+        background: #fff;
+    }
 </style>
 <template>
   <view class='container'>
@@ -226,7 +229,7 @@
 
       </image>
       <view >申请加入当地易站</view>
-      <button @tap="apply" style="background-color:#5777e1">等待审核中~</button>
+      <button style="background-color:#5777e1">等待审核中~</button>
     </view>
    <view class="img" wx:if="{{shenhe==1}}">
       <image src="https://lmbge.com/upload/1234/join_2.png">
@@ -271,16 +274,19 @@
         });
       },
       async apply() {
+       
         var res = await newapi.suppliers_join({
           suppliers_id: this.suppliers_id,
           yizhan_suppliers_id: this.yizhan_suppliers_id
         });
         if (res.data.code == 0) {
           util.showModal("申请成功，请耐心等待易站经理审核通过")
-          this.shenhe = 2
+           this.shenhe = 2
           this.$apply()
         } else {
-          util.showModal(res.data.message)
+          this.shenhe = 0
+          // util.showModal(res.data.message)
+          this.$apply()
         }
 
       }

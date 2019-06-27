@@ -162,7 +162,7 @@ const fetch = async function(url, method, data) {
                             title: res.data.message, //提示的内容,
                             icon: 'none', //图标,
                         });
-                        reject(res)
+                        resolve(res)
                     } else
                         resolve(res);
                 } else {

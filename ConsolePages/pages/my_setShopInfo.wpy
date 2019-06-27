@@ -643,6 +643,10 @@
               util.showModal('请填写地区');
               return;
             }
+            if (this.zhifu.length == 0) {
+              util.showModal('请选择支付方式');
+              return;
+            }
             var sheng = this.region[0];
             var shi = this.region[1];
             var qu = this.region[2];

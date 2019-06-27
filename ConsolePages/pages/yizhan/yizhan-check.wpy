@@ -257,6 +257,7 @@
       statusTap(index) {
         this.page = 1
         this.shenheList = [];
+       
         this.currentStatu = index;
         this.getShenheList(this.suppliers_id, this.currentStatu);
       },
@@ -352,7 +353,7 @@
       wx.hideLoading();
       if (res.data.code == 0) {
         this.page = 1;
-        this.getShenheList(this.suppliers_id, 0);
+        this.getShenheList(this.suppliers_id, this.currentStatu);
       }
     }
     async onLoad(option) {

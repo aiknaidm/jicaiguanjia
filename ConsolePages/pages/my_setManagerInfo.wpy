@@ -71,7 +71,7 @@
           </view>
           <view class="btn">
             <view class="edit" catchtap='editManager({{item.id}})'>编辑权限</view>
-            <view class="del" data-user_id='{{item.id}}' catchtap='delManager'>删除</view>
+            <view class="del" data-user_id='{{item.user_id}}' catchtap='delManager'>删除</view>
           </view>
         </view>
       </block>
@@ -115,7 +115,7 @@
         let res = await newapi.delManager(data);
         if (res.data.code == 0) {
           util.showToast('删除成功');
-          this.managerList();
+          this.managerList(suppliers_id);
         } else {
           util.showToast(res.data.message);
         }

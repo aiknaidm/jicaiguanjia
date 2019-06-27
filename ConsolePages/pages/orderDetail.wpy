@@ -19,7 +19,7 @@
   <view class="container">
     <orderDetail :orderDetail.sync="orderDetail" :goodsMap.sync="goodsMap" @cancelOrderTap.user="cancelOrderTap" @confirmBtnTap.user="confirmBtnTap"></orderDetail>
     <form @submit="fahuoSubmit">
-      <view class="" >
+      <view class="" wx:if="{{orderDetail.order_status>=2}}">
         <view class="section">
           <view class="name">预计送达时间</view>
           <picker disabled="{{orderDetail.order_status!=2 || orderDetail.shipping_status!=0}}" class="input" mode="date" name="time" value="{{time}}" start="2015-09-01" end="2020-09-01" bindchange="bindDateChange">

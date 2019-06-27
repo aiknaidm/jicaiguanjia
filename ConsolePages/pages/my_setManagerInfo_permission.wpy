@@ -119,7 +119,8 @@
           newapi.addManager({
             permission_list: permission_list.toString(),
             juese,
-            id
+            user_id:id,
+            suppliers_id
           }).then(res => {
             if (res.data.code == 0){
               util.showToast("提交成功")
@@ -172,7 +173,7 @@
         suppliers_id
       })
       this.permission = res.data.data;
-      if (this.type = "edit") {
+      if (this.type == "edit") {
         this.getThisPermission(this.id)
         this.items[this.items.length - 1].checked = true;
       }

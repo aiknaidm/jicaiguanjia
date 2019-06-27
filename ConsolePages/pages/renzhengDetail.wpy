@@ -244,7 +244,7 @@
           <input name="storename" class="input" type="text" value="{{userDetail.suppliers_desc}}" disabled='{{isuserDetail}}' />
         </view>
       </view>
-      <view class="section">
+      <!-- <view class="section">
         <view class="label label2">
           <text>*</text>pc管理账号</view>
         <view class="label-right">
@@ -257,8 +257,8 @@
         <view class="label-right">
           <input name="password" class="input" type="text" value="{{password}}" disabled/>
         </view>
-      </view>
-      <view class="section">
+      </view> -->
+      <!-- <view class="section">
         <view class="label">
           <text>*</text>所属地区</view>
         <picker mode="region" disabled="{{isuserDetail}}" @change="bindRegionChange">
@@ -266,12 +266,20 @@
             {{region[0]}}-{{region[1]}}-{{region[2]}}
           </view>
         </picker>
+      </view> -->
+      <view class="section">
+        <view class="label">选择地址</view>
+        <button wx:if="{{isOpenSetting}}" open-type="openSetting" bindopensetting="getAddressTap" class="label-right">{{region[0]}}-{{region[1]}}-{{region[2]}}</button>
+        <view wx:else @tap="getAddressTap" class="label-right">
+          <input value="{{region[0]}}-{{region[1]}}-{{region[2]}}" name="address" disabled>
+        </view>
       </view>
       <view class="section">
         <view class="label">
           详细地址</view>
-        <button wx:if="{{isOpenSetting}}" open-type="openSetting" bindopensetting="getAddressTap" class="label-right">{{address}} </button>
-        <view wx:else @tap="getAddressTap" class="label-right">
+        
+        <button wx:if="{{isOpenSetting&&address!=''}}" open-type="openSetting" bindopensetting="getAddressTap" class="label-right">{{address}} </button>
+        <view wx:else @tap="{{!isuserDetail?'getAddressTap':''}}" class="label-right">
           <input value="{{address}}" name="address" disabled/>
         </view>
       </view>
@@ -473,6 +481,7 @@
     }
     //表单数据提交
     async formSubmit(e) {
+     
       var param = e.detail.value;
       var that = this;
       var flag = that.checkPhone(param.phone) && that.checkSmsCode(param.smscode);
@@ -482,8 +491,8 @@
           var smscode = e.detail.value.smscode;
           var realname = e.detail.value.realname;
           var storename = e.detail.value.storename;
-          var pcusername = e.detail.value.pcusername;
-          var password = '123456';
+          // var pcusername = e.detail.value.pcusername;
+          // var password = '123456';
           var share_code = e.detail.value.shareCode;
           if (realname == '') {
             util.showModal('请填写姓名');
@@ -493,10 +502,10 @@
             util.showModal('请填写店铺名');
             return;
           }
-          if (pcusername == '') {
-            util.showModal('请填写后台用户名');
-            return;
-          }
+          // if (pcusername == '') {
+          //   util.showModal('请填写后台用户名');
+          //   return;
+          // }
           if (this.region.length == 0) {
             util.showModal('请填写地区');
             return;
@@ -512,17 +521,26 @@
           var sheng = this.region[0];
           var shi = this.region[1];
           var qu = this.region[2];
+           wx.showLoading({
+        title: '卖力加载中...', //提示的内容,
+        mask: true, //显示透明蒙层，防止触摸穿透,
+       
+      });
           if (!this.shopImg.upload) var img = this.shopImg.img_url==0?"":this.shopImg.img_url;
           else var img = await this.upImg(this.shopImg.img_url);
-          util.showLoading();
+ wx.showLoading({
+        title: '卖力加载中...', //提示的内容,
+        mask: true, //显示透明蒙层，防止触摸穿透,
+       
+      });
           let data = {
             mobile: phone,
             realname: realname,
             sheng,
             shi,
             qu,
-            suppliers_name: pcusername,
-            password,
+            // suppliers_name: "jc",
+            // password,
             suppliers_desc: storename,
             share_code: share_code,
             img,
@@ -563,6 +581,24 @@
         this.address = res.name
         this.longitude = res.longitude
         this.latitude = res.latitude
+        var that = this;
+          qqmapsdk.reverseGeocoder({
+            location: {
+              latitude: this.latitude,
+              longitude: this.longitude
+            },
+            success: function(res) {
+              var newAddress = res.result.address_component;
+              that.region = [
+                newAddress.province,
+                newAddress.city,
+                newAddress.district
+              ];
+              console.log(that.region);
+              that.$apply();
+            },
+            fail: function(res) {}
+          });
         this.$apply();
       });
     }
@@ -580,6 +616,8 @@
         this.shopImg={}
         this.shopImg.img_url = yizhanInfo.img
         this.shopImg.upload = false
+        this.address=yizhanInfo.address;
+        console.log("this.address",yizhanInfo.address)
       } else {
         wepy.getLocation().then(res => {
           console.info("getLocation success: ", res);
@@ -620,13 +658,13 @@
             Accept: 'application/json'
           }
         });
-        wx.hideLoading();
+     
         var datas = JSON.parse(res.data.trim());
         if (datas.code == 0) {
           return datas.data.pic_url;
         }
       } catch (error) {
-        console.log(error);
+           wx.hideLoading();
         let mRes = await util.showModalBig(
           '图片' + img_url + '上传失败'
         );

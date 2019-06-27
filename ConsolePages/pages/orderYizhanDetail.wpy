@@ -26,6 +26,12 @@
   .queren {
     text-align: right
   }
+  .goods-weight{
+    background: #f0f0f0;
+    padding-right: 30rpx;
+    padding-bottom: 30rpx;
+    text-align: right;
+  }
 </style>
 <template>
   <view class="container">
@@ -47,6 +53,7 @@
                     <view class="goods-label">{{item.goods_attr}}</view>
                     <view class="goods-label" wx:if="{{item.suppliers_id!=0}}">由{{item.suppliers_name}}发货</view>
                     <view class="goods-label" wx:if="{{item.shipping_status!=0}}">已发货</view>
+                    
                   </view>
                   <view class="arow02">
                     <view class="goods-price">¥ {{item.goods_price}}</view>
@@ -54,6 +61,7 @@
                   </view>
                 </view>
               </view>
+               <view class="goods-weight" wx:if="{{item.weight!=0}}">商品重量：{{item.weight}}</view>
             </block>
           </checkbox-group>
         </view>
@@ -208,6 +216,7 @@
           if (fahuo == 1) var fahuodan = await this.upfahuoimg();
           else fahuodan = '';
           this.orderDetail.fahuodan = fahuodan;
+          this.data.fahuodan = fahuodan;
           
           this.fahuo(data);
         }
