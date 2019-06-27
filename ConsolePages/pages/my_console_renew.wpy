@@ -74,7 +74,7 @@
   <view class='container'>
     <view class='renew-top'>
       <view class='img'>
-        <image src='{{yizhanInfo.avatar}}' />
+        <image src='{{yizhanInfo.img}}' />
       </view>
       <view class='txt'>
         <view wx:if="{{yizhanInfo.end_time}}">服务费到期时间：{{yizhanInfo.end_time}}</view>
