@@ -151,6 +151,7 @@
           手机号码：{{info.mobile_phone}}
           <text class="iconfont icon-shouji"></text>
         </view>
+        <view >地区：{{info.province}}-{{info.city}}-{{info.district}}</view>
         <view >会员等级：{{info.vip_level}}级</view>
          <view catchtap="tocallphone" data-phone="{{info.mobile_phone}}">
         所属业务员：{{info.salesman}}
