@@ -643,7 +643,7 @@
               util.showModal('请填写地区');
               return;
             }
-            if (this.zhifu.length == 0) {
+            if (param.payStyle.length == 0) {
               util.showModal('请选择支付方式');
               return;
             }
