@@ -234,7 +234,8 @@ export default class extends wepy.app {
       'wx04135fb8cc44a57c',
       'wxf48cdd6a7dae8c21',
       'wx7e302245debd521a',
-      'wx87bfbcfe887faf4d'
+      'wx87bfbcfe887faf4d',
+      'wxedc203036acbc9e4'
     ]
   };
   globalData = {
