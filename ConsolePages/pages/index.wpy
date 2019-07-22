@@ -275,8 +275,17 @@
               index="index2"
               item="item2">
                 <myList :tabItem="item2"></myList>
+               
           </repeat>
-        
+        <repeat
+              for="{{item3}}"
+              key="index"
+              index="index"
+              item="item">
+                <myList :tabItem="item"></myList>
+               
+          </repeat>
+       
             <!-- <block  > -->
             <!-- 易站所有者 -->
             <!-- <myList :tabItem="item" wx:if="{{yizhanInfo.is_boss==1&&item.isyizhan==1&&item.is_boss==1}}"></myList> -->
@@ -302,6 +311,10 @@
         </view>
       </scroll-view>
     </view>
+    <!-- <view class="share-button">
+      <button>推广本店</button>
+      <button>推广海报</button>
+    </view> -->
   </view>
 </template>
 
@@ -457,6 +470,22 @@
           isadmin: 1
         }
       ],
+      item3:[{
+          icon: '/images/console/fabushangpin.png',
+          num: 0,
+          display_name: '首页轮播图',
+          url: '/banner/setBanner',
+          bgcolor: '#10b3b1'
+        },
+        {
+          icon: '/images/console/fabushangpin.png',
+          num: 0,
+          display_name: '首页品牌广告',
+          url: '/brand/setBrand',
+          bgcolor: '#10b3b1'
+        },
+        ],
+ 
       height: 0,
       guoqi: 0
     };

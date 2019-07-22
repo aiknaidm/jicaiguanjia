@@ -133,6 +133,11 @@ const newapi = {
     fenpei: (data) => fetch(`${host_chk}/fenpei`, 'GET', data), //权限
     // 易站和加盟店铺发货接口  yizhan_fahuo   参数 rec_id 多个ID用 1,2,3字符串方式    order_id 订单ID  peisongyuan   yujisongda     fahuodan
     yizhan_fahuo: (data) => fetch(`${host_chk}/yizhan_fahuo`, 'GET', data), //权限
+    add_lunbotu: (data) => fetch(`${host_chk}/add_lunbotu`, 'POST', data), //权限
+    lunbotu: (data) => fetch(`${host_chk}/lunbotu`, 'GET', data), //权限
+    del_lunbotu: (data) => fetch(`${host_chk}/del_lunbotu`, 'GET', data), //权限
+    add_slides: (data) => fetch(`${host_chk}/add_slides`, 'POST', data), //权限
+    slides: (data) => fetch(`${host_chk}/slides`, 'POST', data), //权限
 
 }
 const fetch = async function(url, method, data) {

@@ -1,0 +1,240 @@
+<style lang="less">
+  .container {
+    margin-bottom: 150rpx;
+  }
+  .kind {
+    border-bottom: 8rpx solid #f0f0f0;
+  }
+  .kind-1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2rpx solid #f0f0f0;
+    padding: 20rpx 40rpx;
+  }
+  .kind-1 text {
+    color: #999999;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+    -webkit-transition: transform 0.2s;
+    -moz-transition: transform 0.2s;
+    -ms-transition: transform 0.2s;
+    -o-transition: transform 0.2s;
+    transition: transform 0.2s;
+  }
+  .kind-1 view {
+    display: inline-block;
+    line-height: 50rpx;
+    image {
+      width: 50rpx;
+      height: 50rpx;
+      margin: 0 20rpx;
+    }
+  }
+  .add {
+    position: fixed;
+    bottom: 10px;
+    width: 80%;
+    left: 10%;
+    margin: auto;
+    background-color: #e50012;
+    text-align: center;
+    line-height: 80rpx;
+    border-radius: 50px;
+    color: #fff;
+  }
+  .delete {
+    text-align: center;
+    background-color: #e50012;
+    color: #eee;
+    line-height: 80rpx;
+  }
+  .add-box {
+    background: #fff;
+    border-top: 3px solid #e50012;
+    width: 85%;
+    position: relative;
+    z-index: 15;
+  }
+  .add-box .title {
+    padding: 20rpx 40rpx;
+    font-size: 35rpx;
+  }
+  .add-box .content {
+    padding: 20rpx 40rpx;
+  }
+  .add-box .content input {
+    font-size: 30rpx;
+    width: 100%;
+    min-width: 450rpx;
+  }
+  .add-box .btn {
+    display: flex;
+    border: 1px solid #f0f0f0;
+  }
+  .add-box .btn view {
+    flex: 1;
+    text-align: center;
+    font-size: 30rpx;
+    line-height: 80rpx;
+    border-right: 1px solid #f0f0f0;
+  }
+  .opacity {
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+  } //   上传图片
+  .cameraBox {
+    height: 204rpx;
+    background-color: #f2f2f2;
+    line-height: 204rpx;
+    display: flex; // flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    overflow-x: scroll;
+  }
+  .camera {
+    width: 102rpx;
+    height: 106rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-right: 30rpx;
+  }
+  .camera image {
+    width: 102rpx;
+    height: 106rpx;
+  }
+  .close {
+    width: 35rpx;
+    height: 35rpx;
+    background-color: #e50012;
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+    line-height: 30rpx;
+    position: absolute;
+    right: -15rpx;
+    top: -15rpx;
+  }
+</style>
+<template>
+  <view class='container'>
+    <view>
+      <search @buttonTap.user="searchTap"></search>
+       <radio-group @change="radioChange" name="radiobox">
+            <view class='kind' wx:for="{{brandList}}" wx:key="{{index}}" bindlongpress='showActionSheet({{index}},{{item.brand_id}},{{item.brand_name}},{{item.brand_logo}})'>
+                <view class="kind-1">
+                <view> 
+                    <radio value="{{item.brand_id}}" checked="{{item.checked}}"  data-catid="{{item.brand_id}}"  />
+                    <image src='{{item.brand_logo}}' /> {{item.brand_name}} </view>
+                <!-- <view class='del' bindtap='showActionSheet({{index}},{{item.brand_id}},{{item.brand_name}},{{item.brand_logo}})'> 编辑</view> -->
+                </view>
+            </view>
+       </radio-group>
+      <view class="add" bindtap='addBrandTap'>
+        确定
+      </view>
+    </view>
+    
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import newapi from '../API/newapi';
+  import api from '../API/api';
+  import util from '../utils/index';
+  import search from '../components/search';
+  export default class brand_Manage extends wepy.page {
+    config = {
+      navigationBarTitleText: '选择品牌'
+    };
+    data = {
+      brandList: [],
+      isShowUptBrand: '',
+      thisBrandName: '',
+      thisBrandId: '',
+      thisBrandImg: '',
+      imgSrc: [],
+      keyword: '',
+      suppliers_id: 0,
+      page: 1
+    };
+    computed = {};
+    components = {
+      search,
+    };
+    methods = {
+     radioChange:function(val){
+         console.log("val",val)
+         this.brand_id=val.detail.value
+      
+     },
+      addBrandTap: function() {
+                var parent=this.$parent.$pages["/banner/setBanner"]
+                var index=parent.index
+                parent.banner[index].ad_link=this.brand_id;
+                this.brandList.forEach((item,index)=>{
+                    if(item.brand_id==this.brand_id){
+                        this.brand_name=item.brand_name
+                    }
+                })
+                if(this.brand_name) parent.banner[index].name=this.brand_name;
+                wx.navigateBack({
+                  delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+                });
+      },
+      
+      searchTap(val) {
+        this.isMoreData = true;
+        this.keyword = val;
+        this.page = 1;
+        this.getBrandList();
+      },
+    };
+    events = {};
+    async getBrandList() {
+      util.showLoading();
+      let data = {
+        suppliers_id: this.suppliers_id,
+        keyword: this.keyword,
+        page: this.page
+      }
+      var res = await newapi.all_brands(data);
+      var datas = res.data.data
+      if (this.page == 1) {
+        this.brandList = datas;
+      } else {
+        this.brandList.push(...datas)
+      }
+      if (datas.length < 20) {
+        this.isMoreData = false;
+      }
+      util.hideLoading();
+      this.$apply();
+    }
+    onReachBottom() {
+      if (this.isMoreData) {
+        this.page = this.page + 1;
+        this.getBrandList();
+      }
+    }
+    async onLoad(option) {
+    var suppliers_id = this.$parent.globalData.suppliers_id?this.$parent.globalData.suppliers_id:""
+      var yizhanInfo =  this.$parent.globalData.yizhanInfo? this.$parent.globalData.yizhanInfo:await this.$parent.getYizhanInfo(suppliers_id);
+      this.suppliers_id = suppliers_id==""?yizhanInfo.suppliers_id:suppliers_id;
+      this.isMoreData = true;
+      this.page = 1;
+      this.getBrandList();
+    }
+    onUnload() {
+
+    }
+  }
+</script>

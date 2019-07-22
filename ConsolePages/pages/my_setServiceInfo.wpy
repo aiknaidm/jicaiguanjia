@@ -138,6 +138,7 @@ export default class my_setServiceInfo extends wepy.page {
         let mRes = await util.showModalBig('你确定要删除吗');
         if (mRes.confirm) {
           var res = await this.delService(id);
+          console.log(res)
           if (res.data.code == 0) {
             util.showToast('删除成功');
             this.values = [];
@@ -184,6 +185,7 @@ export default class my_setServiceInfo extends wepy.page {
   async delService(id) {
     let data = { id };
     let res = await newapi.delService(data);
+    return res
   }
 
   async serviceList() {

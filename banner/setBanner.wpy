@@ -1,0 +1,306 @@
+<style lang="less">
+    .container {
+        padding: 40rpx 0;
+        background: transparent;
+        padding-bottom: 150rpx;
+    }
+    .banner-add {
+        background: #e50012;
+        color: #fff;
+        padding: 20rpx 40rpx;
+        display: inline-block;
+        border-radius: 10rpx;
+        margin-left: 40rpx;
+    }
+    .banner-list {
+        width: 90%;
+        margin: auto;
+        border-radius: 20rpx;
+        margin-top: 20rpx;
+        background: #fff;
+    }
+    .section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 30rpx 40rpx;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .banner-img {
+        width: 102rpx;
+        height: 106rpx;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        margin-right: 30rpx;
+    }
+    .banner-img image {
+        width: 102rpx;
+        height: 106rpx;
+    }
+    .btn {
+        position: fixed;
+        bottom: 40rpx;
+        width: 200rpx;
+        background: #e50012;
+        color: #fff;
+        left: 50%;
+        margin-left: -100rpx;
+        border-radius: 50px;
+        line-height: 80rpx;
+        text-align: center;
+    }
+    .banner-select{
+        display: flex;
+        align-items: center
+    }
+     .banner-select .name{
+         width: 150rpx;
+overflow: hidden;
+text-overflow:ellipsis;
+white-space: nowrap;
+text-align: right
+     }
+    .banner-select .icon-arrow-right{
+         color: #aaa;
+         position: relative;
+         top: 4rpx;
+     }
+</style>
+<template>
+    <view class='container'>
+        <view class="banner-add" @tap="addBanner">添加轮播图</view>
+        <block>
+            <view class="banner-list" wx:for="{{banner}}" wx:key="{{index}}" @longpress="delBanner({{index}},{{item}})">
+                <view class="section">
+                    <view class="banner-name">
+                        显示图片：
+                    </view>
+                    <view class="banner-img" @tap='addShopImg({{index}})'>
+                        <image src="{{item.img.img_url?item.img.img_url:'/images/add_img.png'}}" />
+                    </view>
+                </view>
+                <view class="section">
+                    <view class="banner-name">
+                        跳转：
+                    </view>
+                    <radio-group class="banner-select">
+                        <label wx:for="{{taozhuan}}" wx:for-index="index2" wx:for-item="item2" wx:key="{{index2}}" @tap="radioChange({{index}},{{item2.type}},{{item2.value}})">
+                                        <radio value="{{item2.value}}" checked="{{item2.value==item.val}}" />{{item2.name}}
+                                    </label>
+                    </radio-group>
+                </view>
+                <view class="section" @tap="toList({{index}})">
+                    <view class="banner-name">
+                        选择跳转的：
+                    </view>
+                    <view class="banner-select">
+                        <view class="name">{{item.name}}</view><text class="iconfont icon-arrow-right"></text>
+                    </view>
+                </view>
+            </view>
+        </block>
+        <view class="btn" @tap="save">保存</view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy';
+    import newapi from '../API/newapi';
+    import api from '../API/api';
+    import util from '../utils/index';
+    //   import search from '../../components/search';
+    export default class setBanner extends wepy.page {
+        config = {
+            navigationBarTitleText: '设置首页轮播图'
+        };
+        data = {
+            shenhe: 0,
+            banner: [{
+                img: {},
+                type: "",
+                ad_link: "",
+                val: ""
+            }],
+            index: 0,
+            taozhuan: [{
+                    type: "fenlei",
+                    value: 0,
+                    name: "分类"
+                },
+                {
+                    type: "shangpin",
+                    value: 1,
+                    name: "商品"
+                },
+                {
+                    type: "pinpai",
+                    value: 2,
+                    name: "品牌"
+                },
+            ]
+        };
+        computed = {};
+        components = {};
+        methods = {
+            async delBanner(index, item) {
+                var res = await util.showModalBig("确定要删除吗？")
+                if (res.confirm) {
+                        this.banner.splice(index, 1);
+                        this.$apply();
+                    // if (item.ad_id)
+                    //     newapi.del_lunbotu({
+                    //         ad_id: item.ad_id
+                    //     }).then(res => {
+                    //         this.banner.splice(index, 1)
+                    //         this.$apply();
+                    //     })
+                    // else {
+                    //     this.banner.splice(index, 1);
+                    //     this.$apply();
+                    // }
+                }
+            },
+            async save() {
+                for (var index = 0; index < this.banner.length; index++) {
+                    var item = this.banner[index]
+                    // console.log("item.img.length",item.img,item.img.img_url.length)
+                    if (!item.img.img_url || item.img.img_url.length == 0) {
+                        util.showToast("轮播图不能为空");
+                        return
+                    }
+                    if (item.img.upload) {
+                        item.img.img_url = await this.upImg(item.img.img_url)
+                        item.img.upload = false
+                    }
+                    item.img_url = item.img.img_url
+                }
+                newapi.add_lunbotu({
+                    img_urls: this.banner,
+                    suppliers_id: this.suppliers_id
+                }).then(res => {
+                    this.getBanner();
+                })
+            },
+            radioChange(i, type, val) {
+                this.banner[i].val = val
+                this.banner[i].url = ""
+                this.banner[i].type = type
+                this.banner[i].name = ""
+            },
+            // 上传店铺logo
+            async addShopImg(index) {
+                console.log("index", index)
+                wepy
+                    .chooseImage({
+                        count: 1, // 默认9
+                        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                        sourceType: ['album', 'camera'] // 可以指定来源是相册还是相机，默认二者都有
+                    })
+                    .then(res => {
+                        var that = this;
+                        // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+                        var tempFilePaths = res.tempFilePaths;
+                        this.shopImg = {}
+                        this.shopImg.img_url = tempFilePaths[0];
+                        this.shopImg.upload = true;
+                        this.banner[index].img = this.shopImg
+                        this.$apply();
+                        console.log("index", index)
+                        console.log("this.shopImg", this.shopImg)
+                    })
+                    .catch(res => {});
+            },
+            addBanner() {
+                if (this.banner.length == 6) {
+                    util.showToast("轮播图最大为六个，请删除后添加")
+                    return
+                }
+                this.banner.push({
+                    img: {},
+                    type: "",
+                    ad_link: ""
+                })
+            },
+            toList(value) {
+                this.index = value;
+                var val = this.banner[value].val
+                switch (parseInt(val)) {
+                    case 0:
+                        wx.navigateTo({
+                            url: 'fenleiList'
+                        });
+                        break;
+                    case 1:
+                        wx.navigateTo({
+                            url: 'goodsList'
+                        });
+                        break;
+                    case 2:
+                        wx.navigateTo({
+                            url: 'brandList'
+                        });
+                        break;
+                    default:
+                        util.showToast("请选择跳转的类型")
+                        break;
+                }
+            }
+        };
+        async onLoad() {
+            var suppliers_id = this.$parent.globalData.suppliers_id ? this.$parent.globalData.suppliers_id : ""
+            var yizhanInfo = this.$parent.globalData.yizhanInfo ? this.$parent.globalData.yizhanInfo : await this.$parent.getYizhanInfo(suppliers_id);
+            this.suppliers_id = suppliers_id == "" ? yizhanInfo.suppliers_id : suppliers_id;
+            this.getBanner();
+        }
+        async upImg(img_url) {
+            util.showLoading('上传中');
+            try {
+                var res = await wepy.uploadFile({
+                    url: api.upload,
+                    filePath: img_url,
+                    name: 'file',
+                    header: {
+                        Accept: 'application/json'
+                    }
+                });
+                wx.hideLoading();
+                var datas = JSON.parse(res.data.trim());
+                if (datas.code == 0) {
+                    return datas.data.pic_url;
+                }
+            } catch (error) {
+                console.log(error);
+                util.hideLoading();
+                let mRes = await util.showModalBig(
+                    '图片' + img_url + '上传失败'
+                );
+                if (mRes.confirm) {
+                    await this.upImg(img_url);
+                }
+            }
+        }
+        getBanner() {
+            newapi.lunbotu({
+                suppliers_id: this.suppliers_id
+            }).then(res => {
+                this.banner = res.data.data;
+                this.banner.forEach((item, index) => {
+                    this.taozhuan.forEach((item2, index2) => {
+                        if (item.type == item2.type) {
+                            this.banner[index].val = item2.value
+                        }
+                    })
+                    this.banner[index].img = {
+                        upload: false,
+                        img_url: item.img_url
+                    }
+                })
+                this.$apply();
+            })
+        }
+        events = {};
+    }
+</script>

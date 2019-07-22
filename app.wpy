@@ -180,6 +180,15 @@ export default class extends wepy.app {
         ]
       },
       {
+        root: 'banner',
+        pages: ['setBanner', 'fenleiList', 'brandList', 'goodsList']
+      },
+      {
+        root: 'brand',
+        pages: ['setBrand', 'brandList', 'goodsList']
+      },
+
+      {
         root: 'Admin',
         pages: [
           'pages/index',
@@ -190,7 +199,7 @@ export default class extends wepy.app {
           'pages/memberInfo',
           'pages/permission',
           'pages/brandManage',
-          'pages/jmfManage',
+          'pages/jmfManage'
         ]
       }
     ],
@@ -224,11 +233,11 @@ export default class extends wepy.app {
         }
       ]
     },
-"permission": {
-    "scope.userLocation": {
-      "desc": "你的位置信息将用于小程序位置接口的效果展示"
-    }
-  },
+    permission: {
+      'scope.userLocation': {
+        desc: '你的位置信息将用于小程序位置接口的效果展示'
+      }
+    },
     navigateToMiniProgramAppIdList: [
       'wx024ea505bcfdda8e',
       'wx04135fb8cc44a57c',
@@ -311,7 +320,7 @@ export default class extends wepy.app {
       }
     } catch (res) {}
   }
-   async checkUserLocation() {
+  async checkUserLocation() {
     // 判断是否是第一次授权，非第一次授权且授权失败则进行提醒
     try {
       let auth = await wepy.getSetting();
