@@ -529,12 +529,32 @@
     
     // 订单数量
     async orderNum(data) {
-this.permission[0].permission[0].num=data.daifukuan
-this.permission[0].permission[1].num=data.daifahuo
-this.permission[0].permission[2].num=data.yifahuo
-this.permission[0].permission[3].num=data.chenggong
-this.permission[0].permission[4].num=data.guanbi
-if(data.daifenpei) this.permission[0].permission[5].num=data.daifenpei
+      this.permission[0].permission.forEach((item, index) => {
+          switch (item.name) {
+          case 'daifukuan':
+            item.num = data.daifukuan;
+            break;
+          case 'daifahuo':
+            item.num = data.daifahuo;
+            break;
+          case 'yifahuo':
+            item.num = data.yifahuo;
+            break;
+          case 'chenggong':
+            item.num = data.chenggong;
+            break;
+          case 'guanbi':
+            item.num = data.guanbi;
+            break;
+        }
+      });
+
+// this.permission[0].permission[0].num=data.daifukuan
+// this.permission[0].permission[1].num=data.daifahuo
+// this.permission[0].permission[2].num=data.yifahuo
+// this.permission[0].permission[3].num=data.chenggong
+// this.permission[0].permission[4].num=data.guanbi
+// if(data.daifenpei) this.permission[0].permission[5].num=data.daifenpei
       // this.tabList[0].num = data.daifukuan;
       // this.tabList[1].num = this.yizhanInfo.daifahuo;
       // this.tabList[2].num = this.yizhanInfo.yifahuo;
