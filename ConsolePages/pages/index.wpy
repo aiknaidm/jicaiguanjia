@@ -484,6 +484,13 @@
           url: '/brand/setBrand',
           bgcolor: '#10b3b1'
         },
+        {
+          icon: '/images/console/fabushangpin.png',
+          num: 0,
+          display_name: '设计师管理',
+          url: '/designer/my_setDesignerInfo',
+          bgcolor: '#10b3b1'
+        },
         ],
  
       height: 0,
