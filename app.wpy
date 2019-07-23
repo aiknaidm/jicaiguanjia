@@ -123,6 +123,7 @@ export default class extends wepy.app {
       {
         root: 'ConsolePages',
         pages: [
+          'pages/aaaa',
           'pages/index',
           'pages/orderList',
           'pages/orderDetail',
@@ -186,6 +187,10 @@ export default class extends wepy.app {
       {
         root: 'brand',
         pages: ['setBrand', 'brandList', 'goodsList','setBrandList']
+      },
+      {
+        root: 'designer',
+        pages: ['my_setDesignerInfo']
       },
 
       {

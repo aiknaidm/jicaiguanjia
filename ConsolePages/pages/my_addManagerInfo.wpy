@@ -271,6 +271,8 @@ export default class my_addManagerInfo extends wepy.page {
           res = await newapi.addMember(data);
         } else if (this.type == 'salesman') {
           res = await newapi.addSalesman(data);
+        } else if (this.type == 'designer') {
+          res = await newapi.addDesigner(data);
         } else {
         wx.navigateTo({ url: '/ConsolePages/pages/my_setManagerInfo_permission?id='+user_id  });
           return
@@ -282,6 +284,14 @@ export default class my_addManagerInfo extends wepy.page {
             this.$parent.$pages[
               '/ConsolePages/pages/my_console_check'
             ].getShenheList(this.sales_id, suppliers_id);
+            wx.navigateBack({
+              delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+            });
+          } else if (this.type == 'designer') {
+            await util.showModal('添加设计师成功');
+            this.$parent.$pages[
+              '/aaaa'
+            ].getList(suppliers_id);
             wx.navigateBack({
               delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
             });

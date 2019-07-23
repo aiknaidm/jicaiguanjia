@@ -1,0 +1,199 @@
+<style lang="less">
+  .renew-top {
+    display: flex;
+    padding: 40rpx 40rpx 10rpx 40rpx;
+  }
+  .renew-top .img {
+    width: 120rpx;
+    height: 120rpx;
+  }
+  .renew-top .img image {
+    width: 100%;
+    height: 100%;
+  }
+  .renew-top .txt {
+    margin: 0 20rpx;
+    flex: 1;
+    font-size: 26rpx;
+  }
+  .renew-top .txt view:last-child {
+    font-size: 25rpx;
+    color: #aaa;
+    margin-top: 20rpx;
+  }
+  .renew-top .xufei {
+    width: 130rpx;
+    text-align: center;
+    color: #888;
+    margin-top: 20rpx;
+  }
+  .renew-list {
+    display: flex;
+    justify-content: space-between;
+    padding: 30rpx 40rpx;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .renew-list:last-child {
+    border-bottom: 10rpx solid #f0f0f0;
+  }
+  .money {
+    color: #e50012;
+  }
+  .buy-btn {
+    padding: 5rpx 30rpx;
+    color: #fff;
+    background-color: #e50012;
+    border-radius: 50px;
+    margin-left: 20rpx;
+    font-size: 28rpx;
+  }
+  .money .old-price {
+    text-decoration: line-through;
+    font-size: 25rpx;
+    color: #aaa;
+  }
+  .text {
+    display: flex;
+    padding: 30rpx 40rpx;
+    border-top: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+    align-items: center;
+  }
+  .renew-list input {
+    background: #f0f0f0;
+    color: #000;
+    padding-left: 8px;
+  }
+  .text .placeholder {
+    color: #fff;
+  }
+  .text view:first-child {
+    width: 200rpx;
+  }
+</style>
+<template>
+  <view class='container'>
+    <view class='renew-list'>
+      <view><input type='' value='{{shareCode}}' bindinput='changeInput' maxlength='6' placeholder='请输入电话号码' placeholder-class="placeholder" /></view>
+      <view class='money'>
+        <text class='buy-btn' data-index='{{index}}' bindtap='toBuy'>生成二维码</text>
+      </view>
+    </view>
+    <view class='renew-list' wx:for="{{renewList}}" wx:key="index">
+      <view>{{item.goods_name}}</view>
+      <view class='money'>
+        <block wx:if="{{isHasShareCode}}">
+          <text class='old-price'>￥{{item.goods_price}}</text>
+          <text>￥{{item.youhui_price}}</text>
+        </block>
+        <block wx:else>￥{{item.goods_price}}</block>
+        <text class='buy-btn' data-index='{{index}}' bindtap='toBuy'>购买</text>
+      </view>
+    </view>
+    <view class='renew-top'>
+      <view class='img'>
+        <image src='{{yizhanInfo.img}}' />
+      </view>
+      <view class='txt'>
+        <view>13344455666</view>
+        <view wx:if="{{yizhanInfo.end_time}}">到期时间：{{yizhanInfo.end_time}}</view>
+      </view>
+      <view><text class='buy-btn' bindtap='toBuy'>续费</text>
+        <view class='xufei' bindtap="toRenewRecord">续费记录</view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import newapi from '../../API/newapi';
+  import util from '../../utils/index';
+  export default class aaaa extends wepy.page {
+    config = {
+      navigationBarTitleText: 'aaaa'
+    };
+    data = {
+      yizhanInfo: [],
+      isHasShareCode: false,
+      shareCode: '',
+      renewList: []
+    };
+    computed = {};
+    components = {};
+    methods = {
+      changeInput(e) {
+        var shareCode = e.detail.value;
+        if (shareCode.length == 6) {
+          let data = {
+            share_code: shareCode
+          };
+          newapi.verifyCode(data).then(res => {
+            if (res.data.code == 0) {
+              this.isHasShareCode = res.data.data;
+              this.shareCode = shareCode;
+              this.$apply();
+            } else {
+              this.isHasShareCode = 0;
+            }
+          })
+        }
+      },
+      async toBuy(e) {
+        let mRes = await util.showActionSheet([
+          "续费一个月：1元", "续费一年：10元"
+        ]);
+        switch (mRes.tapIndex) {
+          case 0:
+            break;
+          case 1:
+            break;
+        }
+        // var index = e.currentTarget.dataset.index;
+        // var data = this.renewList[index];
+        // data.isHasShareCode = this.isHasShareCode;
+        // util.fwfwxpay(this.suppliers_id, data, this.shareCode);
+      },
+      toRenewRecord: function() {
+        wx.navigateTo({
+          url: 'my_console_renewRecord'
+        });
+      }
+    };
+    events = {};
+    // onUnload() {
+    //   var new_time = new Date().getTime();
+    //   if (this.yizhanInfo.end_time_bk && new_time > this.yizhanInfo.end_time_bk) {
+    //     this.$parent.globalData.suppliers_id = 0;
+    //     wx.switchTab({
+    //         url: '/pages/my'
+    //       });
+    //   }
+    // }
+    async onLoad(options) {
+      await this.$parent.loginInfo();
+      this.suppliers_id = this.$parent.globalData.suppliers_id;
+      var yizhanInfo = this.$parent.globalData.yizhanInfo;
+      if (!yizhanInfo) {
+        yizhanInfo = await this.$parent.getYizhanInfo(
+          this.suppliers_id
+        );
+      }
+      var newDate = new Date();
+      if (yizhanInfo.end_time) {
+        yizhanInfo.end_time_bk = yizhanInfo.end_time;
+        yizhanInfo.end_time = util.formatDate(yizhanInfo.end_time);
+      }
+      this.yizhanInfo = yizhanInfo;
+      this.shareCode = yizhanInfo.pid == '0' ? '' : yizhanInfo.pid;
+      this.isHasShareCode =
+        yizhanInfo.pid == '' || yizhanInfo.pid == '0' ? false : true;
+      this.getrenewList();
+    }
+    async getrenewList() {
+      let res = await newapi.renewList();
+      this.renewList = res.data.data;
+      this.$apply();
+    }
+  }
+</script>
