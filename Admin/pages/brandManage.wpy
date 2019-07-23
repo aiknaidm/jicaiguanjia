@@ -218,7 +218,8 @@
         var res = await newapi.add_brands({
           brand_id: this.thisBrandId,
           brand_name: brand_name,
-          brand_logo: brand_img
+          brand_logo: brand_img,
+          suppliers_id:this.suppliers_id
         });
         // this.page = 1;
         // this.getBrandList();

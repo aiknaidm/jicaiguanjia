@@ -185,7 +185,7 @@ export default class extends wepy.app {
       },
       {
         root: 'brand',
-        pages: ['setBrand', 'brandList', 'goodsList']
+        pages: ['setBrand', 'brandList', 'goodsList','setBrandList']
       },
 
       {

@@ -1,0 +1,130 @@
+<style lang="less">
+    .container {
+        margin: 34rpx;
+        background: transparent;
+    }
+    .brand-box {
+        padding: 30rpx;
+        background: #fff;
+        text-align: right;
+        margin-bottom: 20rpx;
+        border-radius: 20rpx;
+        /* width: 90%;
+        margin: auto */
+    }
+    .brand-img {
+        width: 100%;
+        height: 180rpx;
+        margin-bottom: 20rpx;
+        overflow: hidden;
+        image{
+            width: 100%;
+        }
+    }
+    .brand-del {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center
+    }
+    .brand-del image {
+        width: 50rpx;
+        height: 50rpx;
+        margin-right: 10rpx;
+    }
+    .brand-add {
+        .brand-icon {
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 40rpx;
+            font-size: 36rpx;
+        }
+        text {
+            display: inline-block;
+            width: 100rpx;
+            height: 100rpx;
+            background: #e50012;
+            color: #fff;
+            border-radius: 50%;
+            overflow: hidden;
+            font-size:60rpx;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .brand-text{
+            text-align: center;
+              font-size: 36rpx;line-height: 80rpx;
+        }
+    }
+</style>
+<template>
+    <view class="container">
+        <view class="brand-box" wx:for="{{module}}" wx:key="{{index}}" @tap="toAddBrand({{item.module}})">
+            <view class="brand-img">
+                <image src="{{item.brand_img}}" mode="widthFix"></image>
+            </view>
+            <view class="brand-del" @tap.stop="del({{item}},{{index}})">
+                <image src="/images/del.png"></image>删除
+            </view>
+        </view>
+        <view class="brand-add" @tap="toAddBrand(-1)">
+            <view class="brand-icon"><text class="iconfont icon-tianjia-copy"></text></view>
+            <view class="brand-text" >添加广告位</view>
+        </view>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy';
+    import newapi from '../API/newapi';
+    import util from '../utils/index';
+    //   import search from '../../components/search';
+    export default class setBrandList extends wepy.page {
+        config = {
+            navigationBarTitleText: '广告位管理'
+        };
+        data={
+            module:[]
+        }
+        methods = {
+          async  del(item,index){
+                var res = await util.showModalBig("确定要删除商品吗？")
+       if (res.confirm) {
+           console.log("你确定要删除吗")
+                newapi.slides_module_del({
+                    suppliers_id:this.suppliers_id,
+                    module:item.module
+                }).then(res=>{
+                    if(res.data.code){
+                        this.module.splice(index,1)
+                        this.$apply();
+                    }else{
+                        util.showToast(res.data.message)
+                    }
+                })
+       }
+            },
+            toAddBrand(module){
+                if(this.module>=2){
+                    util.showToast("添加品牌不能超过两个")
+                }
+                wx.navigateTo({ url: 'setBrand?module='+module });
+            }
+        }
+      async  onLoad(){
+                var suppliers_id = this.$parent.globalData.suppliers_id ? this.$parent.globalData.suppliers_id : ""
+            var yizhanInfo = this.$parent.globalData.yizhanInfo ? this.$parent.globalData.yizhanInfo : await this.$parent.getYizhanInfo(suppliers_id);
+            this.suppliers_id = suppliers_id == "" ? yizhanInfo.suppliers_id : suppliers_id;
+            this.slides_module_list();
+        }
+        slides_module_list(){
+            util.showLoading();
+            newapi.slides_module_list({suppliers_id:this.suppliers_id}).then(res=>{
+                this.module=res.data.data
+                this.$apply();
+            })
+            util.hideLoading();
+        }
+    }
+</script>

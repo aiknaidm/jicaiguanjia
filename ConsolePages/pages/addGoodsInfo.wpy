@@ -705,7 +705,8 @@ export default class newslist extends wepy.page {
   //确定删除品牌
   async sureDelBrand(id, index) {
     let data = {
-      brand_id: id
+      brand_id: id,
+      suppliers_id:this.suppliers_id
     };
     let res = await newapi.del_brands(data);
     if (res.data.code == 0) {

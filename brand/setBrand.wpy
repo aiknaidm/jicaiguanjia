@@ -3,14 +3,19 @@
         padding: 40rpx 0;
         background: transparent;
         padding-bottom: 150rpx;
+
     }
     .banner-add {
         background: #e50012;
         color: #fff;
         padding: 20rpx 40rpx;
-        display: inline-block;
+        width: 200rpx;
+        display: block;
         border-radius: 10rpx;
-        margin-left: 40rpx;
+         margin: auto;
+         text-align: center
+        // margin-left: 40rpx;
+       
     }
     .banner-list {
         width: 90%;
@@ -18,7 +23,7 @@
         border-radius: 20rpx;
         margin-top: 20rpx;
         margin-bottom: 40rpx;
-        background: #fff;
+        // background: #fff;
     }
     .section {
         display: flex;
@@ -89,6 +94,9 @@
     }
     .brand-box {
         overflow: hidden;
+        border-radius: 20rpx;
+        margin-bottom: 20rpx;
+        background: #fff
     }
     .banner-del {
         background: #e50012;
@@ -128,25 +136,25 @@
 </style>
 <template>
     <view class='container'>
-        <view class="banner-add" @tap="addBrands">添加</view>
+         <view class="banner-add" @tap="addBrand(0)">添加品牌</view>
+         <!-- <view class="banner-add" @tap="addBrand(0)">删除品牌</view> -->
         <block>
             <view class="banner-list" wx:for="{{brands}}" wx:key="{{index}}">
+                
                 <view class="close">
-                    <text class="iconfont icon-shangla" @tap="moveBrand('shang',{{index}})" wx:if="{{index!=0}}"></text>
-                    <text class="iconfont icon-xiala" @tap="moveBrand('xia',{{index}})" wx:if="{{index!=brands.length-1}}"></text>
-                    <text class="iconfont icon-close" @tap="delBrands({{index}},{{item}})"></text>
+                    <!-- <text class="iconfont icon-shangla" @tap="moveBrand('shang',{{index}})" wx:if="{{index!=0}}"></text>
+                    <text class="iconfont icon-xiala" @tap="moveBrand('xia',{{index}})" wx:if="{{index!=brands.length-1}}"></text> -->
+                    <!-- <text class="iconfont icon-close" @tap="delBrands({{index}},{{item}})"></text> -->
                 </view>
                 <!-- <view class="section">
                                         <view class="banner-name">
                                             设置轮播图（最多为六张）：
                                         </view>
                                     </view> -->
-                <view class="section">
-                    <view class="banner-add" @tap="addBrand({{index}})">添加品牌</view>
-                </view>
+             
                 <view class="brand-box" wx:for="{{item.brand}}" wx:for-index="index_brand" wx:for-item="item_brand" @longtap="delbrand({{index}},{{index_brand}})">
                     <view class="section2">
-                        <view class="banner-img" wx:if="{{item_brand.brand_img!=''}}">
+                        <view class="banner-img" wx:if="{{item_brand.brand_img!=''}}"  @tap="addBannerImg({{index}},{{index_brand}})">
                             <image src="{{item_brand.brand_img}}" />
                         </view>
                         <view class="banner-img" @tap="addBannerImg({{index}},{{index_brand}})" wx:else>
@@ -174,6 +182,7 @@
                 </view>
             </view>
         </block>
+          
         <view class="btn" @tap="save">保存</view>
     </view>
 </template>
@@ -284,10 +293,10 @@
             },
             async save() {
                 console.log("brand", this.brands)
-                if (this.brands.length > 6) {
-                    util.showToast("***1不能大于六个")
-                    return
-                }
+                // if (this.brands.length > 6) {
+                //     util.showToast("***1不能大于六个")
+                //     return
+                // }
                 for (var i = 0; i < this.brands.length; i++) {
                     if (this.brands[i].brand.length > 6) {
                         util.showToast("***2不能大于六个")
@@ -312,17 +321,25 @@
                     for (var j = 0; j < this.brands[i].brand.length; j++) {
                         if (this.brands[i].brand[j].upload) {
                             this.brands[i].brand[j].brand_img = await this.upImg(this.brands[i].brand[j].brand_img)
+                            this.brands[i].brand[j].upload = false
                         }
                     }
                 }
-                newapi.add_slides({
-                    brands: this.brands,
+                newapi.slides_module_add({
+                    module:this.module,
+                    // brand: this.brands[0].brand,
+                    brands:this.brands[0].brand,
                     suppliers_id: this.suppliers_id
                 }).then(res => {
                     if (res.data.code != 0)
                         util.showToast(res.data.message)
                     else
                         util.showToast("保存成功")
+                     var parent=this.$parent.$pages["/brand/setBrandList"]
+                    parent.slides_module_list();
+                    wx.navigateBack({
+                      delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+                    });
                 })
             },
             radioChange(i, type, val) {
@@ -428,11 +445,13 @@
                 }
             }
         };
-        async onLoad() {
+        async onLoad(option) {
+            console.log("option",option)
+            this.module=option.module;
             var suppliers_id = this.$parent.globalData.suppliers_id ? this.$parent.globalData.suppliers_id : ""
             var yizhanInfo = this.$parent.globalData.yizhanInfo ? this.$parent.globalData.yizhanInfo : await this.$parent.getYizhanInfo(suppliers_id);
             this.suppliers_id = suppliers_id == "" ? yizhanInfo.suppliers_id : suppliers_id;
-            this.getBrands();
+           if(option.module&&option.module!=-1) this.getBrands(option.module);
         }
         async upImg(img_url) {
             util.showLoading('上传中');
@@ -461,11 +480,13 @@
                 }
             }
         }
-        getBrands() {
-            newapi.slides({
+        getBrands(module) {
+            newapi.slides_brand_list({
+                module,
                 suppliers_id: this.suppliers_id
             }).then(res => {
-                this.brands = res.data.data.brands;
+                console.log(res)
+                this.brands[0].brand = res.data.data;
                 // res.data.data.forEach((item,index)=>{
                 //     this.brands[index].brand=item
                 // })

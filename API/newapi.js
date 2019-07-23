@@ -138,6 +138,10 @@ const newapi = {
     del_lunbotu: (data) => fetch(`${host_chk}/del_lunbotu`, 'GET', data), //权限
     add_slides: (data) => fetch(`${host_chk}/add_slides`, 'POST', data), //权限
     slides: (data) => fetch(`${host_chk}/slides`, 'POST', data), //权限
+    slides_module_list: (data) => fetch(`${host_chk}/slides_module_list`, 'POST', data), //推荐品牌列表
+    slides_brand_list: (data) => fetch(`${host_chk}/slides_brand_list`, 'POST', data), //推荐品牌列表
+    slides_module_add: (data) => fetch(`${host_chk}/slides_module_add`, 'POST', data), //推荐品牌列表
+    slides_module_del: (data) => fetch(`${host_chk}/slides_module_del`, 'POST', data), //推荐品牌列表
 
 }
 const fetch = async function(url, method, data) {
