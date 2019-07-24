@@ -143,7 +143,7 @@ text-align: right
                 {
                     type: "",
                     value: 3,
-                    name: "无跳转"
+                    name: "无"
                 },
             ]
         };
@@ -237,7 +237,7 @@ text-align: right
             },
             toList(value) {
                 this.index = value;
-                var val = this.banner[value].val
+                var val = this.banner[value].val ;
                 switch (parseInt(val)) {
                     case 0:
                         wx.navigateTo({
@@ -331,6 +331,7 @@ text-align: right
                         img_url: item.img_url
                     }
                 })
+                this.$parent.$pages['/ConsolePages/pages/my_setShopStyle'].imgSrc = this.banner;
                 console.log("this.banner",this.banner)
                 this.$apply();
             })

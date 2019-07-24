@@ -170,11 +170,14 @@
                         </view>
                     </view>
                     <view class="section" @tap="selectGoods({{index}},{{index_brand}},{{item_brand}})">
-                        品牌下的商品
+                        <view class="banner-name">
+                        品牌下的商品：
+                        </view>
+                        <view class="banner-del" >添加商品</view>
                     </view>
                     <view class="section" wx:for="{{item_brand.goods}}" wx:for-index="index_goods" wx:for-item="item_goods">
                         <view class="goods-name" @longtap.stop="delGoods({{index}},{{index_brand}},{{index_goods}})">
-                            <image src='{{item_goods.original_img1?item_goods.original_img1:item_goods.original_img}}' /> {{item_goods.goods_name}} </view>
+                            <image src="{{item_goods.original_img1?item_goods.original_img1:'http://maijia.jicaizx.com/'+item_goods.original_img}}" /> {{item_goods.goods_name}} </view>
                     </view>
                     <view style="text-align: right;margin:20rpx">
                         <view class="banner-del" @tap="delbrand({{index}},{{index_brand}})">删除</view>
@@ -195,7 +198,7 @@
     //   import search from '../../components/search';
     export default class setBanner extends wepy.page {
         config = {
-            navigationBarTitleText: '设置首页轮播图'
+            navigationBarTitleText: '设置广告位'
         };
         data = {
             shenhe: 0,
@@ -203,7 +206,7 @@
                 brand: [{
                     brand_img: "",
                     brand_id: "",
-                    brand_name: "",
+                    brand_name: "请选择",
                     goods: []
                 }],
             }],
@@ -403,7 +406,7 @@
                     brand: [{
                         brand_img: "",
                         brand_id: "",
-                        brand_name: "",
+                        brand_name: "请选择",
                         goods: [],
                     }],
                 })
@@ -415,7 +418,7 @@
                 }
                 this.brands[index].brand.push({
                     brand_id: "",
-                    brand_name: "",
+                    brand_name: "请选择",
                     goods: [],
                     brand_img: "",
                 })

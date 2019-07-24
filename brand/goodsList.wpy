@@ -132,7 +132,7 @@
           <view class="kind-1">
             <view>
               <checkbox value="{{item.goods_id}}" checked="{{item.checked}}" />
-              <image src='{{item.original_img1?item.original_img1:item.original_img}}' /> {{item.goods_name}} </view>
+              <image src="{{item.original_img1?item.original_img1:'http://maijia.jicaizx.com/'+item.original_img}}" /> {{item.goods_name}} </view>
             <!-- <view class='del' bindtap='showActionSheet({{index}},{{item.brand_id}},{{item.brand_name}},{{item.brand_logo}})'> 编辑</view> -->
           </view>
         </view>

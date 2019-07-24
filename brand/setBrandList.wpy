@@ -89,7 +89,7 @@
         }
         methods = {
           async  del(item,index){
-                var res = await util.showModalBig("确定要删除商品吗？")
+                var res = await util.showModalBig("确定要删除该广告位吗？")
        if (res.confirm) {
            console.log("你确定要删除吗")
                 newapi.slides_module_del({

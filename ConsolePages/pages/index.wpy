@@ -277,7 +277,7 @@
                 <myList :tabItem="item2"></myList>
                
           </repeat>
-        <repeat
+        <repeat wx:if="{{yizhanInfo.is_yizhan==1 }}"
               for="{{item3}}"
               key="index"
               index="index"
@@ -474,7 +474,7 @@
         {
           icon: '/images/console/fabushangpin.png',
           num: 0,
-          display_name: '首页品牌广告',
+          display_name: '广告位管理',
           url: '/brand/setBrandList',
           bgcolor: '#10b3b1'
         },
