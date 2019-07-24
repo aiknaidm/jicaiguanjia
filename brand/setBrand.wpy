@@ -161,6 +161,16 @@
                             <image src="/images/add_img.png" />
                         </view>
                     </view>
+                    <view class="section" >
+                        <view class="banner-name">
+                            到期时间：
+                        </view>
+                        <view class="banner-select">
+                            <picker name="end_time" mode="date" value="{{item_brand.end_time_f}}" start="{{dateStart}}" data-index="{{index}}" data-indexb="{{index_brand}}" bindchange="bindDateChange">
+                                 {{item_brand.end_time_f}}
+                            </picker>
+                        </view>
+                    </view>
                     <view class="section" @tap="selectBrand({{index}},{{index_brand}},{{item_brand}})">
                         <view class="banner-name">
                             选择品牌：
@@ -207,6 +217,7 @@
                     brand_img: "",
                     brand_id: "",
                     brand_name: "请选择",
+                    end_time_f: "请选择",
                     goods: []
                 }],
             }],
@@ -226,11 +237,20 @@
                     value: 2,
                     name: "品牌"
                 },
-            ]
+            ],
+            dateStart:0,
         };
         computed = {};
         components = {};
         methods = {
+            bindDateChange: function(e) {
+               console.log('picker发送选择改变，携带值为', e.detail.value)
+               var index = e.currentTarget.dataset.index;
+               var indexb = e.currentTarget.dataset.indexb;
+               this.brands[index].brand[indexb].end_time_f = e.detail.value;
+               this.brands[index].brand[indexb].end_time = new Date(e.detail.value).getTime()/1000;
+               this.$apply();
+            },
           async  delGoods(x, y,z){
                 console.log("xyz",x,y,z)
        var res = await util.showModalBig("确定要删除商品吗？")
@@ -302,7 +322,7 @@
                 // }
                 for (var i = 0; i < this.brands.length; i++) {
                     if (this.brands[i].brand.length > 6) {
-                        util.showToast("***2不能大于六个")
+                        util.showToast("品牌不能大于六个")
                         return
                     }
                     for (var j = 0; j < this.brands[i].brand.length; j++) {
@@ -450,6 +470,7 @@
         };
         async onLoad(option) {
             console.log("option",option)
+           this.dateStart = util.formatDate();
             this.module=option.module;
             var suppliers_id = this.$parent.globalData.suppliers_id ? this.$parent.globalData.suppliers_id : ""
             var yizhanInfo = this.$parent.globalData.yizhanInfo ? this.$parent.globalData.yizhanInfo : await this.$parent.getYizhanInfo(suppliers_id);
@@ -489,7 +510,17 @@
                 suppliers_id: this.suppliers_id
             }).then(res => {
                 console.log(res)
-                this.brands[0].brand = res.data.data;
+                var l_brand = res.data.data;
+                l_brand.forEach((item,index)=>{
+                    if(item.end_time>0){
+                        item.end_time_f = util.formatDate(item.end_time);
+                    }else{
+                        item.end_time_f = '请选择';
+                    }
+                    
+                })
+                this.brands[0].brand = l_brand;
+                console.log(l_brand)
                 // res.data.data.forEach((item,index)=>{
                 //     this.brands[index].brand=item
                 // })
