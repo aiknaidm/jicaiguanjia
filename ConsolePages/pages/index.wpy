@@ -470,27 +470,21 @@
           isadmin: 1
         }
       ],
-      item3:[{
-          icon: '/images/console/fabushangpin.png',
-          num: 0,
-          display_name: '首页轮播图',
-          url: '/banner/setBanner',
-          bgcolor: '#10b3b1'
-        },
+      item3:[
         {
           icon: '/images/console/fabushangpin.png',
           num: 0,
           display_name: '首页品牌广告',
-          url: '/brand/setBrand',
+          url: '/brand/setBrandList',
           bgcolor: '#10b3b1'
         },
-        {
-          icon: '/images/console/fabushangpin.png',
-          num: 0,
-          display_name: '设计师管理',
-          url: '/designer/my_setDesignerInfo',
-          bgcolor: '#10b3b1'
-        },
+        // {
+        //   icon: '/images/console/fabushangpin.png',
+        //   num: 0,
+        //   display_name: '设计师管理',
+        //   url: '/designer/my_setDesignerInfo',
+        //   bgcolor: '#10b3b1'
+        // },
         ],
  
       height: 0,

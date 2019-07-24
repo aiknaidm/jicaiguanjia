@@ -161,7 +161,7 @@
     border-radius: 0px;
     margin: 0;
     /* height: 84rpx;
-             line-height: 84rpx; */
+               line-height: 84rpx; */
     background-color: #e50012;
   }
   .smsCode button[disabled] {
@@ -184,7 +184,7 @@
     display: flex;
     justify-content: space-between;
     /* border-bottom: 1px solid #ddd;
-            padding-right: 10%; */
+              padding-right: 10%; */
   }
   .smsCode input {
     width: 336rpx;
@@ -273,6 +273,13 @@
     right: -15rpx;
     top: -15rpx;
   }
+  .lianjie {
+    position: absolute;
+    right: 40rpx;
+    top: 40rpx;
+    color:#e50012;
+    
+  }
 </style>
 <template>
   <view class='container'>
@@ -283,7 +290,9 @@
           <image src="{{shopImg.img_url?shopImg.img_url:'/images/add_img.png'}}" />
         </view>
       </view>
-      <view class="title" style="padding:40rpx;text-align:center">首页轮播图设置</view>
+      <view class="title" style="padding:40rpx;text-align:center;position: relative;">首页轮播图设置
+        <view class="lianjie" @tap="toSet">设置链接</view>
+      </view>
       <view class="cameraBox">
         <view class="camera" wx:for="{{imgSrc}}" wx:key="{{index}}">
           <image src="{{item.img_url}}" />
@@ -293,14 +302,12 @@
           <image src="/images/add_img.png" mode='aspectFit' />
         </view>
       </view>
-    
-        <view class="title" style="padding:40rpx;text-align:center">添加背景图</view>
-        <view class="cameraBox">
-          <view class="camera" @tap='chooseBgImg'>
+      <view class="title" style="padding:40rpx;text-align:center">添加背景图</view>
+      <view class="cameraBox">
+        <view class="camera" @tap='chooseBgImg'>
           <image src="{{bgImg.img_url?bgImg.img_url:'/images/add_img.png'}}" />
         </view>
-        </view>
-      
+      </view>
       <view class="section section2">
         <view class="label">
           商品无图模式</view>
@@ -392,13 +399,17 @@
       isOpenSetting: false,
       address: '',
       is_friend_disabled: false,
-      bgImg:0
+      bgImg: 0
     };
     computed = {};
     components = {};
     methods = {
+      toSet() {
+        wx.navigateTo({
+          url: '/banner/setBanner'
+        });
+      },
       toAbout() {
-  
         wx.navigateTo({
           url: 'my_setShopInfo_about?about=' + this.userDetail.jianjie
         });
@@ -535,7 +546,7 @@
         // 上传图片
         if (!this.shopImg.upload) var shopImg = this.shopImg.img_url == 0 ? '' : this.shopImg.img_url
         else var shopImg = await this.upImg(this.shopImg.img_url)
-         if (!this.bgImg.upload) var bgImg = this.bgImg.img_url == 0 ? '' : this.bgImg.img_url
+        if (!this.bgImg.upload) var bgImg = this.bgImg.img_url == 0 ? '' : this.bgImg.img_url
         else var bgImg = await this.upImg(this.bgImg.img_url)
         this.goods_imgs = [];
         if (this.imgSrc != '') {
@@ -567,7 +578,7 @@
           img: shopImg,
           gonggao,
           jianjie,
-          bg_img:bgImg
+          bg_img: bgImg
         };
         let res = await newapi.supplier_upd(data);
         wx.hideLoading();
@@ -607,7 +618,7 @@
       this.suppliers_id = suppliers_id;
       this.isSetAbout = this.userDetail.jianjie == '' ? false : true
       this.userDetail.jianjie = util.html_decode(this.userDetail.jianjie);
-      console.log("this.userDetail",this.userDetail);
+      console.log("this.userDetail", this.userDetail);
       wepy.getLocation().then(res => {}).catch(res => {
         this.isOpenSetting = true
         this.$apply();
@@ -622,7 +633,12 @@
       this.imgSrc = [];
       res.data.data.banner.forEach((item) => {
         this.imgSrc.push({
-          img_url: item.content
+          img_url: item.content,
+          ad_id: item.ad_id,
+          ad_link: item.ad_link,
+          content: item.content,
+          type: item.type,
+          name:item.name
         })
       })
       this.shopImg = {}

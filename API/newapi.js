@@ -142,6 +142,9 @@ const newapi = {
     slides_brand_list: (data) => fetch(`${host_chk}/slides_brand_list`, 'POST', data), //推荐品牌列表
     slides_module_add: (data) => fetch(`${host_chk}/slides_module_add`, 'POST', data), //推荐品牌列表
     slides_module_del: (data) => fetch(`${host_chk}/slides_module_del`, 'POST', data), //推荐品牌列表
+    addDesigner: (data) => fetch(`${host_chk}/adddesigner`, 'POST', data), //添加设计师
+    finddesigner: (data) => fetch(`${host_chk}/finddesigner`, 'POST', data), //设计师列表
+    deldesigner: (data) => fetch(`${host_chk}/deldesigner`, 'POST', data), //删除设计师
 
 }
 const fetch = async function(url, method, data) {

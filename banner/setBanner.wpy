@@ -140,6 +140,11 @@ text-align: right
                     value: 2,
                     name: "品牌"
                 },
+                {
+                    type: "",
+                    value: 3,
+                    name: "无跳转"
+                },
             ]
         };
         computed = {};
@@ -166,9 +171,13 @@ text-align: right
             async save() {
                 for (var index = 0; index < this.banner.length; index++) {
                     var item = this.banner[index]
-                    // console.log("item.img.length",item.img,item.img.img_url.length)
+                    console.log("item.img.length",item.ad_link,item.type)
                     if (!item.img.img_url || item.img.img_url.length == 0) {
                         util.showToast("轮播图不能为空");
+                        return
+                    }
+                    if (item.type&&item.type!=""&&item.ad_link == "") {
+                        util.showToast("请选择跳转的路径");
                         return
                     }
                     if (item.img.upload) {
@@ -189,6 +198,8 @@ text-align: right
                 this.banner[i].url = ""
                 this.banner[i].type = type
                 this.banner[i].name = ""
+                this.banner[i].ad_link = ""
+                
             },
             // 上传店铺logo
             async addShopImg(index) {
@@ -253,7 +264,29 @@ text-align: right
             var suppliers_id = this.$parent.globalData.suppliers_id ? this.$parent.globalData.suppliers_id : ""
             var yizhanInfo = this.$parent.globalData.yizhanInfo ? this.$parent.globalData.yizhanInfo : await this.$parent.getYizhanInfo(suppliers_id);
             this.suppliers_id = suppliers_id == "" ? yizhanInfo.suppliers_id : suppliers_id;
-            this.getBanner();
+            // this.getBanner();
+           var parent=this.$parent.$pages["/ConsolePages/pages/my_setShopStyle"]
+          console.log(" parent.imgSrc", parent.imgSrc)
+           parent.imgSrc.forEach((item,index)=>{
+               this.banner[index]={
+                   img: {
+                       img_url:item.img_url,
+                       upload:item.upload?item.upload:false,
+
+                   },
+                    type: item.type,
+                    ad_link: item.ad_link,
+                    ad_id:item.ad_id,
+                    name:item.name
+               }
+               this.taozhuan.forEach((item2, index2) => {
+                        if (item.type == item2.type) {
+                            this.banner[index].val = item2.value
+                        }
+                    })
+           })
+           
+           this.$apply()
         }
         async upImg(img_url) {
             util.showLoading('上传中');
@@ -298,6 +331,7 @@ text-align: right
                         img_url: item.img_url
                     }
                 })
+                console.log("this.banner",this.banner)
                 this.$apply();
             })
         }
