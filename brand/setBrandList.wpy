@@ -98,6 +98,7 @@
                 }).then(res=>{
                     if(res.data.code){
                         this.module.splice(index,1)
+                            util.showToast("删除成功")
                         this.$apply();
                     }else{
                         util.showToast(res.data.message)

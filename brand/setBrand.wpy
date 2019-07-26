@@ -315,7 +315,7 @@
                 }
             },
             async save() {
-                console.log("brand", this.brands)
+                // console.log("brand", this.brands)
                 // if (this.brands.length > 6) {
                 //     util.showToast("***1不能大于六个")
                 //     return
@@ -422,7 +422,7 @@
                     util.showToast("轮播图最大为六个，请删除后添加")
                     return
                 }
-                this.brands.push({
+                this.brands.unshift({
                     brand: [{
                         brand_img: "",
                         brand_id: "",
@@ -436,7 +436,7 @@
                     util.showToast("添加品牌数最大为六个，请删除后添加")
                     return
                 }
-                this.brands[index].brand.push({
+                this.brands[index].brand.unshift({
                     brand_id: "",
                     brand_name: "请选择",
                     goods: [],

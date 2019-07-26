@@ -191,6 +191,9 @@ text-align: right
                     suppliers_id: this.suppliers_id
                 }).then(res => {
                     this.getBanner();
+                    wx.navigateBack({
+                      delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+                    });
                 })
             },
             radioChange(i, type, val) {
@@ -229,7 +232,7 @@ text-align: right
                     util.showToast("轮播图最大为六个，请删除后添加")
                     return
                 }
-                this.banner.push({
+                this.banner.unshift({
                     img: {},
                     type: "",
                     ad_link: ""

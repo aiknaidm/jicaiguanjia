@@ -366,7 +366,7 @@ export default class my_console_checkDetail extends wepy.page {
   }
   async onLoad(options) {
     try {
-      this.is_kthy = this.$parent.globalData.is_kthy;
+      this.is_kthy = this.$parent.globalData.yizhanInfo.is_kthy;
       this.pay_user_id = options.id;
       this.currentStatu = options.currentStatu;
       this.id = options.id;
