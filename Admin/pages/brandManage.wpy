@@ -70,6 +70,8 @@
     font-size: 30rpx;
     width: 100%;
     min-width: 450rpx;
+    border: 1px solid #f0f0f0;
+    margin-bottom:30rpx;
   }
   .add-box .btn {
     display: flex;
@@ -87,9 +89,9 @@
     filter: alpha(opacity=50);
   } //   上传图片
   .cameraBox {
-    height: 204rpx;
+    height: 150rpx;
     background-color: #f2f2f2;
-    line-height: 204rpx;
+    line-height: 150rpx;
     display: flex; // flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -130,7 +132,7 @@
         长按编辑
       </view>
       <search @buttonTap.user="searchTap"></search>
-      <view class='kind' wx:for="{{brandList}}" wx:key="{{index}}" bindlongpress='showActionSheet({{index}},{{item.brand_id}},{{item.brand_name}},{{item.brand_logo}})'>
+      <view class='kind' wx:for="{{brandList}}" wx:key="{{index}}" bindlongpress='showActionSheet({{index}},{{item}})'>
         <view class="kind-1">
           <view>
             <image src='{{item.brand_logo}}' /> {{item.brand_name}} </view>
@@ -145,10 +147,11 @@
     <view class="body-bg" hidden="{{!isShowUptBrand}}" bindtouchmove='hiddenUptBrand' bindtap='hiddenUptBrand'>
       <view class="add-box" catchtap='showUptBrand'>
         <view class="title">
-          请输入品牌名称
+          {{thisBrandName}}
         </view>
         <view class="content">
-          <input type="text" name="" value="{{thisBrandName}}" bindinput='brandNameIpt' placeholder='请输入' />
+          <input wx:if="{{!thisBrandId}}" type="text" name="" value="{{thisBrandName}}" bindinput='brandNameIpt' placeholder='请输入品牌名称' />
+          <view>上传LOGO</view>
           <view class="cameraBox">
             <view class="camera" wx:for="{{imgSrc}}" wx:key="{{index}}">
               <image src="{{item.img_url}}" />
@@ -157,6 +160,26 @@
             <view class="camera" @tap='chooseImg' wx:if="{{imgSrc.length<1}}">
               <image src="/images/add_img.png" mode='aspectFit' />
             </view>
+          </view>
+        </view>
+        <view class="content">
+          <view>上传广告轮播图</view>
+          <view class="cameraBox">
+            <view class="camera"  wx:if="{{thisBrandAdImg}}">
+              <image src="{{thisBrandAdImg}}" />
+              <text class="close" @tap='delGgImg'>x</text>
+            </view>
+            <view class="camera" @tap='chooseGgImg' wx:else>
+              <image src="/images/add_img.png" mode='aspectFit' />
+            </view>
+          </view>
+        </view>
+        <view class="content">
+          <view>广告到期时间</view>
+          <view class="cameraBox">
+            <picker name="end_time" mode="date" value="{{thisBrandEndtime_f}}" start="{{dateStart}}" bindchange="bindDateChange">
+                                 {{thisBrandEndtime_f}}
+                            </picker>
           </view>
         </view>
         <view class="btn">
@@ -184,16 +207,26 @@
       thisBrandName: '',
       thisBrandId: '',
       thisBrandImg: '',
+      thisBrandAdImg: '',
+      thisBrandEndtime: '',
+      thisBrandEndtime_f: '',
       imgSrc: [],
       keyword: '',
       suppliers_id: 0,
-      page: 1
+      page: 1,
+      dateStart:0,
     };
     computed = {};
     components = {
       search,
     };
     methods = {
+      bindDateChange(e) {
+        console.log('picker发送选择改变，携带值为', e.detail.value)
+        this.thisBrandEndtime_f = e.detail.value;
+        this.thisBrandEndtime = new Date(e.detail.value).getTime()/1000;
+        this.$apply();
+      },
       async addTap() {
         var brand_name = this.thisBrandName;
         if (brand_name.length == 0) {
@@ -215,10 +248,20 @@
           res = this.thisBrandImg
         }
         var brand_img = res;
+
+        if(this.thisBrandAdImg){
+          res = await this.upGgImg();
+        }
+        var ad_img = res;
+
+        var end_time = this.thisBrandEndtime;
+
         var res = await newapi.add_brands({
           brand_id: this.thisBrandId,
           brand_name: brand_name,
           brand_logo: brand_img,
+          ad_img,
+          end_time,
           suppliers_id:this.suppliers_id
         });
         // this.page = 1;
@@ -227,11 +270,15 @@
           if (this.thisBrandId) {
             this.brandList[this.x].brand_name = brand_name;
             this.brandList[this.x].brand_logo = brand_img;
+            this.brandList[this.x].ad_img = ad_img;
+            this.brandList[this.x].end_time = end_time;
           } else {
             let newline = {
               brand_id: res.data.data,
               brand_name: brand_name,
-              brand_logo: brand_img
+              brand_logo: brand_img,
+              ad_img: ad_img,
+              end_time: end_time
             }
             this.brandList.unshift(newline);
           }
@@ -260,17 +307,20 @@
         this.$apply();
       },
       // 长按事件
-      async showActionSheet(x, brand_id, brand_name, brand_img) {
+      async showActionSheet(x, item) {
         this.x = x;
-        this.thisBrandName = brand_name;
-        this.thisBrandId = brand_id;
-        this.thisBrandImg = brand_img;
+        this.thisBrandName = item.brand_name;
+        this.thisBrandId = item.brand_id;
+        this.thisBrandImg = item.brand_logo;
+        this.thisBrandAdImg = item.ad_img;
+        this.thisBrandEndtime = item.end_time;
+        this.thisBrandEndtime_f = item.end_time>0?util.formatDate(this.thisBrandEndtime):'请选择';
         let mRes = await util.showActionSheet([
           "删除品牌", "编辑品牌"
         ]);
         switch (mRes.tapIndex) {
           case 0:
-            this.delBrandTap(brand_id);
+            this.delBrandTap(this.thisBrandId);
             break;
           case 1:
             this.updateBrandTap();
@@ -280,6 +330,10 @@
       // 删除图片
       delImg(i) {
         this.imgSrc.splice(i, 1);
+      },
+      delGgImg(){
+        this.thisBrandAdImg="";
+        this.$apply();
       },
       // 上传图片
       async chooseImg() {
@@ -299,6 +353,24 @@
               that.imgSrc[that.imgSrc.length - 1].img_url = item;
               console.log("that.imgSrc", that.imgSrc);
             });
+            this.$apply();
+          })
+          .catch(res => {});
+      },
+      // 上传广告
+      async chooseGgImg() {
+        wepy
+          .chooseImage({
+            count: 1, // 默认9
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'] // 可以指定来源是相册还是相机，默认二者都有
+          })
+          .then(res => {
+            var that = this;
+            // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+            var tempFilePaths = res.tempFilePaths;
+            that.thisBrandAdImg = tempFilePaths[0];
+            console.log("that.thisBrandAdImg", that.thisBrandAdImg);
             this.$apply();
           })
           .catch(res => {});
@@ -370,6 +442,29 @@
         }
       }
     }
+    async upGgImg() {
+      util.showLoading('上传中');
+      try {
+        var res = await wepy.uploadFile({
+          url: api.upload,
+          filePath: this.thisBrandAdImg,
+          name: 'file',
+          header: {
+            Accept: 'application/json'
+          }
+        });
+        wx.hideLoading();
+        var datas = JSON.parse(res.data.trim());
+        if (datas.code == 0) {
+          return datas.data.pic_url;
+        }
+      } catch (error) {
+        wx.hideLoading();
+        let mRes = await util.showModalBig(
+          '图片' + this.thisBrandAdImg + '上传失败'
+        );
+      }
+    }
     async getBrandList() {
       util.showLoading();
       let data = {
@@ -397,6 +492,7 @@
       }
     }
     async onLoad(option) {
+      this.dateStart = util.formatDate();
       this.suppliers_id = option.suppliers_id;
       this.isMoreData = true;
       this.page = 1;
