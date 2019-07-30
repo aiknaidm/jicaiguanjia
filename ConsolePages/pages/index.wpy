@@ -471,13 +471,13 @@
         }
       ],
       item3:[
-        {
-          icon: '/images/console/fabushangpin.png',
-          num: 0,
-          display_name: '广告位管理',
-          url: '/brand/setBrandList',
-          bgcolor: '#10b3b1'
-        },
+        // {
+        //   icon: '/images/console/fabushangpin.png',
+        //   num: 0,
+        //   display_name: '广告位管理',
+        //   url: '/brand/setBrandList',
+        //   bgcolor: '#10b3b1'
+        // },
         // {
         //   icon: '/images/console/fabushangpin.png',
         //   num: 0,

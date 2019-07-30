@@ -110,12 +110,9 @@ const newapi = {
     swyz: (data) => fetch(`${host_chk}/swyz`, 'GET', data),
     copeCartList: (data) => fetch(`${host_chk}/cat_copy_chk`, 'GET', data),
     bossList: (data) => fetch(`${host_chk}/boss_list`, 'GET', data),
-    anli_list: (data) => fetch(`${host_chk}/anli_list`, 'GET', data),
+  
     yh_num: (data) => fetch(`${host_chk}/yh_num`, 'GET', data),
-    anli_detail: (data) => fetch(`${host_chk}/anli_detail`, 'GET', data),
-    edit_anli: (data) => fetch(`${host_chk}/edit_anli`, 'GET', data),
-    del_anli: (data) => fetch(`${host_chk}/del_anli`, 'GET', data),
-    add_anli: (data) => fetch(`${host_chk}/add_anli`, 'GET', data),
+
     kehu: (data) => fetch(`${host_chk}/kehu`, 'GET', data),
     kehu_read: (data) => fetch(`${host_chk}/kehu_read`, 'GET', data),
     cat_manage: (data) => fetch(`${host_chk}/cat_manage`, 'GET', data),
@@ -145,7 +142,15 @@ const newapi = {
     addDesigner: (data) => fetch(`${host_chk}/adddesigner`, 'POST', data), //添加设计师
     finddesigner: (data) => fetch(`${host_chk}/finddesigner`, 'POST', data), //设计师列表
     deldesigner: (data) => fetch(`${host_chk}/deldesigner`, 'POST', data), //删除设计师
-
+    edit_designer: (data) => fetch(`${host_chk}/edit_designer`, 'POST', data), //编辑简历
+    designer_resume: (data) => fetch(`${host_chk}/designer_resume`, 'POST', data), //修改基础信息
+    designer_detail: (data) => fetch(`${host_chk}/designer_detail`, 'POST', data), //修改基础信息
+    edit_anli: (data) => fetch(`${host_chk}/edit_anli`, 'GET', data),
+    del_anli: (data) => fetch(`${host_chk}/del_anli`, 'GET', data),
+    add_anli: (data) => fetch(`${host_chk}/add_anli`, 'GET', data),
+    anli_style: (data) => fetch(`${host_chk}/anli_style`, 'POST', data), //修改基础信息
+    anli_detail: (data) => fetch(`${host_chk}/anli_detail`, 'GET', data),
+    anli_list: (data) => fetch(`${host_chk}/anli_list`, 'GET', data),
 }
 const fetch = async function(url, method, data) {
     return new Promise((resolve, reject) => {

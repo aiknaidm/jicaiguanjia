@@ -1,0 +1,209 @@
+<style lang="less">
+  .designerCase {
+    padding-bottom: 100rpx;
+  }
+  .checkboxs {
+    display: flex;
+    background: #fff;
+    flex-wrap: wrap;
+    padding: 36rpx;
+  }
+  .checkbox {
+    display: flex;
+    align-items: center; // margin-right: 10rpx;
+    justify-content: space-between;
+    width: 50%;
+    .anli-list {
+      margin-left: 10rpx;
+      flex: 1;
+      height: 162rpx;
+      overflow: hidden;
+      margin-bottom: 20rpx;
+      display: flex;
+      align-items: center;
+      image {
+        width: 100%;
+        border-radius: 5rpx;
+        background: #aaa;
+      }
+       :nth-child(odd) {
+        margin-right: 30rpx;
+      }
+    }
+  }
+  .delBtn {
+    position: fixed;
+    line-height: 80rpx;
+    width: 100%;
+    bottom: 0px;
+    left: 0;
+    background: #fff;
+    checkbox {
+      margin-left: 37rpx;
+      border-radius: 50%;
+    }
+    .btn {
+      width: 200rpx;
+      text-align: center;
+      line-height: 80rpx;
+      background: linear-gradient( 80deg, rgba(213, 53, 52, 1), rgba(218, 91, 73, 1));
+      color: #fff;
+      float: right;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
+  }
+</style>
+<template>
+  <view class="container">
+    <view class="designerCase" wx:if="{{anliList.length>0}}">
+      <checkbox-group bindchange="checkboxChange" class="checkboxs">
+        <view class="checkbox" wx:for="{{anliList}}" >
+          <checkbox value="{{item.article_id}}" checked="{{item.checked}}" />
+          <view class="anli-list" @tap="toDetail({{item.article_id}})">
+            <image src="{{item.file_url}}" mode="widthFix">
+              <!-- <view>{{item.checked}}</view> -->
+          </view>
+        </view>
+      </checkbox-group>
+      <view class="delBtn " wx:if="{{showDelBtn}}">
+        <checkbox-group bindchange="checkboxChange2">
+          <label>
+              <checkbox value="1" checked="{{allselect}}"></checkbox>全选
+            </label>
+        </checkbox-group>
+        <view class="btn" @tap="del">删除案例</view>
+      </view>
+    </view>
+    <noOrder wx:if="{{anliList.length==0}}" text="暂无内容"></noOrder>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import newapi from '../API/newapi';
+  import util from '../utils/index';
+  import noOrder from '../components/noOrder';
+  
+  export default class my_setDesignerInfo extends wepy.page {
+    config = {
+      navigationBarTitleText: '案例管理'
+    };
+    data = {
+      anliList: [
+      ],
+      quanxuan: false,
+      allselect: false,
+      showDelBtn:false,
+    };
+    computed = {};
+    components = {noOrder};
+    methods = {
+      toDetail(article_id){
+        wx.navigateTo({ url: 'my_designerCaseDetail?id=' +article_id});
+      },
+      del() {
+        var modalRes = await util.showModalBig("你确定要删除吗？")
+        if (modalRes.cancel) {
+          return
+        }
+        var article_id = [];
+        this.anliList.forEach((item, index) => {
+          if (item.checked) {
+            article_id.push(item.article_id);
+          }
+        });
+        newapi.del_anli({
+          article_id:article_id.toString()
+        }).then(res => {
+          if (res.data.code == 0) {
+            util.showToast('删除成功');
+            this.$parent.globalData.designer_info.anlishu=this.$parent.globalData.designer_info.anlishu-article_id.length
+            var anliList = [];
+            for (var i = 0; i < this.anliList.length; i++) {
+              for (var j = 0; j < article_id.length; j++) {
+                if (this.anliList[i].article_id == article_id[j]) {
+                  var del = true
+                  break
+                } else {
+                  var del = false
+                }
+              }
+              if (!del) {
+                anliList.push(this.anliList[i]);
+              }
+            }
+            this.anliList = anliList;
+            this.$apply();
+          }
+        });
+        console.log(' article_id', article_id);
+      },
+      checkboxChange2(e) {
+        console.log(e.detail.value[0]);
+        this.anliList.forEach((item, index) => {
+          if (e.detail.value[0] == 1) this.anliList[index].checked = true;
+          else this.anliList[index].checked = false;
+        });
+        if (e.detail.value[0] == 1) this.allselect = true;
+        else this.allselect = false;
+        this.$apply();
+      },
+      checkboxChange(e) {
+        console.log('', e.detail.value);
+        if (e.detail.value.length > 0) {
+          this.showDelBtn = true;
+        }else{
+          this.showDelBtn = false;
+
+        }
+        this.anliList.forEach((item, index) => {
+          this.anliList[index].checked = false;
+          e.detail.value.forEach((item2, index2) => {
+            if (item2 == item.article_id) {
+              this.anliList[index].checked = true;
+            }
+          });
+        });
+        if (e.detail.value.length == this.anliList.length) {
+          this.allselect = true;
+        } else {
+          this.allselect = false;
+        }
+        this.$apply();
+        console.log('this.allselect', this.allselect);
+      }
+    };
+    events = {};
+    async onShow() {
+      var suppliers_id = this.$parent.globalData.suppliers_id ?
+        this.$parent.globalData.suppliers_id :
+        '';
+      var yizhanInfo = this.$parent.globalData.yizhanInfo ?
+        this.$parent.globalData.yizhanInfo :
+        await this.$parent.getYizhanInfo(suppliers_id);
+      this.suppliers_id =suppliers_id == '' ? yizhanInfo.suppliers_id : suppliers_id;
+         this.allselect= false,
+       this.showDelBtn=false,
+      this.designerList();
+      // let res = await newapi.finddesigner({
+      //   suppliers_id: this.suppliers_id
+      // });
+      // if (res.data.code == 0) {
+      //   this.designerList = res.data.data;
+      //   this.$apply();
+      // }
+    }
+    async designerList() {
+      let data = {
+        suppliers_id: this.suppliers_id
+      };
+      let res = await newapi.anli_list(data);
+      if (res.data.code == 0) {
+        this.anliList = res.data.data;
+        this.$apply();
+      }
+    }
+  }
+</script>

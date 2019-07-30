@@ -190,7 +190,18 @@ export default class extends wepy.app {
       },
       {
         root: 'designer',
-        pages: ['my_setDesignerInfo']
+        pages: [
+          'my_designerList',
+        'my_setDesignerInfo',
+        'admin_designerList',
+        'admin_designerDetail',
+        'my_designerDetail',
+        'my_designerIntro',
+        'my_designerCaseList',
+        'my_designerCaseDetail',
+       'my_designerCaseDetailDec',
+       'my_designerIntroSet'
+        ]
       },
 
       {

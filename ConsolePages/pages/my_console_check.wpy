@@ -407,6 +407,7 @@
         this.isShowSalesList = false;
         this.salesmanName = name;
         this.yhData.sales_id = sales_id;
+        this.yhData.page = 1;
         this.getShenheList();
         this.getNum();
         this.getPaycardMsg();

@@ -1,0 +1,104 @@
+<style lang="less">
+  .redborder{
+    position: fixed;
+    bottom:0;
+    left: 0;
+    width: 100%;
+    line-height: 80rpx;
+    text-align: center;
+    color: #fff;
+    background: #e50012;
+  } 
+  .textarea{
+display: flex
+  }
+  textarea{
+    min-height: 200rpx;
+    padding: 40rpx;
+    flex: 1;
+    line-height: 40rpx;
+  }
+</style>
+<template>
+  <view class='container' >
+  
+      <view class="textarea">
+         <textarea
+          @input="bindTextAreaBlur"
+          value="{{resume}}"
+          placeholder="请输入简介"
+          auto-height="true"
+          />
+      </view>
+      <view class='redborder' catchtap='editDesigner'>
+        <view class='img'>
+         提交
+        </view>
+      </view>
+     
+  
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import newapi from '../API/newapi';
+  import util from '../utils/index';
+  export default class my_setManagerInfo extends wepy.page {
+    config = {
+      navigationBarTitleText: '设计师简介'
+    };
+    data = {
+      adminList: [],
+      isshowclose: false,
+      resume:''
+    };
+    computed = {};
+    components = {};
+    methods = {
+      
+      bindTextAreaBlur(e){
+        this.resume=e.detail.value
+        console.log("e",e)
+      },
+      editDesigner: function() {
+       newapi.designer_resume({suppliers_id:this.suppliers_id,resume:this.resume}).then(res=>{
+         util.showToast("修改简介成功")
+         this.$parent.globalData.designer_info.resume=this.resume;
+         wx.navigateBack({
+           delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+         });
+       })
+      },
+      editManager(id){
+         wx.navigateTo({
+          url: '/ConsolePages/pages/my_setManagerInfo_permission?type=edit&id='+id
+        });
+      },
+      hiddenclose: function() {
+        this.isshowclose = false;
+      },
+      showclose: function() {
+        this.isshowclose = true;
+      }
+    };
+    events = {};
+    async onShow() {
+         var suppliers_id = this.$parent.globalData.suppliers_id?this.$parent.globalData.suppliers_id:""
+      var yizhanInfo =  this.$parent.globalData.yizhanInfo? this.$parent.globalData.yizhanInfo:await this.$parent.getYizhanInfo(suppliers_id);
+      this.suppliers_id = suppliers_id==""?yizhanInfo.suppliers_id:suppliers_id;
+         if (this.$parent.globalData.designer_info) {
+     this.resume=this.$parent.globalData.designer_info.resume
+         }else{
+ this.designer_detail();
+         }
+     
+    }
+    async designer_detail() {
+      newapi.designer_detail({suppliers_id:this.suppliers_id}).then(res=>{
+        this.resume=res.data.data
+        this.$apply();
+      })
+    }
+  }
+</script>

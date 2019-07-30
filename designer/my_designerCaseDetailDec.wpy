@@ -1,0 +1,52 @@
+<style lang="less">
+</style>
+<template>
+<view>
+
+ <!-- <xing-editor @finish="finish" output-type="html" image-upload-url="https://lmbge.com/wxapi/jcgj/upload" image-upload-name="file" image-upload-key-chain="image.url" html="{{html}}"/> -->
+<wxeditor :content.sync="html" @getContent.user="finish" ></wxeditor>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import wxeditor from '../components/wx-editor';
+
+export default class newslist extends wepy.page {
+  config = {
+    navigationBarTitleText: '案例详情',
+    // usingComponents: {
+    //   'editor': '/components/wx-editor'
+    // }
+  };
+  components = {wxeditor};
+  data = {
+    html: ''
+  };
+  computed = {};
+  methods = {
+    finish: function(e) {
+      this.$parent.$pages['/designer/my_designerCaseDetail'].goods_desc =
+        e.html;
+      wx.navigateBack({
+        delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+      });
+    },
+ 
+  };
+  events = {};
+  async getIndexNewsList(id) {}
+  async onLoad(option) {
+    this.html = this.$parent.$pages[
+      '/designer/my_designerCaseDetail'
+    ].goods_desc;
+      this.$apply();
+  }
+  thishtml() {
+    this.setData({
+      html:
+        '<p class="xing-p">不谈琐碎的细节，突出主题，颜色运用。这些都是行为，这些行为是纹身师的能力表达，而他们要达到一个目标：</p><img class="xing-img" style="width: 100%" src="https://www.uooyoo.com/img2017/2/15/2017021560909533.jpg" _height="0.61983" _uploaded="true"></img><p class="xing-p">创作出来的这个纹身，有没有在瞬间抓住人眼球，让人不断的想一直看。</p>'
+    });
+  }
+}
+</script>

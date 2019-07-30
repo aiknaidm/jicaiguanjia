@@ -273,19 +273,26 @@ const showModalBig = async function(content, title = '提示') {
     return res;
 }
 const showActionSheet = function(itemList) {
-    return new Promise((resolve, reject) => {
-        wx.showActionSheet({
-            itemList: itemList,
-            success: function(res) {
-                resolve(res);
-            },
-            fail: function(res) {
-                console.log('用户取消');
-            }
-        });
-    })
+        return new Promise((resolve, reject) => {
+            wx.showActionSheet({
+                itemList: itemList,
+                success: function(res) {
+                    resolve(res);
+                },
+                fail: function(res) {
+                    console.log('用户取消');
+                }
+            });
+        })
+    }
+    // 字符串转时间戳
+const strToTime = function(date, str) {
+    var data = new Date(Date.parse(date.replace(/str/g, "/"))).getTime();
+    return data
 }
+
 export default {
+    strToTime,
     formatTime,
     formatDate,
     formatNumber,

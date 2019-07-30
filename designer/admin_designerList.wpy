@@ -1,0 +1,167 @@
+<style lang="less">
+  .container {
+    /* padding: 30rpx; */
+  
+    flex-wrap: wrap;
+    background: #f0f0f0;
+    padding-bottom: 100rpx;
+  }
+  .list{
+    padding:30rpx;
+  }
+  .headPortrait {
+    display: flex;
+    background: #fff;
+    padding: 30rpx;
+    border-radius: 20rpx;
+    margin-bottom: 20rpx;
+    position: relative;
+    .img {
+      width: 100rpx;
+      height: 100rpx;
+      margin-right: 20rpx;
+      image {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .btn {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      view {
+        padding: 0 40rpx;
+        line-height: 60rpx;
+        background: #e50012;
+        color: #fff;
+        margin-bottom: 10rpx;
+        margin-right: 30rpx;
+        border-radius: 50px;
+        text-align: center
+      }
+    }
+  }
+  .redborder{
+    position: fixed;
+    bottom:0;
+    left: 0;
+    width: 100%;
+    line-height: 80rpx;
+    text-align: center;
+    color: #fff;
+    background: #e50012;
+  }
+</style>
+<template>
+  <view class='container' bindtap='hiddenclose'>
+    <view class=''>
+    </view>
+    <view class='list'>
+      <block wx:for="{{designerList}}" wx:key="index">
+        <view class='headPortrait '>
+          <view class='img'>
+            <image src="{{item.avatar?item.avatar:'https://lmbge.com/upload/avatar/weixin3.png'}}" data-user_id='{{item.id}}' mode='aspectFill' />
+            <!-- <text class='iconfont icon-close' wx:if="{{isshowclose}}" data-user_id='{{item.id}}' catchtap='delManager'></text> -->
+          </view>
+          <view class='text'>
+            <view>姓名：{{item.user_nickname?item.user_nickname:'jc'+item.id}}</view>
+            <!-- <view>身份：{{item.juese}}</view> -->
+            <!-- <view>权限：{{item.user_nickname?item.user_nickname:'jc'+item.id}}</view> -->
+          </view>
+          <view class="btn">
+            <view class="edit" catchtap='editDesigner({{item.id}})'>查看</view>
+            <view class="del"  catchtap='delDesigner({{index}},{{item.id}})'>删除</view>
+          </view>
+        </view>
+      </block>
+      <view class='redborder' catchtap='addDesigner'>
+        <view class='img'>
+         添加设计师
+        </view>
+      </view>
+      <!-- <view class='headPortrait redborder' catchtap='showclose' wx:if="{{adminList.length}}">
+        <view class='img'>
+          <text class='iconfont icon-jian'></text>
+        </view>
+      </view> -->
+    </view>
+  
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import newapi from '../API/newapi';
+  import util from '../utils/index';
+  export default class my_setDesignerInfo extends wepy.page {
+    config = {
+      navigationBarTitleText: '设计师管理'
+    };
+    data = {
+      designerList: [],
+      isshowclose: false
+    };
+    computed = {};
+    components = {};
+    methods = {
+      async delDesigner(index,user_id) {
+         var res = await util.showModalBig("确定要删除吗？")
+       
+                if (res.cancel) {
+                  return
+                }
+        var suppliers_id = this.$parent.globalData.suppliers_id;
+        var data = {
+          user_id,
+          suppliers_id
+        };
+        var res = await newapi.deldesigner(data);
+        if (res.data.code == 0) {
+          util.showToast('删除成功');
+          this.designerList.splice(index,1)
+          this.$apply();
+        } else {
+          util.showToast(res.data.message);
+        }
+      },
+      addDesigner: function() {
+        wx.navigateTo({
+          url: '/ConsolePages/pages/my_addManagerInfo?type=designer'
+        });
+      },
+      editDesigner(id){
+         wx.navigateTo({
+          url: 'admin_designerDetail?type=edit&id='+id
+        });
+      },
+      hiddenclose: function() {
+        this.isshowclose = false;
+      },
+      showclose: function() {
+        this.isshowclose = true;
+      }
+    };
+    events = {};
+    async onShow() {
+      var suppliers_id = this.$parent.globalData.suppliers_id?this.$parent.globalData.suppliers_id:""
+      var yizhanInfo =  this.$parent.globalData.yizhanInfo? this.$parent.globalData.yizhanInfo:await this.$parent.getYizhanInfo(suppliers_id);
+      this.suppliers_id = suppliers_id==""?yizhanInfo.suppliers_id:suppliers_id;
+      // this.designerList( );
+      let res = await newapi.finddesigner({suppliers_id:this.suppliers_id});
+      if (res.data.code == 0) {
+        this.designerList = res.data.data;
+        this.$apply();
+      }
+    }
+    async designerList(suppliers_id) {
+      let data = {
+        suppliers_id
+      };
+      let res = await newapi.finddesigner(data);
+      if (res.data.code == 0) {
+        this.designerList = res.data.data;
+        this.$apply();
+      }
+    }
+  }
+</script>
