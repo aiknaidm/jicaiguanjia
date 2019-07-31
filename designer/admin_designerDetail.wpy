@@ -130,7 +130,7 @@
           {{designer_info.realname}}
         </view>
         <view>
-          工作年限：{{designer_info.realname}}
+          工作年限：{{designer_info.nianxian}}
         </view>
         <view>
           级别：{{designer_info.level_name}}

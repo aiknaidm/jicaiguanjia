@@ -261,7 +261,7 @@
           </view>
           <view wx:if="{{item.amount&&item.amount!=0}}">会员卡余额：￥{{item.amount}}</view>
         </view>
-        <view class='check-list-btn'>
+        <view class='check-list-btn'  wx:if="{{!showName}}">
           <text class='iconfont icon-youcecaidan' @tap.stop='toJiechu({{item.amount}})' data-id="{{item.user_id}}"></text>
         </view>
       </view>

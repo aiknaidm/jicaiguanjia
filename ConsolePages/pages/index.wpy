@@ -190,11 +190,10 @@
         height: 70%;
         vertical-align: -2px;
       }
-     
     }
-     .weui_cell_hd2 {
-    width: auto;
-  }
+    .weui_cell_hd2 {
+      width: auto;
+    }
     navigator {
       display: block;
       width: 100%;
@@ -242,62 +241,57 @@
           <form report-submit bindsubmit='getFormId'>
             <navigator url='/ConsolePages/pages/share'>
               <button form-type="submit">
-                            <text class='iconfont icon-fenxiang'></text>分享好友</button>
+                                <text class='iconfont icon-fenxiang'></text>分享好友</button>
             </navigator>
           </form>
         </view>
       </view>
       <form report-submit bindsubmit='getFormId'>
         <!-- <view class="info_list order_list" wx:if="{{yizhanInfo.is_admin==1 && guoqi==0}}">
-          <navigator url="{{}}" open-type="navigate" hover-class="none">
-            <image src="/images/console/transaction-manage.png" />交易管理
-            <view class='hui_txt'> (您当前最多可收到{{yizhanInfo.msg_num}}条通知)</view>
-          </navigator>
-          <repeat for="{{tabList}}" wx:key="{{index}}">
-            <myList :tabItem="item"></myList>
-          </repeat>
-        </view>
-        <view class="info_list" wx:if="{{yizhanInfo.is_admin==1 && guoqi==0}}">
-          <navigator url="{{}}" open-type="navigate" hover-class="none">
-            <image src="/images/console/goods-manage.png" />商品管理
-          </navigator>
-          <repeat for="{{shopList}}" wx:key="{{index}}">
-            <myList :tabItem="item"></myList>
-          </repeat>
-        </view> -->
-        <view class="info_list" wx:for="{{permission}}"  wx:for-index="index" wx:for-item="item" wx:key="{{index}}">
-          <navigator url="{{}}" open-type="navigate" hover-class="none">
-            <image src="{{item.img}}" />{{item.name}}<view class='hui_txt' wx:if="{{index==0}}"> (您当前最多可收到{{yizhanInfo.msg_num}}条通知)</view>
-          </navigator>
-          <repeat
-              for="{{item.permission}}"
-              key="index2"
-              index="index2"
-              item="item2">
-                <myList :tabItem="item2"></myList>
-               
-          </repeat>
-        <repeat wx:if="{{yizhanInfo.is_yizhan==1 }}"
-              for="{{item3}}"
-              key="index"
-              index="index"
-              item="item">
+              <navigator url="{{}}" open-type="navigate" hover-class="none">
+                <image src="/images/console/transaction-manage.png" />交易管理
+                <view class='hui_txt'> (您当前最多可收到{{yizhanInfo.msg_num}}条通知)</view>
+              </navigator>
+              <repeat for="{{tabList}}" wx:key="{{index}}">
                 <myList :tabItem="item"></myList>
-               
+              </repeat>
+            </view>
+            <view class="info_list" wx:if="{{yizhanInfo.is_admin==1 && guoqi==0}}">
+              <navigator url="{{}}" open-type="navigate" hover-class="none">
+                <image src="/images/console/goods-manage.png" />商品管理
+              </navigator>
+              <repeat for="{{shopList}}" wx:key="{{index}}">
+                <myList :tabItem="item"></myList>
+              </repeat>
+            </view> -->
+        <view class="info_list" wx:for="{{permission}}" wx:for-index="index" wx:for-item="item" wx:key="{{index}}">
+          <navigator url="{{}}" open-type="navigate" hover-class="none">
+            <image src="{{item.img}}" />{{item.name}}
+            <view class='hui_txt' wx:if="{{index==0}}"> (您当前最多可收到{{yizhanInfo.msg_num}}条通知)</view>
+          </navigator>
+          <repeat for="{{item.permission}}" key="index2" index="index2" item="item2">
+            <myList :tabItem="item2"></myList>
           </repeat>
-       
-            <!-- <block  > -->
-            <!-- 易站所有者 -->
-            <!-- <myList :tabItem="item" wx:if="{{yizhanInfo.is_boss==1&&item.isyizhan==1&&item.is_boss==1}}"></myList> -->
-            <!-- 店铺所有者 -->
-            <!-- <myList :tabItem="item" wx:elif="{{yizhanInfo.is_boss==1&&item.is_boss==1}}"></myList> -->
-            <!-- 管理员 -->
-            <!-- <myList :tabItem="item" wx:elif="{{item.is_admin==1&&yizhanInfo.is_admin==1}}"></myList> -->
-            <!-- 业务员 -->
-            <!-- <myList :tabItem="item" wx:elif="{{item.is_salesman==1&&yizhanInfo.is_salesman==1}}"></myList> -->
-            <!-- </block> -->
-          
+          <!-- <block  > -->
+          <!-- 易站所有者 -->
+          <!-- <myList :tabItem="item" wx:if="{{yizhanInfo.is_boss==1&&item.isyizhan==1&&item.is_boss==1}}"></myList> -->
+          <!-- 店铺所有者 -->
+          <!-- <myList :tabItem="item" wx:elif="{{yizhanInfo.is_boss==1&&item.is_boss==1}}"></myList> -->
+          <!-- 管理员 -->
+          <!-- <myList :tabItem="item" wx:elif="{{item.is_admin==1&&yizhanInfo.is_admin==1}}"></myList> -->
+          <!-- 业务员 -->
+          <!-- <myList :tabItem="item" wx:elif="{{item.is_salesman==1&&yizhanInfo.is_salesman==1}}"></myList> -->
+          <!-- </block> -->
         </view>
+        <view class="info_list">
+          <block>
+            <!-- <myList :tabItem="item4"></myList>
+              {{item3.url}} -->
+            <myList wx:if="{{is_designer}}"  :tabItem="item3"></myList>
+            <myList2 wx:else :tabItem="item4"></myList2>
+          </block>
+        </view>
+
       </form>
     </view>
     <view class='yizhan-list2' catchtouchmove='' style="height: {{height}}PX;overflow: hidden">
@@ -312,9 +306,9 @@
       </scroll-view>
     </view>
     <!-- <view class="share-button">
-      <button>推广本店</button>
-      <button>推广海报</button>
-    </view> -->
+          <button>推广本店</button>
+          <button>推广海报</button>
+        </view> -->
   </view>
 </template>
 
@@ -323,12 +317,13 @@
   import newapi from '../../API/newapi';
   import util from '../../utils/index';
   import myList from '../../components/myList';
+  import myList2 from '../../components/myList';
   export default class newslist extends wepy.page {
     config = {
       navigationBarTitleText: '管理工作台'
     };
     components = {
-      myList
+      myList,myList2
     };
     data = {
       yizhanInfo: {},
@@ -470,23 +465,34 @@
           isadmin: 1
         }
       ],
-      item3:[
-        // {
-        //   icon: '/images/console/fabushangpin.png',
-        //   num: 0,
-        //   display_name: '广告位管理',
-        //   url: '/brand/setBrandList',
-        //   bgcolor: '#10b3b1'
-        // },
-        // {
-        //   icon: '/images/console/fabushangpin.png',
-        //   num: 0,
-        //   display_name: '设计师管理',
-        //   url: '/designer/my_setDesignerInfo',
-        //   bgcolor: '#10b3b1'
-        // },
-        ],
- 
+      item3: {
+        icon: '/images/console/fabushangpin.png',
+        num: 0,
+        display_name: '设计师管理 设计师',
+        url: '/designer/my_designerDetail',
+        bgcolor: '#10b3b1'
+      },
+      item4: {
+        icon: '/images/console/fabushangpin.png',
+        num: 0,
+        display_name: '设计师管理 管理员',
+        url: '/designer/admin_designerList',
+        bgcolor: '#10b3b1'
+      },
+       item5:[{
+        icon: '/images/console/fabushangpin.png',
+        num: 0,
+        display_name: '设计师管理 设计师',
+        url: '/designer/my_designerDetail',
+        bgcolor: '#10b3b1'
+      },{
+        icon: '/images/console/fabushangpin.png',
+        num: 0,
+        display_name: '设计师管理 管理员',
+        url: '/designer/admin_designerList',
+        bgcolor: '#10b3b1'
+      }] ,
+      is_designer: true,
       height: 0,
       guoqi: 0
     };
@@ -519,19 +525,25 @@
       this.$apply();
     }
     // 获取店铺权限
-     async getpermission(suppliers_id) {
-      let data = {suppliers_id};
+    async getpermission(suppliers_id) {
+      let data = {
+        suppliers_id
+      };
       let res = await newapi.managers_permission(data);
       this.permission = res.data.data.permission;
       this.orderNum(res.data.data)
-      console.log("permission",this.permission)
+      if (res.data.data.is_designer == 1 && res.data.data.is_admin != 1 && res.data.data.is_boss != 1)
+        this.is_designer = true
+      else
+        this.is_designer = false
+      console.log(this.is_designer);
+      // console.log("permission",this.permission)
       this.$apply();
     }
-    
     // 订单数量
     async orderNum(data) {
       this.permission[0].permission.forEach((item, index) => {
-          switch (item.name) {
+        switch (item.name) {
           case 'daifukuan':
             item.num = data.daifukuan;
             break;
@@ -549,13 +561,12 @@
             break;
         }
       });
-
-// this.permission[0].permission[0].num=data.daifukuan
-// this.permission[0].permission[1].num=data.daifahuo
-// this.permission[0].permission[2].num=data.yifahuo
-// this.permission[0].permission[3].num=data.chenggong
-// this.permission[0].permission[4].num=data.guanbi
-// if(data.daifenpei) this.permission[0].permission[5].num=data.daifenpei
+      // this.permission[0].permission[0].num=data.daifukuan
+      // this.permission[0].permission[1].num=data.daifahuo
+      // this.permission[0].permission[2].num=data.yifahuo
+      // this.permission[0].permission[3].num=data.chenggong
+      // this.permission[0].permission[4].num=data.guanbi
+      // if(data.daifenpei) this.permission[0].permission[5].num=data.daifenpei
       // this.tabList[0].num = data.daifukuan;
       // this.tabList[1].num = this.yizhanInfo.daifahuo;
       // this.tabList[2].num = this.yizhanInfo.yifahuo;

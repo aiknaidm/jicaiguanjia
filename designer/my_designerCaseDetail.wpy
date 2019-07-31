@@ -308,6 +308,26 @@
           </view>
         </view>
       </view>
+      <view class="goodsList">
+        <view class='listBox'>
+          <view class="listOption">面积</view>
+        </view>
+        <view class='list'>
+          <view wx:for="{{mianji}}" wx:key="{{index}}" class="list-label {{mianji_id===item.id?'active':''}}" @tap="bindmianji({{item.id}})">{{item.name}}
+            <text class='iconfont icon-guanbi' wx:if="{{longdelkind}}" catchtap='bindKindDel'></text>
+          </view>
+        </view>
+      </view>
+      <view class="goodsList">
+        <view class='listBox'>
+          <view class="listOption">价格</view>
+        </view>
+        <view class='list'>
+          <view wx:for="{{jiage}}" wx:key="{{index}}" class="list-label {{jiage_id===item.id?'active':''}}" @tap="bindjiage({{item.id}})">{{item.name}}
+            <text class='iconfont icon-guanbi' wx:if="{{longdelkind}}" catchtap='bindKindDel'></text>
+          </view>
+        </view>
+      </view>
       <!-- <view class="listBox">
         <view class="listOption">价格</view>
         <input class="shownnum" value='{{anli.price}}' placeholder="请输入价格" type='number' placeholder-class="holder" name="qidingliang" />
@@ -341,9 +361,13 @@
     data = {
       fengge: [],
       huxing: [],
+      jiage:[],
+      mianji:[],
       anli: {},
       fengge_id: '',
       huxing_id: '',
+      mianji_id:'',
+      jiage_id:'',
       isShowPriceAndNum: false,
       goods_attr: [],
       imgSrc: [],
@@ -400,6 +424,12 @@
       },
       bindhuxing(id) {
         this.huxing_id = id;
+      },
+      bindmianji(id){
+ this.mianji_id = id;
+      },
+      bindjiage(id){
+ this.jiage_id = id;
       },
       //长按
       async longtabBrand(name, id, index) {
@@ -552,6 +582,8 @@
       wx.hideLoading();
       this.fengge = res.data.data.fengge;
       this.huxing = res.data.data.huxing;
+      this.mianji = res.data.data.mianji;
+      this.jiage = res.data.data.jiage;
       this.$apply();
     }
     // 添加分类
@@ -617,12 +649,22 @@
         util.showToast("请选择风格")
         return
       }
+       if (!this.mianji_id || this.mianji_id == '') {
+        util.showToast("请选择面积")
+        return
+      }
+       if (!this.jiage_id || this.jiage_id == '') {
+        util.showToast("请选择价格")
+        return
+      }
       this.anli.file_url = this.anli.upload ? await this.upImg(this.anli.file_url) : this.anli.file_url
  var datas = {
           ...e.detail.value,
           content: this.goods_desc,
           huxing_id: this.huxing_id,
           fengge_id: this.fengge_id,
+          jiage_id:this.jiage_id,
+          mianji_id:this.mianji_id,
           file_url: this.anli.file_url,
           suppliers_id: this.suppliers_id
         }
@@ -663,6 +705,8 @@ datas.article_id=this.anli.article_id
       this.file_url = datas.file_url
       this.fengge_id = datas.fengge
       this.huxing_id = datas.huxing
+      this.mianji_id = datas.mianji
+      this.jiage_id = datas.jiage
       this.$apply();
     
   }
