@@ -653,7 +653,7 @@
     // }
     async init(suppliers_id) {
       let yizhanInfo = await this.$parent.getYizhanInfo(suppliers_id);
-      if (!yizhanInfo.is_admin && !yizhanInfo.is_salesman) {
+      if (!yizhanInfo.is_admin && !yizhanInfo.is_salesman && !yizhanInfo.is_designer) {
         let mRes = await util.showModalBig(
           '您还不是批发商，没有管理权限，赶紧去注册吧'
         );

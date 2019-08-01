@@ -103,7 +103,7 @@
       toDetail(article_id){
         wx.navigateTo({ url: 'my_designerCaseDetail?id=' +article_id});
       },
-      del() {
+      async del() {
         var modalRes = await util.showModalBig("你确定要删除吗？")
         if (modalRes.cancel) {
           return
