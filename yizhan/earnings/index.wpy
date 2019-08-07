@@ -1,0 +1,193 @@
+<style lang="less">
+/* pages/qianbao/index.wxss */
+.container{
+  font-size: 30rpx;
+}
+.qb-qian{
+  background-color: #e50012;
+  color: #fff;
+  height:220rpx;
+  padding: 40rpx ;
+  font-size: 35rpx;
+}
+.qb-qian-jia{
+  font-size: 86rpx;
+  line-height: 140rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+}
+.qb-qian-jia image{
+  width: 60rpx;
+  height: 60rpx;
+  line-height: 100rpx;
+  display: inline-block;
+}
+.qb-shouyi{
+  height: 200rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #eee;
+
+}
+.qb-shouyi-zuotian,.qb-shouyi-shouyi{
+  flex: 1;
+   padding: 20rpx 60rpx; 
+  border-right: 1px solid #eee;
+  font-size: 30rpx;
+  /* display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; */
+}
+.qb-shouyi-earnings{
+  font-size: 44rpx;
+  color: #ff9900;
+}
+.qb-list{
+  display: flex;
+  padding: 30rpx;
+  border-bottom: 1px solid #eee;
+  justify-content: space-between;
+}
+.qb-list-2{
+  display: flex;
+  align-items: center;
+}
+.qb-list-2 image{
+  width: 40rpx;
+  height: 40rpx;
+  margin-left: 20px;
+}
+</style>
+<template>
+ <!--pages/qianbao/index.wxml-->
+<view class='container'>
+  <view class='qb-qian'>
+    <view class='qb-qian-zong'>商品总交易额（元）</view>
+    <view class='qb-qian-jia'>
+      <view>{{datas.zonge}}</view>
+      <navigator url='balanceDatas'>
+        <image src='/images/go.png'></image>
+      </navigator>
+    </view>
+  </view>
+  <view class='qb-shouyi'>
+    <view class='qb-shouyi-zuotian'>
+      <view>商品返款（元）</view>
+      <view class='qb-shouyi-earnings'>{{datas.fankuan}}</view>
+    </view>
+    <view class='qb-shouyi-shouyi'>
+      <view>分享收益（元）</view>
+      <view class='qb-shouyi-earnings'>{{datas.shouyi}}</view>
+    </view>
+  </view>
+  <view class='qb-list' bindtap='goYue'>
+    <view>余额</view>
+    <view class='qb-list-2'>{{datas.yue}}
+      <image src='/images/enter.png'></image>
+    </view>
+
+  </view> 
+  <view class='qb-list' @tap='goQuan'>
+    <view>银行卡绑定</view>
+    <view class='qb-list-2'>
+      {{datas.yinhangka>0?datas.yinhangka:''}}
+      <image src='/images/enter.png'></image>
+    </view>
+  </view>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import newapi from '../../API/newapi';
+import util from '../../utils/index';
+export default class share extends wepy.page {
+  config = {
+    navigationBarTitleText: '分享'
+  };
+  components = {};
+  data = {
+    datas: {}
+  };
+  computed = {};
+  methods = {
+    goYue(){
+      wx.navigateTo({ url: 'balance' });
+    },
+    copy(share_code) {
+      // 复制邀请码
+      wx.setClipboardData({
+        data: share_code,
+        success(res) {
+          wx.getClipboardData({
+            success(res) {}
+          });
+        }
+      });
+    },
+    goQuan(){
+      wx.navigateTo({ url: 'setBankCardList' });
+    },
+    toShareRule() {
+      wx.navigateTo({
+        url: 'shareRule'
+      });
+    },
+    toWithdraw: function() {
+      if (this.qrcode && this.qrcode.ketx == 0) {
+        util.showModal('你还没有可以提现的金额，去分享试试');
+      } else {
+        wx.navigateTo({
+          url: 'withdraw?ketx=' + this.qrcode.ketx
+        });
+      }
+    },
+    // 跳转收益列表页面
+    toShareList(status) {
+      wx.navigateTo({
+        url:
+          'shareList?status=' +
+          status +
+          '&zong=' +
+          this.qrcode.zong +
+          '&ketx=' +
+          this.qrcode.ketx
+      });
+    }
+  };
+  events = {};
+
+  async getDatas() {
+    util.showLoading();
+
+    let data = {
+     suppliers_id:this.suppliers_id
+    };
+    let res = await newapi.qianbao(data);
+    if (res.data.code == 0) {
+      wx.hideLoading();
+      this.datas = res.data.data;
+this.$parent.globalData.qianbao=this.datas
+console.log("this.$parent.globalData.qianbao",this.$parent.globalData.qianbao);
+
+    } else {
+      wx.hideLoading();
+      // util.showToast('获取邀请码失败');
+    }
+    this.$apply();
+  }
+  async onLoad(option) {
+   var suppliers_id = this.$parent.globalData.suppliers_id?this.$parent.globalData.suppliers_id:""
+      var yizhanInfo =  this.$parent.globalData.yizhanInfo? this.$parent.globalData.yizhanInfo:await this.$parent.getYizhanInfo(suppliers_id);
+      this.suppliers_id = suppliers_id==""?yizhanInfo.suppliers_id:suppliers_id;
+    this.getDatas();
+  }
+  onShow(){
+   if(this.$parent.globalData.qianbao) this.datas=this.$parent.globalData.qianbao
+  }
+}
+</script>

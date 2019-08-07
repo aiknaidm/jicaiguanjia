@@ -1,0 +1,187 @@
+<style>
+  /* pages/qb-tixian/index.wxss */
+  page {
+    height: 100%;
+  }
+  .container {
+    background-color: #f2f2f2;
+    /* padding: 30rpx; */
+    height: 100%;
+    font-size: 30rpx;
+  }
+  .tx-yhk-c view:first-child {
+    color: #e50012;
+  }
+  .tx-yhk-c {
+    font-size: 28rpx;
+    text-align: right;
+  }
+  .tx-yc {
+    display: flex;
+    justify-content: space-around;
+  }
+  .tx-sx {
+    margin-top: 5rpx;
+    font-size: 22rpx;
+    color: #989898;
+  }
+  .tx {
+    /* width: 90%; */
+    background-color: #fff;
+    margin: auto;
+    padding: 40rpx;
+    margin: 30rpx;
+  }
+  .tx-yhk {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 30rpx;
+    border-bottom: 1px solid #eee;
+  }
+  .tx-jine {
+    padding: 30rpx 0;
+    justify-content: center;
+    /* align-items: center; */
+    display: flex;
+    flex-direction: column;
+  }
+  .tx-yue {
+    color: #ff9900;
+    font-size: 28rpx;
+  }
+  .tx-input {
+    font-size: 66rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30rpx 0;
+    font-weight: bold;
+  }
+  .tx-input input {
+    height: 100%;
+    padding-left: 20rpx;
+    border-bottom: 1px solid #eee;
+  }
+  .tx-btn button {
+    background-color: #e50012;
+    color: #fff;
+  }
+</style>
+
+<template>
+  <!--pages/qb-tixian/index.wxml-->
+  <view class='container'>
+    <form bindsubmit="formSubmit">
+      <view class='tx'>
+        <view class='tx-yhk'>
+          <view>到账银行卡</view>
+          <view class='tx-yhk-c'>
+            <picker value="{{index}}" range="{{array}}" bindchange="bindPickerChange">
+              <view class="picker">
+                <view wx:if='{{array[index]}}'>{{array[index]}}</view>
+                <view wx:else>选择银行卡</view>
+              </view>
+            </picker>
+            <view>24小时内到账</view>
+          </view>
+        </view>
+        <view class='tx-jine'>
+          <view>提现金额</view>
+          <view class='tx-input'>￥
+            <input type='digit' name="jine" bindinput="listenerMoneyInput" value="{{yue}}" disabled></input>
+          </view>
+          <view class='tx-yue'>当前余额:{{yue}}元</view>
+          <view class='tx-sx'>提现将会收取1%的手续费</view>
+        </view>
+        <view class='tx-btn'>
+          <button formType="submit">提现</button>
+        </view>
+      </view>
+    </form>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy';
+  import newapi from '../../API/newapi';
+  import util from '../../utils/index';
+  export default class withdraw extends wepy.page {
+    config = {
+      navigationBarTitleText: '绑定银行卡'
+    };
+    components = {};
+    data = {
+      array: [],
+      index:0,
+      yue:0
+    };
+    computed = {};
+    methods = {
+     async formSubmit(e){
+       var res=await util.showModalBig("你确定要提现吗")
+if(res.cancel) return;
+        var jine=e.detail.value.jine
+        if(this.arrayCard[this.index].length==0||this.arrayBank[this.index].length==0){
+          util.showToast("请选择银行卡")
+          return
+        }
+         if(jine==0){
+          util.showToast("暂无可提现收入")
+          return
+        }
+        var datas={
+jine,
+cardnumber:this.arrayCard[this.index],
+bankname:this.arrayBank[this.index],
+suppliers_id:this.suppliers_id
+        }
+        newapi.tixian(datas).then(res=>{
+          if(res.data.code==0){
+            util.showToast("提现申请提交成功")
+            this.yue=0;
+            this.$parent.globalData.qianbao.yue=0
+            this.$apply();
+            wx.navigateBack({
+              delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+            });
+          }
+        })
+        //  参数 suppliers_id   cardnumber卡号   bankname银行    jine  提现金额
+        
+      },
+      goBd() {
+        wx.navigateTo({
+          url: 'setBankCardInfo'
+        });
+      },
+      bindPickerChange(e) {
+        this.index=e.detail.value
+      }
+    }
+    async onLoad(option) {
+      if(!this.$parent.globalData.qianbao){
+        util.showToast("获取信息失败，请重试");
+      }
+      var suppliers_id = this.$parent.globalData.suppliers_id ? this.$parent.globalData.suppliers_id : ""
+      var yizhanInfo = this.$parent.globalData.yizhanInfo ? this.$parent.globalData.yizhanInfo : await this.$parent.getYizhanInfo(suppliers_id);
+      this.suppliers_id = suppliers_id == "" ? yizhanInfo.suppliers_id : suppliers_id;
+      this.getBankCardList();
+      this.yue=this.$parent.globalData.qianbao.yue;
+    }
+    async getBankCardList() {
+      this.array = new Array();
+      this.arrayBank = new Array();
+      this.arrayCard = new Array();
+      var res = await newapi.kalist({
+        suppliers_id: this.suppliers_id
+      }).then(res => {
+        this.bankCardList = res.data.data
+        for (var i = 0; i < res.data.data.length; i++) {
+          this.array.push(res.data.data[i].yinhang + "    尾号(" + res.data.data[i].cardnumber.substr(res.data.data[i].cardnumber.length - 4, 4) + ")");
+          this.arrayBank.push(res.data.data[i].yinhang);
+          this.arrayCard.push(res.data.data[i].cardnumber);
+        }
+        this.$apply();
+      })
+    }
+  }
+</script>

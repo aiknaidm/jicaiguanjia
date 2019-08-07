@@ -1,0 +1,128 @@
+<style>
+  /* pages/qb-bangding-detail/index.wxss */
+  page {
+    height: 100%;
+    background-color: #fff;
+    font-size: 30rpx;
+  }
+  .qb-title {
+    padding: 20rpx;
+    color: #7a7a7a;
+    font-size: 28rpx;
+  }
+  .qb-input {
+    display: flex;
+    font-size: 32rpx;
+    background-color: #fff;
+    border-top: 1px solid #eee;
+    padding: 20rpx 40rpx;
+    /* justify-content: center; */
+    align-items: center;
+  }
+  .qb-input input {
+    height: 100%;
+    flex: 1;
+    padding-left: 20rpx;
+  }
+  .section {
+    width: 200rpx;
+    height: 100%;
+    padding-left: 20rpx;
+  }
+  button {
+    background-color: #e50012;
+    color: #fff;
+    width: 80%;
+    margin: auto;
+    margin-top: 40rpx;
+  }
+</style>
+
+<template>
+  <view class='container'>
+    <form bindsubmit="formSubmit">
+      <view class='qb-title'>请绑定持卡人本人的银行卡
+      </view>
+      <!-- <view class='qb-input'>持卡人:{{textname}}
+          </view> -->
+      <view class='qb-input'>
+        <view class="section">持卡人：</view>
+        <input name="username"></input>
+      </view>
+      <view class='qb-input'>
+        <view class="section">卡号：</view>
+        <input name="cardnumber" maxlength="19" bindblur="blurfoucs" type="number"></input>
+      </view>
+      <view class='qb-input'>
+        <view class="section">银行：</view>
+        <input name="yinhang" value="{{textbank}}" disabled></input>
+      </view>
+      <button formType="submit">提交</button>
+    </form>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy';
+  import newapi from '../../API/newapi';
+  import util from '../../utils/index';
+  export default class setBankCardInfo extends wepy.page {
+    config = {
+      navigationBarTitleText: '绑定银行卡'
+    };
+    components = {};
+    data = {
+      textbank: "",
+    };
+    computed = {};
+    methods = {
+      async formSubmit(e) {
+        console.log(e.detail.value)
+        var datas = e.detail.value
+        if (datas.username == '') {
+          util.showToast('用户名不能为空')
+          return
+        }
+        if (datas.cardnumber == '') {
+          util.showToast('银行卡号不能为空')
+          return
+        }
+        if (datas.yinhang == '') {
+          util.showToast('银行卡号不正确')
+          return
+        }
+        newapi.addka({...datas,suppliers_id:this.suppliers_id}).then(res => {
+          if (res.data.code == 0) {
+            util.showToast('添加成功')
+            this.$parent.globalData.qianbao.yinhangka++
+            wx.navigateBack({
+              delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+            });
+          } else
+            util.showToast(res.data.message)
+        })
+      },
+      async blurfoucs(e) {
+        if (e.detail.value.length == 0) {
+          this.textbank = ''
+          return
+        }
+        var msgRes = await newapi.bankname({
+          cardnumber: e.detail.value
+        })
+        if (msgRes.data.code != 0) {
+          util.showToast(msgRes.data.data.bankname)
+          this.textbank = ''
+        } else {
+          this.textbank = msgRes.data.data.bankname
+        }
+        this.$apply();
+      }
+    }
+    async onLoad(option) {
+   var suppliers_id = this.$parent.globalData.suppliers_id?this.$parent.globalData.suppliers_id:""
+      var yizhanInfo =  this.$parent.globalData.yizhanInfo? this.$parent.globalData.yizhanInfo:await this.$parent.getYizhanInfo(suppliers_id);
+      this.suppliers_id = suppliers_id==""?yizhanInfo.suppliers_id:suppliers_id;
+ 
+  }
+  }
+</script>

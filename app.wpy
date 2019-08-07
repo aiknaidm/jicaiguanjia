@@ -217,6 +217,19 @@ export default class extends wepy.app {
           'pages/brandManage',
           'pages/jmfManage'
         ]
+      },
+       {
+        root: 'yizhan',
+        pages: [
+          'earnings/index',
+          'earnings/withdraw',
+          'earnings/shareList',
+          'earnings/setBankCardList',
+          'earnings/setBankCardInfo',
+          'earnings/balance',
+          'earnings/balanceDatas'
+         
+        ]
       }
     ],
 

@@ -1,0 +1,97 @@
+<template>
+    <!--pages/qianbao/index.wxml-->
+    <view class="container">
+        <view class="yue">
+            <text class="iconfont icon-qianbao1"></text>
+            <view class="yue-txt">我的余额</view>
+            <view class="yue-money">
+                <text>￥</text>
+                {{qianbao.yue}}
+            </view>
+        </view>
+        <view class="btn">
+            <button class="main-bgcolor" bindtap="goTixian">提现</button>
+            <!-- <button class='' bindtap='goMingxi'>余额明细</button> -->
+            <button class="" bindtap="goCard">银行卡绑定</button>
+        </view>
+    </view>
+</template>
+<style>
+.main-bgcolor {
+  color: #fff;
+  background: #e50012;
+}
+button {
+  margin-bottom: 40rpx;
+  background: #eee;
+}
+/* pages/qb-yue/index.wxss */
+.container {
+  text-align: center;
+  padding-top: 80rpx;
+  padding-left: 50rpx;
+  padding-right: 50rpx;
+}
+.icon-qianbao1 {
+  font-size: 200rpx;
+  color: #f4ea2a;
+}
+.yue-txt {
+  font-size: 38rpx;
+}
+.yue-money {
+  font-size: 90rpx;
+  line-height: 150rpx;
+  font-weight: bold;
+}
+.yue-money text {
+  font-size: 60rpx;
+}
+.container {
+  height: 100%;
+}
+page {
+  height: 100%;
+  position: absolute;
+  overflow: hidden;
+}
+</style>
+<script>
+import wepy from 'wepy';
+import newapi from '../../API/newapi';
+import util from '../../utils/index';
+export default class setBankCard extends wepy.page {
+  config = {
+    navigationBarTitleText: '绑定银行卡'
+  };
+  components = {};
+  data = {
+      qianbao:{}
+  };
+  computed = {};
+  methods = {
+    async goTixian() {
+      var qianbao =this.qianbao;
+      if (qianbao.yinhangka == 0) {
+        var res = await util.showModal('请先绑定银行卡');
+              wx.navigateTo({ url: 'setBankCardList' });
+
+      }
+      wx.navigateTo({ url: 'withdraw' });
+    },
+    goCard() {
+      wx.navigateTo({ url: 'setBankCardList' });
+    }
+  };
+  onLoad() {
+      if(!this.$parent.globalData.qianbao){
+          util.showToast("获取信息失败")
+          wx.navigateBack({
+            delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+          });
+      }
+      else
+      this.qianbao=this.$parent.globalData.qianbao
+  }
+}
+</script>

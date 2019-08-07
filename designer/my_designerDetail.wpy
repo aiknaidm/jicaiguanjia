@@ -146,11 +146,11 @@
     margin-right: 0;
     align-items: center;
     justify-content: center;
-    width: 50rpx;
-    height: 50rpx;
+    width: 60rpx;
+    height: 60rpx;
     image {
-      width: 70%;
-      height: 70%;
+      width: 100%;
+      height: 100%;
       vertical-align: -2px;
     }
   }
@@ -167,7 +167,7 @@
             </view>
             <view class="designerInfo-text">
                 <view class="name">{{designer_info.realname}}</view>
-                <view>工作年限：{{designer_info.realname}}</view>
+                <!-- <view>工作年限：{{designer_info.realname}}</view> -->
                 <view>级别：{{designer_info.level_name}}</view>
                 <view>年限：{{designer_info.nianxian}}年</view>
                 <view>手机号：{{designer_info.mobile}}</view>
@@ -198,25 +198,25 @@ export default class my_setManagerInfo extends wepy.page {
     designer_info: {},
     item3: [
       {
-        icon: '/images/console/fabushangpin.png',
+        icon: '/images/console/jianjie.png',
         num: 0,
         display_name: '个人简介',
         url: '/designer/my_designerIntro',
-        bgcolor: '#10b3b1'
+        bgcolor: '#fff'
       },
       {
-        icon: '/images/console/fabushangpin.png',
+        icon: '/images/console/tianjia.png',
         num: 0,
         display_name: '添加案例',
         url: '/designer/my_designerCaseDetail',
-        bgcolor: '#10b3b1'
+        bgcolor: '#fff'
       },
       {
-        icon: '/images/console/fabushangpin.png',
+        icon: '/images/console/anliguanli.png',
         num: 0,
         display_name: '案例管理',
         url: '/designer/my_designerCaseList',
-        bgcolor: '#10b3b1'
+        bgcolor: '#fff'
       }
     ]
   };
@@ -242,6 +242,9 @@ export default class my_setManagerInfo extends wepy.page {
     this.suppliers_id =
       suppliers_id == '' ? yizhanInfo.suppliers_id : suppliers_id;
     this.designer_detail();
+  }
+  onShow(){
+  this.designer_info=   this.$parent.globalData.designer_info ;
   }
   async designer_detail() {
     newapi.designer_detail({ suppliers_id: this.suppliers_id }).then(res => {

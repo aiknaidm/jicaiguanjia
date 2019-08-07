@@ -237,14 +237,14 @@
           </view>
           <!-- <view class='control-title-txt qiehuan' bindtap='showyizhan'>切换店铺</view> -->
         </view>
-        <view class='share'>
+        <!-- <view class='share'>
           <form report-submit bindsubmit='getFormId'>
             <navigator url='/ConsolePages/pages/share'>
               <button form-type="submit">
                                 <text class='iconfont icon-fenxiang'></text>分享好友</button>
             </navigator>
           </form>
-        </view>
+        </view> -->
       </view>
       <form report-submit bindsubmit='getFormId'>
         <!-- <view class="info_list order_list" wx:if="{{yizhanInfo.is_admin==1 && guoqi==0}}">
@@ -283,14 +283,15 @@
           <!-- <myList :tabItem="item" wx:elif="{{item.is_salesman==1&&yizhanInfo.is_salesman==1}}"></myList> -->
           <!-- </block> -->
         </view>
-        <view class="info_list">
+        <!-- <view class="info_list">
           <block>
-            <!-- <myList :tabItem="item4"></myList>
-              {{item3.url}} -->
             <myList wx:if="{{is_designer}}"  :tabItem="item3"></myList>
             <myList2 wx:else :tabItem="item4"></myList2>
+            <repeat for="{{item2}}" key="index2" index="index2" item="item2">
+            <myList :tabItem="item2"></myList>
+          </repeat>
           </block>
-        </view>
+        </view> -->
 
       </form>
     </view>
@@ -318,12 +319,13 @@
   import util from '../../utils/index';
   import myList from '../../components/myList';
   import myList2 from '../../components/myList';
+  import myList3 from '../../components/myList';
   export default class newslist extends wepy.page {
     config = {
       navigationBarTitleText: '管理工作台'
     };
     components = {
-      myList,myList2
+      myList,myList2,myList3
     };
     data = {
       yizhanInfo: {},
@@ -479,17 +481,12 @@
         url: '/designer/admin_designerList',
         bgcolor: '#10b3b1'
       },
-       item5:[{
+ 
+       item2:[{
         icon: '/images/console/fabushangpin.png',
         num: 0,
-        display_name: '设计师管理 设计师',
-        url: '/designer/my_designerDetail',
-        bgcolor: '#10b3b1'
-      },{
-        icon: '/images/console/fabushangpin.png',
-        num: 0,
-        display_name: '设计师管理 管理员',
-        url: '/designer/admin_designerList',
+        display_name: '二维码',
+        url: '/pages/shoperweima',
         bgcolor: '#10b3b1'
       }] ,
       is_designer: true,

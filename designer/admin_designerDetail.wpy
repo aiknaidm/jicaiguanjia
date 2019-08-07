@@ -136,7 +136,8 @@
           级别：{{designer_info.level_name}}
         </view>
         <view class="anli">
-          <view>案例：{{designer_info.anlishu}}</view>
+          <view>
+            案例：{{designer_info.anlishu}}</view>
           <view class="phone" @tap="tocall({{designer_info.mobile}})">
             联系电话
           </view>

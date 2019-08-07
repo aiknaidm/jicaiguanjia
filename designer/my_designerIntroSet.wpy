@@ -235,7 +235,7 @@
         <view class="label">
           <text>*</text>开始时间</view>
         <view class="label-right">
-          <picker mode="date" value="{{start_date}}" start="2015-09-01" end="2020-09-01" bindchange="bindDateChange">
+          <picker mode="date" value="{{start_date}}" start="2000-09-01" end="2020-09-01" bindchange="bindDateChange">
             <view class="picker">
               {{start_date}}
             </view>
@@ -327,7 +327,7 @@
         datas.avatar = this.designer_info.upload ? await this.upImg(this.designer_info.avatar) : this.designer_info.avatar
         newapi.edit_designer(datas).then(res => {
           util.showToast("保存成功")
-          datas.nianxian =Math.floor((new Date().getTime() / 1000 - datas.start_time) / 60 / 60 / 24 / 365) ;
+          datas.nianxian =Math.ceil((new Date().getTime() / 1000 - datas.start_time) / 60 / 60 / 24 / 365) ;
           
            this.designer_info ={ ...this.$parent.globalData.designer_info,
             ...datas

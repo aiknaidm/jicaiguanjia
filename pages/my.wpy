@@ -73,11 +73,11 @@ export default class my extends wepy.page {
         text: '管理工作台',
         url: '/ConsolePages/pages/index'
       },
-      {
-        icon: '/images/share.png',
-        text: '分享',
-        url: '/ConsolePages/pages/share'
-      }
+      // {
+      //   icon: '/images/share.png',
+      //   text: '分享',
+      //   url: '/ConsolePages/pages/share'
+      // }
      
     ],
     isShowprompt: false
@@ -159,11 +159,11 @@ export default class my extends wepy.page {
           display_name: '管理工作台',
           url: '/ConsolePages/pages/index'
         },
-        {
-          icon: '/images/share.png',
-          display_name: '分享',
-          url: '/ConsolePages/pages/share'
-        },
+        // {
+        //   icon: '/images/share.png',
+        //   display_name: '分享',
+        //   url: '/ConsolePages/pages/share'
+        // },
         {
           icon: '/images/share.png',
           display_name: '管理员界面',

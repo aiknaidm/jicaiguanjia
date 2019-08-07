@@ -172,7 +172,7 @@
     background-color: #fff;
     color: #e50012;
     /* border-radius:50%;
-                      wid */
+                        wid */
     width: 45rpx;
     height: 45rpx;
     text-align: center;
@@ -275,11 +275,11 @@
     <view class="container">
       <!-- <view class="tishi">长按品牌或分类删除</view> -->
       <!-- <view class="topNav">
-                          <view class="topNavL">
-                            <image src="/images/publish/close.png"/>
-                          </view>
-                          <view class="topNavR">发布商品</view>
-                        </view> -->
+                            <view class="topNavL">
+                              <image src="/images/publish/close.png"/>
+                            </view>
+                            <view class="topNavR">发布商品</view>
+                          </view> -->
       <view class="cameraBox">
         <view class="camera" @tap="addShopImg">
           <image src="{{anli.file_url&&anli.file_url!=''?anli.file_url:'/images/add_img.png'}}" />
@@ -329,13 +329,13 @@
         </view>
       </view>
       <!-- <view class="listBox">
-        <view class="listOption">价格</view>
-        <input class="shownnum" value='{{anli.price}}' placeholder="请输入价格" type='number' placeholder-class="holder" name="qidingliang" />
-      </view> -->
+          <view class="listOption">价格</view>
+          <input class="shownnum" value='{{anli.price}}' placeholder="请输入价格" type='number' placeholder-class="holder" name="qidingliang" />
+        </view> -->
       <view class="btnBox">
         <navigator url="my_designerCaseDetailDec">
           <view class="listBox">
-            <view class="listOption">商品详情</view>
+            <view class="listOption">案例详情</view>
             <view class="listOptionImages goodsDetail">
               <label class="showname">{{goods_desc==""?"":"已填写"}}</label>
               <text class='iconfont icon-arrow-right'></text>
@@ -361,13 +361,13 @@
     data = {
       fengge: [],
       huxing: [],
-      jiage:[],
-      mianji:[],
+      jiage: [],
+      mianji: [],
       anli: {},
       fengge_id: '',
       huxing_id: '',
-      mianji_id:'',
-      jiage_id:'',
+      mianji_id: '',
+      jiage_id: '',
       isShowPriceAndNum: false,
       goods_attr: [],
       imgSrc: [],
@@ -425,11 +425,11 @@
       bindhuxing(id) {
         this.huxing_id = id;
       },
-      bindmianji(id){
- this.mianji_id = id;
+      bindmianji(id) {
+        this.mianji_id = id;
       },
-      bindjiage(id){
- this.jiage_id = id;
+      bindjiage(id) {
+        this.jiage_id = id;
       },
       //长按
       async longtabBrand(name, id, index) {
@@ -649,41 +649,38 @@
         util.showToast("请选择风格")
         return
       }
-       if (!this.mianji_id || this.mianji_id == '') {
+      if (!this.mianji_id || this.mianji_id == '') {
         util.showToast("请选择面积")
         return
       }
-       if (!this.jiage_id || this.jiage_id == '') {
+      if (!this.jiage_id || this.jiage_id == '') {
         util.showToast("请选择价格")
         return
       }
       this.anli.file_url = this.anli.upload ? await this.upImg(this.anli.file_url) : this.anli.file_url
- var datas = {
-          ...e.detail.value,
-          content: this.goods_desc,
-          huxing_id: this.huxing_id,
-          fengge_id: this.fengge_id,
-          jiage_id:this.jiage_id,
-          mianji_id:this.mianji_id,
-          file_url: this.anli.file_url,
-          suppliers_id: this.suppliers_id
-        }
+      var datas = {
+        ...e.detail.value,
+        content: this.goods_desc,
+        huxing_id: this.huxing_id,
+        fengge_id: this.fengge_id,
+        jiage_id: this.jiage_id,
+        mianji_id: this.mianji_id,
+        file_url: this.anli.file_url,
+        suppliers_id: this.suppliers_id
+      }
       if (this.type == "add") {
-       
         newapi.add_anli(datas).then(res => {
-
           util.showToast("添加成功")
-          this.$parent.globalData.designer_info.anlishu=this.$parent.globalData.designer_info.anlishu+1
+          this.$parent.globalData.designer_info.anlishu = this.$parent.globalData.designer_info.anlishu + 1
           wx.navigateBack({
             delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
           });
         })
-      }else{
-datas.article_id=this.anli.article_id
- newapi.edit_anli(datas).then(res => {
+      } else {
+        datas.article_id = this.anli.article_id
+        newapi.edit_anli(datas).then(res => {
           console.log("修改", res)
           util.showToast("修改成功")
-
           wx.navigateBack({
             delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
           });
@@ -708,26 +705,25 @@ datas.article_id=this.anli.article_id
       this.mianji_id = datas.mianji
       this.jiage_id = datas.jiage
       this.$apply();
-    
-  }
-  addGoodsINFO() {}
-  async onLoad(option) {
-    try {
-      var suppliers_id = this.$parent.globalData.suppliers_id ? this.$parent.globalData.suppliers_id : ""
-      var yizhanInfo = this.$parent.globalData.yizhanInfo ? this.$parent.globalData.yizhanInfo : await this.$parent.getYizhanInfo(suppliers_id);
-      this.suppliers_id = suppliers_id == "" ? yizhanInfo.suppliers_id : suppliers_id;
-      console.log("option",option)
-      if (option.id) {
-        this.setDesignerInfo(option.id)
-        this.type = "edit"
-      } else {
-        // 添加
-        this.type = "add"
-      }
-      if (option.index) this.index = option.index;
-      this.getAnliStyle(this.suppliers_id);
-      this.$apply();
-    } catch (error) {}
-  }
+    }
+    addGoodsINFO() {}
+    async onLoad(option) {
+      try {
+        var suppliers_id = this.$parent.globalData.suppliers_id ? this.$parent.globalData.suppliers_id : ""
+        var yizhanInfo = this.$parent.globalData.yizhanInfo ? this.$parent.globalData.yizhanInfo : await this.$parent.getYizhanInfo(suppliers_id);
+        this.suppliers_id = suppliers_id == "" ? yizhanInfo.suppliers_id : suppliers_id;
+        console.log("option", option)
+        if (option.id) {
+          this.setDesignerInfo(option.id)
+          this.type = "edit"
+        } else {
+          // 添加
+          this.type = "add"
+        }
+        if (option.index) this.index = option.index;
+        this.getAnliStyle(this.suppliers_id);
+        this.$apply();
+      } catch (error) {}
+    }
   }
 </script>

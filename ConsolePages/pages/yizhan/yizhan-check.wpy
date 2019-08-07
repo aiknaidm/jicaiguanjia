@@ -104,6 +104,9 @@
   .list view {
     border-bottom: 1px solid #f0f0f0;
   }
+  .list.section_gap{
+    padding: 0 20rpx;
+  }
   .icon-jiantou {
     font-size: 12px;
     margin-left: 10rpx;
@@ -161,7 +164,7 @@
         </view>
         <view class='check-list-btn'>
           <form report-submit bindsubmit='getFormId'>
-            <button @tap.stop='toShenhe({{item.id}})'>审核</button>
+            <button @tap.stop='showSlider({{item}})'>审核</button>
           </form>
         </view>
       </view>
@@ -173,12 +176,14 @@
         <view class='check-list-content'>
           <view>姓名：{{item.username}}</view>
           <view>店铺名称：{{item.suppliers_name}}</view>
+          <view>分成比例：商品售价的{{item.bili*100}}% </view>
+          
           <view @tap.stop='tocallphone({{item.mobile}})'>手机号码：{{item.mobile}}
             <text class='iconfont icon-shouji'></text>
           </view>
         </view>
         <view class='check-list-btn'>
-          <text class='iconfont icon-youcecaidan' @tap.stop='toJiechu({{item.id}})'></text>
+          <text class='iconfont icon-youcecaidan' @tap.stop='toJiechu({{item}})'></text>
         </view>
       </view>
     </view>
@@ -186,13 +191,22 @@
       <noOrder text="暂无店铺"></noOrder>
     </view>
     <!-- <navigator url='/ConsolePages/pages/my_addManagerInfo?type=member&sales_id={{sales_id}}'>
-                  <view class='addmember'>+添加会员</view>
-                </navigator> -->
-    <view class='body-bg' wx:if="{{isShowSalesList}}" bindtap='hiddenSalesList' touchstart='hiddenbg' touchmove="hiddenbg">
+                      <view class='addmember'>+添加会员</view>
+                    </navigator> -->
+    <view class='body-bg' wx:if="{{isShowSalesList}}" bindtap='hiddenSalesList' touchstart='hiddenSalesList' touchmove="hiddenSalesList">
       <view class='list'>
         <view wx:for="{{adminList}}" wx:key="{{index}}" @tap='changeShopList({{item.id}},{{item.user_nickname}})'>
           {{item.user_nickname}}
         </view>
+      </view>
+    </view>
+    <view class='body-bg' wx:if="{{isShowSlider}}"  bindtap='hiddenSalesList' touchstart='hiddenSalesList' touchmove="hiddenSalesList">
+      <view class="list section_gap" @tap.stop="stop">
+        <text class="section__title">设置最小/最大值</text>
+        <view class="body-view">
+          <slider @change.stop="sliderChange" min="15" max="25" value="{{bili}}" show-value/>
+        </view>
+        <button @tap.stop="toShenhe()">提交</button>
       </view>
     </view>
   </view>
@@ -217,6 +231,7 @@
       shenheList: [],
       sales_id: 0,
       isShowSalesList: false,
+      isShowSlider: false,
       adminList: [],
       salesmanName: '选择业务员',
       showName: false,
@@ -224,6 +239,7 @@
       money: {},
       is_kthy: 0,
       qurenNum: 0,
+      bili:15,
     };
     computed = {};
     components = {
@@ -231,6 +247,14 @@
       noOrder
     };
     methods = {
+      stop(){
+        return
+      },
+      sliderChange(e){
+         console.log('slider发生 change 事件，携带值为', e.detail.value)
+        //  if(e.detail.value>=15&&e.detail.value<=20)
+        this.bili=e.detail.value
+      },
       toSureList() {
         wx.navigateTo({
           url: 'my_console_toSureList'
@@ -257,12 +281,37 @@
       statusTap(index) {
         this.page = 1
         this.shenheList = [];
-       
         this.currentStatu = index;
         this.getShenheList(this.suppliers_id, this.currentStatu);
       },
       //需要审核提示
-      async toShenhe(id) {
+      async showSlider(item) {
+
+        this.isShowSlider = true;
+        this.id = item.id;
+        this.bili=item.bili*100
+
+      },
+      async toShenhe(type) {
+        var id = this.id
+       this.isShowSlider=false;
+        if (this.currentStatu ==1) {
+          newapi.edit_suppliers_bili({
+            id,
+            bili: this.bili/100
+          }).then(res=>{
+          
+            util.showToast('修改成功')
+            this.shenheList.forEach((item,index)=>{
+if(item.id==id){
+  this.shenheList[index].bili=this.bili/100;
+}
+            })
+            this.$apply();
+          });
+
+          return
+        }
         let mRes = await util.showActionSheet(['通过', '拒绝']);
         if (mRes.tapIndex == 0) {
           this.doshenhe(id, '1');
@@ -271,11 +320,17 @@
         }
       },
       //解除关系提示
-      async toJiechu(id) {
-        let mRes = await util.showActionSheet(['解除关系']);
+      async toJiechu(item) {
+        var id=item.id
+        let mRes = await util.showActionSheet(['解除关系', '设置比例']);
         if (mRes.tapIndex == 0) {
           this.doshenhe(id, 0);
         } else {
+          // 设置等级
+          this.bili=item.bili*100
+          this.isShowSlider = true;
+          this.id = id
+          this.$apply();
           //   console.log("this.list",this.list);
           //    let mRes2 = await util.showActionSheet(this.list);
           //    this.doshenhe(id, 'tongguo',mRes2.tapIndex+1);
@@ -291,6 +346,7 @@
       },
       hiddenSalesList: function() {
         this.isShowSalesList = false;
+        this.isShowSlider = false
       },
       changeShopList: function(sales_id, name) {}
     };
@@ -352,6 +408,14 @@
       let res = await newapi.shenhe_suppliers_join(data);
       wx.hideLoading();
       if (res.data.code == 0) {
+        if (shenhe == 1) {
+          newapi.edit_suppliers_bili({
+            id,
+            bili:  this.bili/100
+          }).then(res=>{
+            util.showToast("设置成功");
+          });
+        }
         this.page = 1;
         this.getShenheList(this.suppliers_id, this.currentStatu);
       }

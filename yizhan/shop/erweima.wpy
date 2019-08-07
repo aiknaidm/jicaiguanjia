@@ -37,8 +37,8 @@
 
 <script>
   import wepy from 'wepy';
-  import newapi from '../API/newapi';
-  import util from '../utils/index';
+  import newapi from '../../API/newapi';
+  import util from '../../utils/index';
   export default class shoperweima extends wepy.page {
     config = {
       navigationBarTitleText: '我的',
@@ -144,7 +144,7 @@
       if (is_yizhan == 1) {
         path = '/pages/home?suppliers_id=' + suppliers_id;
       }else if(is_join==1){
-        path = '/pages/home?suppliers_id=' + yizhanInfo.yizhan_suppliers_id+'&share_suppliers_id='+suppliers_id+'&share_user_id='+userInfo.user_id;
+        path = '/pages/home?suppliers_id=' + yizhanInfo.yizhan_suppliers_id+'&share_suppliers_id='+suppliers_id;
       } else {
         path = '/Shop/pages/index?suppliers_id=' +
           suppliers_id +
@@ -156,7 +156,7 @@
       let data = {
         path,
         suppliers_id,
-        is_yizhan:is_join==1?is_join:is_yizhan
+        is_yizhan
       };
       var qrurl="";
       if(suppliers_id==525){

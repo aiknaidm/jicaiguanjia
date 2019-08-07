@@ -19,7 +19,7 @@ const newapi = {
     add_form: (data) => fetch(`${host_chk}/add_form`, 'GET', data),
     getUserInfo: (data) => fetch(`${host_chk}/get_user_info`, 'GET', data), //用户信息
     upUserInfo: (data) => fetch(`${host_chk}/up_user_info`, 'GET', data),
-    getYizhanInfo: (data) => fetch(`${host_chk}/jlxx_new`, 'GET', data),
+    getYizhanInfo: (data) => fetch(`${host_chk}/managers_permission`, 'GET', data),
     yzm: (data) => fetch(`${host_chk}/yzm`, 'GET', data),
     renzheng: (data) => fetch(`${host_chk}/renzheng`, 'POST', data),
     yizhanIndex: (data) => fetch(`${host_chk}/wdyz`, 'GET', data), //商城首页
@@ -110,7 +110,7 @@ const newapi = {
     swyz: (data) => fetch(`${host_chk}/swyz`, 'GET', data),
     copeCartList: (data) => fetch(`${host_chk}/cat_copy_chk`, 'GET', data),
     bossList: (data) => fetch(`${host_chk}/boss_list`, 'GET', data),
-  
+
     yh_num: (data) => fetch(`${host_chk}/yh_num`, 'GET', data),
 
     kehu: (data) => fetch(`${host_chk}/kehu`, 'GET', data),
@@ -151,6 +151,13 @@ const newapi = {
     anli_style: (data) => fetch(`${host_chk}/anli_style`, 'POST', data), //修改基础信息
     anli_detail: (data) => fetch(`${host_chk}/anli_detail`, 'GET', data),
     anli_list: (data) => fetch(`${host_chk}/anli_list`, 'GET', data),
+    edit_suppliers_bili: (data) => fetch(`${host_chk}/edit_suppliers_bili`, 'GET', data),
+    qianbao: (data) => fetch(`${host_chk}/qianbao`, 'GET', data),
+    addka: (data) => fetch(`${host_chk}/addka`, 'GET', data),
+    bankname: (data) => fetch(`${host_chk}/bankname`, 'GET', data),
+    kalist: (data) => fetch(`${host_chk}/kalist`, 'GET', data),
+    tixian: (data) => fetch(`${host_chk}/tixian`, 'GET', data),
+
 }
 const fetch = async function(url, method, data) {
     return new Promise((resolve, reject) => {
