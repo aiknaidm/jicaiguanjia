@@ -151,7 +151,7 @@ const newapi = {
     anli_style: (data) => fetch(`${host_chk}/anli_style`, 'POST', data), //修改基础信息
     anli_detail: (data) => fetch(`${host_chk}/anli_detail`, 'GET', data),
     anli_list: (data) => fetch(`${host_chk}/anli_list`, 'GET', data),
-    edit_suppliers_bili: (data) => fetch(`${host_chk}/edit_suppliers_bili`, 'GET', data),
+    edit_suppliers_level: (data) => fetch(`${host_chk}/edit_suppliers_level`, 'GET', data),
     qianbao: (data) => fetch(`${host_chk}/qianbao`, 'GET', data),
     addka: (data) => fetch(`${host_chk}/addka`, 'GET', data),
     bankname: (data) => fetch(`${host_chk}/bankname`, 'GET', data),
@@ -161,8 +161,8 @@ const newapi = {
     txjl: (data) => fetch(`${host_chk}/txjl`, 'GET', data),
     suppliers_goods: (data) => fetch(`${host_chk}/suppliers_goods`, 'POST', data),
     suppliers_goods_list: (data) => fetch(`${host_chk}/suppliers_goods_list`, 'GET', data),
-
-
+    baozhengjin_pay: (data) => fetch(`${host_pay}/baozhengjin_pay`, 'GET', data),
+    baozhengjin_paysuccess: (data) => fetch(`${host_pay}/baozhengjin_paysuccess`, 'GET', data),
 }
 const fetch = async function(url, method, data) {
     return new Promise((resolve, reject) => {

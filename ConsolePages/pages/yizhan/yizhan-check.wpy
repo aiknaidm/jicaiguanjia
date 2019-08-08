@@ -176,7 +176,7 @@
         <view class='check-list-content'>
           <view>姓名：{{item.username}}</view>
           <view>店铺名称：{{item.suppliers_name}}</view>
-          <view>分成比例：商品售价的{{item.bili*100}}% </view>
+          <view>等级：{{item.level}} </view>
           
           <view @tap.stop='tocallphone({{item.mobile}})'>手机号码：{{item.mobile}}
             <text class='iconfont icon-shouji'></text>
@@ -202,9 +202,9 @@
     </view>
     <view class='body-bg' wx:if="{{isShowSlider}}"  bindtap='hiddenSalesList' touchstart='hiddenSalesList' touchmove="hiddenSalesList">
       <view class="list section_gap" @tap.stop="stop">
-        <text class="section__title">设置最小/最大值</text>
+        <text class="section__title">设置等级</text>
         <view class="body-view">
-          <slider @change.stop="sliderChange" min="15" max="25" value="{{bili}}" show-value/>
+          <slider @change.stop="sliderChange" min="1" max="2" value="{{level}}" show-value/>
         </view>
         <button @tap.stop="toShenhe()">提交</button>
       </view>
@@ -239,7 +239,7 @@
       money: {},
       is_kthy: 0,
       qurenNum: 0,
-      bili:15,
+      level:15,
     };
     computed = {};
     components = {
@@ -253,7 +253,7 @@
       sliderChange(e){
          console.log('slider发生 change 事件，携带值为', e.detail.value)
         //  if(e.detail.value>=15&&e.detail.value<=20)
-        this.bili=e.detail.value
+        this.level=e.detail.value
       },
       toSureList() {
         wx.navigateTo({
@@ -289,22 +289,22 @@
 
         this.isShowSlider = true;
         this.id = item.id;
-        this.bili=item.bili*100
+        this.level=item.level
 
       },
       async toShenhe(type) {
         var id = this.id
        this.isShowSlider=false;
         if (this.currentStatu ==1) {
-          newapi.edit_suppliers_bili({
+          newapi.edit_suppliers_level({
             id,
-            bili: this.bili/100
+            level: this.level
           }).then(res=>{
           
             util.showToast('修改成功')
             this.shenheList.forEach((item,index)=>{
 if(item.id==id){
-  this.shenheList[index].bili=this.bili/100;
+  this.shenheList[index].level=this.level;
 }
             })
             this.$apply();
@@ -322,12 +322,12 @@ if(item.id==id){
       //解除关系提示
       async toJiechu(item) {
         var id=item.id
-        let mRes = await util.showActionSheet(['解除关系', '设置比例']);
+        let mRes = await util.showActionSheet(['解除关系', '设置等级']);
         if (mRes.tapIndex == 0) {
           this.doshenhe(id, 0);
         } else {
           // 设置等级
-          this.bili=item.bili*100
+          this.level=item.level
           this.isShowSlider = true;
           this.id = id
           this.$apply();
@@ -409,9 +409,9 @@ if(item.id==id){
       wx.hideLoading();
       if (res.data.code == 0) {
         if (shenhe == 1) {
-          newapi.edit_suppliers_bili({
+          newapi.edit_suppliers_level({
             id,
-            bili:  this.bili/100
+            level:  this.level
           }).then(res=>{
             util.showToast("设置成功");
           });

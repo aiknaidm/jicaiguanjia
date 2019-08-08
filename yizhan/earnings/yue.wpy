@@ -149,8 +149,8 @@
 <view class='container'>
   <view class='jy-top'>
     <view class='jy-top-left'>
-      <view class='jy-top-date'>{{currtime}}</view>
-      <view class='jy-top-money'>交易额￥{{zonge}}</view>
+      <view class='jy-top-date'>{{shijian}}</view>
+      <!-- <view class='jy-top-money'>交易额￥{{zonge}}</view> -->
     </view>
 
     <view class='jy-top-img'>
@@ -168,7 +168,7 @@
       <view class='jy-content'>
 
         <view class='jy-content-right'>
-          {{item.jine}}
+         -{{item.jine}}
           <view class='jy-content-left' style='color:black'>
             <view>{{item.shouzhi}}</view>
           </view>
@@ -181,7 +181,7 @@
     </view>
   </view>
 
-  <view class="weui-loadmore" hidden="{{isMoreData}}">
+  <view class="weui-loadmore" wx:if="{{isMoreData}}">
     <view class="weui-loading"></view>
     <view class="weui-loadmore_tips">正在加载</view>
   </view>
@@ -196,12 +196,13 @@ import util from '../../utils/index';
 import popup from '../../components/popup';
 export default class newslist extends wepy.page {
   config = {
-    navigationBarTitleText: '收益'
+    navigationBarTitleText: '提现'
   };
   components = { statusTap, popup };
   data = {
   moneyList:[],
-  isMoreData:true
+  isMoreData:true,
+  shijian:''
   };
   computed = {};
   methods = {
@@ -227,17 +228,18 @@ export default class newslist extends wepy.page {
     };
     let res = await newapi.txjl(data);
     util.hideLoading();
+    res.data.data.data.forEach((item,index)=>{
+        res.data.data.data[index].pay_time=util.formatDate1(new Date(item.pay_time)/1000);
+    })
     if (res.data.code == 0) {
-  
       if (this.page == 1) {
         this.isMoreData = true;
         this.moneyList = res.data.data.data;
         // this.zonge=
       } else {
           this.moneyList.push(...res.data.data.data);
-       
       }
-      if (res.data.data.length < 10) this.isMoreData = false;
+      if (res.data.data.data.length < 10) this.isMoreData = false;
       this.$apply();
     } else {
       util.showToast(res.data.message);

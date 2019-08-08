@@ -143,45 +143,83 @@ const fwfwxpay = async function(suppliers_id, data, pid) {
 
 // 会员缴费 
 const pay = async function(data, data2) {
-    showLoading('支付中...');
-    let res = await newapi.permission_pay(data);
-    wx.hideLoading();
-    var result = res.data.data;
-    var order_id = res.data.orderId
-    if (res.data.code == 0) {
-        //  通知用
-        var prepay_id = result.package.replace("prepay_id=", "");
-        // 发起支付
-        try {
-            var payres = await wepy.requestPayment({
-                timeStamp: result.timeStamp,
-                nonceStr: result.nonceStr,
-                package: result.package,
-                signType: result.signType,
-                paySign: result.paySign,
-            })
-        } catch (err) {
-            // 取消支付 
+        showLoading('支付中...');
+        let res = await newapi.permission_pay(data);
+        wx.hideLoading();
+        var result = res.data.data;
+        var order_id = res.data.orderId
+        if (res.data.code == 0) {
+            //  通知用
+            var prepay_id = result.package.replace("prepay_id=", "");
+            // 发起支付
+            try {
+                var payres = await wepy.requestPayment({
+                    timeStamp: result.timeStamp,
+                    nonceStr: result.nonceStr,
+                    package: result.package,
+                    signType: result.signType,
+                    paySign: result.paySign,
+                })
+            } catch (err) {
+                // 取消支付 
+                return {
+                    code: 2,
+                    msg: "取消支付"
+                };
+            }
+            data2.order_id = order_id;
+            newapi.permission_paysuccess(data2);
             return {
-                code: 2,
-                msg: "取消支付"
+                code: 1,
+                msg: "支付成功"
+            };
+        } else {
+            return {
+                code: 3,
+                msg: "服务器忙"
             };
         }
-        data2.order_id = order_id;
-        newapi.permission_paysuccess(data2);
-        return {
-            code: 1,
-            msg: "支付成功"
-        };
-    } else {
-        return {
-            code: 3,
-            msg: "服务器忙"
-        };
     }
-}
-
-// 收集formid
+    // 保证金缴费 
+const baozhengjinPay = async function(data, data2) {
+        showLoading('支付中...');
+        let res = await newapi.baozhengjin_pay(data);
+        wx.hideLoading();
+        var result = res.data.data;
+        var order_id = res.data.orderId
+        if (res.data.code == 0) {
+            //  通知用
+            var prepay_id = result.package.replace("prepay_id=", "");
+            // 发起支付
+            try {
+                var payres = await wepy.requestPayment({
+                    timeStamp: result.timeStamp,
+                    nonceStr: result.nonceStr,
+                    package: result.package,
+                    signType: result.signType,
+                    paySign: result.paySign,
+                })
+            } catch (err) {
+                // 取消支付 
+                return {
+                    code: 2,
+                    msg: "取消支付"
+                };
+            }
+            data2.order_id = order_id;
+            newapi.baozhengjin_paysuccess(data2);
+            return {
+                code: 1,
+                msg: "支付成功"
+            };
+        } else {
+            return {
+                code: 3,
+                msg: "服务器忙"
+            };
+        }
+    }
+    // 收集formid
 const submitFormId = function(formId) {
     if (formId == "the formId is a mock one") {
         return
@@ -310,6 +348,7 @@ export default {
     formatDate1,
     formatNumber,
     wxpay3,
+    baozhengjinPay,
     fwfwxpay,
     pay,
     regexConfig,
