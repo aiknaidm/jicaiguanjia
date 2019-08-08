@@ -150,6 +150,7 @@ export default class extends wepy.app {
           'pages/my_console_catManage',
           'pages/my_console_catDelete',
           'pages/addGoodsInfo',
+          'pages/addGoodsShop',
           'pages/addSecondaryCat',
           'pages/addGoodsDec',
           'pages/goodsList',
