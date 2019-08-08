@@ -159,6 +159,9 @@ const newapi = {
     tixian: (data) => fetch(`${host_chk}/tixian`, 'GET', data),
     syjl: (data) => fetch(`${host_chk}/syjl`, 'GET', data),
     txjl: (data) => fetch(`${host_chk}/txjl`, 'GET', data),
+    suppliers_goods: (data) => fetch(`${host_chk}/suppliers_goods`, 'POST', data),
+    suppliers_goods_list: (data) => fetch(`${host_chk}/suppliers_goods_list`, 'GET', data),
+
 
 }
 const fetch = async function(url, method, data) {

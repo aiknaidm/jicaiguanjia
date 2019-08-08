@@ -414,7 +414,7 @@
           <switch checked="{{hdky}}" name="hdky" bindchange="switch1Change" color="#e50012" />
         </view>
       </view>
-      <view class="listBox4 listBox3" wx:if="{{goodsId}}">
+      <view class="listBox4 listBox3" wx:if="{{is_yizhan==0 && goodsId}}">
         <view class="listOption">禁止会员查看</view>
         <view class="listOptionImages goodsDetail">
           <checkbox-group bindchange="checkboxChange" name="hykk">
@@ -426,6 +426,15 @@
           </checkbox-group>
         </view>
       </view>
+        <navigator url="addGoodsShop" wx:if="{{is_yizhan}}">
+          <view class="listBox">
+            <view class="listOption">选择供货商</view>
+            <view class="listOptionImages goodsDetail">
+              <label class="showname">去设定</label>
+              <text class='iconfont icon-arrow-right'></text>
+            </view>
+          </view>
+        </navigator>
       <view class="btnBox">
         <navigator url="addGoodsDec">
           <view class="listBox">
@@ -471,6 +480,7 @@ export default class newslist extends wepy.page {
     vip_level: [],
     lev: 1,
     is_join: 0,
+    is_yizhan: 0,
     items: [
       {
         name: '1级会员',
@@ -744,7 +754,7 @@ export default class newslist extends wepy.page {
     var is_best = e.detail.value.is_best ? 1 : 0;
     var is_hot = e.detail.value.is_hot ? 1 : 0;
 
-    var hykk = this.goodsId ? e.detail.value.hykk.toString() : '';
+    var hykk = (this.is_yizhan == 0 && this.goodsId) ? e.detail.value.hykk.toString() : '';
 
     var shop_prices = {};
     if (goods_name == '') {
@@ -994,6 +1004,7 @@ export default class newslist extends wepy.page {
         : (await this.$parent.getYizhanInfo()).suppliers_id;
       this.vip_level = this.$parent.globalData.yizhanInfo.vip_level;
       this.is_join = this.$parent.globalData.yizhanInfo.is_join;
+      this.is_yizhan = this.$parent.globalData.yizhanInfo.is_yizhan;
       this.lev = this.vip_level;
 
       this.hdky = this.$parent.globalData.yizhanInfo.hdky == 1 ? true : false;

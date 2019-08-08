@@ -364,7 +364,7 @@
               </label>
         </view>
       </view>
-      <view class="section section2">
+      <view class="section section2" wx:if="{{userDetail.is_yizhan==0}}">
         <view class="label">会员等级</view>
         <view class="body-view" style="width:300rpx;">
           <slider min="1" max="5" selected-color="#e50012" name="vip_level" value="{{userDetail.vip_level}}" show-value />
@@ -455,7 +455,7 @@
       isOpenSetting: false,
       address: '',
       is_friend_disabled: false,
-      is_kthy: 0
+      is_kthy: 0,
     };
     computed = {};
     components = {};
@@ -622,7 +622,7 @@
             // var is_picture = param.is_picture ? 0 : 1;
             var is_friend = param.is_friend ? 1 : 0;
             var is_chakan = param.is_chakan ? 1 : 0;
-            var vip_level = param.vip_level;
+            var vip_level = param.vip_level ? param.vip_level : 1;
             var zhifu = param.payStyle.toString();
          
             // var gonggao = param.gonggao;
