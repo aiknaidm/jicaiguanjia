@@ -157,6 +157,8 @@ const newapi = {
     bankname: (data) => fetch(`${host_chk}/bankname`, 'GET', data),
     kalist: (data) => fetch(`${host_chk}/kalist`, 'GET', data),
     tixian: (data) => fetch(`${host_chk}/tixian`, 'GET', data),
+    syjl: (data) => fetch(`${host_chk}/syjl`, 'GET', data),
+    txjl: (data) => fetch(`${host_chk}/txjl`, 'GET', data),
 
 }
 const fetch = async function(url, method, data) {

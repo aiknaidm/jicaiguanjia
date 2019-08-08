@@ -1,148 +1,154 @@
 <style lang="less">
-.status-label {
-  background: #f0f0f0;
-  border-left: 5rpx solid #e4e4e4;
-}
-.icon-shouji {
-  color: #44b8f4;
-  font-size: 35rpx;
-}
-.icon-youcecaidan {
-  color: #e50012;
-}
-.green {
-  color: #10b3b1 !important;
-}
-.num {
-  font-size: 26rpx;
-  line-height: 35rpx;
-  padding-left: 20rpx;
-  color: #888;
-}
-.status-box {
-  width: 80%;
-  line-height: 60rpx;
-  font-size: 30rpx;
-  display: flex;
-  align-items: center;
-  background-color: #fff;
-}
-.status-box .status-label {
-  text-align: center;
-  font-size: 30rpx;
-  padding: 0px 40rpx;
-  flex: 1;
-  position: relative;
-}
-.status-label:first-child {
-  border-radius: 50px 0 0 50px;
-}
-.status-label:last-child {
-  border-radius: 0 50px 50px 0;
-}
-.status-box .status-label.active {
-  background-color: #e50012;
-  color: #fff;
-}
-.status-box .status-label .red-dot {
-  width: 16rpx;
-  height: 16rpx;
-  position: absolute;
-  left: 116rpx;
-  top: 23rpx;
-  background-color: #f43530;
-  border-radius: 50%;
-}
-.search-title {
-  display: flex;
-  line-height: 55rpx;
-  font-size: 28rpx;
-  align-items: center;
-  background-color: #fff;
-  z-index: 10;
-  padding: 20rpx;
-}
-.border {
-  display: inline-block;
-  padding: 0 20rpx;
-  background: #fff; // border-right: 1px solid #f0f0f0;
-  // max-width: 300rpx;
-}
-.icon-jiantou {
-  font-size: 12px;
-  margin-left: 10rpx;
-  color: #e50012;
-}
-.top {
-  background: #e50012;
-  padding: 40rpx;
-  text-align: center;
-  .money {
+  .status-label {
+    background: #f0f0f0;
+    border-left: 5rpx solid #e4e4e4;
+  }
+  .icon-shouji {
+    color: #44b8f4;
+    font-size: 35rpx;
+  }
+  .icon-youcecaidan {
+    color: #e50012;
+  }
+  .green {
+    color: #10b3b1 !important;
+  }
+  .num {
+    font-size: 26rpx;
+    line-height: 35rpx;
+    padding-left: 20rpx;
+    color: #888;
+  }
+  .status-box {
+    width: 80%;
+    line-height: 60rpx;
+    font-size: 30rpx;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+  }
+  .status-box .status-label {
+    text-align: center;
+    font-size: 30rpx;
+    padding: 0px 40rpx;
+    flex: 1;
+    position: relative;
+  }
+  .status-label:first-child {
+    border-radius: 50px 0 0 50px;
+  }
+  .status-label:last-child {
+    border-radius: 0 50px 50px 0;
+  }
+  .status-box .status-label.active {
+    background-color: #e50012;
     color: #fff;
-    .text-m {
-      font-size: 60rpx;
+  }
+  .status-box .status-label .red-dot {
+    width: 16rpx;
+    height: 16rpx;
+    position: absolute;
+    left: 116rpx;
+    top: 23rpx;
+    background-color: #f43530;
+    border-radius: 50%;
+  }
+  .search-title {
+    display: flex;
+    line-height: 55rpx;
+    font-size: 28rpx;
+    align-items: center;
+    background-color: #fff;
+    z-index: 10;
+    padding: 20rpx;
+  }
+  .border {
+    display: inline-block;
+    padding: 0 20rpx;
+    background: #fff; // border-right: 1px solid #f0f0f0;
+    // max-width: 300rpx;
+  }
+  .icon-jiantou {
+    font-size: 12px;
+    margin-left: 10rpx;
+    color: #e50012;
+  }
+  .top {
+    background: #e50012;
+    padding: 40rpx;
+    text-align: center;
+    .money {
+      color: #fff;
+      .text-m {
+        font-size: 60rpx;
+        line-height: 80rpx;
+        font-weight: bold;
+      }
+      .icon-jiantou {
+        color: #fff;
+      }
+    }
+    .border2 {
+      border-left: 1px solid rgba(255, 255, 255, 0.5);
+    }
+  }
+  .body-bg {
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+  .list {
+    background-color: #fff;
+    width: 60%;
+    text-align: center;
+    line-height: 88rpx;
+    font-size: 30rpx;
+    max-height: 450rpx;
+    overflow: scroll;
+  }
+  .list view {
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .click {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .click-title {
       line-height: 80rpx;
       font-weight: bold;
     }
-    .icon-jiantou {
-      color: #fff;
+    .time {
+      display: flex;
+      padding-bottom: 20rpx;
+      align-items: center;
     }
   }
-  .border2 {
-    border-left: 1px solid rgba(255, 255, 255, 0.5);
-  }
-}
-.body-bg {
-  background-color: rgba(0, 0, 0, 0.5);
-  height: 100%;
-  width: 100%;
-  position: fixed;
-  left: 0px;
-  top: 0px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-}
-.list {
-  background-color: #fff;
-  width: 60%;
-  text-align: center;
-  line-height: 88rpx;
-  font-size: 30rpx;
-  max-height: 450rpx;
-  overflow: scroll;
-}
-.list view {
-  border-bottom: 1px solid #f0f0f0;
-}
-.click {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  .click-title {
-    line-height: 80rpx;
-    font-weight: bold;
-  }
-  .time {
-    display: flex;
-    padding-bottom: 20rpx;
-    align-items: center;
-  }
-}
 </style>
 <template>
   <view class="container">
     <view class="top">
       <view class="money" wx:if="{{currentType==0}}">
-        <view class="text-t">会员充值金额</view>
-        <view class="text-m">￥{{czmoney}}</view>
+        <view class="text-t">分佣所得</view>
+        <view class="text-m">￥{{yue}}</view>
         <!-- <view class="iconfont icon-jiantou"></view> -->
       </view>
-       <view class="money" wx:else>
-        <view class="text-t">会员支出金额</view>
-        <view class="text-m">￥{{zcmoney}}</view>
+
+      <view class="money" wx:elif="{{currentType==1}}">
+        <view class="text-t">商品返还</view>
+        <view class="text-m">￥{{yue}}</view>
+        <!-- <view class="iconfont icon-jiantou"></view> -->
+      </view>
+      <view class="money" wx:else>
+        <view class="text-t">易站收益</view>
+        <view class="text-m">￥{{yue}}</view>
         <!-- <view class="iconfont icon-jiantou"></view> -->
       </view>
     </view>
@@ -159,260 +165,216 @@
       </view>
     </view>
     <view class="search-title">
-      <view bindtap="salesmanNameTap" class="up">
+      <!-- <view bindtap="salesmanNameTap" class="up">
         <view class="border">
           {{salesmanName}}
           <text class="iconfont icon-jiantou green"></text>
         </view>
-      </view>
+      </view> -->
       <!-- <view bindtap="memberNameTap" class="up">
-            <view class="border">
-              {{memberName}}
-              <text class="iconfont icon-jiantou"></text>
-            </view>
-          </view> -->
+              <view class="border">
+                {{memberName}}
+                <text class="iconfont icon-jiantou"></text>
+              </view>
+            </view> -->
       <view class="up">
-        <input placeholder="会员名" @input="changeMemberName"/>
+        <input placeholder="关键词查询" @input="changeMemberName" />
       </view>
     </view>
-    <view class="payList-box" wx:if="{{currentType==0}}">
-      <repeat for="{{payList}}" key="index" index="index" item="item">
-        <payList type="1" :item.sync="item"></payList>
-        
-      </repeat>
-      <noOrder text="暂无内容" wx:if="{{payList.length==0}}"></noOrder>
-    </view>
-    <view class="payList-box" wx:if="{{currentType==1}}">
-      <repeat for="{{balance}}" key="index" index="index" item="item">
-        <expendList type="1" :item.sync="item"></expendList>
+    <view class="payList-box">
+      <repeat for="{{orderList}}" wx:key="{{index}}">
+        <orderList :orderList.sync="item" :goodsMap.sync="goodsMap[index]" @orderDetail.user="orderDetail">
+        </orderList>
       </repeat>
       <noOrder text="暂无内容" wx:if="{{balance.length==0}}"></noOrder>
     </view>
     <view class="body-bg" wx:if="{{isShowSalesList&&list.length>0}}" bindtap="hiddenSalesList" touchstart="hiddenbg" touchmove="hiddenbg">
       <view class="list">
-        <view wx:for="{{list}}" wx:key="{{index}}" @tap="changeShopList({{item.id}},{{item.user_nickname}})">{{item.user_nickname}}</view>
+        <view wx:for="{{list}}" wx:key="{{index}}" @tap="changeShopList({{item.id}},{{item.user_nickname}})">{{item}}</view>
       </view>
     </view>
   </view>
 </template>
 
 <script>
-import wepy from 'wepy';
-import newapi from '../../API/newapi';
-import util from '../../utils/index';
-import payList from '../../components/payList';
-import expendList from '../../components/expendList';
-import noOrder from '../../components/noOrder';
-export default class my_console_cardPayDetail extends wepy.page {
-  config = {
-    navigationBarTitleText: '会员充值账单明细'
-  };
-  data = {
-    statusType: ['分佣所得', '商品返还'],
-    statusKey: ['0', '1'],
-    currentType: 0,
-    isShowSalesList: false,
-    salesmanName: '商品返款',
-    memberName: '选择会员',
-    showName: false,
-    payList: [],
-    balance: [],
-    list: ['商品返款','分佣所得','提现'],
-    czmoney: 9999,
-    zcmoney: 9999,
-    end_time: 1970 - 0 - 0,
-    start_time: 1970 - 0 - 0,
-    now_time: 1970 - 0 - 0,
-    page: 1
-  };
-  computed = {};
-  components = {
-    payList,
-    expendList,
-    noOrder
-  };
-  methods = {
-    statusTap: function(e) {
-      // this.getShenheList(this.sales_id);
-      var curType = e.currentTarget.dataset.index;
-      this.currentType = curType;
-      this.page = 1;
-      if (this.currentType == 0) {
-        // 会员充值记录
-        this.getCzjl();
-      } else {
-        this.getZcjl();
-      }
-    },
-    tophb() {
-      wx.navigateTo({
-        url: 'my_console_payPhb'
-      });
-    },
-    getFormId: function(e) {
-      util.submitFormId(e.detail.formId);
-    },
-    salesmanNameTap: function() {
-      this.isShowSalesList = true;
-      this.list = this.salesmanList;
-    },
-    memberNameTap: function() {
-      this.isShowSalesList = true;
-      this.list = this.memberNameList;
-    },
-    hiddenSalesList: function() {
-      this.isShowSalesList = false;
-    },
-    changeShopList(sales_id, name) {
-      this.isShowSalesList = false;
-      this.salesmanName = name;
-      this.sales_id = sales_id;
-      this.page = 1;
-      if (this.currentType == 0) {
-        // 会员充值记录
-        this.getCzjl();
-      } else {
-        this.getZcjl();
-      }
-    },
-    bindStartTimeChange(e) {
-      this.start_time = e.detail.value;
-      this.page = 1;
-      if (this.currentType == 0) {
-        // 会员充值记录
-        this.getCzjl();
-      } else {
-        this.getZcjl();
-      }
-    },
-    bindEndTimeChange(e) {
-      this.end_time = e.detail.value;
-      this.page = 1;
-      if (this.currentType == 0) {
-        // 会员充值记录
-        this.getCzjl();
-      } else {
-        this.getZcjl();
-      }
-    },
-    // 会员名
-    changeMemberName(e) {
-      this.keyword = e.detail.value;
-      this.page = 1;
-      if (this.currentType == 0) {
-        // 会员充值记录
-        this.getCzjl();
-      } else {
-        this.getZcjl();
-      }
-    }
-  };
-  events = {};
-  async getSalesmanList() {
-    let suppliers_id = this.$parent.globalData.suppliers_id;
-    let data = {
-      suppliers_id,
-      getall: 1
+  import wepy from 'wepy';
+  import newapi from '../../API/newapi';
+  import util from '../../utils/index';
+  import payList from '../../components/payList';
+  import orderList from '../../components/shop/orderList';
+  import noOrder from '../../components/noOrder';
+  export default class my_console_cardPayDetail extends wepy.page {
+    config = {
+      navigationBarTitleText: '会员充值账单明细'
     };
-    let res = await newapi.findSalesman(data);
-    if (res.data.code == 0) {
-      this.salesmanList = res.data.data;
-      this.$apply();
-    }
-  }
-  async getMemberNameList() {
-    let suppliers_id = this.$parent.globalData.suppliers_id;
-    let data = {
-      suppliers_id,
-      getall: 1
+    data = {
+      statusType: ['分佣所得', '商品返还'],
+      statusKey: ['0', '1'],
+      currentType: 0,
+      isShowSalesList: false,
+      salesmanName: '商品返款',
+      memberName: '选择会员',
+      showName: false,
+      orderList: [],
+      goodsMap: [],
+      list: ['商品返款', '分佣所得', '提现'],
+      czmoney: 9999,
+      zcmoney: 9999,
+      end_time: 1970 - 0 - 0,
+      start_time: 1970 - 0 - 0,
+      now_time: 1970 - 0 - 0,
+      page: 1,
+      yue:0,
+      type:1,
     };
-    let res = await newapi.findmemberNameList(data);
-    if (res.data.code == 0) {
-      this.memberNameList = res.data.data;
-      this.$apply();
-    }
-  }
-  async getZcjl() {
-    var data = this.init();
-    util.showLoading();
-    let res = await newapi.zcjl(data);
-    wx.hideLoading();
-    var datas = res.data.data.data;
-    this.yue = res.data.zonge;
-    datas.forEach((item, index) => {
-      datas[index].add_time = util.formatTime(item.add_time);
-    });
-    if (data.page == 1) {
-      this.isMoreData = true;
-      this.balance = res.data.data.data;
-    } else this.balance.push(...datas);
-    if (datas.length < 10) this.isMoreData = false;
-    this.zcmoney = res.data.zonge;
-    this.$apply();
-  }
-  async getCzjl() {
-    var data = this.init();
-    util.showLoading();
-    let res = await newapi.czjl(data);
-    wx.hideLoading();
-    var datas = res.data.data.data;
-    datas.forEach((item, index) => {
-      datas[index].add_time = util.formatTime(item.add_time);
-    });
-    if (data.page == 1) {
-      this.isMoreData = true;
-      this.payList = res.data.data.data;
-    } else this.payList.push(...datas);
-    if (datas.length < 10) this.isMoreData = false;
-    this.czmoney = res.data.zonge;
-    this.$apply();
-  }
-  init() {
-    var data = {
-      suppliers_id: this.suppliers_id,
-      sales_id: this.sales_id,
-      keyword: this.keyword,
-      start_time: this.start_time,
-      end_time: this.end_time,
-      page: this.page
+    computed = {};
+    components = {
+      orderList,
+      noOrder
     };
+    methods = {
+      statusTap: function(e) {
+        // this.getShenheList(this.sales_id);
+        var curType = e.currentTarget.dataset.index;
+        this.currentType = curType;
+        this.page = 1;
+        if (this.currentType == 0) {
+          // 会员充值记录
+          this.type="1";
+          this.getDatas();
+        }else if (this.currentType == 1) {
+          this.type="2";
+          this.getDatas();
 
-    return data;
-  }
-  async onLoad(option) {
-    // this.money = option.money;
-    // 业务员列表
-    this.salesmanList = [];
-    // 业务员
-    this.sales_id = '';
-    // 会员
-    this.keyword = '';
-    // 页数
-    this.page = 1;
-    // 筛选日期
-    this.end_time = util.formatDate();
-    this.now_time = this.end_time;
-    this.start_time = util.getStartTime();
-    this.suppliers_id = this.$parent.globalData.suppliers_id
-      ? this.$parent.globalData.suppliers_id
-      : (await this.$parent.getYizhanInfo()).suppliers_id;
-    this.getSalesmanList();
-    this.getCzjl();
-    this.getZcjl();
-    this.$apply();
-  }
-  onReachBottom() {
-    if (this.isMoreData) {
-      util.showLoading();
-      this.page = this.page + 1;
-      if (this.currentType == 0) {
-        // 会员充值记录
-        this.getCzjl();
-      } else {
-        this.getZcjl();
+        }else if (this.currentType == 2) {
+          this.type="3";
+          this.getDatas();
+
+        }
+      },
+      tophb() {
+        wx.navigateTo({
+          url: 'my_console_payPhb'
+        });
+      },
+      getFormId: function(e) {
+        util.submitFormId(e.detail.formId);
+      },
+      salesmanNameTap: function() {
+        this.isShowSalesList = true;
+        // this.list = this.salesmanList;
+      },
+      memberNameTap: function() {
+        this.isShowSalesList = true;
+        // this.list = this.memberNameList;
+      },
+      hiddenSalesList: function() {
+        this.isShowSalesList = false;
+      },
+
+      bindStartTimeChange(e) {
+        this.start_time = e.detail.value;
+        this.page = 1;
+         this.getDatas();
+      },
+      bindEndTimeChange(e) {
+        this.end_time = e.detail.value;
+        this.page = 1;
+         this.getDatas();
+      },
+      // 会员名
+      changeMemberName(e) {
+        this.keyword = e.detail.value;
+        this.page = 1;
+         this.getDatas();
+      }
+    };
+    events = {};
+    async getSalesmanList() {
+      let suppliers_id = this.$parent.globalData.suppliers_id;
+      let data = {
+        suppliers_id,
+        getall: 1
+      };
+      let res = await newapi.findSalesman(data);
+      if (res.data.code == 0) {
+        this.salesmanList = res.data.data;
+        this.$apply();
       }
     }
+    async getMemberNameList() {
+      let suppliers_id = this.$parent.globalData.suppliers_id;
+      let data = {
+        suppliers_id,
+        getall: 1
+      };
+      let res = await newapi.findmemberNameList(data);
+      if (res.data.code == 0) {
+        this.memberNameList = res.data.data;
+        this.$apply();
+      }
+    }
+ 
+    async getDatas() {
+        var data = this.init();
+      util.showLoading();
+      let res = await newapi.syjl(data);
+      wx.hideLoading();
+      this.yue = res.data.data.zonge;
+      res.data.data.orderList.forEach((item, index) => {
+        res.data.data.orderList[index].confirm_time = util.formatTime(item.confirm_time);
+      });
+      if (data.page == 1) {
+        this.isMoreData = true;
+        this.orderList = res.data.data.orderList;
+        this.goodsMap = res.data.data.goodsMap;
+      } else {
+        this.orderList.push(...res.data.data.orderList);
+        this.goodsMap.push(...res.data.data.goodsMap);
+      }
+      if (res.data.data.orderList.length < 10) this.isMoreData = false;
+      // this.zcmoney = res.data.zonge;
+      this.$apply();
+    }
+    init() {
+      var data = {
+        suppliers_id: this.suppliers_id,
+        keyword: this.keyword,
+        start_time: this.start_time,
+        end_time: this.end_time,
+        page: this.page,
+        type:this.type
+      };
+      return data;
+    }
+    async onLoad(option) {
+      // this.money = option.money;
+      this.keyword = '';
+      // 页数
+      this.page = 1;
+      // 筛选日期
+      this.end_time = util.formatDate();
+      this.now_time = this.end_time;
+      this.start_time = util.getStartTime();
+      this.suppliers_id = this.$parent.globalData.suppliers_id ?
+        this.$parent.globalData.suppliers_id :
+        (await this.$parent.getYizhanInfo()).suppliers_id;
+      var yizhanInfo =  this.$parent.globalData.yizhanInfo? this.$parent.globalData.yizhanInfo:await this.$parent.getYizhanInfo(suppliers_id);
+
+      // this.getSalesmanList();
+      this.getDatas();
+      if(yizhanInfo.is_yizhan==1){
+        this.statusType=['分佣所得', '商品返还','易站收益']
+      }
+      this.$apply();
+    }
+    onReachBottom() {
+      if (this.isMoreData) {
+        util.showLoading();
+        this.page = this.page + 1;
+        this.getDatas();
+      }
+    }
+    async onShow() {}
   }
-  async onShow() {}
-}
 </script>

@@ -43,7 +43,7 @@
   align-items: center; */
 }
 .qb-shouyi-earnings{
-  font-size: 44rpx;
+  font-size: 35rpx;
   color: #ff9900;
 }
 .qb-list{
@@ -83,6 +83,10 @@
       <view>分享收益（元）</view>
       <view class='qb-shouyi-earnings'>{{datas.shouyi}}</view>
     </view>
+    <view class='qb-shouyi-shouyi' wx:if="{{is_yizhan==1}}">
+      <view>易站收益（元）</view>
+      <view class='qb-shouyi-earnings'>{{datas.yizhan}}</view>
+    </view>
   </view>
   <view class='qb-list' bindtap='goYue'>
     <view>余额</view>
@@ -111,7 +115,8 @@ export default class share extends wepy.page {
   };
   components = {};
   data = {
-    datas: {}
+    datas: {},
+    is_yizhan:0
   };
   computed = {};
   methods = {
@@ -185,6 +190,7 @@ console.log("this.$parent.globalData.qianbao",this.$parent.globalData.qianbao);
       var yizhanInfo =  this.$parent.globalData.yizhanInfo? this.$parent.globalData.yizhanInfo:await this.$parent.getYizhanInfo(suppliers_id);
       this.suppliers_id = suppliers_id==""?yizhanInfo.suppliers_id:suppliers_id;
     this.getDatas();
+    this.is_yizhan=yizhanInfo.is_yizhan
   }
   onShow(){
    if(this.$parent.globalData.qianbao) this.datas=this.$parent.globalData.qianbao

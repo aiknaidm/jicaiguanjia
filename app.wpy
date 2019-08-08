@@ -227,7 +227,8 @@ export default class extends wepy.app {
           'earnings/setBankCardList',
           'earnings/setBankCardInfo',
           'earnings/balance',
-          'earnings/balanceDatas'
+          'earnings/balanceDatas',
+          'earnings/yue'
          
         ]
       }

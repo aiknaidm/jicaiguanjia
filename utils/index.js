@@ -28,6 +28,18 @@ const formatDate = function(d = 0) {
 
     return [year, month, day].map(formatNumber).join('-')
 }
+const formatDate1 = function(d = 0) {
+    var date = new Date();
+    if (d) {
+        date.setTime(d * 1000);
+    }
+
+    var year = date.getFullYear()
+    var month = date.getMonth() + 1
+
+
+    return [year, month].map(formatNumber).join('-')
+}
 const formatNumber = function(n) {
     n = n.toString()
     return n[1] ? n : '0' + n
@@ -295,6 +307,7 @@ export default {
     strToTime,
     formatTime,
     formatDate,
+    formatDate1,
     formatNumber,
     wxpay3,
     fwfwxpay,

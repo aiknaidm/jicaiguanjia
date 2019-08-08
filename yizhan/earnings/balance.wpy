@@ -11,7 +11,7 @@
         </view>
         <view class="btn">
             <button class="main-bgcolor" bindtap="goTixian">提现</button>
-            <!-- <button class='' bindtap='goMingxi'>余额明细</button> -->
+            <button class='' bindtap='goMingxi'>余额明细</button>
             <button class="" bindtap="goCard">银行卡绑定</button>
         </view>
     </view>
@@ -81,6 +81,9 @@ export default class setBankCard extends wepy.page {
     },
     goCard() {
       wx.navigateTo({ url: 'setBankCardList' });
+    },
+    goMingxi(){
+      wx.navigateTo({ url: 'yue' });
     }
   };
   onLoad() {
