@@ -358,8 +358,8 @@
                 <checkbox
                   value="3"
                   checked="{{is_kthy==1}}"
-                  disabled="{{is_kthy==1}}"
-                  wx:if="{{is_kthy==1}}"
+                  disabled
+             
                 />会员卡支付
               </label>
         </view>

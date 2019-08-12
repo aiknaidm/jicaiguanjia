@@ -205,7 +205,7 @@
   import noOrder from '../../components/noOrder';
   export default class my_console_cardPayDetail extends wepy.page {
     config = {
-      navigationBarTitleText: '会员充值账单明细'
+      navigationBarTitleText: '账单明细'
     };
     data = {
       statusType: ['分佣所得', '商品返还'],

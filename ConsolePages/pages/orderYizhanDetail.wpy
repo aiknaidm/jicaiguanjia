@@ -175,7 +175,7 @@
       },
       toShopList() {
         wx.navigateTo({
-          url: '/ConsolePages/pages/orderYizhanDetailShop'
+          url: '/ConsolePages/pages/orderYizhanDetailShop?goods_id='+this.goodsList.toString()+'&order_id='+this.id
         });
       },
       checkboxChange(e) {

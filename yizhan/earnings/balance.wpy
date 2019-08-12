@@ -62,7 +62,7 @@ import newapi from '../../API/newapi';
 import util from '../../utils/index';
 export default class setBankCard extends wepy.page {
   config = {
-    navigationBarTitleText: '绑定银行卡'
+    navigationBarTitleText: '余额'
   };
   components = {};
   data = {
@@ -73,8 +73,6 @@ export default class setBankCard extends wepy.page {
     async goTixian() {
       var qianbao = this.qianbao;
       var baozhengjin= this.qianbao.baozhengjin
-
-
       if (qianbao.yinhangka == 0) {
         var res = await util.showModal('请先绑定银行卡');
         wx.navigateTo({ url: 'setBankCardList' });

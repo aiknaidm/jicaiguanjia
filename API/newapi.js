@@ -163,6 +163,8 @@ const newapi = {
     suppliers_goods_list: (data) => fetch(`${host_chk}/suppliers_goods_list`, 'GET', data),
     baozhengjin_pay: (data) => fetch(`${host_pay}/baozhengjin_pay`, 'GET', data),
     baozhengjin_paysuccess: (data) => fetch(`${host_pay}/baozhengjin_paysuccess`, 'GET', data),
+    suppliers_order_list: (data) => fetch(`${host_chk}/suppliers_order_list`, 'GET', data),
+
 }
 const fetch = async function(url, method, data) {
     return new Promise((resolve, reject) => {

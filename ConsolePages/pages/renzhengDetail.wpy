@@ -283,13 +283,13 @@
           <input value="{{address}}" name="address" disabled/>
         </view>
       </view>
-      <view class="section" wx:if='{{!isuserDetail}}'>
+      <!-- <view class="section" wx:if='{{!isuserDetail}}'>
         <view class="label label2">
           邀请码</view>
         <view class="label-right">
           <input name="shareCode" class="input" type="text" value="{{shareCode}}" />
         </view>
-      </view>
+      </view> -->
       <view class='check' wx:if='{{!isuserDetail}}'>
         <checkbox-group bindchange="agreeClick">
           <label class="checkbox">
@@ -331,7 +331,7 @@
       password: '123456',
       smsCodeDisabled: false,
       isAgreed: false,
-      shareCode: '',
+      // shareCode: '',
       shopImg: 0,
       address: '',
       isOpenSetting: false
@@ -451,13 +451,13 @@
       }, 1000);
     }
     // 绑定上级
-    async bindSuperior(shareCode) {
-      let data = {
-        share_code: shareCode,
-      };
-      let res = await newapi.getYizhanInfo(data);
-      return res.data.data;
-    }
+    // async bindSuperior(shareCode) {
+    //   let data = {
+    //     share_code: shareCode,
+    //   };
+    //   let res = await newapi.getYizhanInfo(data);
+    //   return res.data.data;
+    // }
     //检查输入的手机号
     checkPhone(param = '') {
       var phone = util.regexConfig().phone;
@@ -493,7 +493,7 @@
           var storename = e.detail.value.storename;
           // var pcusername = e.detail.value.pcusername;
           // var password = '123456';
-          var share_code = e.detail.value.shareCode;
+          // var share_code = e.detail.value.shareCode;
           if (realname == '') {
             util.showModal('请填写姓名');
             return;
@@ -542,7 +542,7 @@
             // suppliers_name: "jc",
             // password,
             suppliers_desc: storename,
-            share_code: share_code,
+            // share_code: share_code,
             img,
             address: this.address,
             longitude: this.longitude,

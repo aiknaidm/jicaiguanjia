@@ -235,7 +235,7 @@
       <image src="https://lmbge.com/upload/1234/join_2.png">
 
       </image>
-      <view>恭喜你，你的账号审核成功</view>
+      <view><text>恭喜你，你的账号审核成功,\n已加入{{join_yizhan_name}}</text></view>
       <button @tap="toyizhangou" style="background-color:#71a154" >查看本地易站</button>
     </view>
   </view>
@@ -251,7 +251,8 @@
       navigationBarTitleText: '加入一站购'
     };
     data = {
-      shenhe: 0
+      shenhe: 0,
+      join_yizhan_name:''
     };
     computed = {};
     components = {};
@@ -296,6 +297,8 @@
         this.$parent.globalData.suppliers_id :
         (await this.$parent.getYizhanInfo()).suppliers_id;
       this.yizhan_suppliers_id = this.$parent.globalData.yizhanInfo.yizhan_suppliers_id;
+      this.join_yizhan_name=this.$parent.globalData.yizhanInfo.join_yizhan_name
+
       this.shenhe = this.$parent.globalData.yizhanInfo.is_join;
       this.$apply()
     }

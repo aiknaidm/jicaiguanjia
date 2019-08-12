@@ -130,7 +130,7 @@ export default class setBankCard extends wepy.page {
    var suppliers_id = this.$parent.globalData.suppliers_id?this.$parent.globalData.suppliers_id:""
       var yizhanInfo =  this.$parent.globalData.yizhanInfo? this.$parent.globalData.yizhanInfo:await this.$parent.getYizhanInfo(suppliers_id);
       this.suppliers_id = suppliers_id==""?yizhanInfo.suppliers_id:suppliers_id;
-    this.suppliers_id=263
+
    this.getBankCardList();
   }
     async getBankCardList(){
