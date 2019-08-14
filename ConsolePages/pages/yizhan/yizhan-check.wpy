@@ -97,14 +97,13 @@
     width: 60%;
     text-align: center;
     line-height: 88rpx;
-    font-size: 30rpx;
-    max-height: 450rpx;
+    font-size: 30rpx; // max-height: 600rpx;
     overflow: scroll;
   }
   .list view {
     border-bottom: 1px solid #f0f0f0;
   }
-  .list.section_gap{
+  .list.section_gap {
     padding: 0 20rpx;
   }
   .icon-jiantou {
@@ -147,6 +146,7 @@
 </style>
 <template>
   <view class='container'>
+    <search @buttonTap.user="searchTap"></search>
     <statusTap :statusType="statusType" :currentType.sync="status" @statusTap.user="statusTap">
     </statusTap>
     <view class='checkLists'>
@@ -176,8 +176,7 @@
         <view class='check-list-content'>
           <view>姓名：{{item.username}}</view>
           <view>店铺名称：{{item.suppliers_name}}</view>
-          <view>等级：{{item.level}} </view>
-          
+          <view>等级：{{item.level}} | 分成比：{{item.bili*100}}%</view>
           <view @tap.stop='tocallphone({{item.mobile}})'>手机号码：{{item.mobile}}
             <text class='iconfont icon-shouji'></text>
           </view>
@@ -191,8 +190,8 @@
       <noOrder text="暂无店铺"></noOrder>
     </view>
     <!-- <navigator url='/ConsolePages/pages/my_addManagerInfo?type=member&sales_id={{sales_id}}'>
-                      <view class='addmember'>+添加会员</view>
-                    </navigator> -->
+                          <view class='addmember'>+添加会员</view>
+                        </navigator> -->
     <view class='body-bg' wx:if="{{isShowSalesList}}" bindtap='hiddenSalesList' touchstart='hiddenSalesList' touchmove="hiddenSalesList">
       <view class='list'>
         <view wx:for="{{adminList}}" wx:key="{{index}}" @tap='changeShopList({{item.id}},{{item.user_nickname}})'>
@@ -200,11 +199,15 @@
         </view>
       </view>
     </view>
-    <view class='body-bg' wx:if="{{isShowSlider}}"  bindtap='hiddenSalesList' touchstart='hiddenSalesList' touchmove="hiddenSalesList">
+    <view class='body-bg' wx:if="{{isShowSlider}}" bindtap='hiddenSalesList' touchstart='hiddenSalesList' touchmove="hiddenSalesList">
       <view class="list section_gap" @tap.stop="stop">
         <text class="section__title">设置等级</text>
         <view class="body-view">
           <slider @change.stop="sliderChange" min="1" max="2" value="{{level}}" show-value/>
+        </view>
+        <text class="section__title">设置分成比</text>
+        <view class="body-view">
+          <slider @change.stop="sliderChange2" min="15" max="25" value="{{bili}}" show-value/>
         </view>
         <button @tap.stop="toShenhe()">提交</button>
       </view>
@@ -218,7 +221,7 @@
   import noOrder from '../../../components/noOrder';
   import newapi from '../../../API/newapi';
   import util from '../../../utils/index';
-  //   import search from '../../components/search';
+  import search from '../../../components/search';
   export default class my_console_check extends wepy.page {
     config = {
       navigationBarTitleText: '管理加盟店铺'
@@ -239,21 +242,29 @@
       money: {},
       is_kthy: 0,
       qurenNum: 0,
-      level:15,
+      level: 1,
+      bili: 15,
+      keyword: '',
     };
     computed = {};
     components = {
+      search,
       statusTap,
       noOrder
     };
     methods = {
-      stop(){
+      stop() {
         return
       },
-      sliderChange(e){
-         console.log('slider发生 change 事件，携带值为', e.detail.value)
+      sliderChange(e) {
+        console.log('slider发生 change 事件，携带值为', e.detail.value)
         //  if(e.detail.value>=15&&e.detail.value<=20)
-        this.level=e.detail.value
+        this.level = e.detail.value
+      },
+      sliderChange2(e) {
+        console.log('slider发生 change 事件，携带值为', e.detail.value)
+        //  if(e.detail.value>=15&&e.detail.value<=20)
+        this.bili = e.detail.value
       },
       toSureList() {
         wx.navigateTo({
@@ -286,30 +297,30 @@
       },
       //需要审核提示
       async showSlider(item) {
-
         this.isShowSlider = true;
         this.id = item.id;
-        this.level=item.level
-
+        this.level = 1;//item.level;
+        this.bili = 15;//item.bili * 100;
+        this.$apply();
       },
       async toShenhe(type) {
         var id = this.id
-       this.isShowSlider=false;
-        if (this.currentStatu ==1) {
+        this.isShowSlider = false;
+        if (this.currentStatu == 1) {
           newapi.edit_suppliers_level({
             id,
-            level: this.level
-          }).then(res=>{
-          
+            level: this.level,
+            bili: this.bili / 100
+          }).then(res => {
             util.showToast('修改成功')
-            this.shenheList.forEach((item,index)=>{
-if(item.id==id){
-  this.shenheList[index].level=this.level;
-}
+            this.shenheList.forEach((item, index) => {
+              if (item.id == id) {
+                this.shenheList[index].level = this.level;
+                this.shenheList[index].bili = this.bili/100;
+              }
             })
             this.$apply();
           });
-
           return
         }
         let mRes = await util.showActionSheet(['通过', '拒绝']);
@@ -321,13 +332,14 @@ if(item.id==id){
       },
       //解除关系提示
       async toJiechu(item) {
-        var id=item.id
-        let mRes = await util.showActionSheet(['解除关系', '设置等级']);
+        var id = item.id
+        let mRes = await util.showActionSheet(['解除关系', '设置等级及分成']);
         if (mRes.tapIndex == 0) {
           this.doshenhe(id, 0);
         } else {
           // 设置等级
-          this.level=item.level
+          this.level = item.level
+          this.bili = item.bili * 100;
           this.isShowSlider = true;
           this.id = id
           this.$apply();
@@ -348,7 +360,13 @@ if(item.id==id){
         this.isShowSalesList = false;
         this.isShowSlider = false
       },
-      changeShopList: function(sales_id, name) {}
+      changeShopList: function(sales_id, name) {},
+      searchTap(val) {
+        this.isMoreData = true;
+        this.keyword = val;
+        this.page = 1;
+        this.getShenheList(this.suppliers_id, this.currentStatu);
+      },
     };
     events = {};
     //审核列表
@@ -359,7 +377,9 @@ if(item.id==id){
       //   shenhe 0 未审核 1已审核
       let res = await newapi.suppliers_join_list({
         suppliers_id,
-        shenhe
+        shenhe,
+        keyword: this.keyword,
+        page: this.page
       });
       wx.hideLoading();
       if (res.data.code == 0) {
@@ -411,8 +431,8 @@ if(item.id==id){
         if (shenhe == 1) {
           newapi.edit_suppliers_level({
             id,
-            level:  this.level
-          }).then(res=>{
+            level: this.level
+          }).then(res => {
             util.showToast("设置成功");
           });
         }
