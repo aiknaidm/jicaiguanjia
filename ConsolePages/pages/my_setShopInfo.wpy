@@ -332,19 +332,19 @@
         <view class="label">详细地址</view>
         <view @tap="getAddressTap" class="label-right">{{address}}</view>
       </view>
-      <view class="section section2" wx:if="{{userDetail.is_yizhan==0}}">
+      <view class="section section2" wx:if="{{userDetail.is_yizhan==0&&userDetail.is_join==0}}">
         <view class="label">非会员查看商品</view>
         <view class="body-view">
           <switch color="#e50012" @change="changeIsChakan" checked="{{userDetail.is_chakan}}" name="is_chakan" />
         </view>
       </view>
-      <view class="section section2" wx:if="{{userDetail.is_yizhan==0}}">
+      <view class="section section2" wx:if="{{userDetail.is_yizhan==0&&userDetail.is_join==0}}">
         <view class="label">代下单</view>
         <view class="body-view">
           <switch color="#e50012" @change="changeIsFriend" disabled="{{!userDetail.is_chakan}}" checked="{{userDetail.is_friend}}" name="is_friend" />
         </view>
       </view>
-      <view class="section section2">
+      <view class="section section2" wx:if="{{userDetail.is_join==0}}">
         <view class="label">支付方式</view>
         <view class="body-view" style="width:300rpx;" @tap="setPayStyle">
           <checkbox-group bindchange="checkboxChange" name="payStyle">
@@ -364,7 +364,7 @@
               </label>
         </view>
       </view>
-      <view class="section section2" wx:if="{{userDetail.is_yizhan==0}}">
+      <view class="section section2" wx:if="{{userDetail.is_yizhan==0&&userDetail.is_join==0}}" >
         <view class="label">会员等级</view>
         <view class="body-view" style="width:300rpx;">
           <slider min="1" max="5" selected-color="#e50012" name="vip_level" value="{{userDetail.vip_level}}" show-value />

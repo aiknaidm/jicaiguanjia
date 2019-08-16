@@ -267,8 +267,8 @@
           // extraData: {
           // 	suppliers_id: suppliers_id,
           // },
-          // envVersion: 'release',
-          envVersion: 'trial',
+          envVersion: 'release',
+          // envVersion: 'trial',
           success(res) {
             // 打开成功
           }

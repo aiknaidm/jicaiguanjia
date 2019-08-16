@@ -131,7 +131,7 @@
         <view class='kind' wx:for="{{goodsList}}" wx:key="{{index}}" bindlongpress='showActionSheet({{index}},{{item.brand_id}},{{item.brand_name}},{{item.brand_logo}})'>
           <view class="kind-1">
             <view>
-              <checkbox value="{{item.goods_id}}" checked="{{item.checked}}" />
+              <checkbox value="{{item.goods_id}}" checked="{{item.checked}}" disabled="{{!item.checked&&goods_id.length>=12}}"/>
               <image src="{{item.original_img1?item.original_img1:'http://maijia.jicaizx.com/'+item.original_img}}" /> {{item.goods_name}} </view>
             <!-- <view class='del' bindtap='showActionSheet({{index}},{{item.brand_id}},{{item.brand_name}},{{item.brand_logo}})'> 编辑</view> -->
           </view>
@@ -160,7 +160,8 @@
       imgSrc: [],
       keyword: '',
       suppliers_id: 0,
-      page: 1
+      page: 1,
+      goods_id:[]
     };
     computed = {};
     components = {
@@ -170,6 +171,13 @@
       checkboxChange: function(val) {
         console.log("val", val)
         this.goods_id = val.detail.value
+       this.goodsList.forEach((item, index) => {
+          this.goods_id.forEach((item2, index2) => {
+            if (item2 == item.goods_id) {
+              this.goodsList[index].checked=true
+            }
+          })
+        })
       },
       addBrandTap: function() {
         var parent = this.$parent.$pages["/brand/setBrand"]
@@ -183,7 +191,6 @@
             }
           })
         })
-        console.log("  parent.brands",  parent.brands)
         // parent.banner[index].ad_link=this.goods_id;
         // if(this.goods_name) parent.banner[index].name=this.goods_name;
         wx.navigateBack({
@@ -213,7 +220,7 @@
       var y = parent.y
       for(var i=0;i<parent.brands[x].brand[y].goods.length;i++){
         for(var j=0;j<datas.length;j++){
-          console.log("goods_id",datas[j].goods_id,parent.brands[x].brand[y].goods[i].goods_id)
+        
           if(datas[j].goods_id==parent.brands[x].brand[y].goods[i].goods_id){
             datas[j].checked=true;
             break;

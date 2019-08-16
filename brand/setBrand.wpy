@@ -409,7 +409,12 @@
             selectGoods(x, y, item) {
                 this.x = x;
                 this.y = y
-                if (this.brands[x].brand[y].brand_id) {
+                if(this.brands[x].brand[y].goods.length>=12){
+                    util.showToast("商品数量不能大于12")
+
+                    return
+                }
+               else if (this.brands[x].brand[y].brand_id) {
                     wx.navigateTo({
                         url: 'goodsList?brand_id=' + item.brand_id
                     });

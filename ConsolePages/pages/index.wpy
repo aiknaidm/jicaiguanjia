@@ -283,15 +283,14 @@
           <!-- <myList :tabItem="item" wx:elif="{{item.is_salesman==1&&yizhanInfo.is_salesman==1}}"></myList> -->
           <!-- </block> -->
         </view>
-        <view class="info_list">
+        <!-- <view class="info_list">
           <block>
-            <!-- <myList wx:if="{{is_designer}}"  :tabItem="item3"></myList>
-            <myList2 wx:else :tabItem="item4"></myList2> -->
+        
             <repeat for="{{item2}}" key="index2" index="index2" item="item2">
             <myList :tabItem="item2"></myList>
           </repeat>
           </block>
-        </view>
+        </view> -->
 
       </form>
     </view>

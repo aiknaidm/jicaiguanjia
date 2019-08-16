@@ -108,8 +108,8 @@
           // extraData: {
           // 	suppliers_id: suppliers_id,
           // },
-          // envVersion: 'release',
-          envVersion: 'trial',
+          envVersion: 'release',
+          // envVersion: 'trial',
           success(res) {
             // 打开成功
           }
@@ -144,7 +144,7 @@
       console.log("isyizhan",is_yizhan,"isjion",is_join)
       var path;
       if (is_yizhan == 1) {
-        path = '/pages/home?suppliers_id=' + suppliers_id;
+        path = '/pages/home?suppliers_id=' + suppliers_id+'&share_suppliers_id='+suppliers_id+'&share_user_id='+userInfo.user_id;
       }else if(is_join==1){
         path = '/pages/home?suppliers_id=' + yizhanInfo.yizhan_suppliers_id+'&share_suppliers_id='+suppliers_id+'&share_user_id='+userInfo.user_id;
       } else {
@@ -216,7 +216,7 @@
           },
           {
             type: 'text',
-            content: yizhanInfo.yizhan_name,
+            content:yizhanInfo.is_join==1?yizhanInfo.join_yizhan_name: yizhanInfo.yizhan_name,
             fontSize: 16 * a,
             width: 180 * a,
             top: 335 * a,

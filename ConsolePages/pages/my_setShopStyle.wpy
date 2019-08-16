@@ -298,12 +298,12 @@
           <image src="{{item.img_url}}" />
           <text class="close" @tap='delImg({{index}})'>x</text>
         </view>
-        <view class="camera" @tap='chooseImg' wx:if="{{imgSrc.length<5}}">
+        <view class="camera" @tap='chooseImg' wx:if="{{imgSrc.length<6}}">
           <image src="/images/add_img.png" mode='aspectFit' />
         </view>
       </view>
-      <view class="title" style="padding:40rpx;text-align:center">添加背景图</view>
-      <view class="cameraBox">
+      <view class="title" style="padding:40rpx;text-align:center" hidden="{{is_yizhan==1}}">添加背景图</view>
+      <view class="cameraBox" hidden="{{is_yizhan==1}}">
         <view class="camera" @tap='chooseBgImg'>
           <image src="{{bgImg.img_url?bgImg.img_url:'/images/add_img.png'}}" />
         </view>
@@ -315,14 +315,14 @@
           <switch color="#e50012" checked="{{!userDetail.is_picture}}" name="is_picture" />
         </view>
       </view>
-      <view class="section">
+      <view class="section" hidden="{{is_yizhan==1}}">
         <view class="label">
           店铺公告</view>
         <view class="label-right">
           <textarea auto-height name="gonggao" value="{{userDetail.gonggao}}"></textarea>
         </view>
       </view>
-      <view class="section section2" @tap="toAbout">
+      <view class="section section2" @tap="toAbout" hidden="{{is_yizhan==1}}">
         <view class="label">
           关于我们</view>
         <view style="right">{{isSetAbout?'已填写':''}}</view>
@@ -399,7 +399,8 @@
       isOpenSetting: false,
       address: '',
       is_friend_disabled: false,
-      bgImg: 0
+      bgImg: 0,
+      is_yizhan:0
     };
     computed = {};
     components = {};
@@ -472,7 +473,7 @@
         var l = this.imgSrc.length;
         wepy
           .chooseImage({
-            count: 8 - l, // 默认9
+            count: 6 - l, // 默认9
             sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
             sourceType: ['album', 'camera'] // 可以指定来源是相册还是相机，默认二者都有
           })
@@ -550,8 +551,8 @@
         else var bgImg = await this.upImg(this.bgImg.img_url)
         this.goods_imgs = [];
         if (this.imgSrc != '') {
-          if (this.imgSrc.length > 5) {
-            util.showModal('上传图片不能大于五张');
+          if (this.imgSrc.length > 6) {
+            util.showModal('上传图片不能大于六张');
             return;
           }
         }
@@ -618,6 +619,8 @@
       this.suppliers_id = suppliers_id;
       this.isSetAbout = this.userDetail.jianjie == '' ? false : true
       this.userDetail.jianjie = util.html_decode(this.userDetail.jianjie);
+        this.is_yizhan = this.$parent.globalData.yizhanInfo.is_yizhan;
+
       console.log("this.userDetail", this.userDetail);
       wepy.getLocation().then(res => {}).catch(res => {
         this.isOpenSetting = true

@@ -175,12 +175,24 @@
       },
       toShopList() {
         wx.navigateTo({
-          url: '/ConsolePages/pages/orderYizhanDetailShop?goods_id='+this.goodsList.toString()+'&order_id='+this.id
+          url: '/ConsolePages/pages/orderYizhanDetailShop?goods_id='+this.goods_id.toString()+'&order_id='+this.id
         });
       },
       checkboxChange(e) {
         console.log('发送选择改变，携带值为', e)
         this.goodsList = e.detail.value;
+        var i=0
+        this.goods_id=[]
+        console.log("orderdetail",this.orderDetail)
+        this.goodsMap.forEach((item,index)=>{
+          e.detail.value.forEach((item2,index2)=>{
+              if(item.rec_id==item2){
+                this.goods_id[i]=item.goods_id
+                i++
+              }
+          })
+        })
+        console.log(this.goods_id)
       },
       bindDateChange: function(e) {
         this.time = e.detail.value

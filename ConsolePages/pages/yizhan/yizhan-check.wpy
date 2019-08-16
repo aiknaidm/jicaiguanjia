@@ -431,13 +431,16 @@
         if (shenhe == 1) {
           newapi.edit_suppliers_level({
             id,
-            level: this.level
+            level: this.level,
+            bili: this.bili / 100
           }).then(res => {
             util.showToast("设置成功");
           });
         }
         this.page = 1;
         this.getShenheList(this.suppliers_id, this.currentStatu);
+      }else{
+       util.showToast(res.data.message)
       }
     }
     async onLoad(option) {
