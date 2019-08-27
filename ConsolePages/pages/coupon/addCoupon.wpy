@@ -367,6 +367,11 @@
                     </view>
                 </picker>
             </view>
+            <text class='title'>赠送用户</text>
+            <view class='promotion-name'>
+                <text>选择用户：</text>
+                <input class='' name="user_name" bindtap='touserList' value='{{choose_user_name}}' />
+            </view>
             <!-- </view> -->
             <view class='promotion-submit'>
                 <button class=' main-bgcolorg' bindtap='over'>取消创建</button>
@@ -377,12 +382,14 @@
             <view class="promotion-activity-list {{item.promotion_state==2?'promotion-activity-list2':''}}" wx:for="{{activitylist}}" wx:key='{{index}}' data-id='{{item.promotion_id}}' data-index="{{index}}">
                 <view wx:if="{{item.promotion_state==2}}">
                     <view class='content'>
-                        <view class='left'>
+                        <view class='left' catchtap="touseList({{item.promotion_id}})">
                             <view class='moneyBox'>
                                 <view class='moneycancle'>￥{{item.buy_money}}</view>
                                 <view class="free">减{{item.rebate_money}}元</view>
                             </view>
                             <view class='txt txt2'>{{item.promotion_name}}</view>
+                            <view class='txt txt2' wx:if="{{item.type==2}}">赠送用户：{{item.user_name}}</view>
+                            <view class='txt txt2'>活动商品：{{item.goods_name}}</view>
                         </view>
                         <view class='text'>
                             <view class='btn active ' catchtap="{{item.promotion_state==2?'':'cancleTap'}}" data-promotion_id='{{item.promotion_id}}'>活动终止
@@ -394,12 +401,14 @@
                 </view>
                 <view wx:else>
                     <view class='content'>
-                        <view class='left'>
+                        <view class='left' catchtap="touseList({{item.promotion_id}})">
                             <view class='moneyBox'>
                                 <view class='moneycancle'>￥{{item.buy_money}}</view>
                                 <view class="free">送{{item.rebate_money}}元</view>
                             </view>
                             <view class='txt txt2'>{{item.promotion_name}}</view>
+                            <view class='txt txt2' wx:if="{{item.type==2}}">赠送用户：{{item.user_name}}</view>
+                            <view class='txt txt2'>活动商品：{{item.goods_name}}</view>
                         </view>
                         <view class='text'>
                             <view class='btn active ' catchtap="{{item.promotion_state==2?'':'cancleTap'}}" data-promotion_id='{{item.promotion_id}}'>终止活动
@@ -450,13 +459,25 @@
             activitylist: [],
             rules: '',
             choose_good_id: 0,
-            choose_good_name:''
+            choose_good_name:'',
+            choose_user_id:0,
+            choose_user_name:''
         };
         computed = {};
         methods = {
-            togoodsList: function() {
+            togoodsList() {
                 wx.navigateTo({
                     url: 'goodsList',
+                })
+            },
+            touserList() {
+                wx.navigateTo({
+                    url: '/ConsolePages/pages/my_addManagerInfo?type=coupon'
+                })
+            },
+            touseList(promotion_id) {
+                wx.navigateTo({
+                    url: 'couponUseList?promotion_id=' + promotion_id
                 })
             },
             // 上传规则
@@ -531,6 +552,8 @@
                     rebate_money: moneyfan,
                     start_time: that.date,
                     end_time: that.date2,
+                    user_id: that.choose_user_id,
+                    user_name: that.choose_user_name,
                     suppliers_id: this.suppliers_id
                 };
                 let res = await newapi.promotion_add(data);

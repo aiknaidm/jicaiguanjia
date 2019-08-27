@@ -342,8 +342,9 @@
         <input class="shownnum" value='{{goodsdetail.qidingliang}}' placeholder="请输入起订量" type='number' placeholder-class="holder" name="qidingliang" />
       </view>
       <block wx:if='{{goods_attr.length==0}}'>
-        <view class="listBox" wx:for="{{vip_level}}" wx:key="{{index}}">
-          <view class="listOption" wx:if="{{lev==1}}">会员价</view>
+        <view class="listBox" wx:for="{{vip_level}}" wx:key="{{index}}" >
+          <view class="listOption" wx:if="{{is_yizhan==1}}">批发价</view>
+          <view class="listOption" wx:elif="{{lev==1}}">会员价</view>
           <view class="listOption" wx:else>{{index+1}}级会员价</view>
           <input class="shownnum" type='digit' value="{{goodsdetail['shop_price'+(index==0?'':index+1)]}}" name="shop_price{{index==0?'':index+1}}" />
         </view>
@@ -380,7 +381,8 @@
               <input class="shownnum" @input='getAttrName({{index}})' value='{{item.attr_value}}' />
             </view>
             <view class="listBox" wx:for="{{vip_level}}" wx:for-index="index2" wx:for-item="item2">
-              <view class="listOption" wx:if="{{lev==1}}">会员价</view>
+              <view class="listOption" wx:if="{{is_yizhan==1}}">批发价</view>
+              <view class="listOption" wx:elif="{{lev==1}}">会员价</view>
               <view class="listOption" wx:else>{{index2+1}}级会员价</view>
               <input class="shownnum" @change="getAttrhyPrice({{index}},{{index2}})" type='digit' value="{{item['attr_price'+(index2==0?'':index2+1)]}}" name="attr_value{{index2==0?'':index2+1}}" />
             </view>
@@ -1053,9 +1055,9 @@
         this.suppliers_id = this.$parent.globalData.suppliers_id ?
           this.$parent.globalData.suppliers_id :
           (await this.$parent.getYizhanInfo()).suppliers_id;
-        this.vip_level = this.$parent.globalData.yizhanInfo.vip_level;
         this.is_join = this.$parent.globalData.yizhanInfo.is_join;
         this.is_yizhan = this.$parent.globalData.yizhanInfo.is_yizhan;
+        this.vip_level = this.is_yizhan==1 ? 1 : this.$parent.globalData.yizhanInfo.vip_level;
         this.lev = this.vip_level;
         this.hdky = this.$parent.globalData.yizhanInfo.hdky == 1 ? true : false;
         if (option.id) this.setGoodsInfo(option.id);

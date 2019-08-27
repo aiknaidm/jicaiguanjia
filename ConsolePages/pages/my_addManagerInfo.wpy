@@ -207,9 +207,9 @@
     <block wx:for="{{adminList}}" wx:key="index">
       <view class='headPortrait '>
 			  <view class='img'>
-        <image src="{{item.avatar?item.avatar:'https://lmbge.com/upload/avatar/weixin3.png'}}" data-user_id="{{type=='member'?item.user_id:item.id}}" bindtap='addManager' mode='aspectFill'/>
+        <image src="{{item.avatar?item.avatar:'https://lmbge.com/upload/avatar/weixin3.png'}}" data-user_id="{{(type=='member'||type=='coupon')?item.user_id:item.id}}" data-user_name="{{(type=='member'||type=='coupon')?item.user_name:item.user_nickname}}" bindtap='addManager' mode='aspectFill'/>
       </view>
-      <view class='text' wx:if="{{type=='member'}}">{{item.user_name?item.user_name:'jc'+item.user_id}}</view>
+      <view class='text' wx:if="{{type=='member'||type=='coupon'}}">{{item.user_name?item.user_name:'jc'+item.user_id}}</view>
       <view class='text' wx:else>{{item.user_nickname?item.user_nickname:'jc'+item.id}}</view>
       </view>
     </block>
@@ -246,7 +246,7 @@ export default class my_addManagerInfo extends wepy.page {
       var keyword = this.keyword;
       let data = { keyword };
       var res;
-      if (this.type == 'member') {
+      if (this.type == 'member' || this.type == 'coupon') {
         res = await newapi.find_users_c(data);
       } else {
         res = await newapi.find_users(data);
@@ -257,6 +257,7 @@ export default class my_addManagerInfo extends wepy.page {
     },
     async addManager(e) {
       var user_id = e.currentTarget.dataset.user_id;
+      var user_name = e.currentTarget.dataset.user_name;
       var suppliers_id = this.$parent.globalData.suppliers_id;
       var sales_id = this.sales_id ? this.sales_id : '';
       let mRes = await util.showModalBig('确定要添加吗');console.log("user_id",user_id,"sales_id",sales_id);
@@ -273,8 +274,14 @@ export default class my_addManagerInfo extends wepy.page {
           res = await newapi.addSalesman(data);
         } else if (this.type == 'designer') {
           res = await newapi.addDesigner(data);
+        } else if (this.type == 'coupon') {
+          console.log("11111111",user_name,user_id);
+          console.log("11111111",this.$parent.$pages['/ConsolePages/pages/coupon/addCoupon']);
+          this.$parent.$pages['/ConsolePages/pages/coupon/addCoupon'].choose_user_name = user_name;
+          this.$parent.$pages['/ConsolePages/pages/coupon/addCoupon'].choose_user_id = user_id;
+          wx.navigateBack();
         } else {
-        wx.navigateTo({ url: '/ConsolePages/pages/my_setManagerInfo_permission?id='+user_id  });
+          wx.navigateTo({ url: '/ConsolePages/pages/my_setManagerInfo_permission?id='+user_id  });
           return
         }
 

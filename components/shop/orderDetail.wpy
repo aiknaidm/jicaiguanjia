@@ -471,6 +471,7 @@ page {
               <view class="arow01">
                 <view class="goods-name">{{item.goods_name}}</view>
                 <view class="goods-label">{{item.goods_attr}}</view>
+                <view class="goods-label">货号：{{item.goods_sn}}</view>
               </view>
               <view class="arow02">
                 <view class="goods-price">¥ {{item.goods_price}}</view>
