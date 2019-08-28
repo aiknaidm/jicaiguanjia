@@ -28,7 +28,6 @@
     .btn {
       position: absolute;
       right: 0;
-      bottom: 0;
       view {
         padding: 0 20rpx;
         line-height: 60rpx;
