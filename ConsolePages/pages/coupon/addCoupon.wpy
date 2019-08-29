@@ -189,6 +189,7 @@
         display: flex;
         padding-top: 10rpx;
         justify-content: space-between;
+        position: relative;
     }
     .promotion-activity-list .left {
         padding: 20rpx 30rpx 20rpx 0;
@@ -213,7 +214,10 @@
     }
     .promotion-activity-list .content .text {
         font-size: 35rpx;
-        padding: 20rpx 0;
+        padding: 0 15rpx;
+        position: absolute;
+        top: 15rpx;
+        right: 0rpx;
     }
     .promotion-activity-list .content .textcancle {
         font-size: 35rpx;
