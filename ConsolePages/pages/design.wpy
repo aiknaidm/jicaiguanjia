@@ -79,7 +79,7 @@ page{
     import util from '../../utils/index';
     export default class newslist extends wepy.page {
         config = {
-            navigationBarTitleText: '设计案例',
+            navigationBarTitleText: '免费设计',
         };
         components = {};
         data = {

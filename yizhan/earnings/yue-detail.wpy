@@ -1,0 +1,144 @@
+<template>
+    <view class='container'>
+        <view class='tx-list'>
+            <view class="shenqing" >
+                <text class='icon'></text>发起提现申请</view>
+            <view class="chulizhong {{yueInfo.txstatus>=1?'shenqing':''}}">
+                <image src='/images/dd.png'></image>财务确认中
+                <view class='tx-time'>预计12小时内到账</view>
+            </view>
+            <view   class="daozhang chulizhong ">
+                <text class="icon {{yueInfo.txstatus>=1?'':'icon2'}}"></text>已确认</view>
+        </view>
+        <view class='tx-jine'>
+            <view class='tx-jine-c'>
+                <view>提现金额</view>
+                <view>￥{{yueInfo.jine}}</view>
+            </view>
+            <!-- <view class='tx-jine-c'>
+        <view>手续费</view>
+        <view>￥100</view>
+      </view> -->
+            <view class='tx-jine-c'>
+                <view>到账银行卡</view>
+                <view>{{yueInfo.cardnumber}}</view>
+            </view>
+        </view>
+        <!-- <button bindtap="close" class='tx-wancheng'>完成</button> -->
+    </view>
+</template>
+<style lang="">
+    /* pages/qb-tixian-detail.wxss */
+    .container {
+        padding: 40rpx;
+        font-size: 30rpx;
+    }
+    .icon {
+        padding: 6px;
+        display: inline-block;
+        border-radius: 100px;
+        background-color: #ff9900;
+        position: absolute;
+        left: -12rpx;
+        top: -10rpx;
+    }
+    .icon2 {
+        top: 10rpx;
+        background-color: #d9d9d9;
+    }
+    .daozhang {
+        color: #b2b2b2;
+    }
+    .tx-list .shenqing {
+        border-left: 2px dotted #ff9900;
+        color: #888;
+    }
+    .tx-list {
+        margin-bottom: 50rpx;
+    }
+    .chulizhong image {
+        width: 70rpx;
+        height: 70rpx;
+        position: absolute;
+        left: -35rpx;
+        top: -10rpx;
+    }
+    .chulizhong {
+        font-weight: bold;
+    }
+    .tx-list view {
+        height: 120rpx;
+        padding-left: 80rpx;
+        border-left: 2px dotted #eee;
+        position: relative;
+    }
+    .tx-list .tx-time {
+        padding: 0px;
+        font-size: 26rpx;
+        border: 0px;
+        font-weight: 100;
+    }
+    .tx-list .daozhang {
+        height: 20rpx;
+        border: 0px;
+        border-left: 2px dotted #eee;
+        margin-bottom: 60rpx;
+    }
+    .tx-jine {
+        font-size: 24rpx;
+        padding: 50rpx 0;
+        border-top: 1px solid #eee;
+    }
+    .tx-jine {}
+    .tx-jine-c {
+        display: flex;
+        justify-content: space-between;
+        padding: 15rpx 0;
+        color: #888;
+    }
+    .tx-jine-c view:last-child {
+        color: #353535;
+    }
+    .tx-wancheng {
+        border: 1px solid #ff9900;
+        color: #ff9900;
+        background-color: #fff;
+    }
+</style>
+<script>
+    import wepy from 'wepy';
+    import newapi from '../../API/newapi';
+    import util from '../../utils/index';
+    export default class share extends wepy.page {
+        config = {
+            navigationBarTitleText: '钱包'
+        };
+        components = {};
+        data = {
+            datas: {},
+            yueInfo: 0
+        };
+        computed = {};
+        methods = {
+        };
+        events = {};
+        async getDatas() {
+            util.showLoading();
+            let data = {
+                suppliers_id: this.suppliers_id
+            };
+            let res = await newapi.qianbao(data);
+            if (res.data.code == 0) {
+            } else {
+            }
+            this.$apply();
+        }
+        async onLoad(option) {
+          
+            this.yueInfo = this.$parent.globalData.yueInfo
+              console.log('option',  this.$parent.globalData.yueInfo, this.yueInfo);
+        }
+        onShow() {
+        }
+    }
+</script>

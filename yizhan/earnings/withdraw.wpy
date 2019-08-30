@@ -91,7 +91,7 @@
             <input type='digit' name="jine" bindinput="listenerMoneyInput" value="{{yue}}" disabled></input>
           </view>
           <view class='tx-yue'>当前余额:{{yue}}元</view>
-          <view class='tx-sx'>提现将会收取1%的手续费</view>
+          <!-- <view class='tx-sx'>提现将会收取1%的手续费</view> -->
         </view>
         <view class='tx-btn'>
           <button formType="submit">提现</button>
@@ -139,10 +139,10 @@ suppliers_id:this.suppliers_id
             util.showToast("提现申请提交成功")
             this.yue=0;
             this.$parent.globalData.qianbao.yue=0
+            
+            this.$parent.globalData.yueInfo=datas
             this.$apply();
-            wx.navigateBack({
-              delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
-            });
+           wx.redirectTo({ url: 'yue-detail' });
           }
         })
         //  参数 suppliers_id   cardnumber卡号   bankname银行    jine  提现金额

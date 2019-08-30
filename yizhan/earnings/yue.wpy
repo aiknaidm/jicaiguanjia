@@ -163,7 +163,7 @@
     </view>
   </view>
 
-  <view wx:for-items="{{moneyList}}" wx:key="{{index}}">
+  <view wx:for-items="{{moneyList}}" wx:key="{{index}}" @tap="toDetail({{item}})">
     <view bindtap="moneyDetail" data-id='{{item.id}}' data-userid='{{item.user_id}}'>
       <view class='jy-content'>
 
@@ -206,6 +206,11 @@ export default class newslist extends wepy.page {
   };
   computed = {};
   methods = {
+    toDetail(item){
+      this.$parent.globalData.yueInfo=item;
+      console.log(item,this.$parent.globalData.yueInfo)
+wx.navigateTo({ url: 'yue-detail' });
+    },
      bindDateChange: function (e) {
     console.log('picker发送选择改变，携带值为', e.detail.value)
 
