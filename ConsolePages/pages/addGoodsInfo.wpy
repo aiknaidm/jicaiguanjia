@@ -343,9 +343,8 @@
       </view>
       <block wx:if='{{goods_attr.length==0}}'>
         <view class="listBox" wx:for="{{vip_level}}" wx:key="{{index}}" >
-          <view class="listOption" wx:if="{{is_yizhan==1}}">批发价</view>
-          <view class="listOption" wx:elif="{{lev==1}}">会员价</view>
-          <view class="listOption" wx:else>{{index+1}}级会员价</view>
+          <view class="listOption" wx:if="{{lev==1}}">{{price_text}}</view>
+          <view class="listOption" wx:else>{{index+1}}级{{price_text}}</view>
           <input class="shownnum" type='digit' value="{{goodsdetail['shop_price'+(index==0?'':index+1)]}}" name="shop_price{{index==0?'':index+1}}" />
         </view>
         <view class="listBox">
@@ -381,9 +380,8 @@
               <input class="shownnum" @input='getAttrName({{index}})' value='{{item.attr_value}}' />
             </view>
             <view class="listBox" wx:for="{{vip_level}}" wx:for-index="index2" wx:for-item="item2">
-              <view class="listOption" wx:if="{{is_yizhan==1}}">批发价</view>
-              <view class="listOption" wx:elif="{{lev==1}}">会员价</view>
-              <view class="listOption" wx:else>{{index2+1}}级会员价</view>
+              <view class="listOption" wx:if="{{lev==1}}">{{price_text}}</view>
+              <view class="listOption" wx:else>{{index2+1}}级{{price_text}}</view>
               <input class="shownnum" @change="getAttrhyPrice({{index}},{{index2}})" type='digit' value="{{item['attr_price'+(index2==0?'':index2+1)]}}" name="attr_value{{index2==0?'':index2+1}}" />
             </view>
             <view class="listBox">
@@ -498,7 +496,8 @@
         name: '1级会员',
         val: '1'
       }],
-      select_suppliers_id: []
+      select_suppliers_id: [],
+      price_text:"会员价"
     };
     computed = {};
     methods = {
@@ -812,7 +811,7 @@
         for (var j = 0; j < this.vip_level; j++) {
           var k = j == 0 ? '' : j + 1;
           if (e.detail.value['shop_price' + k].length == 0) {
-            util.showToast('请填写批发价格');
+            util.showToast('请填写'+this.price_text);
             return;
           } else {
             shop_prices['shop_price' + k] = e.detail.value['shop_price' + k];
@@ -826,7 +825,7 @@
         parseFloat(shop_price) > parseFloat(floor_price) &&
         goods_attr.length == 0
       ) {
-        util.showToast('批发价不能大于零售价');
+        util.showToast(this.price_text+'不能大于零售价');
         return;
       }
       if (floor_price <= 0 && goods_attr.length == 0) {
@@ -834,7 +833,7 @@
         return;
       }
       if (shop_price <= 0 && goods_attr.length == 0) {
-        util.showToast('批发价格不能为0');
+        util.showToast(this.price_text+'格不能为0');
         return;
       }
       for (var i = 0; i < goods_attr.length; i++) {
@@ -847,7 +846,7 @@
           console.log('goods_attr[i]', goods_attr[i]);
           var attr_price = goods_attr[i]['attr_price' + k];
           if (attr_price == '') {
-            util.showToast('请填写商品批发价');
+            util.showToast('请填写商品'+this.price_text);
             return;
           }
         }
@@ -859,7 +858,7 @@
           parseFloat(goods_attr[i].floor_price) <
           parseFloat(goods_attr[i].attr_price)
         ) {
-          util.showToast('批发价不能大于零售价');
+          util.showToast(this.price_text+'不能大于零售价');
           return;
         }
         if (goods_attr[i].floor_price <= 0 || goods_attr[i].attr_price <= 0) {
@@ -1060,6 +1059,11 @@
         this.vip_level = this.is_yizhan==1 ? 1 : this.$parent.globalData.yizhanInfo.vip_level;
         this.lev = this.vip_level;
         this.hdky = this.$parent.globalData.yizhanInfo.hdky == 1 ? true : false;
+        if(this.is_yizhan){
+          this.price_text="折后价";
+        }else{
+          this.price_text="会员价";
+        }
         if (option.id) this.setGoodsInfo(option.id);
         else {
           this.ch_cat_id = '';

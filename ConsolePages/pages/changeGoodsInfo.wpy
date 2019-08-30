@@ -95,8 +95,8 @@ picker {
       </view>
     </view>
     <view class="section" wx:for="{{vip_level}}" wx:key="{{index}}">
-      <view class="label">
-        {{index+1}}级会员价</view>
+      <view class="label" wx:if="{{vip_level==1}}">{{price_text}}</view>
+      <view class="label" wx:else>{{index+1}}级{{price_text}}</view>
       <view class="label-right">
         <input class="input" name="shop_price{{index==0?'':index+1}}" maxlength="18" type="digit" value="{{goodsdetail['shop_price'+(index==0?'':index+1)]}}" disabled='{{disable_jiage}}' />
       </view>
@@ -178,7 +178,8 @@ export default class newslist extends wepy.page {
     disable_jiage: false,
     disable_kucun: true,
     input: {},
-    vip_level:1
+    vip_level:1,
+    price_text:"会员价"
   };
   computed = {};
   methods = {
@@ -201,7 +202,7 @@ export default class newslist extends wepy.page {
         for(var i=0;i<this.vip_level;i++){
          inputLists.push({
               name: '',
-              placeholder: '批量修改批发价'+(i+1),
+              placeholder: '批量修改'+this.price_text+(i+1),
               inputName: 'attr_price'+(i==0?'':i+1),
               type: 'digit'
             })
@@ -257,14 +258,14 @@ export default class newslist extends wepy.page {
         parseFloat(shop_price) > parseFloat(floor_price) &&
         goods_attr.length == 0
       ) {
-        util.showToast('批发价不能大于零售价');
+        util.showToast(this.price_text+'不能大于零售价');
         return;
       }
       if (goods_attr.length == 0)
         for (var j = 0; j < this.vip_level; j++) {
           var k = j == 0 ? "" : j + 1;
           if (e.detail.value["shop_price" + k].length == 0) {
-            util.showToast('请填写批发价格');
+            util.showToast('请填写'+this.price_text);
             return;
           } else {
             shop_prices["shop_price" + k] = e.detail.value["shop_price" + k]
@@ -275,7 +276,7 @@ export default class newslist extends wepy.page {
         return;
       }
       if (shop_price <= 0 && goods_attr.length == 0) {
-        util.showToast('批发价格不能为0');
+        util.showToast(this.price_text+'格不能为0');
         return;
       }
 
@@ -288,7 +289,7 @@ export default class newslist extends wepy.page {
           var k = j == 0 ? "" : j + 1;
           var attr_price = goods_attr[i]["attr_price" + k]
           if (attr_price == '') {
-            util.showToast('请填写商品批发价');
+            util.showToast('请填写商品'+this.price_text);
             return;
           }
         }
@@ -300,7 +301,7 @@ export default class newslist extends wepy.page {
           parseFloat(goods_attr[i].floor_price) <
           parseFloat(goods_attr[i].attr_price)
         ) {
-          util.showToast('批发价不能大于零售价');
+          util.showToast(this.price_text+'不能大于零售价');
           return;
         }
         if (goods_attr[i].floor_price <= 0 || goods_attr[i].attr_price <= 0) {
@@ -436,7 +437,15 @@ export default class newslist extends wepy.page {
     this.piliangtitle = option.xiugaitype == 'kucun' ? '库存' : '价格';
     this.disable_jiage = option.xiugaitype == 'jiage' ? false : true;
     this.disable_kucun = option.xiugaitype == 'jiage' ? true : false;
-     this.vip_level = this.$parent.globalData.vip_level
+    
+    this.is_yizhan = this.$parent.globalData.yizhanInfo.is_yizhan;
+    this.vip_level = this.is_yizhan==1 ? 1 : this.$parent.globalData.yizhanInfo.vip_level;
+    if(this.is_yizhan){
+      this.price_text="折后价";
+    }else{
+      this.price_text="会员价";
+    }
+     console.log('is_yizhan',this.is_yizhan);
      console.log('vip_level',this.vip_level);
     this.getGoodsDetail(this.goods_id);
    
