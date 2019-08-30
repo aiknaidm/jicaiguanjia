@@ -123,7 +123,6 @@ export default class extends wepy.app {
       {
         root: 'ConsolePages',
         pages: [
-          'pages/aaaa',
           'pages/index',
           'pages/orderList',
           'pages/orderDetail',
@@ -172,6 +171,7 @@ export default class extends wepy.app {
           'pages/coupon/addCoupon',
           'pages/coupon/selectCoupon',
           'pages/coupon/goodsList',
+          'pages/coupon/couponUseList',
           'pages/yizhan/yizhan-check',
           'pages/yizhan/yizhan-add',
           'pages/yizhan/yizhan-apply',

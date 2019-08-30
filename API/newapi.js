@@ -164,6 +164,7 @@ const newapi = {
     baozhengjin_pay: (data) => fetch(`${host_pay}/baozhengjin_pay`, 'GET', data),
     baozhengjin_paysuccess: (data) => fetch(`${host_pay}/baozhengjin_paysuccess`, 'GET', data),
     suppliers_order_list: (data) => fetch(`${host_chk}/suppliers_order_list`, 'POST', data),
+    promotion_detail: (data) => fetch(`${host_chk}/promotion_detail`, 'GET', data),
 
 }
 const fetch = async function(url, method, data) {

@@ -471,6 +471,7 @@ page {
               <view class="arow01">
                 <view class="goods-name">{{item.goods_name}}</view>
                 <view class="goods-label">{{item.goods_attr}}</view>
+                <view class="goods-label">货号：{{item.goods_sn}}</view>
               </view>
               <view class="arow02">
                 <view class="goods-price">¥ {{item.goods_price}}</view>
@@ -490,15 +491,19 @@ page {
       <block wx:if="{{!orderDetail.single_id}}">
       <view class="row-box">
         <view class="row-label">商品金额</view>
-        <view class="right-text">¥ {{orderDetail.order_amount}}</view>
+        <view class="right-text">¥ {{orderDetail.shiji_money}}</view>
       </view>
       <view class="row-box">
         <view class="row-label">运费</view>
         <view class="right-text">+ ¥ {{orderDetail.yunfei}}</view>
       </view>
-      <view class="row-box" wx:if="{{orderDetail.bonus_money}}">
+      <view class="row-box" wx:if="{{orderDetail.manjian-0>0}}">
         <view class="row-label">优惠券</view>
-        <view class="right-text">- ¥ {{orderDetail.bonus_money}}</view>
+        <view class="right-text">- ¥ {{orderDetail.manjian}}</view>
+      </view>
+      <view class="row-box" wx:if="{{orderDetail.youhui-0>0}}">
+        <view class="row-label">折扣</view>
+        <view class="right-text">- ¥ {{orderDetail.youhui}}</view>
       </view>
       </block>
       <view class="row-box2 red">合计 ¥ {{orderDetail.heji_money}}</view>

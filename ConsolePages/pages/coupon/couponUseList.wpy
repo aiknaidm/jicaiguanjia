@@ -1,0 +1,125 @@
+<style lang="less">
+  .container {
+    /* padding: 30rpx; */
+    flex-wrap: wrap;
+    background: #f0f0f0;
+    padding-bottom: 100rpx;
+  }
+  .list {
+    padding: 30rpx;
+  }
+  .headPortrait {
+    display: flex;
+    background: #fff;
+    padding: 30rpx;
+    border-radius: 20rpx;
+    margin-bottom: 20rpx;
+    position: relative;
+    .img {
+      width: 100rpx;
+      height: 100rpx;
+      margin-right: 20rpx;
+      image {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .text {}
+    .btn {
+      position: absolute;
+      right: 0;
+      view {
+        padding: 0 20rpx;
+        line-height: 60rpx;
+        background: #e50012;
+        color: #fff;
+        margin-bottom: 10rpx;
+        margin-right: 30rpx;
+        border-radius: 50px;
+        text-align: center
+      }
+    }
+  }
+  .redborder {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    line-height: 80rpx;
+    text-align: center;
+    color: #fff;
+    background: #e50012;
+  }
+</style>
+<template>
+  <view class='container'>
+    <view class=''>
+    </view>
+    <noorder text="暂无记录" wx:if="{{adminList.length==0}}"></noorder>
+    <view class='list'>
+      <block wx:for="{{adminList}}" wx:key="index">
+        <view class='headPortrait '>
+          <view class='img'>
+            <image src="{{item.avatar?item.avatar:'https://lmbge.com/upload/avatar/weixin3.png'}}" data-user_id='{{item.id}}' mode='aspectFill' />
+          </view>
+          <view class='text'>
+            <view>姓名：{{item.user_name}}</view>
+            <view wx:if="{{item.receive_time>0}}">赠送时间：{{item.receive_time_f}}</view>
+            <view wx:if="{{item.used_time>0}}">使用时间：{{item.used_time_f}}</view>
+            <view wx:if="{{item.used_time>0}}" @tap="toOrderDetail({{item.order_id}})">订单编号：{{item.order_sn}}</view>
+          </view>
+          <view class="btn">
+            <view class="edit" wx:if="{{item.used_time>0}}">已使用</view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import newapi from '../../../API/newapi';
+  import util from '../../../utils/index';
+  import noorder from '../../../components/noOrder';
+  export default class couponUseList extends wepy.page {
+    config = {
+      navigationBarTitleText: '优惠券使用详情'
+    };
+    data = {
+      adminList: [],
+      isshowclose: false
+    };
+    computed = {};
+    components = {
+      noorder
+    };
+    methods = {
+      toOrderDetail(order_id) {
+        wx.navigateTo({
+          url: '/ConsolePages/pages/orderDetail?id=' + order_id
+        });
+      }
+    };
+    events = {};
+    async onLoad(e) {
+      let promotion_id = e.promotion_id;
+      this.managerList(promotion_id);
+    }
+    async managerList(promotion_id) {
+      let data = {
+        promotion_id
+      };
+      let res = await newapi.promotion_detail(data);
+      if (res.data.code == 0) {
+        let datas = res.data.data;
+        datas.forEach((item, index) => {
+          datas[index].receive_time_f = util.formatDate(item.receive_time);
+          datas[index].used_time_f = util.formatDate(item.used_time);
+        });
+        this.adminList = datas;
+        this.$apply();
+      }
+    }
+  }
+</script>
