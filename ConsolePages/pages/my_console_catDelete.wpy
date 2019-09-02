@@ -97,6 +97,15 @@
         padding: 20rpx 40rpx;
         font-size: 35rpx;
         text-align: center;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+    }
+    .sxj {
+        font-size: 22rpx;
+        color: #e50012;
+        margin-left: 20rpx;
+        border: 1px solid #e50012;
     }
     .add-box .content {
         padding: 20rpx 40rpx;
@@ -122,8 +131,7 @@
         border-radius: 50px;
         color: #fff;
         flex: 1;
-    }
-    //   上传图片
+    } //   上传图片
     .cameraBox {
         height: 204rpx;
         background-color: #f2f2f2;
@@ -151,12 +159,11 @@
     .inputBox {
         padding: 0 36rpx;
         border-bottom: 1px solid #e4e4e4;
-    }
-    .title {
-        width: 100%;
-        height: 100rpx;
-        line-height: 100rpx;
-    }
+    } // .title {
+    //     width: 100%;
+    //     height: 100rpx;
+    //     line-height: 100rpx;
+    // }
     .listBox {
         height: 90rpx;
         line-height: 90rpx;
@@ -207,18 +214,28 @@
                 <radio-group @change="radioChange" name="radiobox">
                     <view class='kind' wx:for="{{kind}}" wx:for-index="indexx" wx:key="{{indexx}}">
                         <view class="kind-1" data-index="{{indexx}}" @tap="clickKind">
-                            <label @tap.stop="clickdafenlei({{indexx}},{{item.cat_id}},{{item.cat_name}},{{item.cat_img}})">
-                                                                <radio value="{{item.cat_id}}" checked="{{item.checked}}" data-indexx="{{indexx}}" data-catid="{{item.cat_id}}"  />
-                                                              </label>
+                            <label @tap.stop="clickdafenlei({{indexx}},{{item}})">
+                                                                                <radio value="{{item.cat_id}}" checked="{{item.checked}}" data-indexx="{{indexx}}" data-catid="{{item.cat_id}}"  />
+                                                                              </label>
                             <view>
-                                <image src="{{item.cat_img}}"></image>{{item.cat_name}}({{item.goods_num}})</view>
+                                <image src="{{item.cat_img}}"></image>{{item.cat_name}}
+                                <!-- ({{item.goods_num}}) -->
+                                <view wx:if="{{item.is_show!=1}}" class="sxj">
+                                    已下架
+                                </view>
+                            </view>
                             <text class="iconfont icon-arrow-right {{kind[indexx].open?'active':''}}"></text>
                         </view>
                         <view class="lists {{kind[indexx].open?'active':''}}">
-                            <label wx:for="{{item.xiaofenlei}}" class="list" wx:for-item="itemName" wx:for-index="indexy" wx:key="{{indexy}}" data-indexx="{{indexx}}" data-indexy="{{indexy}}" data-catid="{{itemName.cat_id}}" @tap='clickxiaolei({{indexx}},{{indexy}},{{itemName.cat_id}},{{itemName.cat_name}},{{itemName.cat_img}})'>
-                                                                <radio value="{{itemName.cat_id}}" checked="{{itemName.checked}}"/><image src="{{itemName.cat_img}}"></image>{{itemName.cat_name}}({{itemName.goods_num}})</label>
+                            <label wx:for="{{item.xiaofenlei}}" class="list" wx:for-item="itemName" wx:for-index="indexy" wx:key="{{indexy}}" data-indexx="{{indexx}}" data-indexy="{{indexy}}" data-catid="{{itemName.cat_id}}" @tap='clickxiaolei({{indexx}},{{indexy}},{{itemName}})'>
+                                                                                <radio value="{{itemName.cat_id}}" checked="{{itemName.checked}}"/><image src="{{itemName.cat_img}}"></image>{{itemName.cat_name}}
+                                                                                <!-- ({{itemName.goods_num}}) -->
+                                        <view wx:if="{{item.is_show!=1}}" class="sxj" >
+                                已下架
+                            </view>
+                            </label>
                             <view wx:if="{{is_join!=1}}" class="addGoods" bindtap='addLittleKindTap' data-parent_id='{{item.cat_id}}'>
-                                <text class="iconfont icon-tianjia-copy mian-color" ></text>添加分类
+                                <text class="iconfont icon-tianjia-copy mian-color"></text>添加分类
                             </view>
                         </view>
                     </view>
@@ -234,6 +251,12 @@
             <view class="add-box" catchtouchmove='showbox' catchtap="showbox">
                 <view class="title">
                     修改分类
+                    <view wx:if="{{thisCatShow==1}}" class="sxj" @tap='downCategory({{thisCatId}},{{thisCatShow}})'>
+                        下架
+                    </view>
+                    <view wx:else class="sxj" @tap='downCategory({{thisCatId}},{{thisCatShow}})'>
+                        上架
+                    </view>
                 </view>
                 <view class="cameraBox">
                     <view class="camera" wx:for="{{imgSrc}}" wx:key="{{index}}">
@@ -277,19 +300,19 @@
             </view>
         </view>
         <!-- <view class="body-bg" hidden="{{!isShowDelKindV}}">
-                                                      <view class="add-box">
-                                                        <view class="title">
-                                                          确定删除该分类?
-                                                        </view>
-                                                        <view class="title">
-                                                          一旦删除将无法撤销
-                                                        </view>
-                                                        <view class="btn">
-                                                          <view bindtap='cancelTap'>取消</view>
-                                                          <view bindtap='sureTap'>确定</view>
-                                                        </view>
-                                                      </view>
-                                                    </view> -->
+                                                                      <view class="add-box">
+                                                                        <view class="title">
+                                                                          确定删除该分类?
+                                                                        </view>
+                                                                        <view class="title">
+                                                                          一旦删除将无法撤销
+                                                                        </view>
+                                                                        <view class="btn">
+                                                                          <view bindtap='cancelTap'>取消</view>
+                                                                          <view bindtap='sureTap'>确定</view>
+                                                                        </view>
+                                                                      </view>
+                                                                    </view> -->
     </div>
 </template>
 <script>
@@ -314,10 +337,26 @@
             thisCatName: '',
             thisCatId: '',
             thisCatImg: '',
+            thisCatShow: 1,
             imgSrc: [],
-            is_join:0
+            is_join: 0
         };
         methods = {
+            async downCategory(cat_id, is_show) {
+                var is_show = is_show == 1 ? 0 : 1;
+                let data = {
+                    cat_id,
+                    is_show
+                };
+                await newapi.down_category(data);
+                if (this.y != -1) {
+                    this.kind[this.x].xiaofenlei[this.y].is_show = is_show
+                } else {
+                    this.kind[this.x].is_show = is_show;
+                }
+                this.isShowEditKindV = false;
+                this.$apply();
+            },
             async addTap() {
                 var parent_id = this.currentParentID
                 var keyword = this.newKindName
@@ -343,7 +382,7 @@
                     parent_id,
                     cat_img
                 });
-                this.page=1;
+                this.page = 1;
                 this.getKindList(suppliers_id);
                 this.isShowAddKindV = false;
                 this.$apply();
@@ -385,7 +424,7 @@
             addKindTap() {
                 this.isShowAddKindV = true;
                 this.currentKindType = 1;
-                this.currentParentID =0;
+                this.currentParentID = 0;
                 this.$apply();
             },
             // 删除分类
@@ -408,20 +447,22 @@
                 }
                 // }, 1000)
             },
-            clickxiaolei(x, y, catid, catName, catImg) {
+            clickxiaolei(x, y, item) {
                 this.x = x;
                 this.y = y;
-                this.thisCatName = catName
-                this.thisCatId = catid
-                this.thisCatImg = catImg
+                this.thisCatName = item.cat_name
+                this.thisCatId = item.cat_id
+                this.thisCatImg = item.cat_img
+                this.thisCatShow = item.is_show
                 this.$apply();
             },
-            clickdafenlei(x, catid, catName, catImg) {
+            clickdafenlei(x, item) {
                 this.x = x;
                 this.y = -1;
-                this.thisCatName = catName
-                this.thisCatId = catid
-                this.thisCatImg = catImg
+                this.thisCatName = item.cat_name
+                this.thisCatId = item.cat_id
+                this.thisCatImg = item.cat_img
+                this.thisCatShow = item.is_show
                 this.$apply();
             },
             kindNameIpt: function(e) {
@@ -500,17 +541,15 @@
             var is_join = this.$parent.globalData.yizhanInfo.is_join
             this.suppliers_id = suppliers_id
             this.is_join = is_join
-            
             this.x = -1;
             this.y = -1;
-            this.isMoreData=true;
-            this.page=1;
+            this.isMoreData = true;
+            this.page = 1;
             this.getKindList(suppliers_id);
         }
-        
         async showAddBox() {}
         //确定删除
-        async sureTap(cat_id,sure=0) {
+        async sureTap(cat_id, sure = 0) {
             var res = await newapi.del_categorys({
                 cat_id,
                 sure
@@ -518,22 +557,19 @@
             if (res.data.code == 0) {
                 if (this.y != -1) {
                     this.kind[this.x].xiaofenlei.splice(this.y, 1);
-                   
                 } else this.kind.splice(this.x, 1)
                 this.isShowEditKindV = false;
-                this.thisCatId="";
-                this.thisCatName="";
-                this.thisCatImg=""
+                this.thisCatId = "";
+                this.thisCatName = "";
+                this.thisCatImg = "";
+                this.thisCatShow = 1;
                 this.$apply();
-            } 
-            else if(res.data.code==4){
-             var res= await  util.showModalBig(res.data.message);
-             if(res.confirm) {
-                 this.sureTap(cat_id,'1')
-             }
-            }
-            else {
-                
+            } else if (res.data.code == 4) {
+                var res = await util.showModalBig(res.data.message);
+                if (res.confirm) {
+                    this.sureTap(cat_id, '1')
+                }
+            } else {
                 util.showToast(res.data.message)
             }
         }
@@ -541,17 +577,17 @@
             util.showLoading()
             var res = await newapi.cat_manage({
                 suppliers_id,
-                page:this.page
+                page: this.page
             });
-            var datas=res.data.data
-            if(this.page==1){
+            var datas = res.data.data
+            if (this.page == 1) {
                 this.kind = datas;
-            }else{
-                 this.kind.push(...datas)
+            } else {
+                this.kind.push(...datas)
             }
-           if(datas.length<10){
-               this.isMoreData = false;
-           }
+            if (datas.length < 10) {
+                this.isMoreData = false;
+            }
             util.hideLoading();
             this.$apply();
         }
@@ -582,15 +618,15 @@
                 }
             }
         }
-         onReachBottom() {
-    if (this.isMoreData) {
-      this.page = this.page + 1;
-      this.getKindList(this.suppliers_id)
-    }
-  }
-   onUnload() {
- this.page=1
-  }
+        onReachBottom() {
+            if (this.isMoreData) {
+                this.page = this.page + 1;
+                this.getKindList(this.suppliers_id)
+            }
+        }
+        onUnload() {
+            this.page = 1
+        }
         // showList: function (e) {
         //   var index = e.currentTarget.dataset.index;
         //   var xiaofenlei = this.data.kind[index].xiaofenlei;

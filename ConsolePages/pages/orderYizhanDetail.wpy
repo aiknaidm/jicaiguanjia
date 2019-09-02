@@ -51,6 +51,7 @@
                   <view class="arow01">
                     <view class="goods-name">{{item.goods_name}}</view>
                     <view class="goods-label">{{item.goods_attr}}</view>
+                    <view class="goods-label">货号：{{item.goods_sn}}</view>
                     <view class="goods-label" wx:if="{{item.suppliers_id!=0}}">由{{item.suppliers_name}}发货</view>
                     <view class="goods-label" wx:if="{{item.shipping_status!=0}}">已发货</view>
                     
