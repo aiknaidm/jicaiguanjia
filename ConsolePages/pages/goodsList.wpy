@@ -618,6 +618,7 @@
               <view class="goods-title" data-id="{{item.goods_id}}">
                 {{item.goods_name}}
                 <text wx:if="{{item.hdky==1}}">支持会员卡</text>
+                <text wx:if="{{item.is_delete==1}}">已下架</text>
               </view>
               <view class='goods-num'>
                 <text class='red'>价格：￥{{item.shop_price}}</text>
@@ -871,7 +872,9 @@
         this.goods_id = id;
         this.index = index;
         this.$parent.globalData.goodsInfo = this.list[index];
+        var is_delete_text = this.list[index].is_delete==1?"上架":"下架";
         let mRes = await util.showActionSheet([
+          is_delete_text,
           '改标题',
           '改价格',
           '改库存',
@@ -879,25 +882,36 @@
         ]);
         switch (mRes.tapIndex) {
           case 0:
+            // 上下架
+            var is_delete = this.list[index].is_delete==1?0:1;
+            let data = {
+              goods_id: this.goods_id,
+              is_delete
+            };
+            await newapi.down_goods(data);
+            this.list[index].is_delete = is_delete;
+            this.$apply();
+            break;
+          case 1:
             // 改标题
             that.isshowBox = true;
             that.title = '改标题';
             that.placeholder = '请输入需要修改的内容';
             that.$apply();
             break;
-          case 1:
+          case 2:
             // 改价格
             wx.navigateTo({
               url: 'changeGoodsInfo?id=' + id + '&xiugaitype=jiage&index=' + index
             });
             break;
-          case 2:
+          case 3:
             // 改库存
             wx.navigateTo({
               url: 'changeGoodsInfo?id=' + id + '&xiugaitype=kucun&index=' + index
             });
             break;
-          case 3:
+          case 4:
             // 改全部
             wx.navigateTo({
               url: 'addGoodsInfo?id=' + id + '&index=' + index
