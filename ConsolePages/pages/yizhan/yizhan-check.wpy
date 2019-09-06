@@ -149,9 +149,35 @@
       }
     }
   }
+  .jy-top {
+    background-color: #f2f2f2;
+    padding: 20rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .jy-top-img image {
+    width: 70rpx;
+    height: 70rpx;
+    margin: 0 20rpx;
+  }
+  .jy-top-img {
+    display: flex;
+  }
+  .jy-top-view{
+    flex:1;
+  }
 </style>
 <template>
   <view class='container'>
+    <view class="jy-top">
+      <view class="jy-top-img">
+        <image src="/images/u87.png" role="img"></image>
+      </view>
+      <view  class="jy-top-view" @tap="toHangyeSelect">
+        行业筛选：{{hangye_list[hangye_sel]}}
+      </view>
+    </view>
     <search @buttonTap.user="searchTap"></search>
     <statusTap :statusType="statusType" :currentType.sync="status" @statusTap.user="statusTap">
     </statusTap>
@@ -197,8 +223,8 @@
       <noOrder text="暂无店铺"></noOrder>
     </view>
     <!-- <navigator url='/ConsolePages/pages/my_addManagerInfo?type=member&sales_id={{sales_id}}'>
-                              <view class='addmember'>+添加会员</view>
-                            </navigator> -->
+                                  <view class='addmember'>+添加会员</view>
+                                </navigator> -->
     <view class='body-bg' wx:if="{{isShowSalesList}}" bindtap='hiddenSalesList' touchstart='hiddenSalesList' touchmove="hiddenSalesList">
       <view class='list'>
         <view wx:for="{{adminList}}" wx:key="{{index}}" @tap='changeShopList({{item.id}},{{item.user_nickname}})'>
@@ -271,6 +297,7 @@
         '供货商',
         '销售会员'
       ],
+      hangye_sel: 0
     };
     computed = {};
     components = {
@@ -318,10 +345,18 @@
       async toChooseHangye(item) {
         let mRes = await util.showActionSheet(this.hangye_list);
         switch (mRes.tapIndex) {
-          default: 
-            this.hangye = mRes.tapIndex;
-            this.$apply();
-            break;
+          default: this.hangye = mRes.tapIndex;
+          this.$apply();
+          break;
+        }
+      },
+      async toHangyeSelect(item) {
+        let mRes = await util.showActionSheet(this.hangye_list);
+        switch (mRes.tapIndex) {
+          default: this.hangye_sel = mRes.tapIndex;
+          this.page = 1;
+          this.getShenheList(this.suppliers_id, this.currentStatu);
+          break;
         }
       },
       statusTap(index) {
@@ -366,7 +401,7 @@
             this.$apply();
           });
           return
-        }else{
+        } else {
           await newapi.edit_suppliers_level({
             id,
             level: this.level,
@@ -426,7 +461,8 @@
         suppliers_id,
         shenhe,
         keyword: this.keyword,
-        page: this.page
+        page: this.page,
+        hangye: this.hangye_sel
       });
       wx.hideLoading();
       if (res.data.code == 0) {

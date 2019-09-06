@@ -106,6 +106,8 @@
         color: #e50012;
         margin-left: 20rpx;
         border: 1px solid #e50012;
+        padding: 5rpx 17rpx;
+        border-radius: 10rpx;
     }
     .add-box .content {
         padding: 20rpx 40rpx;
