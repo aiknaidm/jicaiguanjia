@@ -154,32 +154,15 @@
         <button @tap='addBanggeInfo' form-type='submit'>添加工人</button>
       </view>
     </form>
-    <view class='body-bg' wx:if="{{popupdata.isshowpopup}}" @tap='quxiaoChange' style='position: absolute' isshowpopup="工人">
-      <form bindsubmit='formSubmit'>
-        <view class='changeTitle active' @tap.stop='retu'>
-          <view class='title'>{{popupdata.title}}</view>
-          <view class='content'>
-            <block wx:for="{{popupdata.inputList}}" wx:key="{{index}}">
-              <view class='inputList'>
-                <text wx:if="{{item.name}}">{{item.name?item.name:""}}</text> <input placeholder='{{item.placeholder}}' value='{{item.value}}' type="{{item.type?item.type:'text'}}" name="{{item.inputName}}" />
-              </view>
-            </block>
-            <view class='inputList'>
-              <picker bindchange="bindPickerChange" class="picker" value="{{gz_index}}" range="{{gz_list}}">
-                <view>
-                  工种：{{gongzhong}}
-                </view>
-              </picker>
-            </view>
+    <popupbox :popupdata.sync="popupdata" @formSubmit.user="formSubmit">
+      <view slot="other" class='inputList'>
+        <picker bindchange="bindPickerChange" class="picker" value="{{gz_index}}" range="{{gz_list}}">
+          <view>
+            工种：{{gongzhong}}
           </view>
-          <slot name="other"></slot>
-          <view class='btn'>
-            <button form-type='submit'>确定</button>
-            <button catchtap='quxiaoChange'>取消</button>
-          </view>
-        </view>
-      </form>
-    </view>
+        </picker>
+      </view>
+    </popupbox>
   </view>
 </template>
 
@@ -187,7 +170,7 @@
   import wepy from 'wepy';
   import newapi from '../../API/newapi';
   import util from '../../utils/index';
-  // import popupbox from '../../components/popupbox';
+  import popupbox from '../../components/popupbox';
   export default class my_setBanggeInfo extends wepy.page {
     config = {
       navigationBarTitleText: '工人管理'
@@ -210,7 +193,7 @@
       id: 0,
     };
     components = {
-      // popupbox
+      popupbox
     };
     methods = {
       bindPickerChange(e) {
@@ -304,6 +287,8 @@
         ]
       };
       this.popupdata = popupdata;
+      let res = await newapi.gongzhong();
+      this.gz_list = res.data.data;
       this.banggeList();
     }
     // 删除工人信息

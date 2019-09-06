@@ -83,11 +83,11 @@
         <view class='content'>
           <block wx:for="{{popupdata.inputList}}" wx:key="{{index}}">
             <view class='inputList'>
-              <text wx:if="{{item.name}}">{{item.name?item.name:""}}</text> <input placeholder='{{item.placeholder}}' type="{{item.type?item.type:'text'}}" name="{{item.inputName}}"/>
+              <text wx:if="{{item.name}}">{{item.name?item.name:""}}</text> <input placeholder='{{item.placeholder}}' value='{{item.value}}' type="{{item.type?item.type:'text'}}" name="{{item.inputName}}"/>
             </view>
           </block>
-        </view>
           <slot name="other"></slot>
+        </view>
         <view class='btn'>
           <button form-type='submit'>确定</button>
           <button catchtap='quxiaoChange'>取消</button>

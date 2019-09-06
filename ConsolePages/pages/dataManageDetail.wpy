@@ -77,8 +77,9 @@
     border-bottom: 8rpx solid #f0f0f0;
   }
   .content {
-    display: flex;
-    flex: 1;
+    // display: flex;
+    // flex: 1;
+    display: block;
     align-items: center;
   }
   .content button {
@@ -321,7 +322,20 @@
     text-align: left;
   }
   .inputList {
-    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+  .inputList text {
+    width: 150rpx;
+    padding: 0 10rpx;
+  }
+  .inputList input {
+    flex: 1;
+    border: 1px solid #f0f0f0;
+    margin-bottom: 20rpx;
+    line-height: 88rpx;
+    height: 88rpx;
+    padding: 0 20rpx;
   }
   .search-text {
     line-height: 50rpx;
@@ -339,11 +353,11 @@
     padding-left: 10rpx;
   }
   .checkbox {
+    width: 100%;
     display: flex;
     flex: 1;
     align-items: center;
-    padding-left: 40rpx;
-    margin-bottom: 40rpx;
+    margin: 20rpx 0;
   }
 </style>
 <template>
