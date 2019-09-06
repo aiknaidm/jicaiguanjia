@@ -1,0 +1,363 @@
+<style lang="less">
+  .container {
+    background: transparent;
+    padding-bottom: 100rpx;
+  }
+  .checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 20rpx 40rpx;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .checkbox-list-con {
+    flex: 1;
+  }
+  checkbox {
+    margin-right: 20rpx;
+  }
+  .btn2 {
+    display: flex;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+  }
+  .btn2 button {
+    flex: 1;
+    text-align: center;
+    line-height: 88rpx;
+    background: #e50012;
+    color: #fff;
+    border-radius: 0px;
+  }
+  /* checkbox未选中时样式 */
+  checkbox .wx-checkbox-input {
+    border-radius: 50%;
+    height: 36rpx;
+    width: 36rpx;
+    margin-top: -4rpx;
+    /* 自定义样式.... */
+  }
+  /* checkbox选中时样式 */
+  checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
+    font-family: 'iconfont';
+    content: '\e6c6';
+    font-size: 30rpx;
+    /* background-color: #e02e24; */
+    /* border: 1rpx solid #e02e24; */
+    /* 自定义样式.... */
+  }
+  form {
+    display: block;
+    width: 100%;
+  }
+  .changeTitle {
+    background-color: #fff;
+    border-radius: 10rpx;
+    font-size: 30rpx;
+    overflow: hidden;
+    width: 80%;
+    margin: auto;
+    z-index: 10
+  }
+  .changeTitle.active {
+    position: relative;
+    top: -200rpx;
+  }
+  .inputList {
+    display: flex;
+    align-items: center;
+  }
+  .inputList text {
+    width: 150rpx;
+    padding: 0 10rpx;
+  }
+  .inputList input {
+    flex: 1;
+    border: 1px solid #f0f0f0;
+    margin-bottom: 20rpx;
+    line-height: 88rpx;
+    height: 88rpx;
+    padding: 0 20rpx;
+  }
+  .inputList .picker {
+    flex: 1;
+    width: 100%;
+    border: 1px solid #f0f0f0;
+    margin-bottom: 20rpx;
+    line-height: 88rpx;
+    height: 88rpx;
+    padding: 0 20rpx;
+  }
+  .changeTitle .title {
+    padding: 40rpx;
+    padding-bottom: 0;
+    text-align: center;
+  }
+  .changeTitle .content {
+    padding: 40rpx;
+  }
+  .changeTitle .content textarea {
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    width: 400rpx;
+    padding: 10rpx;
+    height: 120rpx;
+    position: relative;
+    z-index: 1000;
+  }
+  .changeTitle .btn {
+    display: flex;
+    position: relative;
+    z-index: 10;
+  }
+  .changeTitle .btn {
+    background-color: #f0f0f0;
+    text-align: center;
+    line-height: 88rpx;
+  }
+  .changeTitle .btn button {
+    flex: 1;
+    border: 1px solid #ccc;
+    padding: 0;
+    margin: 0;
+    border-radius: 0;
+  }
+  button::after {
+    border: none;
+  }
+  input {
+    outline: none;
+    border: none;
+    list-style: none;
+  }
+  .icon-youcecaidan {
+    color: #e50012;
+  }
+</style>
+<template>
+  <view class='container'>
+    <form report-submit bindsubmit='getFormId'>
+      <view class="checkbox" wx:for="{{items}}" wx:key="{{index}}">
+        <view class="checkbox-list-con">
+          <view>姓名：{{item.name}}</view>
+          <view>电话：{{item.mobile}}</view>
+          <view>工种：{{item.gongzhong}}</view>
+        </view>
+        <view class="check-list-btn">
+          <text catchtap="toEdit({{item}})" class="iconfont icon-youcecaidan"></text>
+        </view>
+      </view>
+      <view class='btn2'>
+        <button @tap='addBanggeInfo' form-type='submit'>添加工人</button>
+      </view>
+    </form>
+    <view class='body-bg' wx:if="{{popupdata.isshowpopup}}" @tap='quxiaoChange' style='position: absolute' isshowpopup="工人">
+      <form bindsubmit='formSubmit'>
+        <view class='changeTitle active' @tap.stop='retu'>
+          <view class='title'>{{popupdata.title}}</view>
+          <view class='content'>
+            <block wx:for="{{popupdata.inputList}}" wx:key="{{index}}">
+              <view class='inputList'>
+                <text wx:if="{{item.name}}">{{item.name?item.name:""}}</text> <input placeholder='{{item.placeholder}}' value='{{item.value}}' type="{{item.type?item.type:'text'}}" name="{{item.inputName}}" />
+              </view>
+            </block>
+            <view class='inputList'>
+              <picker bindchange="bindPickerChange" class="picker" value="{{gz_index}}" range="{{gz_list}}">
+                <view>
+                  工种：{{gongzhong}}
+                </view>
+              </picker>
+            </view>
+          </view>
+          <slot name="other"></slot>
+          <view class='btn'>
+            <button form-type='submit'>确定</button>
+            <button catchtap='quxiaoChange'>取消</button>
+          </view>
+        </view>
+      </form>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import newapi from '../../API/newapi';
+  import util from '../../utils/index';
+  // import popupbox from '../../components/popupbox';
+  export default class my_setBanggeInfo extends wepy.page {
+    config = {
+      navigationBarTitleText: '工人管理'
+    };
+    data = {
+      items: [],
+      popupdata: {},
+      gz_list: [
+        '请选择',
+        '水电工',
+        '木工',
+        '瓦工',
+        '油工',
+        '力工',
+        '保洁',
+        '其他'
+      ],
+      gz_index: 0,
+      gongzhong: "请选择",
+      id: 0,
+    };
+    components = {
+      // popupbox
+    };
+    methods = {
+      bindPickerChange(e) {
+        this.gz_index = e.detail.value;
+        this.gongzhong = this.gz_list[this.gz_index];
+        this.$apply();
+      },
+      retu() {
+        return;
+      },
+      quxiaoChange() {
+        this.popupdata.isshowpopup = false;
+      },
+      // 收集formid
+      getFormId: function(e) {
+        util.submitFormId(e.detail.formId);
+      },
+      async formSubmit(e) {
+        console.log('picker发送选择改变，携带值为', e);
+        if (e.detail.value.name === '') {
+          util.showToast('工人姓名不能为空');
+          return;
+        }
+        if (e.detail.value.phone === '') {
+          util.showToast('工人电话不能为空');
+          return;
+        }
+        if (this.gongzhong == "请选择" && this.gz_index == 0) {
+          util.showToast('请选择工种');
+          return;
+        }
+        // var suppliers_id = this.suppliers_id;
+        var name = e.detail.value.name;
+        var mobile = e.detail.value.phone;
+        var gongzhong = this.gongzhong;
+        var id = this.id;
+        let data = {
+          id,
+          name,
+          mobile,
+          gongzhong
+        };
+        let res = await newapi.addBangge(data);
+        if (res.data.code == 0) {
+          util.showToast('添加成功');
+          this.popupdata.isshowpopup = false;
+          this.banggeList();
+        } else {
+          util.showToast('请求超时');
+        }
+      },
+      // 添加工人信息
+      addBanggeInfo: function() {
+        this.id = 0;
+        this.popupdata.isshowpopup = true;
+      },
+      showpopup: function() {
+        this.addBanggeInfo();
+      },
+      async toEdit(item) {
+        let mRes = await util.showActionSheet([
+          "删除工人", "编辑工人"
+        ]);
+        switch (mRes.tapIndex) {
+          case 0:
+            this.delBanggeInfo(item.id);
+            break;
+          case 1:
+            this.upBanggeInfo(item);
+            break;
+        }
+      },
+    };
+    events = {};
+    async onLoad(option) {}
+    async onShow(option) {
+      var popupdata = {
+        isshowpopup: false,
+        title: '添加工人',
+        inputList: [{
+            name: '',
+            placeholder: '请填写工人姓名',
+            inputName: 'name',
+          },
+          {
+            name: '',
+            placeholder: '请填写工人电话',
+            inputName: 'phone',
+            type: 'number',
+          }
+        ]
+      };
+      this.popupdata = popupdata;
+      this.banggeList();
+    }
+    // 删除工人信息
+    async delBanggeInfo(id) {
+      let mRes = await util.showModalBig('你确定要删除吗');
+      if (mRes.confirm) {
+        var res = await this.delBangge(id);
+        console.log(res)
+        if (res.data.code == 0) {
+          util.showToast('删除成功');
+          this.banggeList();
+        } else {
+          util.showToast(res.data.message);
+        }
+      }
+    }
+    async delBangge(id) {
+      let data = {
+        id
+      };
+      let res = await newapi.delBangge(data);
+      return res
+    }
+    upBanggeInfo(item) {
+      this.id = item.id;
+      this.popupdata.isshowpopup = true;
+      this.popupdata.title = "编辑工人";
+      this.popupdata.inputList = [{
+          name: '',
+          placeholder: '请填写工人姓名',
+          inputName: 'name',
+          value: item.name
+        },
+        {
+          name: '',
+          placeholder: '请填写工人电话',
+          inputName: 'phone',
+          type: 'number',
+          value: item.mobile
+        }
+      ];
+      this.gongzhong = item.gongzhong;
+      this.$apply();
+    }
+    async banggeList() {
+      this.suppliers_id = this.$parent.globalData.suppliers_id;
+      let data = {
+        suppliers_id: this.suppliers_id
+      };
+      let res = await newapi.banggeList(data);
+      if (res.data.code == 0) {
+        this.items = res.data.data;
+        this.$apply();
+      }
+    }
+  }
+</script>

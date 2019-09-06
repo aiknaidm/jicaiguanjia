@@ -100,9 +100,6 @@
     font-size: 30rpx; // max-height: 600rpx;
     overflow: scroll;
   }
-  .list view {
-    border-bottom: 1px solid #f0f0f0;
-  }
   .list.section_gap {
     padding: 0 20rpx;
   }
@@ -110,6 +107,15 @@
     font-size: 12px;
     margin-left: 10rpx;
     color: #e50012;
+  }
+  .body-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .body-line .body-view {
+    width: 60%;
   }
   .top {
     background: #e50012;
@@ -177,6 +183,7 @@
           <view>姓名：{{item.username}}</view>
           <view>店铺名称：{{item.suppliers_name}}</view>
           <view>等级：{{item.level}} | 分成比：{{item.bili*100}}%</view>
+          <view>行业：{{item.hangye==0?'-':hangye_list[item.hangye]}}</view>
           <view @tap.stop='tocallphone({{item.mobile}})'>手机号码：{{item.mobile}}
             <text class='iconfont icon-shouji'></text>
           </view>
@@ -190,8 +197,8 @@
       <noOrder text="暂无店铺"></noOrder>
     </view>
     <!-- <navigator url='/ConsolePages/pages/my_addManagerInfo?type=member&sales_id={{sales_id}}'>
-                          <view class='addmember'>+添加会员</view>
-                        </navigator> -->
+                              <view class='addmember'>+添加会员</view>
+                            </navigator> -->
     <view class='body-bg' wx:if="{{isShowSalesList}}" bindtap='hiddenSalesList' touchstart='hiddenSalesList' touchmove="hiddenSalesList">
       <view class='list'>
         <view wx:for="{{adminList}}" wx:key="{{index}}" @tap='changeShopList({{item.id}},{{item.user_nickname}})'>
@@ -201,13 +208,23 @@
     </view>
     <view class='body-bg' wx:if="{{isShowSlider}}" bindtap='hiddenSalesList' touchstart='hiddenSalesList' touchmove="hiddenSalesList">
       <view class="list section_gap" @tap.stop="stop">
-        <text class="section__title">设置等级</text>
-        <view class="body-view">
-          <slider @change.stop="sliderChange" min="1" max="2" value="{{level}}" show-value/>
+        <view class="body-line">
+          <text class="section__title">设置等级</text>
+          <view class="body-view">
+            <slider @change.stop="sliderChange" min="1" max="2" value="{{level}}" show-value/>
+          </view>
         </view>
-        <text class="section__title">设置分成比</text>
-        <view class="body-view">
-          <slider @change.stop="sliderChange2" min="15" max="25" value="{{bili}}" show-value/>
+        <view class="body-line">
+          <text class="section__title">设置分成比</text>
+          <view class="body-view">
+            <slider @change.stop="sliderChange2" min="15" max="25" value="{{bili}}" show-value/>
+          </view>
+        </view>
+        <view class="body-line">
+          <text class="section__title">设置行业</text>
+          <view class="body-view" @tap="toChooseHangye">
+            {{hangye_list[hangye]}}
+          </view>
         </view>
         <button @tap.stop="toShenhe()">提交</button>
       </view>
@@ -245,6 +262,14 @@
       level: 1,
       bili: 15,
       keyword: '',
+      hangye: 0,
+      hangye_list: [
+        '请选择',
+        '工长',
+        '技工',
+        '装修公司',
+        '供货商'
+      ],
     };
     computed = {};
     components = {
@@ -289,6 +314,15 @@
       getFormId: function(e) {
         util.submitFormId(e.detail.formId);
       },
+      async toChooseHangye(item) {
+        let mRes = await util.showActionSheet(this.hangye_list);
+        switch (mRes.tapIndex) {
+          default: 
+            this.hangye = mRes.tapIndex;
+            this.$apply();
+            break;
+        }
+      },
       statusTap(index) {
         this.page = 1
         this.shenheList = [];
@@ -297,11 +331,18 @@
       },
       //需要审核提示
       async showSlider(item) {
-        this.isShowSlider = true;
-        this.id = item.id;
-        this.level = 1;//item.level;
-        this.bili = 15;//item.bili * 100;
-        this.$apply();
+        let mRes = await util.showActionSheet(['通过', '拒绝']);
+        if (mRes.tapIndex == 0) {
+          this.isShowSlider = true;
+          this.id = item.id;
+          this.level = 1; //item.level;
+          this.bili = 15; //item.bili * 100;
+          this.hangye = 0;
+          this.$apply();
+          //this.doshenhe(item.id, '1');
+        } else if (mRes.tapIndex == 1) {
+          this.doshenhe(item.id, '2');
+        }
       },
       async toShenhe(type) {
         var id = this.id
@@ -310,36 +351,41 @@
           newapi.edit_suppliers_level({
             id,
             level: this.level,
-            bili: this.bili / 100
+            bili: this.bili / 100,
+            hangye: this.hangye
           }).then(res => {
             util.showToast('修改成功')
             this.shenheList.forEach((item, index) => {
               if (item.id == id) {
                 this.shenheList[index].level = this.level;
-                this.shenheList[index].bili = this.bili/100;
+                this.shenheList[index].bili = this.bili / 100;
+                this.shenheList[index].hangye = this.hangye;
               }
             })
             this.$apply();
           });
           return
-        }
-        let mRes = await util.showActionSheet(['通过', '拒绝']);
-        if (mRes.tapIndex == 0) {
+        }else{
+          await newapi.edit_suppliers_level({
+            id,
+            level: this.level,
+            bili: this.bili / 100,
+            hangye: this.hangye
+          });
           this.doshenhe(id, '1');
-        } else if (mRes.tapIndex == 1) {
-          this.doshenhe(id, '2');
         }
       },
       //解除关系提示
       async toJiechu(item) {
         var id = item.id
-        let mRes = await util.showActionSheet(['解除关系', '设置等级及分成']);
+        let mRes = await util.showActionSheet(['解除关系', '设置行业、等级及分成']);
         if (mRes.tapIndex == 0) {
           this.doshenhe(id, 0);
         } else {
           // 设置等级
           this.level = item.level
           this.bili = item.bili * 100;
+          this.hangye = item.hangye;
           this.isShowSlider = true;
           this.id = id
           this.$apply();
@@ -432,15 +478,16 @@
           newapi.edit_suppliers_level({
             id,
             level: this.level,
-            bili: this.bili / 100
+            bili: this.bili / 100,
+            hangye: this.hangye
           }).then(res => {
             util.showToast("设置成功");
           });
         }
         this.page = 1;
         this.getShenheList(this.suppliers_id, this.currentStatu);
-      }else{
-       util.showToast(res.data.message)
+      } else {
+        util.showToast(res.data.message)
       }
     }
     async onLoad(option) {
