@@ -96,7 +96,7 @@
         <image src='/images/glass.png'/>
       </view>
       <view class='ss-my-c-ipt'>
-        <input value='{{keyword}}' placeholder='输入想要搜索的内容' @confirm='buttonTap' @input="searchIpt"/>
+        <input value='{{keyword}}' placeholder='{{placeholder}}' @confirm='buttonTap' @input="searchIpt"/>
       </view>
       <view class='ss-my-c-x'>
         <text hidden='true'></text>
@@ -113,7 +113,8 @@ import wepy from 'wepy';
 export default class List extends wepy.component {
   props = {
     keyword: { type: String, default: '' },
-    isShowBtn: { type: String, default: '1' }
+    isShowBtn: { type: String, default: '1' },
+    placeholder: { type: String, default: '输入想要搜索的内容' },
   };
   data = {};
 

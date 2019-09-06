@@ -164,8 +164,8 @@
   .jy-top-img {
     display: flex;
   }
-  .jy-top-view{
-    flex:1;
+  .jy-top-view {
+    flex: 1;
   }
 </style>
 <template>
@@ -174,11 +174,16 @@
       <view class="jy-top-img">
         <image src="/images/u87.png" role="img"></image>
       </view>
-      <view  class="jy-top-view" @tap="toHangyeSelect">
-        行业筛选：{{hangye_list[hangye_sel]}}
+      <view class="jy-top-view">
+        <view @tap="toHangyeSelect">
+          行业筛选：{{hangye_list[hangye_sel]}}
+        </view>
+        <!-- <view @tap="toHangyeSelect">
+          分成比筛选：<input value='bili_sel' placeholder='请输入分成比' @input="searchIpt" />
+        </view> -->
       </view>
     </view>
-    <search @buttonTap.user="searchTap"></search>
+    <search @buttonTap.user="searchTap" :placeholder="placeholder"></search>
     <statusTap :statusType="statusType" :currentType.sync="status" @statusTap.user="statusTap">
     </statusTap>
     <view class='checkLists'>
@@ -223,8 +228,8 @@
       <noOrder text="暂无店铺"></noOrder>
     </view>
     <!-- <navigator url='/ConsolePages/pages/my_addManagerInfo?type=member&sales_id={{sales_id}}'>
-                                  <view class='addmember'>+添加会员</view>
-                                </navigator> -->
+                                      <view class='addmember'>+添加会员</view>
+                                    </navigator> -->
     <view class='body-bg' wx:if="{{isShowSalesList}}" bindtap='hiddenSalesList' touchstart='hiddenSalesList' touchmove="hiddenSalesList">
       <view class='list'>
         <view wx:for="{{adminList}}" wx:key="{{index}}" @tap='changeShopList({{item.id}},{{item.user_nickname}})'>
@@ -290,14 +295,16 @@
       keyword: '',
       hangye: 0,
       hangye_list: [
-        '请选择',
+        '请选择行业',
         '工长',
         '技工',
         '装修公司',
         '供货商',
         '销售会员'
       ],
-      hangye_sel: 0
+      hangye_sel: 0,
+      bili_sel: 0,
+      placeholder: "请输入店铺名称"
     };
     computed = {};
     components = {
@@ -308,6 +315,9 @@
     methods = {
       stop() {
         return
+      },
+      searchIpt(e) {
+        this.bili_sel = e.detail.value;
       },
       sliderChange(e) {
         console.log('slider发生 change 事件，携带值为', e.detail.value)
