@@ -171,6 +171,7 @@ const newapi = {
     down_goods: (data) => fetch(`${host_chk}/down_goods`, 'GET', data),
     down_category: (data) => fetch(`${host_chk}/down_category`, 'GET', data),
     gongzhong: (data) => fetch(`${host_chk}/gongzhong`, 'GET', data),
+    edit_cost: (data) => fetch(`${host_chk}/edit_cost`, 'GET', data),
 
 }
 const fetch = async function(url, method, data) {

@@ -82,7 +82,7 @@
         <view class='title'>{{popupdata.title}}</view>
         <view class='content'>
           <block wx:for="{{popupdata.inputList}}" wx:key="{{index}}">
-            <view class='inputList'>
+            <view class='inputList' style="{{item.hidden?'display:none':''}}">
               <text wx:if="{{item.name}}">{{item.name?item.name:""}}</text> <input placeholder='{{item.placeholder}}' value='{{item.value}}' type="{{item.type?item.type:'text'}}" name="{{item.inputName}}"/>
             </view>
           </block>

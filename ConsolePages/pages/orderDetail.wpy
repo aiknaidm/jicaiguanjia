@@ -50,6 +50,7 @@
         <button class="confirm-btn" form-type="submit" data-order_id="{{orderDetail.order_id}}">发货</button>
       </view>
     </form>
+    <popupbox :popupdata.sync="popupdata" @formSubmit.user="formSubmit"></popupbox>
   </view>
 </template>
 
@@ -59,18 +60,22 @@
   import newapi from '../../API/newapi';
   import orderDetail from '../../components/shop/orderDetail';
   import util from '../../utils/index';
+  import popupbox from '../../components/popupbox';
   export default class orderDetails extends wepy.page {
     config = {
       navigationBarTitleText: '订单详情'
     };
     components = {
-      orderDetail
+      orderDetail,
+      popupbox
     };
     data = {
       orderDetail: {},
       goodsMap: [],
       is_fahuodan: false,
-      time: 0
+      time: 0,
+      popupdata: {},
+      goodIndex: 0,
     };
     computed = {};
     methods = {
@@ -99,7 +104,43 @@
          }
           this.fahuo(data);
         }
-      }
+      },
+      async formSubmit(e) {
+        if (e.detail.value.cost_price <= 0) {
+          this.popupdata.isshowpopup = true;
+          util.showToast('请输入成本价');
+          return;
+        }
+        var cost_price = e.detail.value.cost_price;
+        var rec_id = e.detail.value.rec_id;
+        var data = {
+          cost_price,
+          rec_id
+        }
+        var res = await newapi.edit_cost(data);
+        this.goodsMap[this.goodIndex].cost_price = cost_price;
+        this.$apply();
+        util.showToast("设置成功");
+      },
+      async setCostPrice(e) {
+        var index = e.currentTarget.dataset.index;
+        var item = e.currentTarget.dataset.item;
+        this.goodIndex = index;
+        this.popupdata.isshowpopup = true;
+        this.popupdata.inputList = [{
+          name: '',
+          placeholder: '',
+          value: item.rec_id,
+          hidden: true,
+          inputName: 'rec_id',
+        }, {
+          name: '',
+          placeholder: '请填写成本价',
+          value: '',
+          hidden: false,
+          inputName: 'cost_price',
+        }]
+      },
     };
     events = {
       cancelOrderTap: res => {
@@ -113,7 +154,7 @@
           this.id
         );
         this.getOrderDetail(this.id);
-      }
+      },
     };
     // 上传发货图片
    async upfahuoimg() {
@@ -182,6 +223,21 @@
       this.getOrderDetail(this.id);
       var time = util.formatDate(new Date().getTime() / 1000)
       this.time = time;
+      var popupdata = {
+        isshowpopup: false,
+        title: '设置成本价',
+        inputList: [{
+          name: '',
+          placeholder: '',
+          hidden: 'true',
+          inputName: 'rec_id',
+        }, {
+          name: '',
+          placeholder: '请填写成本价',
+          inputName: 'cost_price',
+        }]
+      };
+      this.popupdata = popupdata;
       console.log("time,", time)
       this.$apply();
       util.showLoading();

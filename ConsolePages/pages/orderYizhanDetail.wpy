@@ -26,11 +26,19 @@
   .queren {
     text-align: right
   }
-  .goods-weight{
+  .goods-weight {
     background: #f0f0f0;
     padding-right: 30rpx;
     padding-bottom: 30rpx;
     text-align: right;
+  }
+  .goods-btn {
+    font-size: 22rpx;
+    color: #e50012;
+    width: 120rpx;
+    border: 1px solid #e50012;
+    padding: 5rpx 17rpx;
+    border-radius: 10rpx;
   }
 </style>
 <template>
@@ -42,7 +50,7 @@
             <block wx:for-items="{{goodsMap}}" wx:key="{{index}}">
               <view class="a-goods" data-id="{{item.goods_id}}">
                 <view>
-                  <checkbox value="{{item.rec_id}}"  wx:if="{{orderDetail.order_status==2&&item.suppliers_id==0 }}" />
+                  <checkbox value="{{item.rec_id}}" wx:if="{{orderDetail.order_status==2&&item.suppliers_id==0 }}" />
                 </view>
                 <view class="img-box">
                   <image src="{{item.goods_imgs}}" class="img" />
@@ -54,7 +62,8 @@
                     <view class="goods-label">货号：{{item.goods_sn}}</view>
                     <view class="goods-label" wx:if="{{item.suppliers_id!=0}}">由{{item.suppliers_name}}发货</view>
                     <view class="goods-label" wx:if="{{item.shipping_status!=0}}">已发货</view>
-                    
+                    <view class="goods-label" wx:if="{{item.cost_price>0}}">成本价：￥{{item.cost_price}}</view>
+                    <view class="goods-btn" @tap="setCostPrice({{item}},{{index}})" wx:else>设置成本价</view>
                   </view>
                   <view class="arow02">
                     <view class="goods-price">¥ {{item.goods_price}}</view>
@@ -62,7 +71,7 @@
                   </view>
                 </view>
               </view>
-               <view class="goods-weight" wx:if="{{item.weight!=0}}">商品重量：{{item.weight}}</view>
+              <view class="goods-weight" wx:if="{{item.weight!=0}}">商品重量：{{item.weight}}</view>
             </block>
           </checkbox-group>
         </view>
@@ -72,7 +81,7 @@
         <button class="confirm-btn" @tap="toShopList">分配店铺 </button>
       </view>
       <view wx:if="{{goodsList.length>0&&select_suppliers_name&&select_suppliers_name!='易站发货'}}" class="queren">
-        <button class="confirm-btn"  data-order_id="{{orderDetail.order_id}}" form-type="reset">确认</button>
+        <button class="confirm-btn" data-order_id="{{orderDetail.order_id}}" form-type="reset">确认</button>
       </view>
     </form>
     <form @submit="fahuoSubmit" wx:if="{{select_suppliers_name=='易站发货'}}">
@@ -94,33 +103,34 @@
         <radio-group class="radio-group" name="fahuo" @change="radioChange">
           是否需要发货单：
           <label class="radio">
-                  <radio value="1" checked="true" color='red' />是
-                </label>
+                          <radio value="1" checked="true" color='red' />是
+                        </label>
           <label class="radio">
-                  <radio value="0" checked="false" color='red' />否
-                </label>
+                          <radio value="0" checked="false" color='red' />否
+                        </label>
         </radio-group>
         <button class="confirm-btn" form-type="submit" data-order_id="{{orderDetail.order_id}}">发货</button>
       </view>
     </form>
     <!-- <view>
-         店铺：xxxx
-         <view class="a-goods" data-id="{{item.goods_id}}">
-                <view class="img-box">
-                  <image src="{{item.goods_imgs}}" class="img" />
-                </view>
-                <view class="text-box">
-                  <view class="arow01">
-                    <view class="goods-name">{{item.goods_name}}</view>
-                    <view class="goods-label">{{item.goods_attr}}</view>
-                  </view>
-                  <view class="arow02">
-                    <view class="goods-price">¥ {{item.goods_price}}</view>
-                    <view class="goods-num">x {{item.goods_number}}</view>
-                  </view>
-                </view>
-              </view>
-       </view> -->
+                 店铺：xxxx
+                 <view class="a-goods" data-id="{{item.goods_id}}">
+                        <view class="img-box">
+                          <image src="{{item.goods_imgs}}" class="img" />
+                        </view>
+                        <view class="text-box">
+                          <view class="arow01">
+                            <view class="goods-name">{{item.goods_name}}</view>
+                            <view class="goods-label">{{item.goods_attr}}</view>
+                          </view>
+                          <view class="arow02">
+                            <view class="goods-price">¥ {{item.goods_price}}</view>
+                            <view class="goods-num">x {{item.goods_number}}</view>
+                          </view>
+                        </view>
+                      </view>
+               </view> -->
+    <popupbox :popupdata.sync="popupdata" @formSubmit.user="formSubmit"></popupbox>
   </view>
 </template>
 
@@ -130,18 +140,19 @@
   import newapi from '../../API/newapi';
   import orderDetail from '../../components/shop/orderDetail';
   import util from '../../utils/index';
+  import popupbox from '../../components/popupbox';
   export default class orderYizhanDetail extends wepy.page {
     config = {
       navigationBarTitleText: '订单详情'
     };
     components = {
-      orderDetail
+      orderDetail,
+      popupbox
     };
     // watch= {
     //   select_suppliers_name(a,b){
     //     console.log(a,b)
     //     if(a=="易站发货") this.shipping_status
-
     //   }
     // }
     data = {
@@ -152,10 +163,46 @@
       time: 0,
       select_suppliers_id: "",
       select_suppliers_name: "",
-      shipping_status:0,
+      shipping_status: 0,
+      popupdata: {},
+      goodIndex: 0,
     };
     computed = {};
     methods = {
+      setCostPrice(item, index) {
+        this.goodIndex = index;
+        this.popupdata.isshowpopup = true;
+        this.popupdata.inputList = [{
+          name: '',
+          placeholder: '',
+          value: item.rec_id,
+          hidden: true,
+          inputName: 'rec_id',
+        }, {
+          name: '',
+          placeholder: '请填写成本价',
+          value: '',
+          hidden: false,
+          inputName: 'cost_price',
+        }]
+      },
+      async formSubmit(e) {
+        if (e.detail.value.cost_price <= 0) {
+          this.popupdata.isshowpopup = true;
+          util.showToast('请输入成本价');
+          return;
+        }
+        var cost_price = e.detail.value.cost_price;
+        var rec_id = e.detail.value.rec_id;
+        var data = {
+          cost_price,
+          rec_id
+        }
+        var res = await newapi.edit_cost(data);
+        this.goodsMap[this.goodIndex].cost_price = cost_price;
+        this.$apply();
+        util.showToast("设置成功");
+      },
       async reset() {
         var data = {
           suppliers_id: this.select_suppliers_id,
@@ -176,21 +223,21 @@
       },
       toShopList() {
         wx.navigateTo({
-          url: '/ConsolePages/pages/orderYizhanDetailShop?goods_id='+this.goods_id.toString()+'&order_id='+this.id
+          url: '/ConsolePages/pages/orderYizhanDetailShop?goods_id=' + this.goods_id.toString() + '&order_id=' + this.id
         });
       },
       checkboxChange(e) {
         console.log('发送选择改变，携带值为', e)
         this.goodsList = e.detail.value;
-        var i=0
-        this.goods_id=[]
-        console.log("orderdetail",this.orderDetail)
-        this.goodsMap.forEach((item,index)=>{
-          e.detail.value.forEach((item2,index2)=>{
-              if(item.rec_id==item2){
-                this.goods_id[i]=item.goods_id
-                i++
-              }
+        var i = 0
+        this.goods_id = []
+        console.log("orderdetail", this.orderDetail)
+        this.goodsMap.forEach((item, index) => {
+          e.detail.value.forEach((item2, index2) => {
+            if (item.rec_id == item2) {
+              this.goods_id[i] = item.goods_id
+              i++
+            }
           })
         })
         console.log(this.goods_id)
@@ -219,18 +266,17 @@
             order_id,
             suppliers_id: this.select_suppliers_id,
           }
-             wx.showLoading({
-          title: '加载中...', //提示的内容,
-          mask: true, //显示透明蒙层，防止触摸穿透,
-        });
+          wx.showLoading({
+            title: '加载中...', //提示的内容,
+            mask: true, //显示透明蒙层，防止触摸穿透,
+          });
           var res = await newapi.fenpei(data);
           wx.hideLoading();
-          data.single_id=res.data.data.single_id
+          data.single_id = res.data.data.single_id
           if (fahuo == 1) var fahuodan = await this.upfahuoimg();
           else fahuodan = '';
           this.orderDetail.fahuodan = fahuodan;
           this.data.fahuodan = fahuodan;
-          
           this.fahuo(data);
         }
       }
@@ -287,7 +333,7 @@
       if (res.data.code == 0) {
         this.shipping_status = 1;
         this.getOrderDetail(this.id);
-          this.goodsList = []
+        this.goodsList = []
         var order_status = this.$parent.$pages['/ConsolePages/pages/orderList']
           .thisindex;
         this.$parent.$pages['/ConsolePages/pages/orderList'].getOrderList(
@@ -311,7 +357,6 @@
       this.orderDetail.pay_time = util.formatTime(this.orderDetail.pay_time);
       this.orderDetail.confirm_time = util.formatTime(this.orderDetail.confirm_time);
       this.orderDetail.shipping_time = util.formatTime(this.orderDetail.shipping_time);
-
       this.$apply();
     }
     async onLoad(option) {
@@ -324,6 +369,21 @@
       var time = util.formatDate(new Date().getTime() / 1000)
       this.time = time;
       console.log("time,", time)
+      var popupdata = {
+        isshowpopup: false,
+        title: '设置成本价',
+        inputList: [{
+          name: '',
+          placeholder: '',
+          hidden: 'true',
+          inputName: 'rec_id',
+        }, {
+          name: '',
+          placeholder: '请填写成本价',
+          inputName: 'cost_price',
+        }]
+      };
+      this.popupdata = popupdata;
       this.$apply();
       util.showLoading();
     }
