@@ -296,9 +296,9 @@
       <view class="cameraBox">
         <view class="camera" wx:for="{{imgSrc}}" wx:key="{{index}}">
           <image src="{{item.img_url}}" />
-          <text class="close" @tap='delImg({{index}})'>x</text>
+          <!-- <text class="close" @tap='delImg({{index}})'>x</text> -->
         </view>
-        <view class="camera" @tap='chooseImg' wx:if="{{imgSrc.length<6}}">
+        <view class="camera" @tap='toSet' wx:if="{{imgSrc.length<6}}">
           <image src="/images/add_img.png" mode='aspectFit' />
         </view>
       </view>
