@@ -172,6 +172,10 @@ const newapi = {
     down_category: (data) => fetch(`${host_chk}/down_category`, 'GET', data),
     gongzhong: (data) => fetch(`${host_chk}/gongzhong`, 'GET', data),
     edit_cost: (data) => fetch(`${host_chk}/edit_cost`, 'GET', data),
+    activity_add: (data) => fetch(`${host_chk}/activity_add`, 'POST', data),
+    activity_list: (data) => fetch(`${host_chk}/activity_list`, 'GET', data),
+    activity_detail: (data) => fetch(`${host_chk}/activity_detail`, 'GET', data),
+    activity_stop: (data) => fetch(`${host_chk}/activity_stop`, 'GET', data),
 
 }
 const fetch = async function(url, method, data) {

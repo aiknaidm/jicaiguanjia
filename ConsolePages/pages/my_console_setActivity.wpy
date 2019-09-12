@@ -1,0 +1,282 @@
+<style lang="less">
+    .container {
+        padding: 40rpx 0;
+        background: transparent;
+        padding-bottom: 150rpx;
+    }
+    .banner-add {
+        background: #e50012;
+        color: #fff;
+        padding: 20rpx 40rpx;
+        width: 200rpx;
+        display: block;
+        border-radius: 10rpx;
+        margin: auto;
+        text-align: center // margin-left: 40rpx;
+    }
+    .banner-list {
+        width: 90%;
+        margin: auto;
+        border-radius: 20rpx;
+        margin-top: 20rpx;
+        margin-bottom: 40rpx; // background: #fff;
+    }
+    .section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 30rpx 40rpx;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .banner-img {
+        width: 102rpx;
+        height: 106rpx;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        margin-right: 30rpx;
+    }
+    .banner-img image {
+        width: 102rpx;
+        height: 106rpx;
+    }
+    .btn {
+        position: fixed;
+        bottom: 40rpx;
+        width: 200rpx;
+        background: #e50012;
+        color: #fff;
+        left: 50%;
+        margin-left: -100rpx;
+        border-radius: 50px;
+        line-height: 80rpx;
+        text-align: center;
+    }
+    .banner-select {
+        display: flex;
+        align-items: center
+    }
+    .banner-select .name {
+        width: 150rpx;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: right
+    }
+    .banner-select .icon-arrow-right {
+        color: #aaa;
+        position: relative;
+        top: 4rpx;
+    }
+    .section2 {
+        display: flex;
+        padding: 40rpx;
+        image {
+            padding: 0 20rpx;
+        }
+    }
+    .goods-name {
+        display: flex;
+        justify-content: space-between;
+        align-items: center; // border-bottom: 2rpx solid #f0f0f0;
+        padding: 20rpx 40rpx;
+        image {
+            width: 150rpx;
+            height: 150rpx;
+            margin-right: 20rpx;
+        }
+    }
+    .activity-box {
+        overflow: hidden;
+        border-radius: 20rpx;
+        margin-bottom: 20rpx;
+        background: #fff
+    }
+    .banner-del {
+        background: #e50012;
+        color: #fff;
+        padding: 10rpx 30rpx;
+        display: inline-block;
+        border-radius: 10rpx;
+        margin-left: 40rpx;
+        border-radius: 50px;
+    }
+    .banner-list {
+        position: relative
+    }
+    .close {
+        position: absolute;
+        right: -20rpx;
+        top: -25rpx;
+    }
+    .close text {
+        //  width: 40rpx;
+        //         height: 40rpx;
+        background: #e50012;
+        color: #fff;
+        text-align: center;
+        border-radius: 50%;
+        font-size: 28rpx;
+        display: inline-block;
+        padding: 20rpx;
+        margin-left: 20rpx;
+    }
+    .close .icon-xiala,
+    .close .icon-shangla {
+        background: #fff;
+        border: 1px solid #aaa;
+        color: #666
+    }
+</style>
+<template>
+    <view class='container'>
+        <view class="banner-add" @tap="addActivity">添加活动</view>
+        <block>
+            <view class="banner-list">
+                <view class="close">
+                </view>
+                <view class="activity-box" wx:for="{{activity}}" wx:for-index="index_activity" wx:for-item="item_activity">
+                    <view class="section">
+                        <view class="banner-name">
+                            活动名称：
+                        </view>
+                        <view class="banner-select">
+                            <input value='{{item_activity.act_name}}' placeholder='输入活动名称' data-indexb="{{index_activity}}" @input="searchIpt" />
+                        </view>
+                    </view>
+                    <view class="section">
+                        <view class="banner-name">
+                            到期时间：
+                        </view>
+                        <view class="banner-select">
+                            <picker name="end_time" mode="date" value="{{item_activity.end_time_f}}" start="{{dateStart}}" data-index="{{index}}" data-indexb="{{index_activity}}" bindchange="bindDateChange">
+                                {{item_activity.end_time_f}}
+                            </picker>
+                        </view>
+                    </view>
+                    <view class="section" @tap="selectGoods({{index_activity}})">
+                        <view class="banner-name">
+                            活动下的商品：
+                        </view>
+                        <view class="banner-del">添加商品</view>
+                    </view>
+                    <view class="section" wx:for="{{item_activity.goods}}" wx:for-index="index_goods" wx:for-item="item_goods">
+                        <view class="goods-name" @longtap.stop="delGoods({{index_activity}},{{index_goods}})">
+                            <image src="{{item_goods.original_img1?item_goods.original_img1:'http://maijia.jicaizx.com/'+item_goods.original_img}}" /> {{item_goods.goods_name}} </view>
+                    </view>
+                    <view style="text-align: right;margin:20rpx">
+                        <view class="banner-del" @tap="delactivity({{index_activity}})">删除</view>
+                    </view>
+                </view>
+            </view>
+        </block>
+        <view class="btn" @tap="save">保存</view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy';
+    import newapi from '../../API/newapi';
+    import api from '../../API/api';
+    import util from '../../utils/index';
+    export default class setActivity extends wepy.page {
+        config = {
+            navigationBarTitleText: '活动专区'
+        };
+        data = {
+            shenhe: 0,
+            activity: [{
+                act_name: "",
+                end_time_f: "请选择",
+                goods: []
+            }],
+            index: 0,
+            dateStart: 0,
+        };
+        computed = {};
+        components = {};
+        methods = {
+            searchIpt(e) {
+                var indexb = e.currentTarget.dataset.indexb;
+                this.activity[indexb].act_name = e.detail.value;
+            },
+            bindDateChange: function(e) {
+                console.log('picker发送选择改变，携带值为', e.detail.value)
+                var index = e.currentTarget.dataset.index;
+                var indexb = e.currentTarget.dataset.indexb;
+                this.activity[indexb].end_time_f = e.detail.value;
+                this.activity[indexb].end_time = new Date(e.detail.value).getTime() / 1000;
+                this.$apply();
+            },
+            async delGoods(y, z) {
+                console.log("xyz", y, z)
+                var res = await util.showModalBig("确定要删除商品吗？")
+                if (res.confirm) {
+                    var goods = this.activity[y].goods;
+                    console.log("goods", goods)
+                    goods.splice(z, 1)
+                    this.$apply();
+                }
+            },
+            async delactivity(y) {
+                var res = await util.showModalBig("确定要删除吗？")
+                if (res.confirm) {
+                    var activity = this.activity;
+                    activity.splice(y, 1)
+                    this.$apply();
+                }
+            },
+            async save() {
+                newapi.activity_add({
+                    activity: this.activity,
+                    suppliers_id: this.suppliers_id
+                }).then(res => {
+                    if (res.data.code != 0)
+                        util.showToast(res.data.message)
+                    else
+                        util.showToast("保存成功")
+                })
+            },
+            selectGoods(y) {
+                this.y = y;
+                wx.navigateTo({
+                    url: '/brand/goodsList'
+                });
+            },
+            addActivity() {
+                this.activity.unshift({
+                    act_name: "",
+                    end_time_f: "请选择",
+                    goods: [],
+                })
+            }
+        };
+        async onLoad(option) {
+            console.log("option", option)
+            this.dateStart = util.formatDate();
+            var suppliers_id = this.$parent.globalData.suppliers_id ? this.$parent.globalData.suppliers_id : ""
+            var yizhanInfo = this.$parent.globalData.yizhanInfo ? this.$parent.globalData.yizhanInfo : await this.$parent.getYizhanInfo(suppliers_id);
+            this.suppliers_id = suppliers_id == "" ? yizhanInfo.suppliers_id : suppliers_id;
+            this.getActivitys();
+        }
+        getActivitys() {
+            newapi.activity_list({
+                suppliers_id: this.suppliers_id
+            }).then(res => {
+                var l_activity = res.data.data;
+                l_activity.forEach((item, index) => {
+                    if (item.end_time > 0) {
+                        item.end_time_f = util.formatDate(item.end_time);
+                    } else {
+                        item.end_time_f = '请选择';
+                    }
+                })
+                this.activity = l_activity;
+                this.$apply();
+            })
+        }
+        events = {};
+    }
+</script>

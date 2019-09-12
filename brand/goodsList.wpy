@@ -131,7 +131,7 @@
         <view class='kind' wx:for="{{goodsList}}" wx:key="{{index}}" bindlongpress='showActionSheet({{index}},{{item.brand_id}},{{item.brand_name}},{{item.brand_logo}})'>
           <view class="kind-1">
             <view>
-              <checkbox value="{{item.goods_id}}" checked="{{item.checked}}" disabled="{{!item.checked&&goods_id.length>=12}}"/>
+              <checkbox value="{{item.goods_id}}" checked="{{item.checked}}" disabled="{{!item.checked&&goods_id.length>=12}}" />
               <image src="{{item.original_img1?item.original_img1:'http://maijia.jicaizx.com/'+item.original_img}}" /> {{item.goods_name}} </view>
             <!-- <view class='del' bindtap='showActionSheet({{index}},{{item.brand_id}},{{item.brand_name}},{{item.brand_logo}})'> 编辑</view> -->
           </view>
@@ -161,7 +161,7 @@
       keyword: '',
       suppliers_id: 0,
       page: 1,
-      goods_id:[]
+      goods_id: []
     };
     computed = {};
     components = {
@@ -171,28 +171,39 @@
       checkboxChange: function(val) {
         console.log("val", val)
         this.goods_id = val.detail.value
-       this.goodsList.forEach((item, index) => {
+        this.goodsList.forEach((item, index) => {
           this.goods_id.forEach((item2, index2) => {
             if (item2 == item.goods_id) {
-              this.goodsList[index].checked=true
+              this.goodsList[index].checked = true
             }
           })
         })
       },
       addBrandTap: function() {
-        var parent = this.$parent.$pages["/brand/setBrand"]
-        var x = parent.x
-        var y = parent.y
-        parent.brands[x].brand[y].goods = []
-        this.goodsList.forEach((item, index) => {
-          this.goods_id.forEach((item2, index2) => {
-            if (item2 == item.goods_id) {
-              parent.brands[x].brand[y].goods.push(item)
-            }
+        if (this.brand_id) {
+          var parent = this.$parent.$pages["/brand/setBrand"]
+          var x = parent.x
+          var y = parent.y
+          parent.brands[x].brand[y].goods = []
+          this.goodsList.forEach((item, index) => {
+            this.goods_id.forEach((item2, index2) => {
+              if (item2 == item.goods_id) {
+                parent.brands[x].brand[y].goods.push(item)
+              }
+            })
           })
-        })
-        // parent.banner[index].ad_link=this.goods_id;
-        // if(this.goods_name) parent.banner[index].name=this.goods_name;
+        } else {
+          var parent = this.$parent.$pages["/ConsolePages/pages/my_console_setActivity"]
+          var y = parent.y
+          parent.activity[y].goods = []
+          this.goodsList.forEach((item, index) => {
+            this.goods_id.forEach((item2, index2) => {
+              if (item2 == item.goods_id) {
+                parent.activity[y].goods.push(item)
+              }
+            })
+          })
+        }
         wx.navigateBack({
           delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
         });
@@ -211,23 +222,34 @@
         suppliers_id: this.suppliers_id,
         keyword: this.keyword,
         page: this.page,
-        brand:this.brand_id
+        brand: this.brand_id
       }
       var res = await newapi.search(data);
       var datas = res.data.data
-      var parent = this.$parent.$pages["/brand/setBrand"]
-      var x = parent.x
-      var y = parent.y
-      for(var i=0;i<parent.brands[x].brand[y].goods.length;i++){
-        for(var j=0;j<datas.length;j++){
-        
-          if(datas[j].goods_id==parent.brands[x].brand[y].goods[i].goods_id){
-            datas[j].checked=true;
-            break;
+      if (this.brand_id) {
+        var parent = this.$parent.$pages["/brand/setBrand"]
+        var x = parent.x
+        var y = parent.y
+        for (var i = 0; i < parent.brands[x].brand[y].goods.length; i++) {
+          for (var j = 0; j < datas.length; j++) {
+            if (datas[j].goods_id == parent.brands[x].brand[y].goods[i].goods_id) {
+              datas[j].checked = true;
+              break;
+            }
+          }
+        }
+      }else{
+        var parent = this.$parent.$pages["/ConsolePages/pages/my_console_setActivity"]
+        var y = parent.y
+        for (var i = 0; i < parent.activity[y].goods.length; i++) {
+          for (var j = 0; j < datas.length; j++) {
+            if (datas[j].goods_id == parent.activity[y].goods[i].goods_id) {
+              datas[j].checked = true;
+              break;
+            }
           }
         }
       }
-      
       if (this.page == 1) {
         this.goodsList = datas;
       } else {
@@ -246,8 +268,8 @@
       }
     }
     async onLoad(option) {
-      console.log("option",option)
-      this.brand_id=option.brand_id?option.brand_id:0
+      console.log("option", option)
+      this.brand_id = option.brand_id ? option.brand_id : 0
       var suppliers_id = this.$parent.globalData.suppliers_id ? this.$parent.globalData.suppliers_id : ""
       var yizhanInfo = this.$parent.globalData.yizhanInfo ? this.$parent.globalData.yizhanInfo : await this.$parent.getYizhanInfo(suppliers_id);
       this.suppliers_id = suppliers_id == "" ? yizhanInfo.suppliers_id : suppliers_id;
@@ -255,7 +277,6 @@
       this.page = 1;
       this.getGoodsList();
     }
-    onUnload() {
-    }
+    onUnload() {}
   }
 </script>

@@ -644,6 +644,7 @@
       <view>
         <text class="to-pay-btn " bindtap="deleteSelected" wx:if="{{del}}">删除</text>
         <text class="to-pay-btn" bindtap="clickbtn" wx:if="{{del}}">设置会员卡</text>
+        <text class="to-pay-btn" bindtap="clickghs" wx:if="{{del && is_yizhan}}">设置供货商</text>
         <!-- <text class="to-pay-btn" bindtap="setSelected(0)" wx:if="{{del}}">设置会员卡不可用</text>
                                           <text class="to-pay-btn" bindtap="setSelected(1)" wx:if="{{del}}">设置会员卡可用</text> -->
       </view>
@@ -858,6 +859,11 @@
           '设置为可用会员卡购买'
         ]);
         this.setSelected(mRes.tapIndex);
+      },
+      clickghs() {
+        wx.navigateTo({
+        	url: '/ConsolePages/pages/addGoodsShop?type=more',
+        })
       },
       // 修改
       async toGoodDetailsTap(id, name, index, e) {

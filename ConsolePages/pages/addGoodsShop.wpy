@@ -40,13 +40,29 @@
             goods_id: 0,
             shopList: -1,
             keyword: '',
+            select_suppliers_id: []
         };
         components = {
             search,
         };
         methods = {
             async submit(e) {
-                this.$parent.$pages['/ConsolePages/pages/addGoodsInfo'].select_suppliers_id = e.detail.value.suppliers;
+                if (this.type == 'more') {
+                    var setSelectIds = [];
+                    this.list.forEach((item, index) => {
+                        if (item.active) {
+                            setSelectIds.push(item.goods_id);
+                        }
+                    });
+                    var data = {
+                        goods_id: setSelectIds,
+                        suppliers: e.detail.value.suppliers
+                    };
+                    var res = await newapi.suppliers_goods(data);
+                    await util.showModal('设置成功');
+                } else {
+                    this.$parent.$pages['/ConsolePages/pages/addGoodsInfo'].select_suppliers_id = e.detail.value.suppliers;
+                }
                 wx.navigateBack({
                     delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
                 });
@@ -99,9 +115,14 @@
             }
             this.$apply();
         }
-        async onLoad() {
-            this.goods_id = this.$parent.$pages['/ConsolePages/pages/addGoodsInfo'].goodsId;
-            this.select_suppliers_id = this.$parent.$pages['/ConsolePages/pages/addGoodsInfo'].select_suppliers_id
+        async onLoad(e) {
+            if (e.type == 'more') {
+                this.type = 'more';
+                this.list = this.$parent.$pages['/ConsolePages/pages/goodsList'].list;
+            } else {
+                this.goods_id = this.$parent.$pages['/ConsolePages/pages/addGoodsInfo'].goodsId;
+                this.select_suppliers_id = this.$parent.$pages['/ConsolePages/pages/addGoodsInfo'].select_suppliers_id
+            }
             var suppliers_id = this.suppliers_id = this.$parent.globalData.suppliers_id ?
                 this.$parent.globalData.suppliers_id :
                 (await this.$parent.getYizhanInfo()).suppliers_id;
