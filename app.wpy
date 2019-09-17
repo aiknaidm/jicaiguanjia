@@ -117,7 +117,9 @@ export default class extends wepy.app {
           'pages/index',
           'pages/details',
           'pages/indexNewsList',
-          'pages/newsList'
+          'pages/newsList',
+          'pages/renzheng',
+          'pages/renzhengDetail',
         ]
       },
       {
@@ -126,7 +128,6 @@ export default class extends wepy.app {
           'pages/index',
           'pages/orderList',
           'pages/orderDetail',
-          'pages/renzheng',
           'pages/share',
           'pages/shareRule',
           'pages/shareList',
@@ -165,7 +166,6 @@ export default class extends wepy.app {
           'pages/my_console_payPhb',
           'pages/my_console_toSureList',
           'pages/my_console_tobalanceDetail',
-          'pages/renzhengDetail',
           'pages/upCase',
           'pages/caseList',
           'pages/addCaseDec',

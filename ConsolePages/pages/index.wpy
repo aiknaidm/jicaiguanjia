@@ -668,7 +668,7 @@
         }
         if (mRes.confirm) {
           wx.navigateTo({
-            url: '/ConsolePages/pages/renzheng'
+            url: '/IndexPages/pages/renzheng'
           });
         }
         return;

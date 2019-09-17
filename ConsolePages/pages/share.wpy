@@ -202,7 +202,7 @@ export default class share extends wepy.page {
     util.showLoading();
 
     let data = {
-      path: '/ConsolePages/pages/renzheng',
+      path: '/IndexPages/pages/renzheng',
     };
     let res = await newapi.getShareImg(data);
     if (res.data.code == 0) {

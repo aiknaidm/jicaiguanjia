@@ -66,7 +66,7 @@ export default class my extends wepy.page {
       {
         icon: '/images/icon_normal.png',
         text: '注册',
-        url: '/ConsolePages/pages/renzheng'
+        url: '/IndexPages/pages/renzheng'
       },
       {
         icon: '/images/console.png',
@@ -152,7 +152,7 @@ export default class my extends wepy.page {
         {
           icon: '/images/icon_normal.png',
           display_name: '注册',
-          url: '/ConsolePages/pages/renzheng'
+          url: '/IndexPages/pages/renzheng'
         },
         {
           icon: '/images/console.png',

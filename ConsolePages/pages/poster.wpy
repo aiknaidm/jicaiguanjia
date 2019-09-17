@@ -158,7 +158,7 @@ export default class newslist extends wepy.page {
     // var suppliers_id = app.globalData.yizhanInfo.suppliers_id;
     var that = this;
     let data = {
-      path: '/ConsolePages/pages/renzheng',
+      path: '/IndexPages/pages/renzheng',
     };
     let res = await newapi.getShareImg(data);
     util.showLoading('绘制图片中');
