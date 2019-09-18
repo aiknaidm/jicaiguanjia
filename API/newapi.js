@@ -170,6 +170,7 @@ const newapi = {
     promotion_detail: (data) => fetch(`${host_chk}/promotion_detail`, 'GET', data),
     down_goods: (data) => fetch(`${host_chk}/down_goods`, 'GET', data),
     down_category: (data) => fetch(`${host_chk}/down_category`, 'GET', data),
+    down_brands: (data) => fetch(`${host_chk}/down_brands`, 'GET', data),
     gongzhong: (data) => fetch(`${host_chk}/gongzhong`, 'GET', data),
     edit_cost: (data) => fetch(`${host_chk}/edit_cost`, 'GET', data),
     activity_add: (data) => fetch(`${host_chk}/activity_add`, 'POST', data),

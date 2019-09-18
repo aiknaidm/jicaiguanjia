@@ -232,7 +232,7 @@
                             <label wx:for="{{item.xiaofenlei}}" class="list" wx:for-item="itemName" wx:for-index="indexy" wx:key="{{indexy}}" data-indexx="{{indexx}}" data-indexy="{{indexy}}" data-catid="{{itemName.cat_id}}" @tap='clickxiaolei({{indexx}},{{indexy}},{{itemName}})'>
                                                                                 <radio value="{{itemName.cat_id}}" checked="{{itemName.checked}}"/><image src="{{itemName.cat_img}}"></image>{{itemName.cat_name}}
                                                                                 <!-- ({{itemName.goods_num}}) -->
-                                        <view wx:if="{{item.is_show!=1}}" class="sxj" >
+                                        <view wx:if="{{itemName.is_show!=1}}" class="sxj" >
                                 已下架
                             </view>
                             </label>
@@ -253,11 +253,8 @@
             <view class="add-box" catchtouchmove='showbox' catchtap="showbox">
                 <view class="title">
                     修改分类
-                    <view wx:if="{{thisCatShow==1}}" class="sxj" @tap='downCategory({{thisCatId}},{{thisCatShow}})'>
-                        下架
-                    </view>
-                    <view wx:else class="sxj" @tap='downCategory({{thisCatId}},{{thisCatShow}})'>
-                        上架
+                    <view class="sxj" @tap='downCategory({{thisCatId}},{{thisCatShow}})'>
+                        {{thisCatShowText}}
                     </view>
                 </view>
                 <view class="cameraBox">
@@ -340,11 +337,16 @@
             thisCatId: '',
             thisCatImg: '',
             thisCatShow: 1,
+            thisCatShowText: '下架',
             imgSrc: [],
             is_join: 0
         };
         methods = {
             async downCategory(cat_id, is_show) {
+                let mRes = await util.showModalBig('你确定要将该分类' + this.thisCatShowText + '吗？' + this.thisCatShowText + '后该分类下所有商品将会一同' + this.thisCatShowText);
+                if (mRes.cancel) {
+                  return;
+                }
                 var is_show = is_show == 1 ? 0 : 1;
                 let data = {
                     cat_id,
@@ -456,6 +458,7 @@
                 this.thisCatId = item.cat_id
                 this.thisCatImg = item.cat_img
                 this.thisCatShow = item.is_show
+                this.thisCatShowText = item.is_show==1?'下架':'上架';
                 this.$apply();
             },
             clickdafenlei(x, item) {
@@ -465,6 +468,7 @@
                 this.thisCatId = item.cat_id
                 this.thisCatImg = item.cat_img
                 this.thisCatShow = item.is_show
+                this.thisCatShowText = item.is_show==1?'下架':'上架';
                 this.$apply();
             },
             kindNameIpt: function(e) {
