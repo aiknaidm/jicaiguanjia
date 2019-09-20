@@ -439,7 +439,7 @@
     <view class="goodsList" wx:else>
       <view class="a-gooods" wx:for="{{list}}" wx:key="{{index}}">
         <!-- wx:for="{{list}}" wx:key="{{index}}" -->
-        <view class="a-goods-conts " @tap.stop="toChooseTap({{item.goods_id}},{{item.goods_name}})">
+        <view class="a-goods-conts " @tap.stop="toChooseTap({{item.goods_id}},{{item.goods_name}},{{item.properties}})">
           <view class="goods-info">
             <view class="img-box">
               <image src="http://maijia.jicaizx.com/{{item.original_img}}" class="img" wx:if="{{item.original_img1==''}}" />
@@ -485,15 +485,23 @@
       buttonClass: "",
       keyword: "",
       list: [],
-      isMoreData: true
+      isMoreData: true,
+      type:""
     };
     computed = {};
     methods = {
-      toChooseTap(id, name) {
+      toChooseTap(id, name,properties) {
         console.log(name);
         console.log(id);
-        this.$parent.$pages['/ConsolePages/pages/coupon/addCoupon'].choose_good_name = name;
-        this.$parent.$pages['/ConsolePages/pages/coupon/addCoupon'].choose_good_id = id;
+        console.log(properties);
+        if(this.type=="tuan"){
+            this.$parent.$pages['/ConsolePages/pages/coupon/addPintuan'].choose_good_name = name;
+            this.$parent.$pages['/ConsolePages/pages/coupon/addPintuan'].choose_good_id = id;
+            this.$parent.$pages['/ConsolePages/pages/coupon/addPintuan'].choose_properties = properties;
+        }else{
+            this.$parent.$pages['/ConsolePages/pages/coupon/addCoupon'].choose_good_name = name;
+            this.$parent.$pages['/ConsolePages/pages/coupon/addCoupon'].choose_good_id = id;
+        }
         wx.navigateBack();
       },
       searchTap(val) {
@@ -526,6 +534,7 @@
         this.$parent.globalData.suppliers_id :
         (await this.$parent.getYizhanInfo()).suppliers_id;
       this.initdata = this.initData();
+      this.type = option.type;
       this.getShopList(this.initdata);
     }
     onReachBottom() {

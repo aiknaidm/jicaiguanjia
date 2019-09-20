@@ -228,8 +228,8 @@ text-align: right
                     .catch(res => {});
             },
             addBanner() {
-                if (this.banner.length == 6) {
-                    util.showToast("轮播图最大为六个，请删除后添加")
+                if (this.banner.length == 10) {
+                    util.showToast("轮播图最大为十个，请删除后添加")
                     return
                 }
                 this.banner.unshift({

@@ -177,6 +177,9 @@ const newapi = {
     activity_list: (data) => fetch(`${host_chk}/activity_list`, 'GET', data),
     activity_detail: (data) => fetch(`${host_chk}/activity_detail`, 'GET', data),
     activity_stop: (data) => fetch(`${host_chk}/activity_stop`, 'GET', data),
+    pintuan_add: (data) => fetch(`${host_chk}/pintuan_add`, 'GET', data),
+    pintuan_stop: (data) => fetch(`${host_chk}/pintuan_stop`, 'GET', data),
+    pintuan_list: (data) => fetch(`${host_chk}/pintuan_list`, 'GET', data),
 
 }
 const fetch = async function(url, method, data) {
