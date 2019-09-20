@@ -41,10 +41,12 @@
   z-index: 100;
   background: transparent;
   border: 1px solid #aaa;
-  padding: 15rpx 100rpx;
+  padding: 0rpx 80rpx;
   margin-bottom: 30rpx;
   font-weight: bold;
   border-radius: 10rpx;
+  font-size: 30rpx;
+  line-height: 50rpx;
 }
 
 .getinfo .txt {
@@ -61,8 +63,8 @@
 }
 </style>
 <template>
-  <view class="prompt">
-    <view class="getinfo">
+  <view class="prompt" @tap="hidden">
+    <view class="getinfo" @tap.stop="stop">
       <slot name="title">
         <view class="title">提示</view>
       </slot>
@@ -86,6 +88,10 @@ export default class List extends wepy.component {
   methods = {
     getUserInfo(e) {
       this.$emit('gotUserInfo', e);
+    },
+    hidden(){
+      this.$emit('hidden');
+
     }
   };
 

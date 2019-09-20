@@ -41,7 +41,7 @@
 }
 </style>
 <template>
-  <view  class="userinfo" userData="用户信息">
+  <view  class="userinfo" userData="用户信息" @tap="getUserInfo2">
  
       <image class="userinfo-avatar" src="{{userData.avatarUrl}}" background-size="cover"/>
       <text
@@ -67,7 +67,10 @@ export default class List extends wepy.component {
   events = {};
 
   methods = {
-
+getUserInfo2(){
+  console.log("getUserInfo2");
+  this.$emit("getUserInfo2")
+}
   };
 
   async onLoad() {

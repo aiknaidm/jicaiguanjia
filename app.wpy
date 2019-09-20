@@ -109,7 +109,7 @@ import util from './utils/index';
 
 export default class extends wepy.app {
   config = {
-    pages: ['pages/home', 'pages/my', 'pages/shoperweima'],
+    pages: ['pages/home', 'pages/my', 'pages/shoperweima','pages/myerweima'],
     subPackages: [
       {
         root: 'IndexPages',

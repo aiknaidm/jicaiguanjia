@@ -22,7 +22,7 @@
 </style>
 <template>
   <view class="container">
-    <userInfo :userData.sync="userInfo" @tap="getUserInfo2"></userInfo>
+    <userInfo :userData.sync="userInfo" @getUserInfo2.user="getUserInfo2"></userInfo>
     <view class="info_list">
       <repeat for="{{tabList}}" wx:key="{{index}}">
         <myList :tabItem="item"></myList>
@@ -32,9 +32,9 @@
       <image src='http://wsc.jicaizx.com/images/ad1.jpg'  mode='aspectFill'/>
     </view> -->
     <!-- 遮罩层 -->
-    <mask wx:if="{{isShowprompt}}"></mask>
+     <mask wx:if="{{isShowprompt}}" @tap="hiddenPrompt"></mask>
     <!-- 为获取用户信息的提示 -->
-    <prompt wx:if="{{isShowprompt}}" @gotUserInfo.user="getUserInfo"></prompt>
+    <prompt wx:if="{{isShowprompt}}" @gotUserInfo.user="getUserInfo" @hidden.user="hiddenPrompt"></prompt>
     <!-- <view class="info_list">
         <myList :tabItem="myConsole"></myList>
       </view>
@@ -85,6 +85,7 @@ export default class my extends wepy.page {
   computed = {};
   methods = {
     getUserInfo2(e, evt) {
+      console.log("this.isShowprompt",this.isShowprompt)
       this.isShowprompt = true;
       this.$apply();
     },
@@ -97,6 +98,10 @@ export default class my extends wepy.page {
       this.isShowprompt = false;
       this.$apply();
     },
+    hiddenPrompt(){
+        console.log(1111111111111)
+        this.isShowprompt=false
+      },
     toBannerDetail2: function() {
       wx.navigateToMiniProgram({
         appId: 'wxf48cdd6a7dae8c21',
@@ -143,7 +148,7 @@ export default class my extends wepy.page {
       }
       this.$apply();
     } else {
-      this.isShowprompt = true;
+      this.isShowprompt = false;
       this.$apply();
     }
     // 判断身份

@@ -485,7 +485,7 @@
         icon: '/images/console/fabushangpin.png',
         num: 0,
         display_name: '钱包',
-        url: '/yizhan/earnings/index',
+        url: '/pages/myerweima',
         bgcolor: '#10b3b1'
       }] ,
       is_designer: true,
@@ -527,22 +527,6 @@
       };
       let res = await newapi.managers_permission(data);
       this.permission = res.data.data.permission;
-      this.permission[2].permission.push({
-          icon: '/images/console/ywy.png',
-          text: '活动专区',
-          url: 'my_console_setActivity',
-          bgcolor: '#10b3b1',
-          isadmin: 1,
-          isfufei: 1
-        });
-      this.permission[2].permission.push({
-          icon: '/images/console/ywy.png',
-          text: '拼团管理',
-          url: '/ConsolePages/pages/coupon/addPintuan',
-          bgcolor: '#10b3b1',
-          isadmin: 1,
-          isfufei: 1
-        });
       this.orderNum(res.data.data)
       if (res.data.data.is_designer == 1 && res.data.data.is_admin != 1 && res.data.data.is_boss != 1)
         this.is_designer = true

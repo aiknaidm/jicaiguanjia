@@ -120,7 +120,7 @@
     border-radius: 0px;
     margin: 0;
     /* height: 84rpx;
-     line-height: 84rpx; */
+       line-height: 84rpx; */
     background-color: #e50012;
   }
   .rz-submit {
@@ -132,7 +132,7 @@
     display: flex;
     justify-content: space-between;
     /* border-bottom: 1px solid #ddd;
-    padding-right: 10%; */
+      padding-right: 10%; */
   }
   .smsCode input {
     width: 336rpx;
@@ -146,9 +146,9 @@
     line-height: 80rpx;
     background-color: #e50012;
   }
-    .smsCode button[disabled]{
-       color: #fff;
-    }
+  .smsCode button[disabled] {
+    color: #fff;
+  }
   button {
     background-color: #e50012;
   }
@@ -245,28 +245,28 @@
         </view>
       </view>
       <!-- <view class="section">
-        <view class="label label2">
-          <text>*</text>pc管理账号</view>
-        <view class="label-right">
-          <input name="pcusername" class="input" type="text" value="{{userDetail.suppliers_name}}" disabled='{{isuserDetail}}' />
-        </view>
-      </view>
-      <view class="section">
-        <view class="label label2">
-          <text>*</text>pc管理密码</view>
-        <view class="label-right">
-          <input name="password" class="input" type="text" value="{{password}}" disabled/>
-        </view>
-      </view> -->
-      <!-- <view class="section">
-        <view class="label">
-          <text>*</text>所属地区</view>
-        <picker mode="region" disabled="{{isuserDetail}}" @change="bindRegionChange">
-          <view class="picker">
-            {{region[0]}}-{{region[1]}}-{{region[2]}}
+          <view class="label label2">
+            <text>*</text>pc管理账号</view>
+          <view class="label-right">
+            <input name="pcusername" class="input" type="text" value="{{userDetail.suppliers_name}}" disabled='{{isuserDetail}}' />
           </view>
-        </picker>
-      </view> -->
+        </view>
+        <view class="section">
+          <view class="label label2">
+            <text>*</text>pc管理密码</view>
+          <view class="label-right">
+            <input name="password" class="input" type="text" value="{{password}}" disabled/>
+          </view>
+        </view> -->
+      <!-- <view class="section">
+          <view class="label">
+            <text>*</text>所属地区</view>
+          <picker mode="region" disabled="{{isuserDetail}}" @change="bindRegionChange">
+            <view class="picker">
+              {{region[0]}}-{{region[1]}}-{{region[2]}}
+            </view>
+          </picker>
+        </view> -->
       <view class="section">
         <view class="label">选择地址</view>
         <button wx:if="{{isOpenSetting}}" open-type="openSetting" bindopensetting="getAddressTap" class="label-right">{{region[0]}}-{{region[1]}}-{{region[2]}}</button>
@@ -277,25 +277,24 @@
       <view class="section">
         <view class="label">
           详细地址</view>
-        
         <button wx:if="{{isOpenSetting&&address!=''}}" open-type="openSetting" bindopensetting="getAddressTap" class="label-right">{{address}} </button>
         <view wx:else @tap="{{!isuserDetail?'getAddressTap':''}}" class="label-right">
           <input value="{{address}}" name="address" disabled/>
         </view>
       </view>
       <!-- <view class="section" wx:if='{{!isuserDetail}}'>
-        <view class="label label2">
-          邀请码</view>
-        <view class="label-right">
-          <input name="shareCode" class="input" type="text" value="{{shareCode}}" />
-        </view>
-      </view> -->
+          <view class="label label2">
+            邀请码</view>
+          <view class="label-right">
+            <input name="shareCode" class="input" type="text" value="{{shareCode}}" />
+          </view>
+        </view> -->
       <view class='check' wx:if='{{!isuserDetail}}'>
         <checkbox-group bindchange="agreeClick">
           <label class="checkbox">
-              <checkbox value="{{isAgreed}}" checked="{{isAgreed}}" />
-              <text >我已阅读</text><text class='main-color'  catchtap='showtext'>吉采易站批发版规则</text><text >，同意在吉采易站批发版开店</text>
-            </label>
+                <checkbox value="{{isAgreed}}" checked="{{isAgreed}}" />
+                <text >我已阅读</text><text class='main-color'  catchtap='showtext'>吉采易站批发版规则</text><text >，同意在吉采易站批发版开店</text>
+              </label>
         </checkbox-group>
       </view>
       <button class='rz-submit' formType="submit" wx:if="{{!isuserDetail}}" disabled='{{issubmit}}'>提交</button>
@@ -338,19 +337,17 @@
     };
     computed = {};
     methods = {
-       getAddressTap() {
-
-         this.$parent.checkUserLocation().then(res => {
+      getAddressTap() {
+        this.$parent.checkUserLocation().then(res => {
           if (res) {
             this.isOpenSetting = false;
             this.getAddress();
-          }else{
+          } else {
             this.isOpenSetting = true;
-            
           }
-           this.$apply();
-        }).catch(res=>{
-           console.log('res',res)
+          this.$apply();
+        }).catch(res => {
+          console.log('res', res)
         })
       },
       // 上传店铺logo
@@ -365,10 +362,9 @@
             var that = this;
             // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
             var tempFilePaths = res.tempFilePaths;
-           
-            this.shopImg={}
-        this.shopImg.img_url = tempFilePaths[0];
-        this.shopImg.upload = true
+            this.shopImg = {}
+            this.shopImg.img_url = tempFilePaths[0];
+            this.shopImg.upload = true
             this.$apply();
           })
           .catch(res => {});
@@ -481,7 +477,6 @@
     }
     //表单数据提交
     async formSubmit(e) {
-     
       var param = e.detail.value;
       var that = this;
       var flag = that.checkPhone(param.phone) && that.checkSmsCode(param.smscode);
@@ -521,18 +516,16 @@
           var sheng = this.region[0];
           var shi = this.region[1];
           var qu = this.region[2];
-           wx.showLoading({
-        title: '卖力加载中...', //提示的内容,
-        mask: true, //显示透明蒙层，防止触摸穿透,
-       
-      });
-          if (!this.shopImg.upload) var img = this.shopImg.img_url==0?"":this.shopImg.img_url;
+          wx.showLoading({
+            title: '卖力加载中...', //提示的内容,
+            mask: true, //显示透明蒙层，防止触摸穿透,
+          });
+          if (!this.shopImg.upload) var img = this.shopImg.img_url == 0 ? "" : this.shopImg.img_url;
           else var img = await this.upImg(this.shopImg.img_url);
- wx.showLoading({
-        title: '卖力加载中...', //提示的内容,
-        mask: true, //显示透明蒙层，防止触摸穿透,
-       
-      });
+          wx.showLoading({
+            title: '卖力加载中...', //提示的内容,
+            mask: true, //显示透明蒙层，防止触摸穿透,
+          });
           let data = {
             mobile: phone,
             realname: realname,
@@ -546,7 +539,9 @@
             img,
             address: this.address,
             longitude: this.longitude,
-            latitude: this.latitude
+            latitude: this.latitude,
+            share_user_id:this.share_user_id,
+            share_suppliers_id:this.share_suppliers_id
           };
           let res = await newapi.renzheng(data);
           wx.hideLoading();
@@ -582,29 +577,32 @@
         this.longitude = res.longitude
         this.latitude = res.latitude
         var that = this;
-          qqmapsdk.reverseGeocoder({
-            location: {
-              latitude: this.latitude,
-              longitude: this.longitude
-            },
-            success: function(res) {
-              var newAddress = res.result.address_component;
-              that.region = [
-                newAddress.province,
-                newAddress.city,
-                newAddress.district
-              ];
-              console.log(that.region);
-              that.$apply();
-            },
-            fail: function(res) {}
-          });
+        qqmapsdk.reverseGeocoder({
+          location: {
+            latitude: this.latitude,
+            longitude: this.longitude
+          },
+          success: function(res) {
+            var newAddress = res.result.address_component;
+            that.region = [
+              newAddress.province,
+              newAddress.city,
+              newAddress.district
+            ];
+            console.log(that.region);
+            that.$apply();
+          },
+          fail: function(res) {}
+        });
         this.$apply();
       });
     }
     async onLoad(option) {
-      await this.$parent.loginInfo();
+      console.log(option)
+     var res= await this.$parent.loginInfo();
+     this.share_user_id=option.user_id?option.user_id:0
       var suppliers_id = option.suppliers_id ? option.suppliers_id : ''
+      this.share_suppliers_id= option.share_suppliers_id ? option.share_suppliers_id : ''
       var yizhanInfo = await this.$parent.getYizhanInfo(suppliers_id);
       if (suppliers_id != '') {
         this.isuserDetail = true;
@@ -613,11 +611,11 @@
         this.region[1] = yizhanInfo.shi;
         this.region[2] = yizhanInfo.qu;
         this.phone = yizhanInfo.mobile;
-        this.shopImg={}
+        this.shopImg = {}
         this.shopImg.img_url = yizhanInfo.img
         this.shopImg.upload = false
-        this.address=yizhanInfo.address;
-        console.log("this.address",yizhanInfo.address)
+        this.address = yizhanInfo.address;
+        console.log("this.address", yizhanInfo.address)
       } else {
         wepy.getLocation().then(res => {
           console.info("getLocation success: ", res);
@@ -637,8 +635,7 @@
               that.region = [newAddress.province, newAddress.city, newAddress.district]
               that.$apply();
             },
-            fail: function(res) {
-            },
+            fail: function(res) {},
           });
         }).catch(res => {
           this.isOpenSetting = true
@@ -646,6 +643,16 @@
         });
       }
       this.$apply();
+    }
+    onShareAppMessage(res) {
+      console.log("this.$parent.globalData.userInfo.user_id",this.$parent.globalData.userInfo.user_id)
+      // console.log(res, 'suppliers_id=' + this.suppliers_id + '&share_suppliers_id=' + this.$parent.globalData.share_suppliers_id + '&share_user_id=' + this.$parent.globalData.user_id);
+      var path = '/IndexPages/pages/renzhengDetail?user_id=' + this.$parent.globalData.userInfo.user_id ;
+      return {
+        title: "装饰材料一站购",
+        path: path,
+        // imageUrl: this.shareImage
+      };
     }
     async upImg(img_url) {
       util.showLoading('上传中');
@@ -658,13 +665,12 @@
             Accept: 'application/json'
           }
         });
-     
         var datas = JSON.parse(res.data.trim());
         if (datas.code == 0) {
           return datas.data.pic_url;
         }
       } catch (error) {
-           wx.hideLoading();
+        wx.hideLoading();
         let mRes = await util.showModalBig(
           '图片' + img_url + '上传失败'
         );
