@@ -6,9 +6,13 @@
         display: flex;
     }
     .btn {
-        margin-top: 40rpx;
         background: #e50012;
         color: #fff;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        z-index: 10;
+        width: 100%;
     }
 </style>
 <template>

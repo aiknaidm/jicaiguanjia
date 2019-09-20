@@ -213,27 +213,19 @@
         var x = parent.x
         var y = parent.y
         this.chooseGoodsList = parent.brands[x].brand[y].goods;
-        for (var i = 0; i < parent.brands[x].brand[y].goods.length; i++) {
-          for (var j = 0; j < datas.length; j++) {
-            if (datas[j].goods_id == parent.brands[x].brand[y].goods[i].goods_id) {
-              datas[j].checked = true;
-              break;
-            }
-          }
-        }
       } else {
         var parent = this.$parent.$pages["/ConsolePages/pages/my_console_setActivity"]
         var y = parent.y
         this.chooseGoodsList = parent.activity[y].goods;
-        for (var i = 0; i < parent.activity[y].goods.length; i++) {
+      }
+        for (var i = 0; i < this.chooseGoodsList.goods.length; i++) {
           for (var j = 0; j < datas.length; j++) {
-            if (datas[j].goods_id == parent.activity[y].goods[i].goods_id) {
+            if (datas[j].goods_id == this.chooseGoodsList.goods[i].goods_id) {
               datas[j].checked = true;
               break;
             }
           }
         }
-      }
       if (this.page == 1) {
         this.goodsList = datas;
       } else {
