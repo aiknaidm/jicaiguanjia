@@ -52,22 +52,22 @@
         line-height: 80rpx;
         text-align: center;
     }
-    .banner-select{
+    .banner-select {
         display: flex;
         align-items: center
     }
-     .banner-select .name{
-         width: 150rpx;
-overflow: hidden;
-text-overflow:ellipsis;
-white-space: nowrap;
-text-align: right
-     }
-    .banner-select .icon-arrow-right{
-         color: #aaa;
-         position: relative;
-         top: 4rpx;
-     }
+    .banner-select .name {
+        width: 150rpx;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: right
+    }
+    .banner-select .icon-arrow-right {
+        color: #aaa;
+        position: relative;
+        top: 4rpx;
+    }
 </style>
 <template>
     <view class='container'>
@@ -84,12 +84,20 @@ text-align: right
                 </view>
                 <view class="section">
                     <view class="banner-name">
+                        pc显示图片：
+                    </view>
+                    <view class="banner-img" @tap='addShopImg({{index}},pc)'>
+                        <image src="{{item.img.pc_img_url?item.img.pc_img_url:'/images/add_img.png'}}" />
+                    </view>
+                </view>
+                <view class="section">
+                    <view class="banner-name">
                         跳转：
                     </view>
                     <radio-group class="banner-select">
                         <label wx:for="{{taozhuan}}" wx:for-index="index2" wx:for-item="item2" wx:key="{{index2}}" @tap="radioChange({{index}},{{item2.type}},{{item2.value}})">
-                                        <radio value="{{item2.value}}" checked="{{item2.value==item.val}}" />{{item2.name}}
-                                    </label>
+                                            <radio value="{{item2.value}}" checked="{{item2.value==item.val}}" />{{item2.name}}
+                                        </label>
                     </radio-group>
                 </view>
                 <view class="section" @tap="toList({{index}})">
@@ -153,8 +161,8 @@ text-align: right
             async delBanner(index, item) {
                 var res = await util.showModalBig("确定要删除吗？")
                 if (res.confirm) {
-                        this.banner.splice(index, 1);
-                        this.$apply();
+                    this.banner.splice(index, 1);
+                    this.$apply();
                     // if (item.ad_id)
                     //     newapi.del_lunbotu({
                     //         ad_id: item.ad_id
@@ -171,12 +179,16 @@ text-align: right
             async save() {
                 for (var index = 0; index < this.banner.length; index++) {
                     var item = this.banner[index]
-                    console.log("item.img.length",item.ad_link,item.type)
+                    console.log("item.img.length", item.ad_link, item.type)
                     if (!item.img.img_url || item.img.img_url.length == 0) {
                         util.showToast("轮播图不能为空");
                         return
                     }
-                    if (item.type&&item.type!=""&&item.ad_link == "") {
+                    if (!item.img.pc_img_url || item.img.pc_img_url.length == 0) {
+                        util.showToast("pc轮播图不能为空");
+                        return
+                    }
+                    if (item.type && item.type != "" && item.ad_link == "") {
                         util.showToast("请选择跳转的路径");
                         return
                     }
@@ -184,7 +196,12 @@ text-align: right
                         item.img.img_url = await this.upImg(item.img.img_url)
                         item.img.upload = false
                     }
+                    if (item.img.pc_upload) {
+                        item.img.pc_img_url = await this.upImg(item.img.pc_img_url)
+                        item.img.pc_upload = false
+                    }
                     item.img_url = item.img.img_url
+                    item.pc_img_url = item.img.pc_img_url
                 }
                 newapi.add_lunbotu({
                     img_urls: this.banner,
@@ -192,7 +209,7 @@ text-align: right
                 }).then(res => {
                     this.getBanner();
                     wx.navigateBack({
-                      delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+                        delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
                     });
                 })
             },
@@ -202,11 +219,10 @@ text-align: right
                 this.banner[i].type = type
                 this.banner[i].name = ""
                 this.banner[i].ad_link = ""
-                
             },
             // 上传店铺logo
-            async addShopImg(index) {
-                console.log("index", index)
+            async addShopImg(index, type) {
+                console.log("index", index, type)
                 wepy
                     .chooseImage({
                         count: 1, // 默认9
@@ -217,13 +233,18 @@ text-align: right
                         var that = this;
                         // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
                         var tempFilePaths = res.tempFilePaths;
-                        this.shopImg = {}
-                        this.shopImg.img_url = tempFilePaths[0];
-                        this.shopImg.upload = true;
-                        this.banner[index].img = this.shopImg
+                        // this.shopImg = {}
+                        console.log("type", type)
+                        if (type == "pc") {
+                            this.banner[index].img.pc_img_url = tempFilePaths[0];
+                            this.banner[index].img.pc_upload = true;
+                        } else {
+                            this.banner[index].img.img_url = tempFilePaths[0];
+                            this.banner[index].img.upload = true;
+                        }
                         this.$apply();
                         console.log("index", index)
-                        console.log("this.shopImg", this.shopImg)
+                        // console.log("this.shopImg", this.shopImg)
                     })
                     .catch(res => {});
             },
@@ -240,7 +261,7 @@ text-align: right
             },
             toList(value) {
                 this.index = value;
-                var val = this.banner[value].val ;
+                var val = this.banner[value].val;
                 switch (parseInt(val)) {
                     case 0:
                         wx.navigateTo({
@@ -268,28 +289,28 @@ text-align: right
             var yizhanInfo = this.$parent.globalData.yizhanInfo ? this.$parent.globalData.yizhanInfo : await this.$parent.getYizhanInfo(suppliers_id);
             this.suppliers_id = suppliers_id == "" ? yizhanInfo.suppliers_id : suppliers_id;
             // this.getBanner();
-           var parent=this.$parent.$pages["/ConsolePages/pages/my_setShopStyle"]
-          console.log(" parent.imgSrc", parent.imgSrc)
-           parent.imgSrc.forEach((item,index)=>{
-               this.banner[index]={
-                   img: {
-                       img_url:item.img_url,
-                       upload:item.upload?item.upload:false,
-
-                   },
+            var parent = this.$parent.$pages["/ConsolePages/pages/my_setShopStyle"]
+            console.log(" parent.imgSrc", parent.imgSrc)
+            parent.imgSrc.forEach((item, index) => {
+                this.banner[index] = {
+                    img: {
+                        img_url: item.img_url,
+                        upload: item.upload ? item.upload : false,
+                        pc_img_url: item.pc_img_url,
+                        pc_upload: item.pc_upload ? item.pc_upload : false,
+                    },
                     type: item.type,
                     ad_link: item.ad_link,
-                    ad_id:item.ad_id,
-                    name:item.name
-               }
-               this.taozhuan.forEach((item2, index2) => {
-                        if (item.type == item2.type) {
-                            this.banner[index].val = item2.value
-                        }
-                    })
-           })
-           
-           this.$apply()
+                    ad_id: item.ad_id,
+                    name: item.name
+                }
+                this.taozhuan.forEach((item2, index2) => {
+                    if (item.type == item2.type) {
+                        this.banner[index].val = item2.value
+                    }
+                })
+            })
+            this.$apply()
         }
         async upImg(img_url) {
             util.showLoading('上传中');
@@ -331,11 +352,13 @@ text-align: right
                     })
                     this.banner[index].img = {
                         upload: false,
-                        img_url: item.img_url
+                        pc_upload: false,
+                        img_url: item.img_url,
+                        pc_img_url: item.pc_img_url
                     }
                 })
                 this.$parent.$pages['/ConsolePages/pages/my_setShopStyle'].imgSrc = this.banner;
-                console.log("this.banner",this.banner)
+                console.log("this.banner", this.banner)
                 this.$apply();
             })
         }

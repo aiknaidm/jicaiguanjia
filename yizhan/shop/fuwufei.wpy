@@ -1,0 +1,25 @@
+<style lang="less">
+ 
+</style>
+<template>
+  <view>
+    
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import newapi from '../../API/newapi';
+  import util from '../../utils/index';
+  export default class fuwufei extends wepy.page {
+    config = {
+      navigationBarTitleText: '购买延伸服务',
+    
+    };
+    data = {};
+    computed = {};
+    components = {};
+    methods = {
+    }
+  }
+</script>

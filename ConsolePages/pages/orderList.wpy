@@ -92,6 +92,7 @@
     <!-- 订单列表  -->
     <repeat for="{{orderList}}" wx:key="{{index}}">
       <orderList :orderList.sync="item" :goodsMap.sync="goodsMap[index]" @orderDetail.user="orderDetail">
+       
         <view slot="btn" class="price-box price-box2">
           <view wx:if="{{thisindex==1 && suppliers_id == cur_suppliers_id}}" class="btn topay-btn" @tap="orderDetail({{item}})">去发货</view>
         </view>

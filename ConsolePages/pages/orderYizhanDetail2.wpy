@@ -249,7 +249,11 @@
       this.orderDetail.pay_time = util.formatTime(this.orderDetail.pay_time);
       this.orderDetail.confirm_time = util.formatTime(this.orderDetail.confirm_time);
       this.orderDetail.shipping_time = util.formatTime(this.orderDetail.shipping_time);
-
+ var order_amount_fuwufei=0;
+    this.orderDetail.fuwufei.forEach((item,index)=>{
+      order_amount_fuwufei+=parseFloat(item.order_amount)
+    })
+    this.orderDetail.order_amount_fuwufei=order_amount_fuwufei.toFixed(2);
       this.$apply();
     }
     async onLoad(option) {

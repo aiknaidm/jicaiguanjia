@@ -637,6 +637,7 @@
       res.data.data.banner.forEach((item) => {
         this.imgSrc.push({
           img_url: item.content,
+          pc_img_url: item.pc_content,
           ad_id: item.ad_id,
           ad_link: item.ad_link,
           content: item.content,

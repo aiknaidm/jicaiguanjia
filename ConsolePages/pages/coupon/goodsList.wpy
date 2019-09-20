@@ -346,6 +346,9 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    max-height: 100rpx;
+overflow: hidden;
+
     text {
       border: 1px solid #e50012;
       padding: 5rpx 10rpx;

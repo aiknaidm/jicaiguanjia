@@ -404,6 +404,20 @@
     padding: 5rpx 17rpx;
     border-radius: 10rpx;
   }
+   .fuwufei{
+    max-height : 80rpx;
+    overflow: hidden;
+    transition: max-height 0.2s ease-in-out;
+    .fuwufei-list{
+      font-size: 24rpx;
+      line-height: 30rpx;
+      color: #666;
+      padding: 10rpx  30rpx 10rpx 50rpx;
+    }
+  }
+  .fuwufei.active{
+    max-height : 1000px;
+  }
 </style>
 <template>
   <view>
@@ -512,6 +526,21 @@
           <view class="row-label">折扣</view>
           <view class="right-text">- ¥ {{orderDetail.youhui}}</view>
         </view>
+          <view class="fuwufei {{fuwufeiActive?'active':''}}" @tap="showMore" wx:if="{{(orderDetail.order_amount_fuwufei-0)>0}}"> <view class="row-box" >
+        <view class="row-label ">服务费</view>
+        <view class="right-text red">
+          总计 ¥ {{orderDetail.order_amount_fuwufei}}
+        </view>
+      </view>
+      <view class="row-box fuwufei-list" wx:for="{{orderDetail.fuwufei}}" wx:key="{{index}}">
+        <view class="row-label"> 备注：{{item.remark&&item.remark!=''?item.remark:'无'}}</view>
+        <view class="right-text">
+          ¥ {{item.order_amount}}
+        </view>
+      </view>
+      
+    
+     </view>
       </block>
       <view class="row-box2 red">合计 ¥ {{orderDetail.heji_money}}</view>
     </view>
@@ -546,10 +575,15 @@
         twoWay: true
       }
     };
-    data = {};
+    data = {
+      fuwufeiActive:false
+    };
     components = {};
     events = {};
     methods = {
+      showMore(){
+        this.fuwufeiActive=!this.fuwufeiActive;
+      },
       showFahuodan(url) {
         var img = new Array();
         img[0] = url;

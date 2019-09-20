@@ -215,7 +215,7 @@ button.ss-my-d {
       </view>
       <view class="price-box">
         <view class="name">{{orderList.consignee}}</view>
-        <view class="total-price">共{{goodsMap.length}}件商品 合计：<text class="red">¥ {{orderList.heji_money}}</text></view>
+        <view class="total-price">共{{goodsMap.length}}件商品 合计：<text class="red">¥ {{orderList.heji_money}}<text wx:if="{{orderList.fuwufei!=0}}">(含服务费：{{orderList.fuwufei}})</text></text></view>
       </view>
         <view class="price-box price-box2" wx:if="{{item.pay_id}}">
         <view class='name' wx:if="{{item.pay_id==2}}">支付方式：线下支付 请注意核对订单</view>

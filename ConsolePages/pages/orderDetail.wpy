@@ -30,22 +30,22 @@
         </view>
         <view class="section">
           <view class="name">配送员信息</view>
-          <input class="input" name="info" placeholder="配送员姓名电话" disabled="{{orderDetail.order_status!=2 || orderDetail.shipping_status!=0}}"/>
+          <input class="input" name="info" placeholder="配送员姓名电话" disabled="{{orderDetail.order_status!=2 || orderDetail.shipping_status!=0}}" />
         </view>
         <!-- <view class="section">
-                <view class="name">配送员电话</view>
-                <input class="input" name="phone" placeholder="请填写配送员电话"/>
-              </view> -->
+                  <view class="name">配送员电话</view>
+                  <input class="input" name="phone" placeholder="请填写配送员电话"/>
+                </view> -->
       </view>
       <view class="btn-row" wx:if="{{orderDetail.order_status==2 && orderDetail.shipping_status==0}}">
-        <radio-group class="radio-group" name="fahuo" @change="radioChange" >
+        <radio-group class="radio-group" name="fahuo" @change="radioChange">
           是否需要发货单：
           <label class="radio">
-              <radio value="1" checked="true" color='red' />是
-            </label>
+                <radio value="1" checked="true" color='red' />是
+              </label>
           <label class="radio">
-              <radio value="0" checked="false" color='red' />否
-            </label>
+                <radio value="0" checked="false" color='red' />否
+              </label>
         </radio-group>
         <button class="confirm-btn" form-type="submit" data-order_id="{{orderDetail.order_id}}">发货</button>
       </view>
@@ -93,15 +93,18 @@
         var fahuo = e.detail.value.fahuo;
         var yujisongda = e.detail.value.time;
         var peisongyuan = e.detail.value.info;
-        var order_id=this.id
+        var order_id = this.id
         let mRes = await util.showModalBig('你确定要发货吗');
         if (mRes.confirm) {
-          if (fahuo == 1)  var fahuodan=await this.upfahuoimg();
-          else fahuodan='';
-          this.orderDetail.fahuodan=fahuodan;
-         var data={
-           yujisongda,peisongyuan,fahuodan,order_id
-         }
+          if (fahuo == 1) var fahuodan = await this.upfahuoimg();
+          else fahuodan = '';
+          this.orderDetail.fahuodan = fahuodan;
+          var data = {
+            yujisongda,
+            peisongyuan,
+            fahuodan,
+            order_id
+          }
           this.fahuo(data);
         }
       },
@@ -157,7 +160,7 @@
       },
     };
     // 上传发货图片
-   async upfahuoimg() {
+    async upfahuoimg() {
       var res = await wepy
         .chooseImage({
           count: 1, // 默认9
@@ -188,8 +191,6 @@
       let res = await newapi.fahuo(data);
       if (res.data.code == 0) {
         this.orderDetail.shipping_status = 1;
-        
-        
         var order_status = this.$parent.$pages['/ConsolePages/pages/orderList']
           .thisindex;
         this.$parent.$pages['/ConsolePages/pages/orderList'].getOrderList(
@@ -212,6 +213,12 @@
       this.orderDetail.pay_time = util.formatTime(this.orderDetail.pay_time);
       this.orderDetail.confirm_time = util.formatTime(this.orderDetail.confirm_time);
       this.orderDetail.shipping_time = util.formatTime(this.orderDetail.shipping_time);
+      var order_amount_fuwufei = 0;
+      this.orderDetail.fuwufei.forEach((item, index) => {
+        order_amount_fuwufei += parseFloat(item.order_amount)
+      })
+      console.log("order_amount_fuwufei",order_amount_fuwufei);
+      this.orderDetail.order_amount_fuwufei = order_amount_fuwufei.toFixed(2);
       this.$apply();
     }
     async onLoad(option) {
