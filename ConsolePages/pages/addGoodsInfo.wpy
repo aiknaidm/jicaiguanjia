@@ -520,6 +520,11 @@
           .catch(res => {});
 
       },
+      delAttrImg(index){
+           this.goods_attr[index].img_url='';
+           this.goods_attr[index].upload=false;
+            this.$apply();
+      },
       switch1Change() {},
       // 删除图片
       delImg(i) {

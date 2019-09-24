@@ -344,7 +344,7 @@
           <switch color="#e50012" @change="changeIsFriend" disabled="{{!userDetail.is_chakan}}" checked="{{userDetail.is_friend}}" name="is_friend" />
         </view>
       </view>
-      <view class="section section2" wx:if="{{userDetail.is_join==0}}">
+      <view class="section section2" wx:if="{{userDetail.is_yizhan==0&&userDetail.is_join==0}}">
         <view class="label">支付方式</view>
         <view class="body-view" style="width:300rpx;" @tap="setPayStyle">
           <checkbox-group bindchange="checkboxChange" name="payStyle">
@@ -623,7 +623,7 @@
             var is_friend = param.is_friend ? 1 : 0;
             var is_chakan = param.is_chakan ? 1 : 0;
             var vip_level = param.vip_level ? param.vip_level : 1;
-            var zhifu = param.payStyle.toString();
+            var zhifu = param.payStyle? param.payStyle.toString() : '';
          
             // var gonggao = param.gonggao;
             // var jianjie = this.userDetail.jianjie;
@@ -643,7 +643,7 @@
               util.showModal('请填写地区');
               return;
             }
-            if (param.payStyle.length == 0) {
+            if (param.payStyle && param.payStyle.length == 0) {
               util.showModal('请选择支付方式');
               return;
             }
@@ -793,7 +793,7 @@
       for (var j = 0; j < this.items.length; j++) {
         for (var i = 0; i < this.payStyle.length; i++) {
           if (this.items[j].val == this.payStyle[i]) {
-            this.items[i].checked=true;
+            this.items[j].checked=true;
             break;
           }
         }

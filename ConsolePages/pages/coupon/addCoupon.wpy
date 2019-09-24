@@ -137,6 +137,11 @@
         padding: 40rpx;
         padding-bottom: 0;
     }
+    .promotion-time2 {
+        display: flex;
+        align-items: center;
+        padding: 40rpx;
+    }
     picker {
         line-height: 80rpx;
         border: 1px solid #e2e2e2;
@@ -362,7 +367,7 @@
                     </view>
                 </picker>
             </view>
-            <view class='promotion-time'>
+            <view class='promotion-time2'>
                 <text>结束时间：</text>
                 <picker mode="date" value="{{date2}}" start="{{date}}" bindchange="bindDateChange2">
                     <view class="picker">
