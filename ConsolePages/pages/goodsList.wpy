@@ -562,6 +562,9 @@
       <!-- <view class='border' wx:for="{{catList}}" bindtap="statusTap"> 二级分类
                                                 <text class='iconfont icon-jiantou'></text>
                                               </view> -->
+      <view class="border">
+        商品总数：{{total}}
+      </view>
       <view class='search' @tap='showSearch'>
         <text class='iconfont icon-sousuo'></text>
       </view>
@@ -702,7 +705,8 @@
       ishowjoinlist: false,
       is_yizhan: 0,
       cur_suppliers_name: "查看本店",
-      joinlist: []
+      joinlist: [],
+      total:0
     };
     computed = {};
     methods = {
@@ -1034,6 +1038,7 @@
           this.isallSelect = false
         }
         this.del = this.isallSelect;
+        this.total = res.data.count;
         this.$apply();
       } else {
         wx.navigateBack({

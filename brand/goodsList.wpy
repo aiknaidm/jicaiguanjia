@@ -218,9 +218,9 @@
         var y = parent.y
         this.chooseGoodsList = parent.activity[y].goods;
       }
-        for (var i = 0; i < this.chooseGoodsList.goods.length; i++) {
+        for (var i = 0; i < this.chooseGoodsList.length; i++) {
           for (var j = 0; j < datas.length; j++) {
-            if (datas[j].goods_id == this.chooseGoodsList.goods[i].goods_id) {
+            if (datas[j].goods_id == this.chooseGoodsList[i].goods_id) {
               datas[j].checked = true;
               break;
             }
