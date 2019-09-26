@@ -174,7 +174,6 @@ export default class extends wepy.app {
           'pages/coupon/selectCoupon',
           'pages/coupon/goodsList',
           'pages/coupon/couponUseList',
-          'pages/coupon/addPintuan',
           'pages/yizhan/yizhan-check',
           'pages/yizhan/yizhan-add',
           'pages/yizhan/yizhan-apply',
@@ -235,7 +234,14 @@ export default class extends wepy.app {
           'earnings/yue',
           'earnings/yue-detail',
           'shop/fuwufei'
-         
+        ]
+      },
+       {
+        root: 'pintuan',
+        pages: [
+          'pages/addPintuan',
+          'pages/orderList',
+          'pages/orderDetail',
         ]
       }
     ],

@@ -527,6 +527,14 @@
       };
       let res = await newapi.managers_permission(data);
       this.permission = res.data.data.permission;
+      this.permission[2].permission.push({
+          icon: '/images/console/ywy.png',
+          text: '拼团管理',
+          url: '/pintuan/pages/addPintuan',
+          bgcolor: '#10b3b1',
+          isadmin: 1,
+          isfufei: 1
+        });
       this.orderNum(res.data.data)
       if (res.data.data.is_designer == 1 && res.data.data.is_admin != 1 && res.data.data.is_boss != 1)
         this.is_designer = true

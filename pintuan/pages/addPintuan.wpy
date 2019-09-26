@@ -63,7 +63,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 50rpx;
+        padding: 0 50rpx;
         position: relative;
         padding-top: 100rpx;
         border-radius: 15rpx;
@@ -209,7 +209,7 @@
     }
     .promotion-activity-list .moneycancle {
         margin-bottom: 10rpx;
-        font-size: 50rpx;
+        font-size: 40rpx;
         text-align: center;
         line-height: 50rpx;
         margin-right: 20rpx;
@@ -272,7 +272,7 @@
     .free {
         height: 40rpx;
         line-height: 40rpx;
-        width: 140rpx;
+        padding: 0 10rpx;
         font-size: 22rpx;
         color: #ff6600;
         border-radius: 20rpx;
@@ -341,7 +341,13 @@
                         选择商品：<input placeholder='请选择活动优惠商品' disabled='true' bindtap='togoodsList' value='{{choose_good_name}}'/>
                     </view>
                     <view class='name'>
+                        新商品名：<input placeholder='请填写新商品名' value='{{goods_name_new}}'  @input="goodNameChange"/>
+                    </view>
+                    <view class='name'>
                         成团数量：<input placeholder='请填写成团数量'  @input="groupNumChange"/>
+                    </view>
+                    <view class='name'>
+                        零售价格：<input  value='{{shop_price}}' disabled/>
                     </view>
                     <view class='name'>
                         团购价格：<input placeholder='请填写团购价格'  @input="ptPriceChange"/>
@@ -377,16 +383,16 @@
             <view class="promotion-activity-list {{item.is_finished == 1?'promotion-activity-list2':''}}" wx:for="{{activitylist}}" wx:key='{{index}}' data-id='{{item.pt_id}}' data-index="{{index}}">
                 <view wx:if="{{item.is_finished == 1}}">
                     <view class='content'>
-                        <view class='left' catchtap="touseList({{item.pt_id}})">
+                        <view class='left' catchtap="touseList({{item}})">
                             <view class='moneyBox'>
                                 <view class='moneycancle'>￥{{item.pt_price}}</view>
-                                <view class="free">{{item.group_num}}件成团</view>
+                                <view class="free">{{item.group_num}}件成团，已拼{{item.salenum}}件</view>
                             </view>
-                            <!-- <view class='txt txt2'>{{item.promotion_name}}</view> -->
+                            <view class='txt txt2'>零售价：{{item.shop_price}}</view>
                             <view class='txt txt2'>活动商品：{{item.goods_name}}</view>
                         </view>
                         <view class='text'>
-                            <view class='btn active ' catchtap="{{item.is_finished == 1?'':'cancleTap'}}" data-pt_id='{{item.pt_id}}'>活动终止
+                            <view class='btn active ' catchtap="{{item.is_finished == 1?'':'cancleTap'}}" data-pt_id='{{item.pt_id}}'>已结束
                             </view>
                         </view>
                     </view>
@@ -395,16 +401,20 @@
                 </view>
                 <view wx:else>
                     <view class='content'>
-                        <view class='left' catchtap="touseList({{item.pt_id}})">
+                        <view class='left' catchtap="touseList({{item}})">
                             <view class='moneyBox'>
                                 <view class='moneycancle'>￥{{item.pt_price}}</view>
-                                <view class="free">{{item.group_num}}件成团</view>
+                                <view class="free">{{item.group_num}}件成团，已拼{{item.salenum}}件</view>
                             </view>
-                            <!-- <view class='txt txt2'>{{item.promotion_name}}</view> -->
+                            <view class='txt txt2'>零售价：{{item.shop_price}}</view>
                             <view class='txt txt2'>活动商品：{{item.goods_name}}</view>
                         </view>
                         <view class='text'>
-                            <view class='btn active ' catchtap="{{item.is_finished == 1?'':'cancleTap'}}" data-pt_id='{{item.pt_id}}'>终止活动
+                            <view class='btn active ' wx:if="{{item.salenum>=item.group_num}}" >
+                                已成团
+                            </view>
+                            <view class='btn active ' wx:else >
+                                进行中
                             </view>
                         </view>
                     </view>
@@ -427,8 +437,8 @@
 <script>
     var t1;
     import wepy from 'wepy';
-    import newapi from '../../../API/newapi';
-    import util from '../../../utils/index';
+    import newapi from '../../API/newapi';
+    import util from '../../utils/index';
     export default class newslist extends wepy.page {
         config = {
             navigationBarTitleText: '拼团活动管理'
@@ -458,6 +468,8 @@
             choose_properties:[],
             pt_price:0,
             group_num:0,
+            goods_name_new:'',
+            shop_price:0.00
         };
         computed = {};
         methods = {
@@ -467,6 +479,9 @@
             },
             groupNumChange(e) {
               this.group_num = e.detail.value;
+            },
+            goodNameChange(e) {
+              this.goods_name_new = e.detail.value;
             },
             togoodsList() {
                 wx.navigateTo({
@@ -478,9 +493,18 @@
                     url: '/ConsolePages/pages/my_addManagerInfo?type=pintuan'
                 })
             },
-            touseList(pt_id) {
+            touseList(item) {
+                var pt_id = item.pt_id;
+                var order_status = 0;
+                if(item.is_finished && item.salenum<item.group_num){
+                  order_status = 3;
+                }else if(item.is_finished && item.salenum>=item.group_num){
+                  order_status = 2;
+                }else if(item.salenum>=item.group_num){
+                  order_status = 1;
+                }
                 wx.navigateTo({
-                    url: 'pintuanUseList?pt_id=' + pt_id
+                    url: 'orderList?pt_id=' + pt_id +'&order_status=' + order_status
                 })
             },
             //终止活动
@@ -519,6 +543,7 @@
                 let data = {
                     suppliers_id: this.suppliers_id,
                     goods_id: that.choose_good_id,
+                    goods_name: that.goods_name_new,
                     pt_price: that.pt_price,
                     group_num: that.group_num,
                     start_time: that.date,

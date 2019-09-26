@@ -180,6 +180,9 @@ const newapi = {
     pintuan_add: (data) => fetch(`${host_chk}/pintuan_add`, 'GET', data),
     pintuan_stop: (data) => fetch(`${host_chk}/pintuan_stop`, 'GET', data),
     pintuan_list: (data) => fetch(`${host_chk}/pintuan_list`, 'GET', data),
+    pintuan_ddlb: (data) => fetch(`${host_chk}/pintuan_ddlb`, 'GET', data),
+    pintuan_ddxq: (data) => fetch(`${host_chk}/pintuan_ddxq`, 'GET', data),
+    pintuan_fahuo: (data) => fetch(`${host_chk}/pintuan_fahuo`, 'GET', data),
 
 }
 const fetch = async function(url, method, data) {
