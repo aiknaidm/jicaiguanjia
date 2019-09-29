@@ -351,6 +351,10 @@
           <view class="listOption">零售价</view>
           <input class="shownnum" type='digit' value='{{goodsdetail.floor_price}}' name="floor_price" />
         </view>
+        <view class="listBox" wx:if="{{is_yizhan==1||is_join==1}}">
+          <view class="listOption">成本价</view>
+          <input class="shownnum" type='digit' value='{{goodsdetail.cost_price}}' name="cost_price" />
+        </view>
         <view class="listBox">
           <view class="listOption">重量(公斤)</view>
           <input class="shownnum" type='digit' value='{{goodsdetail.weight}}' name="weight" />
@@ -388,6 +392,10 @@
               <view class="listOption">零售价</view>
               <input class="shownnum" @input='getAttrPrice({{index}})' type='digit' value='{{item.floor_price}}' />
             </view>
+             <view class="listBox" wx:if="{{is_yizhan==1||is_join==1}}">
+          <view class="listOption">成本价</view>
+          <input class="shownnum"  @input='getCostPrice({{index}})' type='digit' value='{{item.cost_price}}' />
+        </view>
             <view class="listBox">
               <view class="listOption">重量(公斤)</view>
               <input class="shownnum" @input='getWeight({{index}})' type='digit' value='{{item.weight}}' />
@@ -602,7 +610,8 @@
           attr_price: '',
           goods_number: '',
           floor_price: '',
-          img_url:''
+          img_url:'',
+          cost_price:''
         };
         this.goods_attr.push(goods);
       },
@@ -619,6 +628,10 @@
       // 获取规格的零售价格
       getAttrPrice(index, e) {
         this.goods_attr[index].floor_price = e.detail.value;
+      },
+      getCostPrice(index, e){
+        this.goods_attr[index].cost_price = e.detail.value;
+
       },
       // 获取规格的重量
       getWeight(index, e) {
@@ -778,6 +791,8 @@
         e.detail.value.floor_price :
         '';
       var shop_price = e.detail.value.shop_price ? e.detail.value.shop_price : '';
+      var cost_price = e.detail.value.cost_price ? e.detail.value.cost_price : '';
+      
       var weight = e.detail.value.weight ? e.detail.value.weight : 0;
       var ch_cat_id = this.ch_cat_id ? this.ch_cat_id : ''; //二级分类
       var qidingliang = e.detail.value.qidingliang;
@@ -812,6 +827,11 @@
         util.showToast('请填写零售价格');
         return;
       }
+       if (cost_price.length == 0 && cost_price.length == 0&&(this.is_yizhan==1||this.is_join==1)) {
+        util.showToast('请填写成本价格');
+        return;
+      }
+      
       if (goods_attr.length == 0)
         for (var j = 0; j < this.vip_level; j++) {
           var k = j == 0 ? '' : j + 1;
@@ -857,6 +877,10 @@
         }
         if (goods_attr[i].floor_price == '') {
           util.showToast('请填写商品零售价');
+          return;
+        }
+         if (goods_attr[i].cost_price == ''&&(this.is_yizhan==1||this.is_join==1)) {
+          util.showToast('请填写商品成本价');
           return;
         }
         if (
@@ -909,7 +933,7 @@
       
       var goods_img = this.goods_imgs[0];
       var img_url = this.goods_imgs;
-      console.log('shop_prices', shop_prices);
+     
       var data = {
         suppliers_id,
         goods_id,
@@ -934,9 +958,10 @@
         hykk,
         is_best,
         is_hot,
+        cost_price,
         ...shop_prices
       };
-      console.log('shop_prices', shop_prices);
+
       var res = await newapi.addGoodsInfo(data);
       wx.hideLoading();
       if (res.data.code == 0) {

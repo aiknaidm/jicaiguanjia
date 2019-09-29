@@ -375,9 +375,9 @@
         });
       },
       // 免责条款
-      showtext: function() {
+      showtext: function(id) {
         wx.navigateTo({
-          url: '/pages/my-rulesDescription/index'
+          url: "details?type=rule"
         });
       },
       // 同意免责条款

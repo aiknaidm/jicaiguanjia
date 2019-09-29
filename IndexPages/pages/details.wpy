@@ -31,15 +31,39 @@ export default class details extends wepy.page {
     wx.hideLoading();
     this.articleDetail = res.data.data;
     this.articleDetail.published_time = util.formatDate(this.articleDetail.published_time);
+    
 
     this.articleDetail.post_content = this.articleDetail.post_content.replace(
+      /\<img/gi,
+      '<img style="max-width:100%;height:auto" '
+    );
+
+    this.$apply();
+  }
+ async getRules(){
+ util.showLoading();
+    let res = await newapi.shop_rules();
+    wx.hideLoading();
+     this.articleDetail = res.data.data;
+    this.articleDetail.published_time = util.formatDate(this.articleDetail.add_time);
+this.articleDetail.post_title = this.articleDetail.title;
+    this.articleDetail.post_content = this.articleDetail.content.replace(
       /\<img/gi,
       '<img style="max-width:100%;height:auto" '
     );
     this.$apply();
   }
   async onLoad(option) {
-    this.getArticleDetail(option.id);
+console.log("option",option)
+     if (option.type == 'rule'){
+wx.setNavigationBarTitle({
+        title: '吉采易站规则'
+      });
+       this.getRules();
+     }
+
+      else
+          this.getArticleDetail(option.id);
   }
 }
 </script>

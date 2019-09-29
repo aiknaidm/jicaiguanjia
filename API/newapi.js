@@ -50,6 +50,8 @@ const newapi = {
     managers_detail: (data) => fetch(`${host_chk}/managers_detail`, 'GET', data), //权限
     // 判断管理员显示权限功能的接口   managers_permission  参数  suppliers_id店铺ID
     managers_permission: (data) => fetch(`${host_chk}/managers_permission`, 'GET', data), //权限
+    shop_rules: (data) => fetch(`${host_chk}/xieyi`, 'GET', data), //权限
+    // 规则
 
     yhxq: (data) => fetch(`${host_chk}/yhxq`, 'GET', data),
     findManagers: (data) => fetch(`${host_chk}/find_managers`, 'GET', data),
