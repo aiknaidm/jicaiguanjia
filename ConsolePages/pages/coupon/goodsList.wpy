@@ -499,11 +499,11 @@ overflow: hidden;
         var properties = item.properties;
         var shop_price = item.shop_price;
         if(this.type=="tuan"){
-            this.$parent.$pages['/ConsolePages/pages/coupon/addPintuan'].goods_name_new = name;
-            this.$parent.$pages['/ConsolePages/pages/coupon/addPintuan'].shop_price = shop_price;
-            this.$parent.$pages['/ConsolePages/pages/coupon/addPintuan'].choose_good_name = name;
-            this.$parent.$pages['/ConsolePages/pages/coupon/addPintuan'].choose_good_id = id;
-            this.$parent.$pages['/ConsolePages/pages/coupon/addPintuan'].choose_properties = properties;
+            this.$parent.$pages['/pintuan/pages/addPintuan'].goods_name_new = name;
+            this.$parent.$pages['/pintuan/pages/addPintuan'].shop_price = shop_price;
+            this.$parent.$pages['/pintuan/pages/addPintuan'].choose_good_name = name;
+            this.$parent.$pages['/pintuan/pages/addPintuan'].choose_good_id = id;
+            this.$parent.$pages['/pintuan/pages/addPintuan'].choose_properties = properties;
         }else{
             this.$parent.$pages['/ConsolePages/pages/coupon/addCoupon'].choose_good_name = name;
             this.$parent.$pages['/ConsolePages/pages/coupon/addCoupon'].choose_good_id = id;

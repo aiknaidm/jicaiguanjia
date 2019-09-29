@@ -265,6 +265,9 @@ export default class List extends wepy.component {
     orderDetail(id) {
       this.$emit('orderDetail', id);
     },
+    tuikuan(id) {
+      this.$emit('tuikuan', id);
+    },
     // 去店铺页面
     toshop(id) {
       wx.navigateTo({ url: '/Shop/pages/index?suppliers_id=' + id });

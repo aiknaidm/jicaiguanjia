@@ -248,6 +248,7 @@
         padding: 0 10rpx;
         border-radius: 15rpx;
         margin-left: 20rpx;
+        margin-bottom: 10rpx;
         height: 70rpx;
         background-color: #ff6600;
     }
@@ -409,12 +410,16 @@
                             <view class='txt txt2'>零售价：{{item.shop_price}}</view>
                             <view class='txt txt2'>活动商品：{{item.goods_name}}</view>
                         </view>
-                        <view class='text'>
-                            <view class='btn active ' wx:if="{{item.salenum>=item.group_num}}" >
+                        <view class='text' wx:if="{{item.salenum>=item.group_num}}" >
+                            <view class='btn active '>
                                 已成团
                             </view>
-                            <view class='btn active ' wx:else >
+                        </view>
+                        <view class='text' wx:else >
+                            <view class='btn active '>
                                 进行中
+                            </view>
+                            <view class='btn active ' catchtap="{{item.is_finished == 1?'':'cancleTap'}}" data-pt_id='{{item.pt_id}}'>结束活动
                             </view>
                         </view>
                     </view>
@@ -485,7 +490,7 @@
             },
             togoodsList() {
                 wx.navigateTo({
-                    url: 'goodsList?type=tuan',
+                    url: '/ConsolePages/pages/coupon/goodsList?type=tuan',
                 })
             },
             touserList() {

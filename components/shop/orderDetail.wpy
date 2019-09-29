@@ -494,7 +494,9 @@
                   <view class="goods-label">{{item.goods_attr}}</view>
                   <view class="goods-label">货号：{{item.goods_sn}}</view>
                   <block wx:if="{{orderDetail.suppliers_id==76}}">
-                    <view class="goods-label" wx:if="{{item.cost_price>0}}">成本价：￥{{item.cost_price}}</view>
+                    <view class="goods-label" wx:if="{{item.cost_price>0}}">成本价：￥{{item.cost_price}}
+                      <view class="goods-btn" data-item="{{item}}" data-index="{{index}}" @tap="setCostPrice">修改成本价</view>
+                    </view>
                     <view class="goods-btn" data-item="{{item}}" data-index="{{index}}" @tap="setCostPrice" wx:else>设置成本价</view>
                   </block>
                 </view>

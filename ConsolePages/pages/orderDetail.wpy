@@ -109,12 +109,15 @@
         }
       },
       async formSubmit(e) {
-        if (e.detail.value.cost_price <= 0) {
-          this.popupdata.isshowpopup = true;
-          util.showToast('请输入成本价');
-          return;
-        }
+        // if (e.detail.value.cost_price <= 0) {
+        //   this.popupdata.isshowpopup = true;
+        //   util.showToast('请输入成本价');
+        //   return;
+        // }
         var cost_price = e.detail.value.cost_price;
+        if (cost_price <= 0) {
+          cost_price = 0;
+        }
         var rec_id = e.detail.value.rec_id;
         var data = {
           cost_price,
@@ -139,7 +142,7 @@
         }, {
           name: '',
           placeholder: '请填写成本价',
-          value: '',
+          value: item.cost_price,
           hidden: false,
           inputName: 'cost_price',
         }]

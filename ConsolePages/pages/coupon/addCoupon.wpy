@@ -413,7 +413,7 @@
                         <view class='left' catchtap="touseList({{item.promotion_id}})">
                             <view class='moneyBox'>
                                 <view class='moneycancle'>￥{{item.buy_money}}</view>
-                                <view class="free">送{{item.rebate_money}}元</view>
+                                <view class="free">减{{item.rebate_money}}元</view>
                             </view>
                             <view class='txt txt2'>{{item.promotion_name}}</view>
                             <view class='txt txt2' wx:if="{{item.type==2}}">赠送用户：{{item.user_name}}</view>
