@@ -549,9 +549,29 @@
     width: 100%;
     padding: 20rpx 40rpx;
   }
+  .fix{
+position: fixed;
+top:0;
+z-index: 9;
+background: #fff;
+width: 100%;
+  }
+  .to-copy{
+    background: #e50012;
+    color:#fff;
+    padding:10px 20px;
+    margin:10px;
+display: inline-block;
+
+  }
+  .list-top1{
+    height:188rpx;
+  }
 </style>
 <template>
   <view class="container {{isshowbiaoti||showSearch||isShowGoodsList?'hidden':''}}">
+    <view class="fix" >
+   <text bindtap="fuzhi" class="to-copy" >复制到黑河</text>
     <view class='search-title '>
       <view @tap="statusTap({{index}})" class="status-label {{index == currentType ? 'active' : ''}} {{isclick?'down':'up'}}" wx:for-items="{{statusType}}" wx:key="{{index}}" data-index="{{index}}" data-name="{{item.name}}">
         <view class='border'>{{item}}
@@ -571,6 +591,7 @@
     </view>
     <!--搜索  -->
     <form report-submit @submit='getFormId'>
+      
       <view class="ss-my {{showSearch?'active':''}}">
         <view class='ss-my-c'>
           <view class='ss-my-c-img'>
@@ -589,6 +610,7 @@
       </view>
       <mask wx:if="{{showSearch}}" @tap.stop="hiddenSearch"></mask>
     </form>
+    </view>
     <!-- <view class="title-box">
                                               购物车空空如也～
                                             </view>
@@ -597,7 +619,7 @@
                                             </view> -->
     <!-- <view class="list">
                                               <scroll-view scroll-y> -->
-    <view class="list-top">
+    <view class="list-top list-top1">
       <!-- <view bindtap="toAddGoods" class='toaddgoods'>
                                                 +添加其他商品
                                               </view> -->
@@ -609,6 +631,7 @@
     </view> -->
     <noorder text="暂无商品" wx:if="{{list.length==0}}"></noorder>
     <view class="goodsList" wx:else>
+       
       <view class="a-gooods" wx:for="{{list}}" wx:key="{{index}}">
         <!-- wx:for="{{list}}" wx:key="{{index}}" -->
         <view class="a-goods-conts {{item.active? 'active':''}}" @tap='selectTap({{index}})'>
@@ -710,6 +733,34 @@
     };
     computed = {};
     methods = {
+      fuzhi(){
+        if(this.suppliers_id!=523){
+           util.showToast("只能复制尚志")
+          return
+        }
+        var list=[]
+        this.list.forEach((item, index) => {
+          if (item.active) {
+            list.push(item.goods_id);
+           
+          }
+        });
+        if(list.length==0){
+          util.showToast("请选择复制的商品")
+          return
+        }
+
+        console.log("list",list,list.toString())
+        util.showLoading("加载中");
+          newapi.copy_goods_sel({base_supp_id :523,
+          suppliers_id: 501,
+          goods_id:list.toString()}).then(res=>{
+            util.hideLoading();
+          if(res.data.code==0)
+          util.showToast("复制成功")
+          })
+        
+      },
       statusTap(index) {
         this.currentIndex = index;
         this.fenleilist = this.fenleiLists[index];
