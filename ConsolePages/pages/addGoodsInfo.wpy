@@ -827,7 +827,7 @@
         util.showToast('请填写零售价格');
         return;
       }
-       if (cost_price.length == 0 && cost_price.length == 0&&(this.is_yizhan==1||this.is_join==1)) {
+       if (cost_price.length == 0 && goods_attr.length == 0&&(this.is_yizhan==1||this.is_join==1)) {
         util.showToast('请填写成本价格');
         return;
       }

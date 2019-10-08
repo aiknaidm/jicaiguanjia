@@ -297,9 +297,9 @@
     font-size: 30rpx;
     align-items: center;
     background-color: #fff;
-    position: fixed;
+    // position: fixed;
     width: 100%;
-    z-index: 10;
+    // z-index: 10;
     padding: 0 20rpx;
   }
   .search-title .active {
@@ -330,10 +330,15 @@
   }
   .border {
     display: inline-block;
-    padding: 0 20rpx;
+    padding: 0rpx 20rpx;
     line-height: 50rpx;
     border-right: 1px solid #f0f0f0;
     max-width: 300rpx;
+    // border-bottom: 1px solid #f0f0f0;
+    background: #fff
+  }
+  .total{
+ padding: 20rpx;border-bottom: 1px solid #f0f0f0;
   }
   .search {
     text-align: right;
@@ -353,6 +358,7 @@
     z-index: 100;
     justify-content: center;
     align-items: center;
+    top:0
   }
   .ss-my.active {
     display: flex;
@@ -567,12 +573,33 @@ display: inline-block;
   .list-top1{
     height:188rpx;
   }
+  .xiajia{
+    display: flex;
+    line-height: 80rpx;
+    text-align: center;
+    view{
+      flex: 1
+    }
+  }
 </style>
 <template>
   <view class="container {{isshowbiaoti||showSearch||isShowGoodsList?'hidden':''}}">
-    <view class="fix" >
-   <text bindtap="fuzhi" class="to-copy" >复制到黑河</text>
-    <view class='search-title '>
+    <view >
+    <!-- <view  class="xiajia">
+      <view @tap="statusTap2('1')">下架</view>
+      <view @tap="statusTap2('0')">上架</view>
+    </view> -->
+    <view class="total">
+        商品总数：{{total}}
+      </view>
+   <!-- <text bindtap="fuzhi" class="to-copy" >复制到黑河</text> -->
+    <view class='search-title'>
+       <view @tap="statusTap3({{index}})" class="status-label {{index == currentType ? 'active' : ''}} {{isclick?'down':'up'}}" wx:for-items="{{statusType2}}" wx:key="{{index}}" data-index="{{index}}" data-name="{{item.name}}">
+        <view class='border'>{{item}}
+          <text class='iconfont icon-jiantou'></text>
+        </view>
+        <!-- <image rc='/images/sanjiao-active.png' class='img'/> -->
+      </view>
       <view @tap="statusTap({{index}})" class="status-label {{index == currentType ? 'active' : ''}} {{isclick?'down':'up'}}" wx:for-items="{{statusType}}" wx:key="{{index}}" data-index="{{index}}" data-name="{{item.name}}">
         <view class='border'>{{item}}
           <text class='iconfont icon-jiantou'></text>
@@ -582,9 +609,7 @@ display: inline-block;
       <!-- <view class='border' wx:for="{{catList}}" bindtap="statusTap"> 二级分类
                                                 <text class='iconfont icon-jiantou'></text>
                                               </view> -->
-      <view class="border">
-        商品总数：{{total}}
-      </view>
+      
       <view class='search' @tap='showSearch'>
         <text class='iconfont icon-sousuo'></text>
       </view>
@@ -619,11 +644,11 @@ display: inline-block;
                                             </view> -->
     <!-- <view class="list">
                                               <scroll-view scroll-y> -->
-    <view class="list-top list-top1">
-      <!-- <view bindtap="toAddGoods" class='toaddgoods'>
+    <!-- <view class="list-top">
+      <view bindtap="toAddGoods" class='toaddgoods'>
                                                 +添加其他商品
-                                              </view> -->
-    </view>
+                                              </view>
+    </view> -->
     <!-- <view class="viewjoin" wx:if="{{is_yizhan}}">
       <view bindtap="statusTap2"> {{cur_suppliers_name}}
         <text class='iconfont icon-jiantou'></text>
@@ -690,6 +715,13 @@ display: inline-block;
         </view>
       </view>
     </view>
+    <view class='body-bg' bindtap='hiddenJoinList' touchstart='hiddenbg' touchmove="hiddenbg" wx:if="{{ishowxiajialist}}">
+      <view class='list'>
+        <view wx:for="{{xiajialist}}" wx:key="{{index}}" bindtap='changexiajiaList({{index-1}})'>
+          {{item}}
+        </view>
+      </view>
+    </view>
     <panel :isshowBox.sync="isshowBox" :title.sync="title" :placeholder.sync="placeholder" @tapSure.user="tapSure"></panel>
   </view>
 </template>
@@ -711,8 +743,10 @@ display: inline-block;
     };
     data = {
       list: [],
+      statusType2:["全部商品"],
       statusType: ['暂无数据'],
       statusid: [],
+      xiajialist:["全部","上架商品","下架商品"],
       currentIndex: 0,
       fenleilist: [],
       ishowfenlei: false, //分类 选择
@@ -729,10 +763,20 @@ display: inline-block;
       is_yizhan: 0,
       cur_suppliers_name: "查看本店",
       joinlist: [],
-      total:0
+      total:0,
+      ishowxiajialist:false
     };
     computed = {};
     methods = {
+      changexiajiaList(index){
+      
+        this.initdata.is_delete=index==-1?"":index
+        this.initdata.page=1
+          console.log("index", this.initdata)
+        this.getShopList(this.initdata);
+        this.ishowxiajialist=false;
+        this.statusType2[0]=this.xiajialist[index+1]
+      },
       fuzhi(){
         if(this.suppliers_id!=523){
            util.showToast("只能复制尚志")
@@ -766,8 +810,13 @@ display: inline-block;
         this.fenleilist = this.fenleiLists[index];
         this.ishowfenlei = true;
       },
-      statusTap2(index) {
+      statusTap2(is_delete) {
         this.ishowjoinlist = true;
+// this.is_delete=is_delete;
+      },
+       statusTap3(is_delete) {
+        this.ishowxiajialist = true;
+// this.is_delete=is_delete;
       },
       //搜索商品
       showSearch: function() {
@@ -837,7 +886,6 @@ display: inline-block;
         this.statusType[0] = this.fenleiList_new[0].cat_name;
         this.ishowfenlei = false;
         this.initdata.page = 1;
-        this.isMoreData = true;
         this.isallSelect = false;
         this.del = false;
         this.initdata.cat_id = '';
@@ -850,6 +898,7 @@ display: inline-block;
       },
       hiddenJoinList() {
         this.ishowjoinlist = false;
+        this.ishowxiajialist = false;
       },
       // 全选
       bindAllSelect: function() {
@@ -1084,6 +1133,9 @@ display: inline-block;
         else this.list.push(...datas);
         if (datas.length < 10) {
           this.isMoreData = false;
+        }else{
+          this.isMoreData = true;
+
         }
         if (datas.length == 0) {
           this.isallSelect = false
@@ -1126,7 +1178,8 @@ display: inline-block;
         paixuid: '',
         keyword: '',
         page: 1,
-        suppliers_id: this.suppliers_id
+        suppliers_id: this.suppliers_id,
+        is_delete:0
       };
       return data;
     }
