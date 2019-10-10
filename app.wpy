@@ -189,7 +189,7 @@ export default class extends wepy.app {
       },
       {
         root: 'brand',
-        pages: ['setBrand', 'brandList', 'goodsList','setBrandList']
+        pages: ['setBrand', 'brandList', 'goodsList','setBrandList', 'userList']
       },
       {
         root: 'designer',
@@ -242,6 +242,12 @@ export default class extends wepy.app {
           'pages/addPintuan',
           'pages/orderList',
           'pages/orderDetail',
+        ]
+      },
+       {
+        root: 'group',
+        pages: [
+          'pages/my_console_setGroup',
         ]
       }
     ],

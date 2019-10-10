@@ -527,16 +527,6 @@
       };
       let res = await newapi.managers_permission(data);
       this.permission = res.data.data.permission;
-      if(this.yizhanInfo.is_yizhan==0 && this.yizhanInfo.is_join==0){
-      this.permission[2].permission.push({
-          icon: '/images/console/ywy.png',
-          text: '拼团管理',
-          url: '/pintuan/pages/addPintuan',
-          bgcolor: '#10b3b1',
-          isadmin: 1,
-          isfufei: 1
-        });
-      }
 
       // this.permission[2].permission.push({
       //     icon: '/images/console/ywy.png',
