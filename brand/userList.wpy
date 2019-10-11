@@ -128,12 +128,11 @@
     <view>
       <search @buttonTap.user="searchTap"></search>
       <checkbox-group name="checkboxbox">
-        <view class='kind' wx:for="{{goodsList}}" wx:key="{{index}}" @tap="checkboxChange({{index}})" bindlongpress='showActionSheet({{index}},{{item.brand_id}},{{item.brand_name}},{{item.brand_logo}})'>
+        <view class='kind' wx:for="{{usersList}}" wx:key="{{index}}" @tap="checkboxChange({{index}})">
           <view class="kind-1">
             <view>
-              <checkbox value="{{item.goods_id}}" checked="{{item.checked}}" disabled="{{!item.checked&&goods_id.length>=12}}" />
-              <image src="{{item.original_img1?item.original_img1:'http://maijia.jicaizx.com/'+item.original_img}}" /> {{item.goods_name}} </view>
-            <!-- <view class='del' bindtap='showActionSheet({{index}},{{item.brand_id}},{{item.brand_name}},{{item.brand_logo}})'> 编辑</view> -->
+              <checkbox value="{{item.user_id}}" checked="{{item.checked}}" />
+              <image src="{{item.avatar}}" /> {{item.user_name}} </view>
           </view>
         </view>
       </checkbox-group>
@@ -150,20 +149,21 @@
   import api from '../API/api';
   import util from '../utils/index';
   import search from '../components/search';
-  export default class brand_Manage extends wepy.page {
+  export default class user_Manage extends wepy.page {
     config = {
-      navigationBarTitleText: '选择商品'
+      navigationBarTitleText: '选择用户'
     };
     data = {
-      goodsList: [],
+      usersList: [],
       isShowUptBrand: '',
       imgSrc: [],
       keyword: '',
       suppliers_id: 0,
       page: 1,
-      goods_id: [],
-      chooseGoodsList: [],
-      pname:''
+      user_id: [],
+      chooseUsersList: [],
+      pname: '',
+      group_id: 0
     };
     computed = {};
     components = {
@@ -171,18 +171,18 @@
     };
     methods = {
       checkboxChange: function(i) {
-        this.goodsList[i].checked = !this.goodsList[i].checked;
+        this.usersList[i].checked = !this.usersList[i].checked;
         var find = false;
-        this.chooseGoodsList.forEach((item, index) => {
-          if (item.goods_id == this.goodsList[i].goods_id) {
-            if (!this.goodsList[i].checked) {
-              this.chooseGoodsList.splice(index, 1);
+        this.chooseUsersList.forEach((item, index) => {
+          if (item.user_id == this.usersList[i].user_id) {
+            if (!this.usersList[i].checked) {
+              this.chooseUsersList.splice(index, 1);
               find = true;
             }
           }
         })
         if (!find) {
-          this.chooseGoodsList.push(this.goodsList[i]);
+          this.chooseUsersList.push(this.usersList[i]);
         }
       },
       addBrandTap: function() {
@@ -194,47 +194,42 @@
         this.isMoreData = true;
         this.keyword = val;
         this.page = 1;
-        this.getGoodsList();
+        this.getUsersList();
       },
     };
     events = {};
-    async getGoodsList() {
+    async getUsersList() {
       util.showLoading();
-      let data = {
-        suppliers_id: this.suppliers_id,
-        keyword: this.keyword,
-        page: this.page,
-        brand: this.brand_id,
-        is_delete: 0
-      }
-      var res = await newapi.search(data);
-      var datas = res.data.data
-      if (this.brand_id) {
-        var parent = this.$parent.$pages["/brand/setBrand"]
-        var x = parent.x
-        var y = parent.y
-        this.chooseGoodsList = parent.brands[x].brand[y].goods;
-      } else if (this.pname == 'activity'){
-        var parent = this.$parent.$pages["/ConsolePages/pages/my_console_setActivity"]
-        var y = parent.y
-        this.chooseGoodsList = parent.activity[y].goods;
-      } else if (this.pname == 'group'){
+      if (this.pname == 'group') {
         var parent = this.$parent.$pages["/group/pages/my_console_setGroup"]
         var y = parent.y
-        this.chooseGoodsList = parent.group[y].goods;
+        this.chooseUsersList = parent.group[y].users;
+        if (parent.group[y].group_id) {
+          this.group_id = parent.group[y].group_id;
+        } else {
+          this.group_id = 0;
+        }
       }
-        for (var i = 0; i < this.chooseGoodsList.length; i++) {
-          for (var j = 0; j < datas.length; j++) {
-            if (datas[j].goods_id == this.chooseGoodsList[i].goods_id) {
-              datas[j].checked = true;
-              break;
-            }
+      let data = {
+        suppliers_id: this.suppliers_id,
+        shenhe: 1,
+        page: this.page,
+        group_id: this.group_id
+      }
+      var res = await newapi.yhlb_new(data);
+      var datas = res.data.data.data
+      for (var i = 0; i < this.chooseUsersList.length; i++) {
+        for (var j = 0; j < datas.length; j++) {
+          if (datas[j].user_id == this.chooseUsersList[i].user_id) {
+            datas[j].checked = true;
+            break;
           }
         }
+      }
       if (this.page == 1) {
-        this.goodsList = datas;
+        this.usersList = datas;
       } else {
-        this.goodsList.push(...datas)
+        this.usersList.push(...datas)
       }
       if (datas.length < 10) {
         this.isMoreData = false;
@@ -245,7 +240,7 @@
     onReachBottom() {
       if (this.isMoreData) {
         this.page = this.page + 1;
-        this.getGoodsList();
+        this.getUsersList();
       }
     }
     async onLoad(option) {
@@ -257,7 +252,7 @@
       this.suppliers_id = suppliers_id == "" ? yizhanInfo.suppliers_id : suppliers_id;
       this.isMoreData = true;
       this.page = 1;
-      this.getGoodsList();
+      this.getUsersList();
     }
     onUnload() {}
   }

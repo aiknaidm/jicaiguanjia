@@ -188,6 +188,10 @@ const newapi = {
     pintuan_tuikuan: (data) => fetch(`${host_chk}/pintuan_tuikuan`, 'GET', data),
     copy_goods_sel: (data) => fetch(`${host_chk}/copy_goods_sel`, 'POST', data),
     slogan_list: (data) => fetch(`${host_chk}/slogan_list`, 'GET', data),
+    group_list: (data) => fetch(`${host_chk}/group_list`, 'POST', data),
+    group_add: (data) => fetch(`${host_chk}/group_add`, 'POST', data),
+    yhlb_new: (data) => fetch(`${host_chk}/yhlb_new`, 'GET', data),
+
 
 
 }

@@ -1179,7 +1179,7 @@ display: inline-block;
         keyword: '',
         page: 1,
         suppliers_id: this.suppliers_id,
-        is_delete:0
+        is_delete:''
       };
       return data;
     }
