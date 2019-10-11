@@ -1,4 +1,9 @@
-<style lang="less">
+<style lang="less"scoped>
+.body-bg{
+position: fixed;
+top:0;
+left:0
+}
   form {
     display: block;
     width: 100%;
@@ -76,7 +81,7 @@
   }
 </style>
 <template>
-  <view class='body-bg' wx:if="{{popupdata.isshowpopup}}" @tap='quxiaoChange' style='position: absolute' isshowpopup="客服">
+  <view class='body-bg' wx:if="{{popupdata.isshowpopup}}" @tap='quxiaoChange' isshowpopup="客服">
     <form bindsubmit='formSubmit'>
       <view class='changeTitle active' catchtap='showpopup2'>
         <view class='title'>{{popupdata.title}}</view>

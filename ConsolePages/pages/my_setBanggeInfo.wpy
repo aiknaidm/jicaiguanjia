@@ -234,7 +234,8 @@
           id,
           name,
           mobile,
-          gongzhong
+          gongzhong,
+          suppliers_id:this.suppliers_id
         };
         let res = await newapi.addBangge(data);
         if (res.data.code == 0) {
@@ -286,6 +287,13 @@
           }
         ]
       };
+      this.suppliers_id = this.$parent.globalData.suppliers_id;
+      if(!this.suppliers_id) {
+        util.showToast("获取信息失败")
+        wx.navigateBack({
+          delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+        });
+      }
       this.popupdata = popupdata;
       let res = await newapi.gongzhong();
       this.gz_list = res.data.data;
@@ -307,7 +315,10 @@
     }
     async delBangge(id) {
       let data = {
-        id
+        
+          id,
+          suppliers_id:this.suppliers_id
+        
       };
       let res = await newapi.delBangge(data);
       return res
@@ -334,7 +345,7 @@
       this.$apply();
     }
     async banggeList() {
-      this.suppliers_id = this.$parent.globalData.suppliers_id;
+      // this.suppliers_id = this.$parent.globalData.suppliers_id;
       let data = {
         suppliers_id: this.suppliers_id
       };

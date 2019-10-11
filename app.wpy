@@ -233,7 +233,8 @@ export default class extends wepy.app {
           'earnings/balanceDatas',
           'earnings/yue',
           'earnings/yue-detail',
-          'shop/fuwufei'
+          'shop/fuwufei',
+          "shop/message"
         ]
       },
        {

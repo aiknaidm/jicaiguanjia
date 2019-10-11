@@ -187,6 +187,7 @@ const newapi = {
     pintuan_fahuo: (data) => fetch(`${host_chk}/pintuan_fahuo`, 'GET', data),
     pintuan_tuikuan: (data) => fetch(`${host_chk}/pintuan_tuikuan`, 'GET', data),
     copy_goods_sel: (data) => fetch(`${host_chk}/copy_goods_sel`, 'POST', data),
+    slogan_list: (data) => fetch(`${host_chk}/slogan_list`, 'GET', data),
 
 
 }

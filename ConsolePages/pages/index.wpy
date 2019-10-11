@@ -283,14 +283,14 @@
           <!-- <myList :tabItem="item" wx:elif="{{item.is_salesman==1&&yizhanInfo.is_salesman==1}}"></myList> -->
           <!-- </block> -->
         </view>
-        <!-- <view class="info_list">
+        <view class="info_list">
           <block>
         
             <repeat for="{{item2}}" key="index2" index="index2" item="item2">
             <myList :tabItem="item2"></myList>
           </repeat>
           </block>
-        </view> -->
+        </view>
 
       </form>
     </view>
@@ -481,13 +481,22 @@
         bgcolor: '#10b3b1'
       },
  
-       item2:[{
+       item2:[
+         {
         icon: '/images/console/fabushangpin.png',
         num: 0,
         display_name: '钱包',
         url: '/pages/myerweima',
         bgcolor: '#10b3b1'
-      }] ,
+      },
+      {
+        icon: '/images/console/fabushangpin.png',
+        num: 0,
+        display_name: '宣传语',
+        url: '/yizhan/shop/message',
+        bgcolor: '#10b3b1'
+      },
+      ] ,
       is_designer: true,
       height: 0,
       guoqi: 0
