@@ -287,6 +287,8 @@
 
         if(this.thisBrandAdImg){
           res = await this.upGgImg();
+        }else{
+          res = "";
         }
         var ad_img = res;
 
