@@ -1,0 +1,128 @@
+<style lang="less">
+  .title {
+    text-align: center;
+    font-size: 40rpx;
+    padding: 30rpx 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .scroll-view-item {
+    line-height: 100rpx;
+    padding: 0 30rpx;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 30rpx;
+  }
+  .scroll-view-item text {
+    border: 1px solid #e50012;
+    border-radius: 50%;
+    display: inline-block;
+    width: 50rpx;
+    height: 50rpx;
+    color: #e50012;
+    text-align: center;
+    line-height: 50rpx;
+    font-size: 30rpx;
+  }
+</style>
+<template>
+  <view class="container">
+    <button bindtap="toshop" class="btn" wx:if="{{suppliers_id>0}}">进入店铺</button>
+    <scroll-view scroll-y style="height: {{height}}PX;overflow: hidden" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}" wx:if="{{yizhanlist.length>0}}">
+      <view class='title'>
+        请选择店铺
+      </view>
+      <view style='height:100rpx' class="scroll-view-item bc_green" wx:for="{{yizhanlist}}" @tap='changeShop({{item.suppliers_id}})' wx:key="{{index}}">
+        {{item.suppliers_desc}}
+        <text class='iconfont icon-qiehuan'></text>
+      </view>
+    </scroll-view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import newapi from '../../API/newapi';
+  import util from '../../utils/index';
+  export default class newslist extends wepy.page {
+    config = {
+      navigationBarTitleText: '吉采一站购'
+    };
+    components = {};
+    data = {
+      yizhanlist: [],
+      suppliers_id: 0,
+      sales_id: 0,
+      qr_sn: 0,
+    };
+    computed = {};
+    methods = {
+      toshop() {
+        var appId = "wx87bfbcfe887faf4d";
+        var path = '/pages/home?suppliers_id=' + this.suppliers_id + '&sales_id=' + this.sales_id;
+        console.log(appId, path);
+        wx.navigateToMiniProgram({
+          appId,
+          path,
+          // extraData: {
+          // 	suppliers_id: suppliers_id,
+          // },
+          envVersion: 'release',
+          // envVersion: 'trial',
+          success(res) {
+            // 打开成功
+          }
+        });
+      },
+      async changeShop(suppliers_id) {
+        let data = {
+          suppliers_id,
+          qr_sn: this.qr_sn,
+        };
+        var res = await newapi.salesman_suppliers(data);
+        if (res.data.code == 0) {
+          this.yizhanlist = [];
+          var datas = res.data.data;
+          // if (!datas.id) {
+          wx.showToast({
+            title: "二维码绑定成功", //提示的内容,
+            icon: 'none', //图标,
+          });
+          // }
+          this.suppliers_id = datas.suppliers_id;
+          this.sales_id = datas.sales_id;
+          this.$apply();
+        }
+      }
+    };
+    events = {};
+    async onShow() {}
+    async onLoad(query) {
+      //var userInfo = this.$parent.globalData.userInfo ? this.$parent.globalData.userInfo : (await this.$parent.getUserInfo());
+      //var user_id = userInfo.user_id;
+      const scene = decodeURIComponent(query.scene);
+      this.qr_sn = scene;
+      let data = {
+        //sales_id: user_id,
+        qr_sn: scene,
+      };
+      var res = await newapi.salesman_suppliers(data);
+      if (res.data.code == 0) {
+        var datas = res.data.data;
+        if (!datas.id) {
+          wx.showToast({
+            title: "二维码绑定成功", //提示的内容,
+            icon: 'none', //图标,
+          });
+        }
+        this.suppliers_id = datas.suppliers_id;
+        this.sales_id = datas.sales_id;
+        this.$apply();
+      } else if (res.data.code == 4) {
+        this.yizhanlist = res.data.data;
+        this.$apply();
+      }
+    }
+  }
+</script>

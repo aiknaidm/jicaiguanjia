@@ -191,6 +191,8 @@ const newapi = {
     group_list: (data) => fetch(`${host_chk}/group_list`, 'POST', data),
     group_add: (data) => fetch(`${host_chk}/group_add`, 'POST', data),
     yhlb_new: (data) => fetch(`${host_chk}/yhlb_new`, 'GET', data),
+    getQRCode3: (data) => fetch(`${host_chk}/getQRCode3`, 'GET', data),
+    salesman_suppliers: (data) => fetch(`${host_chk}/salesman_suppliers`, 'GET', data),
 
 
 
