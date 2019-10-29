@@ -1,0 +1,335 @@
+<style lang="less">
+  .container {
+    /* padding: 30rpx; */
+    flex-wrap: wrap;
+    background: #f0f0f0;
+    padding-bottom: 100rpx;
+  }
+  .designerInfo {
+    display: flex;
+    padding: 30rpx;
+    background: #fff;
+    .designerInfo-img {
+      width: 174rpx;
+      height: 174rpx;
+      overflow: hidden;
+      margin-right: 40rpx;
+      background: #aaa;
+      image {
+        width: 100%;
+        height: 100%
+      }
+    }
+    .designerInfo-text {
+      font-size: 28rpx;
+      color: #5E5E5E;
+      flex: 1;
+      .name {
+        color: #303030;
+        font-size: 40rpx; // line-height: 60rpx;
+        margin-bottom: 24rpx;
+      }
+      line-height: 40rpx;
+      .anli {
+        display: flex;
+        justify-content: space-between;
+      }
+      .phone {
+        width: 173rpx;
+        height: 58rpx;
+        line-height: 58rpx;
+        background: linear-gradient(80deg, rgba(213, 53, 52, 1), rgba(218, 91, 73, 1));
+        border-radius: 15rpx;
+        color: #fff;
+        display: inline-block;
+        text-align: center;
+      }
+    }
+  }
+  .status-box {
+    padding: 0 20rpx;
+    border-bottom: 6rpx solid #f0f0f0;
+  }
+  .status-box .status-label {
+    flex: inherit;
+    padding: 0 40rpx;border-bottom: 6rpx solid #fff;
+
+  }
+  .designerIntro {
+    padding: 36rpx;
+    background: #fff;
+    .phone {
+      margin-bottom: 20rpx;
+      image {
+        width: 27rpx;
+        height: 27rpx;
+      }
+    }
+  }
+  .designerCase {
+    padding-bottom: 100rpx;
+  }
+  .checkboxs {
+    display: flex;
+    background: #fff;
+    flex-wrap: wrap;
+    padding: 36rpx;
+  }
+  .checkbox {
+    display: flex;
+    align-items: center; // margin-right: 10rpx;
+    justify-content: space-between;
+    width: 50%;
+    .anli-list {
+      margin-left: 10rpx;
+      flex: 1;
+      image {
+        width: 250rpx;
+        height: 162rpx;
+        border-radius: 5rpx;
+        background: #aaa;
+      }
+       :nth-child(odd) {
+        margin-right: 30rpx;
+      }
+    }
+  }
+  .delBtn {
+    position: fixed;
+    line-height: 80rpx;
+    width: 100%;
+    bottom: 0px;
+    left: 0;
+    background: #fff;
+    checkbox {
+      margin-left: 37rpx;
+      border-radius: 50%;
+    }
+    .btn {
+      width: 200rpx;
+      text-align: center;
+      line-height: 80rpx;
+      background: linear-gradient(80deg, rgba(213, 53, 52, 1), rgba(218, 91, 73, 1));
+      color: #fff;
+      float: right;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
+  }
+</style>
+<template>
+  <view class='container'>
+    <view class="designerInfo">
+      <view class="designerInfo-img">
+        <image src="{{designer_info.avatar}}" mode="scaleToFill" lazy-load="false">
+        </image>
+      </view>
+      <view class="designerInfo-text">
+        <view class="name">
+          {{designer_info.realname}}
+        </view>
+        <view>
+          工作年限：{{designer_info.nianxian}}
+        </view>
+        <view>
+          级别：{{designer_info.level_name}}
+        </view>
+        <view class="anli">
+          <view>
+            案例：{{designer_info.anlishu}}</view>
+          <view class="phone" @tap="tocall({{designer_info.mobile}})">
+            联系电话
+          </view>
+        </view>
+      </view>
+    </view>
+    <statusTap :statusType="statusType" :currentType.sync="status" @statusTap.user="statusTap">
+      <view class="designerIntro" wx:if="{{status==0}}">
+        <!-- 个人简历 -->
+        <view class="phone">
+          <image src="/images/console/phone.png"></image>
+          {{designer_info.mobile}}
+        </view>
+        <view>
+          {{designer_info.resume}}
+        </view>
+      </view>
+      <view class="designerCase" wx:else="{{status==1}}">
+          <noOrder wx:if="{{anliList.length==0}}" text="暂无内容"></noOrder>
+        <checkbox-group bindchange="checkboxChange" class="checkboxs" wx:else>
+          <view class="checkbox" wx:for="{{anliList}}" @tap="toDetail({{item.article_id}})">
+            <checkbox value="{{item.article_id}}" checked="{{item.checked}}" />
+            <view class="anli-list">
+              <image src="{{item.file_url}}" mode="widthFix">
+                <!-- <view>{{item.checked}}</view> -->
+            </view>
+          </view>
+        </checkbox-group>
+        <view class="delBtn"  wx:if="{{showDelBtn}}">
+          <checkbox-group bindchange="checkboxChange2">
+            <label>
+                <checkbox value="1" checked="{{allselect}}"></checkbox>全选
+              </label>
+          </checkbox-group>
+          <view class="btn" @tap="del">删除案例</view>
+        </view>
+      </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import newapi from '../../API/newapi';
+  import util from '../../utils/index';
+  import statusTap from '../../components/statusTap';
+  import noOrder from '../../components/noOrder';
+
+  export default class my_setManagerInfo extends wepy.page {
+    config = {
+      navigationBarTitleText: '设计师详情'
+    };
+    data = {
+      designer_info: [],
+      isshowclose: false,
+      statusType: ["个人简历", "案例"],
+      status: 0,
+      anliList: [],
+      quanxuan: false,
+      allselect: false,
+      showDelBtn:false,
+    };
+    computed = {};
+    components = {
+      statusTap,noOrder
+    };
+    methods = {
+      tocall(phone) {
+        wx.makePhoneCall({
+          phoneNumber: phone
+        });
+      },
+     async del() {
+
+       var modalRes = await util.showModalBig("你确定要删除吗？")
+        if (modalRes.cancel) {
+          return
+        }
+        var article_id = [];
+        this.anliList.forEach((item, index) => {
+          if (item.checked) {
+            article_id.push(item.article_id);
+          }
+        });
+        newapi.del_anli({
+          article_id:article_id.toString()
+        }).then(res => {
+          if (res.data.code == 0) {
+            util.showToast('删除成功');
+            var anliList = [];
+            for (var i = 0; i < this.anliList.length; i++) {
+              for (var j = 0; j < article_id.length; j++) {
+                if (this.anliList[i].article_id == article_id[j]) {
+                  var del = true
+                  break
+                } else {
+                  var del = false
+                }
+              }
+              if (!del) {
+                anliList.push(this.anliList[i]);
+              }
+            }
+            this.allselect=false;
+            this.anliList = anliList;
+            this.$apply();
+          }
+        });
+        console.log(' article_id', article_id);
+      },
+      statusTap(e) {
+        console.log("e", e)
+        this.status = e;
+      },
+      checkboxChange2(e) {
+        this.anliList.forEach((item, index) => {
+          if (e.detail.value[0] == 1) this.anliList[index].checked = true;
+          else this.anliList[index].checked = false;
+        })
+        if (e.detail.value[0] == 1) this.allselect = true;
+        else this.allselect = false;
+        this.$apply();
+      },
+      checkboxChange(e) {
+        console.log("", e.detail.value)
+        if (e.detail.value.length > 0) {
+          this.showDelBtn = true
+        }else{
+          this.showDelBtn = false
+
+        }
+        this.anliList.forEach((item, index) => {
+          this.anliList[index].checked = false;
+          e.detail.value.forEach((item2, index2) => {
+            if (item2 == item.article_id) {
+              this.anliList[index].checked = true;
+            }
+          })
+        })
+        if (e.detail.value.length == this.anliList.length) {
+          this.allselect = true;
+        } else {
+          this.allselect = false;
+        }
+        this.$apply();
+        console.log("this.allselect", this.allselect);
+      }
+    };
+    events = {};
+    async onLoad(option) {
+      var suppliers_id = this.$parent.globalData.suppliers_id ? this.$parent.globalData.suppliers_id : ""
+      var yizhanInfo = this.$parent.globalData.yizhanInfo ? this.$parent.globalData.yizhanInfo : await this.$parent.getYizhanInfo(suppliers_id);
+      this.suppliers_id = suppliers_id == "" ? yizhanInfo.suppliers_id : suppliers_id;
+      this.user_id = option.id
+      this.designer_detail();
+      this.designerList();
+    }
+    async designer_detail() {
+      newapi.designer_detail({
+        suppliers_id: this.suppliers_id,
+        user_id: this.user_id
+      }).then(res => {
+        this.designer_info = res.data.data;
+        this.designer_info.start_date = util.formatDate(
+          this.designer_info.start_time
+        );
+        switch (this.designer_info.level) {
+          case 0:
+            this.designer_info.level_name = '初级';
+            break;
+          case 1:
+            this.designer_info.level_name = '中级';
+            break;
+          case 2:
+            this.designer_info.level_name = '高级';
+            break;
+          default:
+            break;
+        }
+        this.$parent.globalData.designer_info = this.designer_info;
+        this.$apply();
+      });
+    }
+    async designerList() {
+      let data = {
+        suppliers_id: this.suppliers_id,
+        user_id: this.user_id
+      };
+      let res = await newapi.anli_list(data);
+      if (res.data.code == 0) {
+        this.anliList = res.data.data;
+        this.$apply();
+      }
+    }
+  }
+</script>

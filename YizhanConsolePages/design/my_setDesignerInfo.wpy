@@ -1,0 +1,82 @@
+<style lang="less">
+  
+</style>
+<template>
+  <view class='container' >
+  
+      
+      <view class='redborder' catchtap='addManager'>
+        <view class='img'>
+         确认添加设计师
+        </view>
+      </view>
+     
+  
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import newapi from '../../API/newapi';
+  import util from '../../utils/index';
+  export default class my_setManagerInfo extends wepy.page {
+    config = {
+      navigationBarTitleText: '管理员绑定'
+    };
+    data = {
+      adminList: [],
+      isshowclose: false
+    };
+    computed = {};
+    components = {};
+    methods = {
+      async delManager(e) {
+        let user_id = e.currentTarget.dataset.user_id;
+        let suppliers_id = this.$parent.globalData.suppliers_id;
+        let data = {
+          user_id,
+          suppliers_id
+        };
+        let res = await newapi.delManager(data);
+        if (res.data.code == 0) {
+          util.showToast('删除成功');
+          this.managerList(suppliers_id);
+        } else {
+          util.showToast(res.data.message);
+        }
+      },
+      addManager: function() {
+        wx.navigateTo({
+          url: '/ConsolePages/pages/my_addManagerInfo?type=manager'
+        });
+      },
+      editManager(id){
+         wx.navigateTo({
+          url: '/ConsolePages/pages/my_setManagerInfo_permission?type=edit&id='+id
+        });
+      },
+      hiddenclose: function() {
+        this.isshowclose = false;
+      },
+      showclose: function() {
+        this.isshowclose = true;
+      }
+    };
+    events = {};
+    async onShow() {
+       let suppliers_id = this.$parent.globalData.suppliers_id;
+      this.managerList(suppliers_id);
+    }
+    async managerList(suppliers_id) {
+     
+      let data = {
+        suppliers_id
+      };
+      let res = await newapi.findManagers(data);
+      if (res.data.code == 0) {
+        this.adminList = res.data.data;
+        this.$apply();
+      }
+    }
+  }
+</script>

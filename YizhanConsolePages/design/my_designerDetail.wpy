@@ -1,0 +1,273 @@
+<style lang="less">
+.container {
+  /* padding: 30rpx; */
+  flex-wrap: wrap;
+  background: #f0f0f0;
+  padding-bottom: 100rpx;
+}
+.designerInfo {
+  display: flex;
+  padding: 30rpx;
+  background: #fff;
+  .designerInfo-img {
+    width: 250rpx;
+    height: 250rpx;
+    overflow: hidden;
+    margin-right: 40rpx;
+    background: #aaa;
+    image {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .designerInfo-text {
+    font-size: 28rpx;
+    color: #5e5e5e;
+    flex: 1;
+    .name {
+      color: #303030;
+      font-size: 40rpx; // line-height: 60rpx;
+      margin-bottom: 24rpx;
+    }
+    line-height: 40rpx;
+    .anli {
+      display: flex;
+      justify-content: space-between;
+    }
+    .phone {
+      width: 173rpx;
+      height: 58rpx;
+      line-height: 58rpx;
+      background: linear-gradient(
+        80deg,
+        rgba(213, 53, 52, 1),
+        rgba(218, 91, 73, 1)
+      );
+      border-radius: 15rpx;
+      color: #fff;
+      display: inline-block;
+      text-align: center;
+    }
+  }
+}
+.status-box {
+  padding: 0 20rpx;
+}
+.status-box .status-label {
+  flex: inherit;
+  padding: 0 40rpx;
+}
+.designerIntro {
+  padding: 36rpx;
+  background: #fff;
+  .phone {
+    margin-bottom: 20rpx;
+    image {
+      width: 27rpx;
+      height: 27rpx;
+    }
+  }
+}
+.designerCase {
+  padding-bottom: 100rpx;
+}
+.checkboxs {
+  display: flex;
+  background: #fff;
+  flex-wrap: wrap;
+  padding: 36rpx;
+}
+.checkbox {
+  display: flex;
+  align-items: center; // margin-right: 10rpx;
+  justify-content: space-between;
+  .anli-list {
+    margin-left: 10rpx;
+    image {
+      width: 250rpx;
+      height: 162rpx;
+      border-radius: 5rpx;
+      background: #aaa;
+    }
+    :nth-child(odd) {
+      margin-right: 30rpx;
+    }
+  }
+}
+.delBtn {
+  position: fixed;
+  line-height: 80rpx;
+  width: 100%;
+  bottom: 0px;
+  left: 0;
+  background: #fff;
+  checkbox {
+    margin-left: 37rpx;
+    border-radius: 50%;
+  }
+  .btn {
+    width: 200rpx;
+    text-align: center;
+    line-height: 80rpx;
+    background: linear-gradient(
+      80deg,
+      rgba(213, 53, 52, 1),
+      rgba(218, 91, 73, 1)
+    );
+    color: #fff;
+    float: right;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+}
+.info_list {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 16rpx solid #f0f0f0;
+  font-size: 28rpx;
+  background: #fff;
+  border-top: 1px solid #f0f0f0;
+  border-left: 1px solid #f0f0f0;
+  .weui_cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: calc((100% - 2rpx) / 3);
+    border-right: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .weui_cell_hd {
+    border-radius: 50%;
+    padding: 10rpx;
+    text-align: center;
+    display: flex;
+    margin-right: 0;
+    align-items: center;
+    justify-content: center;
+    width: 60rpx;
+    height: 60rpx;
+    image {
+      width: 100%;
+      height: 100%;
+      vertical-align: -2px;
+    }
+  }
+  .weui_cell_hd2 {
+    width: auto;
+  }
+}
+</style>
+<template>
+    <view class="container">
+        <view class="designerInfo">
+            <view class="designerInfo-img">
+                <image src="{{designer_info.avatar}}" mode="scaleToFill" lazy-load="false">
+            </view>
+            <view class="designerInfo-text">
+                <view class="name">{{designer_info.realname}}</view>
+                <!-- <view>工作年限：{{designer_info.realname}}</view> -->
+                <view>级别：{{designer_info.level_name}}</view>
+                <view>年限：{{designer_info.nianxian}}年</view>
+                <view>手机号：{{designer_info.mobile}}</view>
+                <view class="anli">
+                    <view>案例：{{designer_info.anlishu}}</view>
+                    <view class="phone" @tap="toSet">修改</view>
+                </view>
+            </view>
+        </view>
+        <view class="info_list">
+            <repeat for="{{item3}}" key="index" index="index" item="item">
+                <myList :tabItem="item"></myList>
+            </repeat>
+        </view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import newapi from '../../API/newapi';
+import util from '../../utils/index';
+import myList from '../../components/myList';
+export default class my_setManagerInfo extends wepy.page {
+  config = {
+    navigationBarTitleText: '设计师管理'
+  };
+  data = {
+    designer_info: {},
+    item3: [
+      {
+        icon: '/images/console/jianjie.png',
+        num: 0,
+        display_name: '个人简介',
+        url: '/designer/my_designerIntro',
+        bgcolor: '#fff'
+      },
+      {
+        icon: '/images/console/tianjia.png',
+        num: 0,
+        display_name: '添加案例',
+        url: '/designer/my_designerCaseDetail',
+        bgcolor: '#fff'
+      },
+      {
+        icon: '/images/console/anliguanli.png',
+        num: 0,
+        display_name: '案例管理',
+        url: '/designer/my_designerCaseList',
+        bgcolor: '#fff'
+      }
+    ]
+  };
+  computed = {};
+  components = {
+    myList
+  };
+  methods = {
+    toSet() {
+      wx.navigateTo({ url: 'my_designerIntroSet' });
+    }
+  };
+
+  events = {};
+  async onLoad() {
+    var suppliers_id = this.$parent.globalData.suppliers_id
+      ? this.$parent.globalData.suppliers_id
+      : '';
+    var yizhanInfo = this.$parent.globalData.yizhanInfo
+      ? this.$parent.globalData.yizhanInfo
+      : await this.$parent.getYizhanInfo(suppliers_id);
+
+    this.suppliers_id =
+      suppliers_id == '' ? yizhanInfo.suppliers_id : suppliers_id;
+    this.designer_detail();
+  }
+  onShow(){
+  this.designer_info=   this.$parent.globalData.designer_info ;
+  }
+  async designer_detail() {
+    newapi.designer_detail({ suppliers_id: this.suppliers_id }).then(res => {
+      this.designer_info = res.data.data;
+      this.designer_info.start_date = util.formatDate(
+        this.designer_info.start_time
+      );
+      switch (this.designer_info.level) {
+        case 0:
+          this.designer_info.level_name = '初级';
+          break;
+        case 1:
+          this.designer_info.level_name = '中级';
+          break;
+        case 2:
+          this.designer_info.level_name = '高级';
+          break;
+        default:
+          break;
+      }
+      this.$parent.globalData.designer_info = this.designer_info;
+      this.$apply();
+    });
+  }
+}
+</script>

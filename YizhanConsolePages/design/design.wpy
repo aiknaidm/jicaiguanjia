@@ -1,0 +1,129 @@
+<style lang="less">
+page{
+  height:auto;
+}
+    .design{
+        font-size: 30rpx;
+        background: #fff;
+        margin: 30rpx;
+        border-bottom: 6rpx solid #f0f0f0;
+      position: relative;
+      border-radius: 10rpx;
+      padding: 40rpx 25rpx;
+      color: #525252;
+      opacity:0.8;
+      line-height: 43rpx;
+    }
+     .btn{
+         position: absolute;
+         right: 40rpx;
+         top: 80rpx;
+     }
+    .btn .read{
+       
+        border-radius: 50px;
+        text-align: center;
+        margin: auto;
+        padding: 5rpx 30rpx;
+        font-size: 30rpx;
+        background: #e50012;
+        color: #fff;
+    }
+    .btn .read-active{
+        background: #AAAAAA;
+    }
+    .height{
+        max-height: 135rpx;
+        overflow: hidden;
+        transition: max-height 0.8s;
+        -moz-transition: max-height 0.8s;	/* Firefox 4 */
+        -webkit-transition: max-height 0.8s;	/* Safari 和 Chrome */
+        -o-transition: max-height 0.8s;
+    }
+    .height.active{
+        max-height: 500px;
+    }
+</style>
+<template>
+    <view>
+        <view class="design" wx:for="{{mfsjList}}" wx:key="{{index}}" @tap="itemTap({{index}})">
+           <view class="height {{item.active?'active':''}}" >
+                <view >
+                姓名：{{item.name}}
+            </view>
+             <view >
+                电话号码：{{item.mobile}}
+            </view>
+            <view >
+                城市：{{item.city}}
+            </view>
+            <view >
+                房屋面积：{{item.area}}
+            </view>
+            <view >
+                备注：{{item.remark}}
+            </view>
+           </view>
+         <view  class="btn">
+             <text class="read"  wx:if="{{item.is_read==0}}" @tap.stop="toMark({{item.id}},{{index}})">未读</text>
+             <text class="read read-active" wx:else>已读</text>
+            </view>
+         
+        </view>
+        <noOrder  text="暂无内容" wx:if="{{mfsjList.length>0}}">
+
+        </noOrder>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy';
+    import newapi from '../../API/newapi';
+    import util from '../../utils/index';
+    import noOrder from '../../components/noOrder';
+    export default class newslist extends wepy.page {
+        config = {
+            navigationBarTitleText: '免费设计',
+        };
+        components = {noOrder};
+        data = {
+            caseList: [],
+            mfsjList:[]
+        };
+        computed = {};
+        methods = {
+            itemTap(index){
+                this.mfsjList[index].active=!this.mfsjList[index].active;
+                this.$apply();
+            },
+            toMark(id,index){
+              
+               newapi.kehu_read({id}).then(res=>{
+                   if(res.data.code==0){
+                       util.showToast("已标记为已读")
+                       this.mfsjList[index].is_read=1;
+                       this.$apply();
+                   }else{
+                       util.showToast(res.data.message)
+                   }
+               })
+            }
+        }
+        events = {};
+       async kehu(suppliers_id) {
+          var res=await  newapi.kehu({
+                suppliers_id
+            })
+            this.mfsjList=res.data.data;
+            this.$apply();
+            console.log(res.data.data);
+        }
+        async onLoad(option) {
+            if (!this.$parent.globalData.suppliers_id) {
+                util.showToast("登录失败")
+            }
+            var suppliers_id = this.$parent.globalData.suppliers_id
+            this.kehu(suppliers_id)
+        }
+    }
+</script>

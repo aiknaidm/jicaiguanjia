@@ -1,0 +1,55 @@
+
+<style lang="less">
+.shop-list{
+    padding: 20rpx 40rpx;
+    border-bottom: 1px solid #f0f0f0;
+}
+</style>
+<template>
+    <view class="container">
+        <view wx:for="{{shopList}}" wx:key="{{index}}" class="shop-list">
+            <view wx:if="{{item.suppliers_name=='本店'}}" @tap="getFahuoShop({{item.suppliers_id}},'易站发货')">易站发货</view>
+            <view wx:else  @tap="getFahuoShop({{item.suppliers_id}},{{item.suppliers_name}})">{{item.suppliers_name}}</view>
+        </view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy';
+    import newapi from '../../API/newapi';
+    import util from '../../utils/index';
+    export default class orderYizhanDetailShop extends wepy.page {
+        config = {
+            navigationBarTitleText: '店铺列表'
+        };
+        data = {
+            shopList: -1
+        };
+        methods = {
+            getFahuoShop(suppliers_id,suppliers_name){
+                var select_suppliers_id=suppliers_id
+                var select_suppliers_name=suppliers_name
+                 this.$parent.$pages['/OrderManagement/pages/orderYizhanDetail'].select_suppliers_id=select_suppliers_id
+                 this.$parent.$pages['/OrderManagement/pages/orderYizhanDetail'].select_suppliers_name=select_suppliers_name
+                wx.navigateBack({
+                  delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+                });
+            }
+        }
+       async getYizhanList(suppliers_id,order_id,goods_id) {
+         var res= await  newapi.suppliers_order_list({
+                suppliers_id,order_id,goods_id
+            })
+         this.shopList=res.data.data;
+         this.$apply();
+        }
+        async onLoad(option) {
+            this.order_id=option.order_id;
+            this.goods_id=option.goods_id;
+            var suppliers_id = this.suppliers_id = this.$parent.globalData.suppliers_id ?
+                this.$parent.globalData.suppliers_id :
+                (await this.$parent.getYizhanInfo()).suppliers_id;
+            this.getYizhanList(suppliers_id,option.order_id,option.goods_id);
+        }
+    }
+</script>

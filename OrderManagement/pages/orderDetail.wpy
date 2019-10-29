@@ -1,0 +1,256 @@
+
+<style lang="less">
+  .section {
+    display: flex;
+    padding: 20rpx 40rpx;
+    align-items: center;
+    .name {
+      width: 200rpx;
+      text-align: left
+    }
+    .input {
+      flex: 1;
+      width: auto;
+      text-align: left
+    }
+  }
+</style>
+<template>
+  <view class="container">
+    <orderDetail :orderDetail.sync="orderDetail" :goodsMap.sync="goodsMap" @cancelOrderTap.user="cancelOrderTap" @confirmBtnTap.user="confirmBtnTap"></orderDetail>
+    <form @submit="fahuoSubmit">
+      <view class="" wx:if="{{orderDetail.order_status>=2}}">
+        <view class="section">
+          <view class="name">预计送达时间</view>
+          <picker disabled="{{orderDetail.order_status!=2 || orderDetail.shipping_status!=0}}" class="input" mode="date" name="time" value="{{time}}" start="2015-09-01" end="2020-09-01" bindchange="bindDateChange">
+            <view class="picker">
+              {{time}}
+            </view>
+          </picker>
+        </view>
+        <view class="section">
+          <view class="name">配送员信息</view>
+          <input class="input" name="info" placeholder="配送员姓名电话" disabled="{{orderDetail.order_status!=2 || orderDetail.shipping_status!=0}}" />
+        </view>
+        <!-- <view class="section">
+                  <view class="name">配送员电话</view>
+                  <input class="input" name="phone" placeholder="请填写配送员电话"/>
+                </view> -->
+      </view>
+      <view class="btn-row" wx:if="{{orderDetail.order_status==2 && orderDetail.shipping_status==0}}">
+        <radio-group class="radio-group" name="fahuo" @change="radioChange">
+          是否需要发货单：
+          <label class="radio">
+                <radio value="1" checked="true" color='red' />是
+              </label>
+          <label class="radio">
+                <radio value="0" checked="false" color='red' />否
+              </label>
+        </radio-group>
+        <button class="confirm-btn" form-type="submit" data-order_id="{{orderDetail.order_id}}">发货</button>
+      </view>
+    </form>
+    <popupbox :popupdata.sync="popupdata" @formSubmit.user="formSubmit"></popupbox>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import api from '../../API/api';
+  import newapi from '../../API/newapi';
+  import orderDetail from '../../components/shop/orderDetail';
+  import util from '../../utils/index';
+  import popupbox from '../../components/popupbox';
+  export default class orderDetails extends wepy.page {
+    config = {
+      navigationBarTitleText: '订单详情'
+    };
+    components = {
+      orderDetail,
+      popupbox
+    };
+    data = {
+      orderDetail: {},
+      goodsMap: [],
+      is_fahuodan: false,
+      time: 0,
+      popupdata: {},
+      goodIndex: 0,
+    };
+    computed = {};
+    methods = {
+      bindDateChange: function(e) {
+        console.log('picker发送选择改变，携带值为', e.detail.value)
+        this.time = e.detail.value
+      },
+      radioChange(e) {
+        console.log(e.detail.value)
+        if (e.detail.value) {
+          this.is_fahuodan = e.detail.value
+        }
+      },
+      async fahuoSubmit(e) {
+        var fahuo = e.detail.value.fahuo;
+        var yujisongda = e.detail.value.time;
+        var peisongyuan = e.detail.value.info;
+        var order_id = this.id
+        let mRes = await util.showModalBig('你确定要发货吗');
+        if (mRes.confirm) {
+          if (fahuo == 1) var fahuodan = await this.upfahuoimg();
+          else fahuodan = '';
+          this.orderDetail.fahuodan = fahuodan;
+          var data = {
+            yujisongda,
+            peisongyuan,
+            fahuodan,
+            order_id
+          }
+          this.fahuo(data);
+        }
+      },
+      async formSubmit(e) {
+        // if (e.detail.value.cost_price <= 0) {
+        //   this.popupdata.isshowpopup = true;
+        //   util.showToast('请输入成本价');
+        //   return;
+        // }
+        var cost_price = e.detail.value.cost_price;
+        if (cost_price <= 0) {
+          cost_price = 0;
+        }
+        var rec_id = e.detail.value.rec_id;
+        var data = {
+          cost_price,
+          rec_id
+        }
+        var res = await newapi.edit_cost(data);
+        this.goodsMap[this.goodIndex].cost_price = cost_price;
+        this.$apply();
+        util.showToast("设置成功");
+      },
+      async setCostPrice(e) {
+        var index = e.currentTarget.dataset.index;
+        var item = e.currentTarget.dataset.item;
+        this.goodIndex = index;
+        this.popupdata.isshowpopup = true;
+        this.popupdata.inputList = [{
+          name: '',
+          placeholder: '',
+          value: item.rec_id,
+          hidden: true,
+          inputName: 'rec_id',
+        }, {
+          name: '',
+          placeholder: '请填写成本价',
+          value: item.cost_price,
+          hidden: false,
+          inputName: 'cost_price',
+        }]
+      },
+    };
+    events = {
+      cancelOrderTap: res => {
+        this.$parent.$pages['/OrderManagement/pages/orderList'].events.cancelOrderTap(
+          this.id
+        );
+        this.getOrderDetail(this.id);
+      },
+      confirmBtnTap: res => {
+        this.$parent.$pages['/OrderManagement/pages/orderList'].events.confirmBtnTap(
+          this.id
+        );
+        this.getOrderDetail(this.id);
+      },
+    };
+    // 上传发货图片
+    async upfahuoimg() {
+      var res = await wepy
+        .chooseImage({
+          count: 1, // 默认9
+          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+          sourceType: ['album', 'camera'] // 可以指定来源是相册还是相机，默认二者都有
+        })
+      var tempFilePaths = res.tempFilePaths;
+      var imgRes = await wepy
+        .uploadFile({
+          url: api.upload,
+          filePath: tempFilePaths + '',
+          name: 'file',
+          header: {
+            Accept: 'application/json'
+          }
+        })
+      var datas = JSON.parse(imgRes.data.trim());
+      console.log(datas);
+      if (datas.code == 0) {
+        return datas.data.pic_url
+      }
+    }
+    // 发货
+    async fahuo(data) {
+      // let data = {
+      //   order_id: orderId
+      // };
+      let res = await newapi.fahuo(data);
+      if (res.data.code == 0) {
+        this.orderDetail.shipping_status = 1;
+        var order_status = this.$parent.$pages['/OrderManagement/pages/orderList']
+          .thisindex;
+        this.$parent.$pages['/OrderManagement/pages/orderList'].getOrderList(
+          order_status,
+          1
+        );
+        this.$apply();
+      }
+    }
+    async getOrderDetail(id) {
+      let data = {
+        order_id: id,
+        suppliers_id: this.suppliers_id
+      };
+      let res = await newapi.orderDetail(data);
+      wx.hideLoading();
+      this.orderDetail = res.data.data.orderList;
+      this.goodsMap = res.data.data.goodsMap;
+      this.orderDetail.add_time = util.formatTime(this.orderDetail.add_time);
+      this.orderDetail.pay_time = util.formatTime(this.orderDetail.pay_time);
+      this.orderDetail.confirm_time = util.formatTime(this.orderDetail.confirm_time);
+      this.orderDetail.shipping_time = util.formatTime(this.orderDetail.shipping_time);
+      var order_amount_fuwufei = 0;
+      this.orderDetail.fuwufei.forEach((item, index) => {
+        order_amount_fuwufei += parseFloat(item.order_amount)
+      })
+      console.log("order_amount_fuwufei",order_amount_fuwufei);
+      this.orderDetail.order_amount_fuwufei = order_amount_fuwufei.toFixed(2);
+      this.$apply();
+    }
+    async onLoad(option) {
+      this.id = option.id;
+      await this.$parent.loginInfo();
+      this.suppliers_id = this.$parent.globalData.suppliers_id ?
+        this.$parent.globalData.suppliers_id :
+        (await this.$parent.getYizhanInfo()).suppliers_id;
+      this.getOrderDetail(this.id);
+      var time = util.formatDate(new Date().getTime() / 1000)
+      this.time = time;
+      var popupdata = {
+        isshowpopup: false,
+        title: '设置成本价',
+        inputList: [{
+          name: '',
+          placeholder: '',
+          hidden: 'true',
+          inputName: 'rec_id',
+        }, {
+          name: '',
+          placeholder: '请填写成本价',
+          inputName: 'cost_price',
+        }]
+      };
+      this.popupdata = popupdata;
+      console.log("time,", time)
+      this.$apply();
+      util.showLoading();
+    }
+  }
+</script>

@@ -1,0 +1,391 @@
+<style lang="less">
+  /* page/lmbg/login/login.wxss */
+  page {
+    background-color: #fff;
+  }
+  .container {
+    text-align: center;
+    height: 100%;
+    font-size: 15px;
+    color: #666;
+    background-color: #fff;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    /* padding-top: 10px; */
+  }
+  .section {
+    /* margin-top: 10px; */
+    flex: 1;
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+    border-bottom: 1px solid #eee;
+    font-size: 30rpx;
+    padding: 20rpx 40rpx;
+  }
+  .section input,
+  picker {
+    height: 60rpx;
+    /* background-color: pink; */
+    line-height: 60rpx;
+    text-align: left;
+    padding-left: 20rpx;
+    flex: 10;
+  }
+  .section image {
+    width: 43rpx;
+    height: 43rpx;
+  }
+  .section .label {
+    width: 180rpx;
+    text-align: left;
+    /* text-align-last:justify; */
+  }
+  .section .label2 {
+    width: 200rpx;
+    text-align: left;
+  }
+  .yzm {
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+    border-bottom: 0px solid #c4c4c4;
+  }
+  .yzm input {
+    border: 1px solid #c4c4c4;
+    height: 35px;
+    width: 130px;
+    flex: 1;
+    text-align: left;
+    padding: 4px;
+  }
+  .yzm text {
+    height: 35px;
+    line-height: 35px;
+    margin-left: 10px;
+    flex: 1;
+    display: inline-block;
+    border: 1px solid #c4c4c4;
+    margin-top: 4px;
+    color: #09f;
+  }
+  button {
+    background-color: #e50012;
+    color: #fff;
+    height: 80rpx;
+    line-height: 80rpx;
+    font-size: 30rpx;
+    border-radius: 3px;
+    margin-top: 20rpx;
+    margin-bottom: 20rpx;
+  }
+  .picker {
+    color: #888;
+    flex: 10;
+  }
+  .section:last-child {
+    /* border: 0px solid; */
+  }
+  .label-right {
+    flex: 1;
+    min-height: 40rpx;
+    background: transparent;
+    text-align: left;
+    margin: 0;
+    padding: 0
+  }
+  .smsCode {
+    /* border: 0px solid #c4c4c4; */
+    border-bottom: 1rpx solid #eee;
+    justify-content: center;
+    align-items: center;
+  }
+  .smsCode:last-child {
+    border-bottom: 1rpx solid #eee;
+  }
+  .smsCode input {
+    flex: 1;
+    /* height: 80rpx; */
+    /* border-bottom: 1rpx solid #c4c4c4; */
+    /* float: left; */
+  }
+  .smsCode .getSmsCodeBtn {
+    flex: 1;
+    font-size: 30rpx;
+    color: #fff;
+    box-sizing: border-box;
+    margin-right: 0;
+    border-radius: 0px;
+    margin: 0;
+    /* height: 84rpx;
+         line-height: 84rpx; */
+    background-color: #e50012;
+  }
+  .rz-submit {
+    width: 80%;
+    margin: auto;
+    margin-top: 40rpx;
+  }
+  .smsCode {
+    display: flex;
+    justify-content: space-between;
+    /* border-bottom: 1px solid #ddd;
+        padding-right: 10%; */
+  }
+  .smsCode input {
+    width: 336rpx;
+  }
+  .smsCode .getSmsCodeBtn {
+    font-size: 30rpx;
+    color: #fff;
+    width: 216rpx;
+    box-sizing: border-box;
+    height: 80rpx;
+    line-height: 80rpx;
+    background-color: #e50012;
+  }
+  .smsCode button[disabled] {
+    color: #fff;
+  }
+  button {
+    background-color: #e50012;
+  }
+  button[disabled] {
+    /* color: #fff; */
+  }
+  button[disabled][type='default'],
+  wx-button[disabled]:not([type]) {
+    /* color: #fff; */
+  }
+  .section .label text,
+  .section .label2 text {
+    color: #e50012;
+    margin-right: 5rpx;
+  }
+  .radio-group {
+    /* padding-left: 20rpx; */
+    display: flex;
+  }
+  .radio-group .radio {
+    display: flex;
+    align-items: center;
+    padding-left: 20rpx;
+  }
+  /* 开店规则 */
+  .check {
+    text-align: left;
+    margin: 50rpx 0;
+    font-size: 24rpx;
+    padding: 0 30rpx;
+  }
+  .main-color {
+    color: #e50012;
+  }
+  .cameraBox {
+    height: 204rpx;
+    background-color: #f2f2f2;
+    line-height: 204rpx;
+    display: flex; // flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    overflow-x: scroll;
+  }
+  .camera {
+    width: 102rpx;
+    height: 106rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-right: 30rpx;
+  }
+  .camera image {
+    width: 102rpx;
+    height: 106rpx;
+  }
+</style>
+<template>
+  <view class='container'>
+    <form bindsubmit="formSubmit">
+      <view class="title" style="padding:40rpx;text-align:left">头像</view>
+      <view class="cameraBox">
+        <view class="camera" @tap="{{isuserDetail?'':'addShopImg'}}">
+          <image src="{{designer_info.avatar?designer_info.avatar:'/images/add_img.png'}}" />
+        </view>
+      </view>
+      <view class="section">
+        <view class="label">
+          <text>*</text>真实姓名</view>
+        <view class="label-right">
+          <input name="realname" class="input" type="text" value="{{designer_info.realname}}" disabled='{{isuserDetail}}' />
+        </view>
+      </view>
+      <view class="section">
+        <view class="label">
+          <text>*</text>电话号码</view>
+        <view class="label-right">
+          <input name="mobile" class="input" type="text" value="{{designer_info.mobile}}" disabled='{{isuserDetail}}' />
+        </view>
+      </view>
+      <view class="section">
+        <view class="label">
+          <text>*</text>开始时间</view>
+        <view class="label-right">
+          <picker mode="date" value="{{start_date}}" start="2000-09-01" end="2020-09-01" bindchange="bindDateChange">
+            <view class="picker">
+              {{start_date}}
+            </view>
+          </picker>
+        </view>
+      </view>
+      <!-- <view class="section">
+            <view class="label label2">
+              <text>*</text>pc管理账号</view>
+            <view class="label-right">
+              <input name="pcusername" class="input" type="text" value="{{userDetail.suppliers_name}}" disabled='{{isuserDetail}}' />
+            </view>
+          </view>
+          <view class="section">
+            <view class="label label2">
+              <text>*</text>pc管理密码</view>
+            <view class="label-right">
+              <input name="password" class="input" type="text" value="{{password}}" disabled/>
+            </view>
+          </view> -->
+      <!-- <view class="section">
+            <view class="label">
+              <text>*</text>所属地区</view>
+            <picker mode="region" disabled="{{isuserDetail}}" @change="bindRegionChange">
+              <view class="picker">
+                {{region[0]}}-{{region[1]}}-{{region[2]}}
+              </view>
+            </picker>
+          </view> -->
+      <!-- <view class="section">
+          <view class="label"> <text>*</text>级别</view>
+          <picker value="{{level}}" bindchange="bindLevelChange" range="{{level_name}}">
+            <view class="picker">
+              {{level_name[level]}}
+            </view>
+          </picker>
+        </view> -->
+      <button class='rz-submit' formType="submit" wx:if="{{!isuserDetail}}" disabled='{{issubmit}}'>提交</button>
+      <!-- <button class='rz-submit' disabled='true' wx:if="{{userDetail.user_status=='0'}}">审核中...</button> -->
+    </form>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import newapi from '../../API/newapi';
+  import api from '../../API/api';
+  import util from '../../utils/index';
+  export default class newslist extends wepy.page {
+    config = {
+      navigationBarTitleText: '修改信息'
+    };
+    components = {};
+    data = {
+      userDetail: {},
+      region: [],
+      isuserDetail: false,
+      issubmit: false,
+      designer_info: {},
+      start_date: util.formatDate(new Date().getTime() / 1000),
+      level: 0,
+      level_name: ["初级", "中级", "高级"]
+    };
+    computed = {};
+    methods = {
+      async addShopImg() {
+        wepy
+          .chooseImage({
+            count: 1, // 默认9
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'] // 可以指定来源是相册还是相机，默认二者都有
+          })
+          .then(res => {
+            var that = this;
+            // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+            var tempFilePaths = res.tempFilePaths;
+            this.designer_info.avatar = tempFilePaths[0];
+            this.designer_info.upload = true
+            this.$apply();
+          })
+          .catch(res => {});
+      },
+      async formSubmit(e) {
+        var date = util.strToTime(this.start_date, '-');
+        var datas = e.detail.value
+        datas.start_time = date / 1000;
+        datas.start_date = this.start_date;
+        datas.suppliers_id = this.suppliers_id;
+        datas.avatar = this.designer_info.upload ? await this.upImg(this.designer_info.avatar) : this.designer_info.avatar
+        newapi.edit_designer(datas).then(res => {
+          util.showToast("保存成功")
+          datas.nianxian =Math.ceil((new Date().getTime() / 1000 - datas.start_time) / 60 / 60 / 24 / 365) ;
+          
+           this.designer_info ={ ...this.$parent.globalData.designer_info,
+            ...datas
+          }
+          this.$parent.globalData.designer_info = this.designer_info
+          wx.navigateBack({
+            delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+          });
+          // this.$parent.globalData.designer_info
+        })
+      },
+      bindDateChange(e) {
+        this.start_date = e.detail.value
+      },
+      bindLevelChange(e) {
+        console.log("e", e)
+        this.level = e.detail.value
+      }
+    };
+    async upImg(img_url) {
+      util.showLoading('上传中');
+      try {
+        var res = await wepy.uploadFile({
+          url: api.upload,
+          filePath: img_url,
+          name: 'file',
+          header: {
+            Accept: 'application/json'
+          }
+        });
+        var datas = JSON.parse(res.data.trim());
+        if (datas.code == 0) {
+          return datas.data.pic_url;
+        }
+      } catch (error) {
+        wx.hideLoading();
+        let mRes = await util.showModalBig(
+          '图片' + img_url + '上传失败'
+        );
+        if (mRes.confirm) {
+          await this.upImg(img_url);
+        }
+      }
+    }
+    async onShow() {
+      if (this.$parent.globalData.designer_info) {
+        console.log(this.$parent.globalData.designer_info)
+        var suppliers_id = this.$parent.globalData.suppliers_id ? this.$parent.globalData.suppliers_id : ""
+        var yizhanInfo = this.$parent.globalData.yizhanInfo ? this.$parent.globalData.yizhanInfo : await this.$parent.getYizhanInfo(suppliers_id);
+        this.suppliers_id = suppliers_id == "" ? yizhanInfo.suppliers_id : suppliers_id;
+        this.designer_info = this.$parent.globalData.designer_info
+        this.start_date = this.designer_info.start_date
+        console.log("this.designer_info.start_date",this.start_date)
+      } else {
+        util.showToast("获取信息失败")
+        return
+      }
+    }
+    events = {};
+  }
+</script>

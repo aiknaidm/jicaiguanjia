@@ -496,6 +496,13 @@
         url: '/yizhan/shop/message',
         bgcolor: '#10b3b1'
       },
+      {
+        icon: '/images/console/fabushangpin.png',
+        num: 0,
+        display_name: '赠品',
+        url: '/ConsolePages/pages/gift/my_console_gift',
+        bgcolor: '#10b3b1'
+      },
       ] ,
       is_designer: true,
       height: 0,

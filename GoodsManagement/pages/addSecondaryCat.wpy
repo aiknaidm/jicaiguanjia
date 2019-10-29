@@ -1,0 +1,260 @@
+<style lang="less">
+.listBox {
+  height: 90rpx;
+  line-height: 90rpx;
+  border-bottom: 1px solid#e4e4e4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.listBoxAdd {
+  height: 90rpx;
+  line-height: 90rpx;
+  border-bottom: 1px solid#e4e4e4;
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
+  color: #e50012;
+}
+
+.listOption {
+  display: inline-block;
+  margin: 0 36rpx;
+  margin-right: 10rpx;
+  width: 180rpx;
+}
+.listOptionAdd {
+  display: inline-block;
+  margin-left: 36rpx;
+  /* width: 150rpx; */
+}
+
+.listOptionImages {
+  display: flex;
+  flex: 1;
+  padding-left: 20rpx;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.listOptionImages input {
+  flex: 1;
+  font-size: 28rpx;
+  padding-right: 10rpx;
+}
+.format {
+  font-size: 25rpx;
+  margin: 0;
+  margin-left: 5rpx;
+}
+.goodsList .listBox {
+  border: 0px solid;
+}
+.goodsList .list {
+  padding: 40rpx;
+  border-bottom: 1px solid #e4e4e4;
+}
+.goodsList .list .list-label {
+  padding: 10rpx 40rpx;
+  border: 1px solid #e4e4e4;
+  margin-right: 20rpx;
+  margin-bottom: 20rpx;
+  border-radius: 10rpx;
+  color: #888;
+  display: inline-block;
+  position: relative;
+}
+.goodsList .list .list-label .icon-guanbi {
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  right: -10rpx;
+  top: -10rpx;
+  border: 0px solid;
+  background-color: #fff;
+  color: #e50012;
+  /* border-radius:50%;
+wid */
+  width: 45rpx;
+  height: 45rpx;
+  text-align: center;
+  font-size: 44rpx;
+  display: inline-block;
+}
+.goodsList .list .list-label.active {
+  border: 1px solid #e50012;
+  color: #e50012;
+}
+.listOptionImages button {
+  margin: 0;
+  padding: 0 30rpx;
+  margin-left: 10rpx;
+  line-height: 60rpx;
+  height: 60rpx;
+  font-size: 26rpx;
+  margin-right: 20rpx;
+}
+
+.listOptionImages in .listOptionImages image {
+  width: 22rpx;
+  height: 22rpx;
+}
+
+button {
+  background: #e50012;
+  color: #fff;
+  line-height: 76rpx;
+}
+</style>
+<template>
+<view class='container'>
+ <view class="goodsList">
+    <view class='listBox' >
+      <view class="listOption">商品分类</view>
+      <view class="listOptionImages" wx:if="{{is_join!=1}}">
+        <input placeholder='添加准确分类方便顾客查找商品' @input='changeGoodsInput'/>
+        <button bindtap='bindGoodsSure'>
+          确定
+        </button>
+      </view>
+    </view>
+    <view class='list'>
+      <view wx:for="{{goodsList}}" wx:key="{{index}}" class="list-label {{cat_id===item.cat_id?'active':''}}" @tap="bindGoodsList({{item}})" @longpress.stop='longtabGoods({{item.cat_name}},{{item.cat_id}},{{index}})'>{{item.cat_name}}
+
+      </view>
+    </view>
+  </view>
+    <button bindtap='changeSecondary'>确认选择</button>
+</view>
+
+</template>
+
+<script>
+import wepy from 'wepy';
+import newapi from '../../API/newapi';
+import util from '../../utils/index';
+
+export default class newslist extends wepy.page {
+  config = {
+    navigationBarTitleText: '添加二级分类'
+  };
+  components = {};
+  data = {
+    cat_id: '',
+    goodsList: [],
+    is_join:0
+  };
+  computed = {};
+  methods = {
+    bindGoodsSure() {
+      if (!this.goodsKeyword || this.goodsKeyword == '') {
+        util.showToast('请输入查找的商品分类');
+        return;
+      }
+      // this.initKind();
+      this.addGoodsList(
+        this.suppliers_id,
+        this.goodsKeyword,
+        this.parent_id
+      );
+    },
+    changeGoodsInput(e) {
+      this.goodsKeyword = e.detail.value;
+    },
+    bindGoodsList(item) {
+      if (this.cat_id == item.cat_id) {
+        this.cat_id = '';
+        this.cat_name = '';
+      } else {
+        this.cat_id = item.cat_id;
+        this.cat_name = item.cat_name;
+      }
+    },
+    async longtabGoods(name, id, index) {
+      let mRes = await util.showModalBig('你确定要删除"' + name + '"分类吗');
+      if (mRes.confirm) {
+        this.sureDelGoods(id, index);
+      }
+    },
+    changeSecondary() {
+      try {
+        this.$parent.$pages[
+          '/GoodsManagement/pages/addGoodsInfo'
+        ].ch_cat_id = this.cat_id;
+        this.$parent.$pages[
+          '/GoodsManagement/pages/addGoodsInfo'
+        ].goods_secondray_dec = this.cat_name;
+        wx.navigateBack({
+          delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+        });
+      } catch (error) {}
+    }
+  };
+  events = {};
+  //确定删除分类
+  async sureDelGoods(id, index) {
+    let data = {
+      cat_id: id,
+    };
+    let res = await newapi.del_categorys(data);
+    wx.hideLoading();
+    if (res.data.code == 0) {
+      this.goodsList.splice(index, 1);
+    } else {
+      util.showToast(res.data.message + '，删除失败');
+    }
+    this.$apply();
+  }
+  // 分类列表 用户id 店铺id 有keyword时添加查找商品
+  async getGoodsList(suppliers_id, keyword = '', parent_id) {
+    util.showLoading();
+    let data = {
+      suppliers_id: suppliers_id,
+      keyword: keyword,
+      parent_id
+    };
+    let res = await newapi.categorys(data);
+    var ispush = true;
+    wx.hideLoading();
+    this.goodsList = res.data.data;
+    this.$apply();
+  }
+  // 添加分类
+  async addGoodsList(suppliers_id, keyword = '', parent_id) {
+    util.showLoading();
+    let data = {
+      suppliers_id: suppliers_id,
+      keyword,
+      parent_id
+    };
+    let res = await newapi.add_categorys(data);
+    wx.hideLoading();
+    if (res.data.data.tianjia == 1) {
+      this.goodsList.push(res.data.data);
+    }
+    this.cat_id = res.data.data.cat_id;
+    this.cat_name = res.data.data.cat_name;
+    this.$apply();
+  }
+  async onLoad(option) {
+    try {
+      this.parent_id = option.cat_id; //上一级分类
+      await this.$parent.loginInfo();
+      this.cat_id = this.$parent.$pages[
+        '/GoodsManagement/pages/addGoodsInfo'
+      ].ch_cat_id;
+      this.goods_secondray_dec = this.$parent.$pages[
+        '/GoodsManagement/pages/addGoodsInfo'
+      ].goods_secondray_dec;
+      this.suppliers_id = this.$parent.globalData.suppliers_id
+        ? this.$parent.globalData.suppliers_id
+        : (await this.$parent.getYizhanInfo()).suppliers_id;
+       this.is_join = this.$parent.globalData.yizhanInfo.is_join
+      this.getGoodsList(this.suppliers_id, '', this.parent_id);
+    } catch (error) {
+      var log = wx.getStorageSync('log');
+      wx.setStorageSync('log', log + '/n' + error);
+    }
+  }
+}
+</script>

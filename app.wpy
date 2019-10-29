@@ -1,428 +1,414 @@
 <style lang="less">
-@import './font/font.wxss';
-page {
-  position: relative;
-  height: 100%;
-  background: #f0f0f0;
-}
-
-.hidden {
-  overflow: hidden;
-  /* height: 100%;  */
-  width: 100%;
-  padding: 0 !important;
-  position: fixed;
-}
-.container {
-  background-color: #fff;
-  font-size: 30rpx;
-
-  word-break: break-all;
-}
-
-.body-bg {
-  background-color: rgba(0, 0, 0, 0.5);
-  height: 100%;
-  width: 100%;
-  position: fixed;
-  left: 0px;
-  top: 0px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-button {
-  font-size: 32rpx;
-  background: transparent;
-  border: 0px solid;
-  display: block;
-  padding: 0;
-  margin: 0;
-}
-button::after {
-  border: none;
-}
-input {
-  outline: none;
-  border: none;
-  list-style: none;
-}
-.red {
-  color: #e50012;
-}
-.green {
-  color: #14c09a;
-}
-.bg-red {
-  background-color: #e50012;
-}
-.orange {
-  color: #f60;
-}
-mask,
-.mask {
-  background: rgba(0, 0, 0, 0.5);
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
-  z-index: 5;
-}
-.price-box {
-  text-align: right;
-
-  font-size: 28rpx;
-  .btn {
-    /* flex: 1; */
-
-    box-sizing: border-box;
-    text-align: center;
-    line-height: 60rpx;
-    border-radius: 6rpx;
-    margin: 20rpx;
-    width: 164rpx;
-    display: inline-block;
+  @import './font/font.wxss';
+  page {
+    position: relative;
+    height: 100%;
+    background: #f0f0f0;
   }
-  .cancel-btn {
-    border: 1rpx solid #ccc;
-    /* position: absolute; */ /* flex: 1; */
+  .hidden {
+    overflow: hidden;
+    /* height: 100%;  */
+    width: 100%;
+    padding: 0 !important;
+    position: fixed;
   }
-  .topay-btn {
+  .container {
+    background-color: #fff;
+    font-size: 30rpx;
+    word-break: break-all;
+  }
+  .body-bg {
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  button {
+    font-size: 32rpx;
+    background: transparent;
+    border: 0px solid;
+    display: block;
+    padding: 0;
+    margin: 0;
+  }
+  button::after {
+    border: none;
+  }
+  input {
+    outline: none;
+    border: none;
+    list-style: none;
+  }
+  .red {
+    color: #e50012;
+  }
+  .green {
+    color: #14c09a;
+  }
+  .bg-red {
     background-color: #e50012;
-    color: #fff;
   }
-}
+  .orange {
+    color: #f60;
+  }
+  mask,
+  .mask {
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 5;
+  }
+  .price-box {
+    text-align: right;
+    font-size: 28rpx;
+    .btn {
+      /* flex: 1; */
+      box-sizing: border-box;
+      text-align: center;
+      line-height: 60rpx;
+      border-radius: 6rpx;
+      margin: 20rpx;
+      width: 164rpx;
+      display: inline-block;
+    }
+    .cancel-btn {
+      border: 1rpx solid #ccc;
+      /* position: absolute; */
+      /* flex: 1; */
+    }
+    .topay-btn {
+      background-color: #e50012;
+      color: #fff;
+    }
+  }
 </style>
 
 <script>
-import wepy from 'wepy';
-import 'wepy-async-function';
-// import { setStore } from 'wepy-redux';
-// import configStore from './store';
-import newapi from './API/newapi';
-import util from './utils/index';
-
-// const store = configStore();
-// setStore(store);
-
-export default class extends wepy.app {
-  config = {
-    pages: ['pages/home', 'pages/my', 'pages/shoperweima','pages/myerweima'],
-    subPackages: [
-      {
-        root: 'IndexPages',
-        pages: [
-          'pages/index',
-          'pages/details',
-          'pages/indexNewsList',
-          'pages/newsList',
-          'pages/renzheng',
-          'pages/renzhengDetail',
-        ]
-      },
-      {
-        root: 'ConsolePages',
-        pages: [
-          'pages/index',
-          'pages/orderList',
-          'pages/orderDetail',
-          'pages/share',
-          'pages/shareRule',
-          'pages/shareList',
-          'pages/withdraw',
-          'pages/poster',
-          'pages/dataManage',
-          'pages/dataManageDetail',
-          'pages/my_setServiceInfo',
-          'pages/my_setBanggeInfo',
-          'pages/my_console_check',
-          'pages/my_console_checkDetail',
-          'pages/my_addManagerInfo',
-          'pages/my_setManagerInfo',
-          'pages/my_setManagerInfo_permission',
-          'pages/my_console_renew',
-          'pages/my_console_renewRecord',
-          'pages/my_setShopInfo',
-          'pages/my_setShopStyle',
-          'pages/my_setShopInfo_about',
-          'pages/my_setSalesman',
-          'pages/my_console_catManage',
-          'pages/my_console_catDelete',
-          'pages/my_console_setActivity',
-          'pages/addGoodsInfo',
-          'pages/addGoodsShop',
-          'pages/addSecondaryCat',
-          'pages/addGoodsDec',
-          'pages/goodsList',
-          'pages/changeGoodsInfo',
-          'pages/clubCard/payCard',
-          'pages/clubCard/setCard',
-          'pages/clubCard/setPayType',
-          'pages/clubCard/setBackgroundImg',
-          'pages/my_console_cardPayDetail',
-          'pages/my_console_cardExpendDetail',
-          'pages/my_console_payPhb',
-          'pages/my_console_toSureList',
-          'pages/my_console_tobalanceDetail',
-          'pages/upCase',
-          'pages/caseList',
-          'pages/addCaseDec',
-          'pages/design',
-          'pages/coupon/addCoupon',
-          'pages/coupon/selectCoupon',
-          'pages/coupon/goodsList',
-          'pages/coupon/couponUseList',
-          'pages/yizhan/yizhan-check',
-          'pages/yizhan/yizhan-add',
-          'pages/yizhan/yizhan-apply',
-          'pages/orderYizhanDetail',
-          'pages/orderYizhanList',
-          'pages/orderYizhanDetailShop',
-          'pages/orderYizhanDetail2'
-        ]
-      },
-      {
-        root: 'banner',
-        pages: ['setBanner', 'fenleiList', 'brandList', 'goodsList']
-      },
-      {
-        root: 'brand',
-        pages: ['setBrand', 'brandList', 'goodsList','setBrandList', 'userList']
-      },
-      {
-        root: 'designer',
-        pages: [
-          'my_designerList',
-        'my_setDesignerInfo',
-        'admin_designerList',
-        'admin_designerDetail',
-        'my_designerDetail',
-        'my_designerIntro',
-        'my_designerCaseList',
-        'my_designerCaseDetail',
-       'my_designerCaseDetailDec',
-       'my_designerIntroSet'
-        ]
-      },
-
-      {
-        root: 'Admin',
-        pages: [
-          'pages/index',
-          'pages/supplierDetail',
-          'pages/goodsInfo',
-          'pages/orderInfo',
-          'pages/userInfo',
-          'pages/memberInfo',
-          'pages/permission',
-          'pages/brandManage',
-          'pages/jmfManage',
-          'pages/erweima'
-        ]
-      },
-       {
-        root: 'yizhan',
-        pages: [
-          'earnings/index',
-          'earnings/withdraw',
-          'earnings/shareList',
-          'earnings/setBankCardList',
-          'earnings/setBankCardInfo',
-          'earnings/balance',
-          'earnings/balanceDatas',
-          'earnings/yue',
-          'earnings/yue-detail',
-          'shop/fuwufei',
-          "shop/message"
-        ]
-      },
-       {
-        root: 'pintuan',
-        pages: [
-          'pages/addPintuan',
-          'pages/orderList',
-          'pages/orderDetail',
-        ]
-      },
-       {
-        root: 'group',
-        pages: [
-          'pages/my_console_setGroup',
-        ]
-      }
-    ],
-
-    window: {
-      backgroundTextStyle: 'light',
-      navigationBarTitleText: '吉采管家',
-      navigationBarBackgroundColor: '#e50012',
-      backgroundColor: '#F2f2f2',
-      navigationBarTextStyle: 'white',
-      enablePullDownRefresh: false
-    },
-    tabBar: {
-      color: '#707070',
-      selectedColor: '#e50012',
-      borderStyle: 'white',
-      backgroundColor: '#fff',
-      list: [
-        {
-          pagePath: 'pages/home',
-          iconPath: 'images/footer-icon-01.png',
-          selectedIconPath: 'images/footer-icon-01-active.png',
-          text: '首页'
+  import wepy from 'wepy';
+  import 'wepy-async-function';
+  // import { setStore } from 'wepy-redux';
+  // import configStore from './store';
+  import newapi from './API/newapi';
+  import util from './utils/index';
+  // const store = configStore();
+  // setStore(store);
+  export default class extends wepy.app {
+    config = {
+      pages: ['pages/home', 'pages/my', 'pages/shoperweima', 'pages/myerweima'],
+      subPackages: [{
+          root: 'IndexPages',
+          pages: [
+            'pages/index',
+            'pages/details',
+            'pages/indexNewsList',
+            'pages/newsList',
+            'pages/renzheng',
+            'pages/renzhengDetail'
+          ]
         },
-
         {
-          pagePath: 'pages/my',
-          iconPath: 'images/footer-icon-04.png',
-          selectedIconPath: 'images/footer-icon-04-active.png',
-          text: '我的'
+          root: 'OrderManagement',
+          pages: [
+            'pages/orderList',
+            'pages/orderDetail',
+            'pages/orderYizhanDetail',
+            'pages/orderYizhanList',
+            'pages/orderYizhanDetailShop',
+            'pages/orderYizhanDetail2'
+          ]
+        },
+        {
+          root: 'GoodsManagement',
+          pages: [
+            'pages/addGoodsInfo',
+            'pages/addSecondaryCat',
+            'pages/addGoodsDec',
+            'pages/addGoodsShop',
+            'pages/goodsList',
+            'pages/changeGoodsInfo',
+            'pages/my_console_catDelete'
+          ]
+        },
+        {
+          root: 'ConsolePages',
+          pages: [
+            'pages/index',
+            'pages/share',
+            'pages/shareRule',
+            'pages/shareList',
+            'pages/withdraw',
+            'pages/poster',
+            'pages/dataManage',
+            'pages/dataManageDetail',
+            'pages/my_setServiceInfo',
+            'pages/my_console_check',
+            'pages/my_console_checkDetail',
+            'pages/my_addManagerInfo',
+            'pages/my_setManagerInfo',
+            'pages/my_setManagerInfo_permission',
+            'pages/my_console_renew',
+            'pages/my_console_renewRecord',
+            'pages/my_setShopInfo',
+            'pages/my_setShopStyle',
+            'pages/my_setShopInfo_about',
+            'pages/my_setSalesman',
+            'pages/my_console_catManage',
+            'pages/my_console_setActivity',
+            'pages/clubCard/payCard',
+            'pages/clubCard/setCard',
+            'pages/clubCard/setPayType',
+            'pages/clubCard/setBackgroundImg',
+            'pages/my_console_cardPayDetail',
+            'pages/my_console_cardExpendDetail',
+            'pages/my_console_payPhb',
+            'pages/my_console_toSureList',
+            'pages/my_console_tobalanceDetail',
+            'pages/upCase',
+            'pages/caseList',
+            'pages/addCaseDec',
+            'pages/coupon/addCoupon',
+            'pages/coupon/selectCoupon',
+            'pages/coupon/goodsList',
+            'pages/coupon/couponUseList',
+            'pages/gift/my_console_gift',
+            'pages/gift/my_console_gift_goodslist'
+          ]
+        },
+        {
+          root: 'banner',
+          pages: ['setBanner', 'fenleiList', 'brandList', 'goodsList']
+        },
+        {
+          root: 'Admin',
+          pages: [
+            'pages/index',
+            'pages/supplierDetail',
+            'pages/goodsInfo',
+            'pages/orderInfo',
+            'pages/userInfo',
+            'pages/memberInfo',
+            'pages/permission',
+            'pages/brandManage',
+            'pages/jmfManage',
+            'pages/erweima'
+          ]
+        },
+        {
+          root: 'YizhanConsolePages',
+          pages: [
+            'earnings/index',
+            'earnings/withdraw',
+            'earnings/shareList',
+            'earnings/setBankCardList',
+            'earnings/setBankCardInfo',
+            'earnings/balance',
+            'earnings/balanceDatas',
+            'earnings/yue',
+            'earnings/yue-detail',
+            'shop/fuwufei',
+            'shop/message',
+            'yizhan/yizhan-check',
+            'yizhan/yizhan-add',
+            'yizhan/yizhan-apply',
+            'design/design',
+            'worker/my_setBanggeInfo',
+            'brand/setBrand',
+            'brand/brandList',
+            'brand/goodsList',
+            'brand/setBrandList',
+            'brand/userList',
+            'design/my_designerList',
+            'design/my_setDesignerInfo',
+            'design/admin_designerList',
+            'design/admin_designerDetail',
+            'design/my_designerDetail',
+            'design/my_designerIntro',
+            'design/my_designerCaseList',
+            'design/my_designerCaseDetail',
+            'design/my_designerCaseDetailDec',
+            'design/my_designerIntroSet'
+          ]
+        },
+        {
+          root: 'pintuan',
+          pages: ['pages/addPintuan', 'pages/orderList', 'pages/orderDetail']
+        },
+        {
+          root: 'group',
+          pages: ['pages/my_console_setGroup']
         }
+      ],
+      window: {
+        backgroundTextStyle: 'light',
+        navigationBarTitleText: '吉采管家',
+        navigationBarBackgroundColor: '#e50012',
+        backgroundColor: '#F2f2f2',
+        navigationBarTextStyle: 'white',
+        enablePullDownRefresh: false
+      },
+      tabBar: {
+        color: '#707070',
+        selectedColor: '#e50012',
+        borderStyle: 'white',
+        backgroundColor: '#fff',
+        list: [{
+            pagePath: 'pages/home',
+            iconPath: 'images/footer-icon-01.png',
+            selectedIconPath: 'images/footer-icon-01-active.png',
+            text: '首页'
+          },
+          {
+            pagePath: 'pages/my',
+            iconPath: 'images/footer-icon-04.png',
+            selectedIconPath: 'images/footer-icon-04-active.png',
+            text: '我的'
+          }
+        ]
+      },
+      permission: {
+        'scope.userLocation': {
+          desc: '你的位置信息将用于小程序位置接口的效果展示'
+        }
+      },
+      navigateToMiniProgramAppIdList: [
+        'wx024ea505bcfdda8e',
+        'wx04135fb8cc44a57c',
+        'wxf48cdd6a7dae8c21',
+        'wx7e302245debd521a',
+        'wx87bfbcfe887faf4d',
+        'wxedc203036acbc9e4'
       ]
-    },
-    permission: {
-      'scope.userLocation': {
-        desc: '你的位置信息将用于小程序位置接口的效果展示'
-      }
-    },
-    navigateToMiniProgramAppIdList: [
-      'wx024ea505bcfdda8e',
-      'wx04135fb8cc44a57c',
-      'wxf48cdd6a7dae8c21',
-      'wx7e302245debd521a',
-      'wx87bfbcfe887faf4d',
-      'wxedc203036acbc9e4'
-    ]
-  };
-  globalData = {
-    userInfo: null,
-    loginInfo: null
-  };
-
-  constructor() {
-    super();
-    this.use('promisify');
-    this.use('requestfix');
-  }
-
-  async onLaunch() {
-    this.upData();
-  }
-  upData() {
-    // 获取小程序更新机制兼容
-    if (wx.canIUse('getUpdateManager')) {
-      const updateManager = wx.getUpdateManager();
-      updateManager.onCheckForUpdate(function(res) {
-        // 请求完新版本信息的回调
-        if (res.hasUpdate) {
-          updateManager.onUpdateReady(function() {
-            wx.showModal({
-              title: '更新提示',
-              content: '新版本已经准备好，是否重启应用？',
-              success: function(res) {
-                if (res.confirm) {
-                  // 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
-                  updateManager.applyUpdate();
+    };
+    globalData = {
+      userInfo: null,
+      loginInfo: null
+    };
+    constructor() {
+      super();
+      this.use('promisify');
+      this.use('requestfix');
+    }
+    async onLaunch() {
+      this.upData();
+    }
+    upData() {
+      // 获取小程序更新机制兼容
+      if (wx.canIUse('getUpdateManager')) {
+        const updateManager = wx.getUpdateManager();
+        updateManager.onCheckForUpdate(function(res) {
+          // 请求完新版本信息的回调
+          if (res.hasUpdate) {
+            updateManager.onUpdateReady(function() {
+              wx.showModal({
+                title: '更新提示',
+                content: '新版本已经准备好，是否重启应用？',
+                success: function(res) {
+                  if (res.confirm) {
+                    // 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
+                    updateManager.applyUpdate();
+                  }
                 }
-              }
+              });
             });
-          });
-          updateManager.onUpdateFailed(function() {
-            // 新的版本下载失败
-            wx.showModal({
-              title: '已经有新版本了哟~',
-              content: '新版本已经上线啦~，请您删除当前小程序，重新搜索打开哟~'
+            updateManager.onUpdateFailed(function() {
+              // 新的版本下载失败
+              wx.showModal({
+                title: '已经有新版本了哟~',
+                content: '新版本已经上线啦~，请您删除当前小程序，重新搜索打开哟~'
+              });
             });
-          });
-        }
-      });
-    } else {
-      // 如果希望用户在最新版本的客户端上体验您的小程序，可以这样子提示
-      wx.showModal({
-        title: '提示',
-        content:
-          '当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。'
+          }
+        });
+      } else {
+        // 如果希望用户在最新版本的客户端上体验您的小程序，可以这样子提示
+        wx.showModal({
+          title: '提示',
+          content: '当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。'
+        });
+      }
+    }
+    sleep(s) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve('promise resolved');
+        }, s * 1000);
       });
     }
-  }
-  sleep(s) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve('promise resolved');
-      }, s * 1000);
-    });
-  }
-  async checkSettingStatus() {
-    // 判断是否是第一次授权，非第一次授权且授权失败则进行提醒
-    try {
-      let auth = await wepy.getSetting();
-      let authSetting = auth.authSetting;
-      if (
-        authSetting['scope.userInfo'] === false ||
-        authSetting['scope.userInfo'] === undefined
-      ) {
-        return false;
-      } else {
-        return true;
+    async checkSettingStatus() {
+      // 判断是否是第一次授权，非第一次授权且授权失败则进行提醒
+      try {
+        let auth = await wepy.getSetting();
+        let authSetting = auth.authSetting;
+        if (
+          authSetting['scope.userInfo'] === false ||
+          authSetting['scope.userInfo'] === undefined
+        ) {
+          return false;
+        } else {
+          return true;
+        }
+      } catch (res) {}
+    }
+    async checkUserLocation() {
+      // 判断是否是第一次授权，非第一次授权且授权失败则进行提醒
+      try {
+        let auth = await wepy.getSetting();
+        let authSetting = auth.authSetting;
+        if (
+          authSetting['scope.userLocation'] === false ||
+          authSetting['scope.userLocation'] === undefined
+        ) {
+          return false;
+        } else {
+          return true;
+        }
+      } catch (res) {}
+    }
+    async testAsync() {
+      const data = await this.sleep(3);
+    }
+    async loginInfo() {
+      let token = wx.getStorageSync('Token') || '';
+      if (token) {
+        return;
       }
-    } catch (res) {}
-  }
-  async checkUserLocation() {
-    // 判断是否是第一次授权，非第一次授权且授权失败则进行提醒
-    try {
-      let auth = await wepy.getSetting();
-      let authSetting = auth.authSetting;
-      if (
-        authSetting['scope.userLocation'] === false ||
-        authSetting['scope.userLocation'] === undefined
-      ) {
-        return false;
-      } else {
-        return true;
-      }
-    } catch (res) {}
-  }
-  async testAsync() {
-    const data = await this.sleep(3);
-  }
-
-  async loginInfo() {
-    let token = wx.getStorageSync('Token') || '';
-    if (token) {
+      let code = await wepy.login();
+      let data = {
+        weixin: code.code,
+        sex: '未知',
+        avatar: 'https://lmbge.com/upload/avatar/weixin1.png'
+      };
+      let res = await newapi.login(data);
+      wx.setStorageSync('Token', res.data.data.token);
       return;
     }
-    let code = await wepy.login();
-    let data = {
-      weixin: code.code,
-      sex: '未知',
-      avatar: 'https://lmbge.com/upload/avatar/weixin1.png'
-    };
-    let res = await newapi.login(data);
-    wx.setStorageSync('Token', res.data.data.token);
-    return;
+    async getUserInfo() {
+      let res = await newapi.getUserInfo();
+      this.globalData.userInfo = res.data.data;
+      if (res.data.code == 0) return res.data.data;
+      else util.showToast('获取用户信息失败');
+      return 0;
+    }
+    async getYizhanInfo(suppliers_id = '') {
+      let data = {
+        suppliers_id
+      };
+      let res = await newapi.getYizhanInfo(data);
+      if (res.data.code == 0) {
+        this.globalData.yizhanInfo = res.data.data;
+        this.globalData.suppliers_id = res.data.data.suppliers_id;
+        this.globalData.vip_level = res.data.data.vip_level;
+        return res.data.data;
+      } else util.showToast('获取易站信息失败');
+      return 0;
+    }
   }
-  async getUserInfo() {
-    let res = await newapi.getUserInfo();
-    this.globalData.userInfo = res.data.data;
-    if (res.data.code == 0) return res.data.data;
-    else util.showToast('获取用户信息失败');
-    return 0;
-  }
-  async getYizhanInfo(suppliers_id = '') {
-    let data = {
-      suppliers_id
-    };
-    let res = await newapi.getYizhanInfo(data);
-    if (res.data.code == 0) {
-      this.globalData.yizhanInfo = res.data.data;
-      this.globalData.suppliers_id = res.data.data.suppliers_id;
-      this.globalData.vip_level = res.data.data.vip_level;
-      return res.data.data;
-    } else util.showToast('获取易站信息失败');
-    return 0;
-  }
-}
 </script>

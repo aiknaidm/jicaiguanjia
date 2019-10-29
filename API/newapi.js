@@ -49,7 +49,7 @@ const newapi = {
     editManager: (data) => fetch(`${host_chk}/manager_edit`, 'GET', data), //编辑管理员
     managers_detail: (data) => fetch(`${host_chk}/managers_detail`, 'GET', data), //权限
     // 判断管理员显示权限功能的接口   managers_permission  参数  suppliers_id店铺ID
-    managers_permission: (data) => fetch(`${host_chk}/managers_permission`, 'GET', data), //权限
+    managers_permission: (data) => fetch(`${host_chk}/managers_permission1`, 'GET', data), //权限
     shop_rules: (data) => fetch(`${host_chk}/xieyi`, 'GET', data), //权限
     // 规则
 
@@ -193,6 +193,8 @@ const newapi = {
     yhlb_new: (data) => fetch(`${host_chk}/yhlb_new`, 'GET', data),
     getQRCode3: (data) => fetch(`${host_chk}/getQRCode3`, 'GET', data),
     salesman_suppliers: (data) => fetch(`${host_chk}/salesman_suppliers`, 'GET', data),
+    gifts_add: (data) => fetch(`${host_chk}/gifts_add`, 'POST', data),
+    gifts_list: (data) => fetch(`${host_chk}/gifts_list`, 'POST', data),
 
 
 

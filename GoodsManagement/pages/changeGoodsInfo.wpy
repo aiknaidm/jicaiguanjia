@@ -1,0 +1,456 @@
+<style lang="less">
+.section {
+  /* margin-top: 10px; */
+  flex: 1;
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  border-bottom: 1px solid #eee;
+  font-size: 30rpx;
+  padding: 20rpx 40rpx;
+}
+
+.section input,
+picker {
+  height: 60rpx;
+  /* background-color: pink; */
+  line-height: 60rpx;
+  text-align: left;
+  padding-left: 20rpx;
+  flex: 10;
+}
+.section .label-right {
+  flex: 1;
+}
+.section image {
+  width: 43rpx;
+  height: 43rpx;
+}
+.section .label {
+  width: 180rpx;
+  text-align: left;
+}
+.goodsname .label {
+  width: 180rpx;
+}
+.goodstitle .label {
+  width: 180rpx;
+}
+.goodstitle {
+  display: flex;
+  padding: 20rpx 40rpx;
+  justify-content: space-between;
+  border-bottom: 16rpx solid #eee;
+}
+.goodstitle .label-right {
+  border: 1px solid #666;
+  font-size: 28rpx;
+  color: #666;
+  padding: 5rpx 20rpx;
+  border-radius: 50px;
+}
+.goodslist {
+  border-bottom: 16rpx solid #eee;
+}
+.goodsbtn {
+  text-align: center;
+  margin-top: 20rpx;
+  padding-bottom: 20rpx;
+}
+.goodsbtn button {
+  border: 1px solid #e50012;
+  color: #e50012;
+  width: 250rpx;
+  line-height: 68rpx;
+  height: 68rpx;
+  border-radius: 50px;
+  background: #fff;
+  display: inline-block;
+}
+</style>
+<template>
+  <view class='container'>
+
+  <view class=" section goodsname">
+    <view class="label">
+      商品名称：</view>
+    <view class="label-right">{{goodsdetail.goods_name}}
+    </view>
+  </view>
+
+  <view class=' goodstitle'>
+    <view class="label">
+      批量修改</view>
+    <view class="label-right" bindtap='showBox' wx:if="{{properties.length>0}}">
+     批量修改 {{piliangtitle}}
+    </view>
+  </view>
+<form @submit="quedingChange">
+    <view class='goodslist' wx:if="{{properties.length==0}}">
+ <view class="section">
+      <view class="label">
+        型号</view>
+      <view class="label-right">
+        <input name="realname" class="input" type="text" value="默认型号" disabled='true'/>
+      </view>
+    </view>
+    <view class="section" wx:for="{{vip_level}}" wx:key="{{index}}">
+      <view class="label" wx:if="{{vip_level==1}}">{{price_text}}</view>
+      <view class="label" wx:else>{{index+1}}级{{price_text}}</view>
+      <view class="label-right">
+        <input class="input" name="shop_price{{index==0?'':index+1}}" maxlength="18" type="digit" value="{{goodsdetail['shop_price'+(index==0?'':index+1)]}}" disabled='{{disable_jiage}}' />
+      </view>
+    </view>
+		 <view class="section">
+      <view class="label">
+        零售价</view>
+      <view class="label-right">
+        <input class="input" name="floor_price"  maxlength="18" type="digit" value="{{goodsdetail.floor_price}}" disabled='{{disable_jiage}}' />
+      </view>
+    </view>
+    <view class="section">
+      <view class="label">
+        库存</view>
+      <view class="label-right">
+        <input class="input" name="goods_number" maxlength="18" type="number" value="{{goodsdetail.goods_number}}" disabled='{{disable_kucun}}' />
+      </view>
+    </view>
+    </view>
+ <block wx:else>
+    
+  <view class='goodslist' wx:for="{{properties}}" wx:key="{{index}}">
+    <view class="section">
+      <view class="label">
+        型号</view>
+      <view class="label-right">
+        <input name="realname" class="input" type="text" value="{{item.attr_value}}" disabled='true'/>
+      </view>
+    </view>
+    <view class="section"  wx:for="{{vip_level}}"  wx:for-index='index2' wx:for-item='item2' wx:key="{{index2}}" >
+      <view class="label">
+        {{index2+1}}级会员价</view>
+      <view class="label-right">
+        <input class="input" data-index='{{index}}' data-goods_attr_id="{{item.goods_attr_id}}" @input="bindJiaGeInput({{item.goods_attr_id}},{{index}},{{index2}})" maxlength="18" type="digit" value="{{item['attr_price'+(index2==0?'':index2+1)]}}" disabled='{{disable_jiage}}' />
+      </view>
+    </view>
+		 <view class="section">
+      <view class="label">
+        零售价</view>
+      <view class="label-right">
+        <input class="input" data-index='{{index}}' data-goods_attr_id="{{item.goods_attr_id}}" bindinput="bindJiaGe2Input" maxlength="18" type="digit" value="{{item.floor_price}}" disabled='{{disable_jiage}}' />
+      </view>
+    </view>
+    <view class="section">
+      <view class="label">
+        库存</view>
+      <view class="label-right">
+        <input class="input" data-index='{{index}}' data-goods_attr_id="{{item.goods_attr_id}}" bindinput="bindKuCunInput" maxlength="18" type="number" value="{{item.goods_number}}" disabled='{{disable_kucun}}' />
+      </view>
+    </view>
+  </view>
+ </block>
+
+
+  <view class='goodsbtn'>
+    <button form-type='submit'>保存修改</button>
+  </view></form>
+  <popupbox :popupdata.sync="popupdata" @formSubmit.user="tapSure"></popupbox>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import popupbox from '../../components/popupbox';
+import newapi from '../../API/newapi';
+import util from '../../utils/index';
+export default class newslist extends wepy.page {
+  config = {
+    navigationBarTitleText: '修改'
+  };
+  components = { popupbox };
+  data = {
+    goodsdetail: {},
+    properties: [],
+    piliangtitle: '库存',
+    popupdata: {},
+    title: '修改库存',
+    placeholder: '批量修改',
+    disable_jiage: false,
+    disable_kucun: true,
+    input: {},
+    vip_level:1,
+    price_text:"会员价"
+  };
+  computed = {};
+  methods = {
+    showBox() {
+      if (this.xiugaitype == 'kucun') {
+        this.popupdata = {
+          isshowpopup: true,
+          title: '修改库存',
+          inputList: [
+            {
+              name: '',
+              placeholder: '批量修改库存',
+              inputName: 'goods_number',
+              type: 'number'
+            }
+          ]
+        };
+      } else {
+        var inputLists=[]
+        for(var i=0;i<this.vip_level;i++){
+         inputLists.push({
+              name: '',
+              placeholder: '批量修改'+this.price_text+(i+1),
+              inputName: 'attr_price'+(i==0?'':i+1),
+              type: 'digit'
+            })
+        }
+        this.popupdata = {
+          isshowpopup: true,
+          title: '修改价格',
+          inputList: [
+            ...inputLists,
+           
+          ]
+        };
+      }
+    },
+    tapSure(e) {
+      var value = e.detail.value;
+
+      var datas = this.properties;
+      if (this.xiugaitype == 'jiage') {
+        var attr_price = parseFloat(value.attr_price).toFixed(2);
+        var floor_price = parseFloat(value.floor_price).toFixed(2);
+        for (var i = 0; i < datas.length; i++) {
+          if (floor_price && floor_price != 'NaN')
+            datas[i].floor_price = floor_price;
+            for(var j=0;j<this.vip_level;j++){
+              // if (attr_price && attr_price != 'NaN')
+              var k=j==0?'':j+1
+              console.log("value['attr_price'+"+k+"]",value['attr_price'+k]);
+              datas[i]['attr_price'+k] = value['attr_price'+k];
+            }
+          
+        }
+      } else {
+        var goods_number = parseFloat(value.goods_number).toFixed(2);
+        for (var i = 0; i < datas.length; i++) {
+          datas[i].goods_number = goods_number;
+        }
+      }
+    },
+    async quedingChange(e) {
+      // 修改价格
+      var shop_price = this.goodsdetail.shop_price;
+      var floor_price = this.goodsdetail.floor_price;
+      var goods_attr = this.goodsdetail.properties;
+      var goods_number = this.goodsdetail.goods_number;
+      var shop_prices={}
+      if (goods_number.length == 0 && goods_attr.length == 0) {
+        util.showToast('请填写商品数量');
+        return;
+      }
+      
+      if (
+        parseFloat(shop_price) > parseFloat(floor_price) &&
+        goods_attr.length == 0
+      ) {
+        util.showToast(this.price_text+'不能大于零售价');
+        return;
+      }
+      if (goods_attr.length == 0)
+        for (var j = 0; j < this.vip_level; j++) {
+          var k = j == 0 ? "" : j + 1;
+          if (e.detail.value["shop_price" + k].length == 0) {
+            util.showToast('请填写'+this.price_text);
+            return;
+          } else {
+            shop_prices["shop_price" + k] = e.detail.value["shop_price" + k]
+          }
+        }
+      if (floor_price <= 0 && goods_attr.length == 0) {
+        util.showToast('零售价格不能为0');
+        return;
+      }
+      if (shop_price <= 0 && goods_attr.length == 0) {
+        util.showToast(this.price_text+'格不能为0');
+        return;
+      }
+
+      for (var i = 0; i < goods_attr.length; i++) {
+        if (goods_attr[i].attr_value == '') {
+          util.showToast('请填写商品规格');
+          return;
+        }
+        for (var j = 0; j < this.vip_level; j++) {
+          var k = j == 0 ? "" : j + 1;
+          var attr_price = goods_attr[i]["attr_price" + k]
+          if (attr_price == '') {
+            util.showToast('请填写商品'+this.price_text);
+            return;
+          }
+        }
+        if (goods_attr[i].floor_price == '') {
+          util.showToast('请填写商品零售价');
+          return;
+        }
+        if (
+          parseFloat(goods_attr[i].floor_price) <
+          parseFloat(goods_attr[i].attr_price)
+        ) {
+          util.showToast(this.price_text+'不能大于零售价');
+          return;
+        }
+        if (goods_attr[i].floor_price <= 0 || goods_attr[i].attr_price <= 0) {
+          util.showToast('商品价格不能为0');
+          return;
+        }
+        if (goods_attr[i].goods_number == '') {
+          util.showToast('请填写商品数量');
+          return;
+        }
+      }
+      if (this.xiugaitype == 'jiage') {
+        if (this.properties.length > 0) {
+          var data = {
+            goods_id: this.goodsdetail.goods_id,
+            properties: this.properties
+          };
+        } else {
+          var data = {
+            goods_id: this.goodsdetail.goods_id,
+            
+            floor_price: e.detail.value.floor_price,
+            ...shop_prices
+          };
+        }
+        let res = await newapi.changePrice(data);
+        if (res.data.code == 0) {
+          util.showToast('修改成功');
+          if (this.properties.length > 0) {
+            var max = 0;
+            var min = this.properties[0].attr_price;
+            var add = 0;
+            this.properties.forEach(function(item, index) {
+              if (item.attr_price > max) {
+                max = item.attr_price;
+              }
+              if (item.attr_price < min) {
+                min = item.attr_price;
+              }
+            });
+            this.$parent.$pages['/GoodsManagement/pages/goodsList'].list[
+              this.index
+            ].shop_price = min;
+          } else
+            this.$parent.$pages['/GoodsManagement/pages/goodsList'].list[
+              this.index
+            ].shop_price =
+              e.detail.value.shop_price;
+        } else {
+          util.showToast('修改失败');
+        }
+      } else {
+        if (this.properties.length > 0) {
+          var data = {
+            goods_id: this.goodsdetail.goods_id,
+            properties: this.properties
+          };
+        } else {
+          var data = {
+            goods_id: this.goodsdetail.goods_id,
+            goods_number: e.detail.value.goods_number
+          };
+        }
+        let res = await newapi.changeNum(data);
+        if (res.data.code == 0) {
+          util.showToast('修改成功');
+          if (this.properties.length > 0) {
+            var add = 0;
+            this.properties.forEach(function(item, index) {
+              add = add + parseInt(item.goods_number);
+            });
+            this.$parent.$pages['/GoodsManagement/pages/goodsList'].list[
+              this.index
+            ].goods_number = add;
+          } else
+            this.$parent.$pages['/GoodsManagement/pages/goodsList'].list[
+              this.index
+            ].goods_number =
+              e.detail.value.goods_number;
+        } else {
+          util.showToast('修改失败');
+        }
+      }
+      this.goodsdetail.goods_number = e.detail.value.goods_number;
+    },
+    //零售价格修改
+    bindJiaGe2Input: function(e) {
+      var goods_attr_id = e.currentTarget.dataset.goods_attr_id;
+      var jiage = e.detail.value;
+      var i = e.currentTarget.dataset.index;
+      var datas = this.properties;
+      datas[i].floor_price = jiage;
+      this.properties = datas;
+    },
+    //价格修改
+    bindJiaGeInput: function(goods_attr_id,index,index2,e) {
+      var jiage = e.detail.value;
+      var datas = this.properties;
+      index2=index2==0?'':index2+1
+      datas[index]['attr_price'+index2] = jiage;
+      this.properties = datas;
+      this.$apply();
+    },
+
+    //库存修改
+    bindKuCunInput: function(e) {
+      var goods_attr_id = e.currentTarget.dataset.goods_attr_id;
+      var kucun = e.detail.value;
+      var i = e.currentTarget.dataset.index;
+      var datas = this.data.properties;
+
+      datas[i].goods_number = kucun;
+      this.properties = datas;
+    }
+  };
+  events = {};
+  async getIndexNewsList(id) {}
+  async getGoodsDetail(goods_id) {
+    let data = { goods_id };
+    let res = await newapi.goodinfo(data);
+    if (res.data.code == 0) {
+      var datas = res.data.data;
+
+      this.goodsdetail = datas;
+      this.properties = datas.properties;
+      this.$apply();
+    }
+  }
+  async onLoad(option) {
+    this.goods_id = option.id;
+    this.index = option.index;
+    this.xiugaitype = option.xiugaitype;
+    this.piliangtitle = option.xiugaitype == 'kucun' ? '库存' : '价格';
+    this.disable_jiage = option.xiugaitype == 'jiage' ? false : true;
+    this.disable_kucun = option.xiugaitype == 'jiage' ? true : false;
+    
+    this.is_yizhan = this.$parent.globalData.yizhanInfo.is_yizhan;
+    this.vip_level = this.is_yizhan==1 ? 1 : this.$parent.globalData.yizhanInfo.vip_level;
+    if(this.is_yizhan){
+      this.price_text="折后价";
+    }else{
+      this.price_text="会员价";
+    }
+     console.log('is_yizhan',this.is_yizhan);
+     console.log('vip_level',this.vip_level);
+    this.getGoodsDetail(this.goods_id);
+   
+    wx.setNavigationBarTitle({ title: '修改' + this.piliangtitle });
+    this.$apply();
+  }
+}
+</script>

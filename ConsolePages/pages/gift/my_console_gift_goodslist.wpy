@@ -1,0 +1,57 @@
+<style lang="less">
+
+</style>
+<template>
+  <view class='container'>
+    <goodsList @toChooseTap.user="toChooseTap" :type.sync="type"></goodsList>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import newapi from '../../../API/newapi';
+  import util from '../../../utils/index';
+  import goodsList from '../../../components/goodsList';
+  // import noorder from '../../../components/noOrder';
+  export default class newslist extends wepy.page {
+    config = {
+      navigationBarTitleText: '选择优惠商品'
+    };
+    components = {
+      goodsList
+    };
+    data = {
+      parampage: 1,
+      ssButton: "取消",
+      buttonClass: "",
+      keyword: "",
+      list: [],
+      isMoreData: true,
+      type: ""
+    };
+    computed = {};
+    methods = {
+      toChooseTap(item) {
+        var parent = this.$parent.$pages[
+            '/ConsolePages/pages/gift/my_console_gift'
+          ]
+        if (this.type == "gou") {
+          
+          parent.choose_good=item
+        }else{
+  parent.choose_gift[this.index]=item
+        }
+        
+    wx.navigateBack({
+      delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+    });
+    console.log("parent.choose_good_name",item,item.goods_name,parent)
+      },
+    }
+    onLoad(option) {
+      this.type = option.type
+      this.index = option.index
+      console.log("option",option)
+    }
+  }
+</script>

@@ -1,0 +1,58 @@
+<style lang="less">
+  .img{
+    text-align: center;
+    line-height: 100rpx;
+    font-size: 38rpx;
+    image{
+
+      width: 100%;
+      margin-bottom: 150rpx;
+     
+    }
+    button{
+      width: 50%;
+     
+      margin: auto;
+      margin-top: 60rpx;
+      color: #fff;
+    }
+  }
+</style>
+<template>
+<view class="img">
+      <image src="https://lmbge.com/upload/1234/join_1.png" mode="widthFix" >
+
+      </image>
+      <view >本地还没有易站</view>
+      <button @tap="apply"  style="background-color:#eb4b45">拨打400电话，加入我们</button>
+    </view>
+ 
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import newapi from '../../API/newapi';
+  import util from '../../utils/index';
+//   import search from '../../components/search';
+  
+  export default class my_console_check extends wepy.page {
+    config = {
+      navigationBarTitleText: '加入我们'
+    };
+    data = {
+    
+      
+    };
+    computed = {};
+    components = {};
+    methods = {
+     apply(){
+         wx.makePhoneCall({
+          phoneNumber: '4006300719'
+        });
+     }
+    };
+    events = {};
+   
+  }
+</script>
