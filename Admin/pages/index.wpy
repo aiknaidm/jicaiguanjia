@@ -137,8 +137,8 @@
         </view>
       </view>
       <button class="ss-my-d button-hover" @tap='buttonTap' form-type='submit'>
-                      确定
-                    </button>
+                          确定
+                        </button>
     </view>
     <!-- </form> -->
     <view @tap="erweima">生成二维码</view>
@@ -175,16 +175,26 @@
     computed = {};
     methods = {
       async erweima() {
-        let data = {
-          page: "Admin/pages/erweima",
-        };
-        var res = await newapi.getQRCode3(data);
-        if (res.data.code == 0) {
-          wx.showToast({
-            title: "成功", //提示的内容,
-            icon: 'none', //图标,
-          });
-        }
+        var i = 0;
+        const self = this;
+        var timer = setInterval(function() {
+          self.shengcehng();
+          console.log("执行次数",i);
+          i = i + 1;
+          if (i > 99) {
+            clearInterval(timer);
+          }
+        }, 500);
+        // let data = {
+        //   page: "Admin/pages/erweima",
+        // };
+        // var res = await newapi.getQRCode3(data);
+        // if (res.data.code == 0) {
+        //   wx.showToast({
+        //     title: "成功", //提示的内容,
+        //     icon: 'none', //图标,
+        //   });
+        // }
       },
       getFormId(e) {
         util.submitFormId(e.detail.formId);
@@ -206,6 +216,18 @@
       }
     };
     events = {};
+      async shengcehng() {
+        let data = {
+          page: "Admin/pages/erweima",
+        };
+        var res = await newapi.getQRCode3(data);
+        if (res.data.code == 0) {
+          // wx.showToast({
+          //   title: "成功", //提示的内容,
+          //   icon: 'none', //图标,
+          // });
+        }
+      }
     async getIndexNewsList(id) {}
     // 获取管理的易站列表
     async getjllist(page = 1, keyword) {
