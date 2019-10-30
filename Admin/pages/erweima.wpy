@@ -84,7 +84,7 @@
   import util from '../../utils/index';
   export default class newslist extends wepy.page {
     config = {
-      navigationBarTitleText: '吉采一站购'
+      navigationBarTitleText: '装饰材料一站购'
     };
     components = {};
     data = {
@@ -92,13 +92,20 @@
       suppliers_id: 0,
       sales_id: 0,
       qr_sn: 0,
+      is_click: false
     };
     computed = {};
     methods = {
       toshop() {
+        if(this.is_click){
+          return;
+        }
+        this.is_click = true;
+        this.$apply();
         var appId = "wx87bfbcfe887faf4d";
         var path = '/pages/home?suppliers_id=' + this.suppliers_id + '&sales_id=' + this.sales_id;
         console.log(appId, path);
+        var that = this;
         wx.navigateToMiniProgram({
           appId,
           path,
@@ -109,6 +116,10 @@
           // envVersion: 'trial',
           success(res) {
             // 打开成功
+          },
+          complete(res) {
+            that.is_click = false;
+            that.$apply();
           }
         });
       },
