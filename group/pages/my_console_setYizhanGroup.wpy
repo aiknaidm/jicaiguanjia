@@ -132,7 +132,7 @@
 </style>
 <template>
     <view class='container'>
-        <view class="banner-add" @tap="addGroup">添加分组</view>
+        <!-- <view class="banner-add" @tap="addGroup">添加分组</view> -->
         <block>
             <view class="banner-list">
                 <view class="close">
@@ -155,12 +155,6 @@
                     <view class="section" wx:for="{{item_group.users}}" wx:for-index="index_users" wx:for-item="item_users">
                         <view class="goods-name" @longtap.stop="delUsers({{index_group}},{{index_users}})">
                             <image src="{{item_users.avatar}}" /> {{item_users.user_name}} </view>
-                    </view>
-                    <view class="section" @tap="selectGoods({{index_group}})">
-                        <view class="banner-name">
-                            禁止用户查看商品：
-                        </view>
-                        <view class="banner-del">添加商品</view>
                     </view>
                     <view class="section" wx:for="{{item_group.goods}}" wx:for-index="index_goods" wx:for-item="item_goods">
                         <view class="goods-name" @longtap.stop="delGoods({{index_group}},{{index_goods}})">
@@ -231,7 +225,7 @@
                 }
             },
             async save() {
-                newapi.group_add({
+                newapi.group1_add({
                     group: this.group,
                     suppliers_id: this.suppliers_id
                 }).then(res => {
@@ -241,16 +235,10 @@
                         util.showToast("保存成功")
                 })
             },
-            selectGoods(y) {
-                this.y = y;
-                wx.navigateTo({
-                    url: '/YizhanConsolePages/brand/goodsList?pname=group'
-                });
-            },
             selectUsers(y) {
                 this.y = y;
                 wx.navigateTo({
-                    url: '/YizhanConsolePages/brand/userList?pname=group'
+                    url: '/YizhanConsolePages/brand/userList?pname=yzgroup'
                 });
             },
             addGroup() {
@@ -270,7 +258,7 @@
             this.getGroups();
         }
         getGroups() {
-            newapi.group_list({
+            newapi.group1_list({
                 suppliers_id: this.suppliers_id
             }).then(res => {
                 var l_group = res.data.data;

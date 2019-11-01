@@ -209,14 +209,37 @@
         } else {
           this.group_id = 0;
         }
+        let data = {
+          suppliers_id: this.suppliers_id,
+          keyword: this.keyword,
+          // shenhe: 1,
+          page: this.page,
+          group_id: this.group_id
+        }
+        var res = await newapi.yhlb_new(data);
+      } else if (this.pname == 'yzgroup') {
+        var parent = this.$parent.$pages["/group/pages/my_console_setYizhanGroup"]
+        var y = parent.y
+        this.chooseUsersList = parent.group[y].users;
+        if (parent.group[y].group_id) {
+          this.group_id = parent.group[y].group_id;
+        } else {
+          this.group_id = 0;
+        }
+        let data = {
+          suppliers_id: this.suppliers_id,
+          keyword: this.keyword,
+          // shenhe: 1,
+          page: this.page,
+          group1_id: this.group_id
+        }
+        var res = await newapi.yhlb_new(data);
+      } else {
+        this.usersList = [];
+        this.$apply();
+        util.hideLoading();
+        return;
       }
-      let data = {
-        suppliers_id: this.suppliers_id,
-        // shenhe: 1,
-        page: this.page,
-        group_id: this.group_id
-      }
-      var res = await newapi.yhlb_new(data);
       var datas = res.data.data.data
       for (var i = 0; i < this.chooseUsersList.length; i++) {
         for (var j = 0; j < datas.length; j++) {
