@@ -3,7 +3,7 @@
 </style>
 <template>
   <view class='container'>
-    <goodsList @toChooseTap.user="toChooseTap" :type.sync="type"></goodsList>
+    <goodsList @toChooseTap.user="toChooseTap" @searchTap.user="searchTap" :list.sync="list" :type.sync="type"></goodsList>
   </view>
 </template>
 
@@ -31,27 +31,71 @@
     };
     computed = {};
     methods = {
+      searchTap(val){
+         this.initdata.page = 1;
+        this.initdata.keyword = val;
+        this.getShopList(this.initdata);
+      },
       toChooseTap(item) {
         var parent = this.$parent.$pages[
-            '/ConsolePages/pages/gift/my_console_gift'
-          ]
+          '/ConsolePages/pages/gift/my_console_gift'
+        ]
         if (this.type == "gou") {
-          
-          parent.choose_good=item
-        }else{
-  parent.choose_gift[this.index]=item
+          parent.choose_good = item
+        } else {
+          parent.choose_gift[this.index] = item
         }
-        
-    wx.navigateBack({
-      delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
-    });
-    console.log("parent.choose_good_name",item,item.goods_name,parent)
+        wx.navigateBack({
+          delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+        });
+        console.log("parent.choose_good_name", item, item.goods_name, parent)
       },
     }
-    onLoad(option) {
+    async onLoad(option) {
       this.type = option.type
       this.index = option.index
-      console.log("option",option)
+      this.suppliers_id = this.$parent.globalData.suppliers_id ?
+        this.$parent.globalData.suppliers_id :
+        (await this.$parent.getYizhanInfo()).suppliers_id;
+      this.initdata = this.initData();
+      this.getShopList(this.initdata);
+    }
+    onReachBottom() {
+      console.log("1111111111")
+      if (this.isMoreData) {
+        util.showLoading();
+        this.initdata.page = this.initdata.page + 1;
+        this.getShopList(this.initdata);
+      }
+    }
+    initData() {
+      var data = {
+        keyword: '',
+        page: 1,
+        suppliers_id: this.suppliers_id
+      };
+      return data;
+    }
+    async getShopList(data) {
+      if (!this.suppliers_id) {
+        util.showToast('获取店铺信息失败，请稍后再试');
+      }
+      util.showLoading();
+      let res = await newapi.search(data);
+      wx.hideLoading();
+      if (res.data.code == 0) {
+        if (this.initdata.page == 1) this.list = res.data.data;
+        else this.list.push(...res.data.data);
+        if (res.data.data.length < 10) {
+          this.isMoreData = false;
+        }
+        console.log(this.list);
+        this.$apply();
+      } else {
+        wx.navigateBack({
+          delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+        });
+      }
     }
   }
 </script>

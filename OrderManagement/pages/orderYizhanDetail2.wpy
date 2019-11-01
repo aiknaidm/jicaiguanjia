@@ -49,6 +49,19 @@
                   </view>
                 </view>
               </view>
+                <view class="a-goods gift-goods" wx:for="{{item.gift}}" wx:key="index">
+            <view class="img-box">
+              <image src="{{item.original_img?item.original_img:item.original_img1}}" class="img" />
+            </view>
+            <view class="text-box">
+              <view class="arow01">
+                <view class="goods-name">{{item.goods_name}}<text wx:if="{{item.hdky}}">可用会员卡</text></view>
+              </view>
+              <view class="arow02">
+                <view class="goods-num">x {{item.goods_num}}</view>
+              </view>
+            </view>
+          </view>
             </block>
         </view>
       </orderDetail>

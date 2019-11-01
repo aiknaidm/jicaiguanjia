@@ -10,7 +10,7 @@
         background-color: #fff;
         border-bottom: 6rpx solid #eee;
         /* justify-content: space-between;
-                                                                           */
+                                                                               */
     }
     .gray {
         color: gray;
@@ -69,6 +69,7 @@
         border-radius: 15rpx;
         margin-top: 80rpx;
         margin-bottom: 30rpx;
+        position: relative;
     }
     .promotion-content-box .icon {
         width: 100rpx;
@@ -324,6 +325,28 @@
         line-height: 80rpx;
         background-color: #f9f9f9;
     }
+    .add-gift {
+        text-align: center;
+        width: 240rpx;
+        margin: auto;
+        padding: 10rpx 0;
+        background: #e50012;
+        color: #fff;
+        border-radius: 5rpx;
+        margin-bottom: 20rpx;
+    }
+    .close {
+        width: 50rpx;
+        height: 50rpx;
+        text-align: center;
+        line-height: 50rpx;
+        border-radius: 50%;
+        background: #e50012;
+        color: #fff;
+        position: absolute;
+        right: -25rpx;
+        top: -25rpx;
+    }
 </style>
 <template>
     <!--pages/my/my-hy/my-promotion-add/index.wxml-->
@@ -339,29 +362,26 @@
                 <view class='promotion-content-box'>
                     <view class='icon'>购</view>
                     <view class='name'>
-                        选择商品：<input placeholder='请选择活动优惠商品' disabled='true' bindtap="togoodsList('gou')" value='{{choose_good.goods_name}}'/>
+                        选择商品：<input placeholder='请选择活动优惠商品' disabled='true' bindtap="togoodsList('gou')" value='{{choose_good.goods_name}}' />
                     </view>
-                 
                     <view class='name'>
-                        数量：<input placeholder='请填写数量' type="number"  name="number"/>
+                        数量：<input placeholder='请填写数量' type="number" name="number" />
                     </view>
-                  
                 </view>
                 <view class='promotion-content-box' wx:for="{{choose_gift}}" wx:key="index">
                     <view class='icon'>赠</view>
                     <view class='name'>
-                        选择商品：<input placeholder='请选择活动优惠商品' disabled='true' bindtap="togoodsList('zeng',{{index}})" value='{{item.goods_name}}'/>
+                        选择商品：<input placeholder='请选择活动优惠商品' disabled='true' bindtap="togoodsList('zeng',{{index}})" value='{{item.goods_name}}' />
                     </view>
                     <view class='name'>
-                        新商品名：<input placeholder='请填写新商品名' value=''  @input="goodNameChange({{index}})"/>
+                        新商品名：<input placeholder='请填写新商品名' value='' @input="goodNameChange({{index}})" />
                     </view>
                     <view class='name'>
-                        数量：<input placeholder='请填写数量'  type="number" @input="groupNumChange({{index}})"/>
+                        数量：<input placeholder='请填写数量' type="number" @input="groupNumChange({{index}})" />
                     </view>
-                  
-                 
+                    <view class="close" @tap="delGift({{index}})">x</view>
                 </view>
-                <view @tap="addGift">添加赠品</view>
+                <view @tap="addGift" class="add-gift">添加赠品</view>
             </view>
             <text class='title'>时间设置</text>
             <view class='promotion-time'>
@@ -394,14 +414,14 @@
                     <view class='content'>
                         <view class='left' catchtap="touseList({{item}})">
                             <view class='moneyBox'>
-                                <view class='moneycancle'>￥{{item.pt_price}}</view>
-                                <view class="free">{{item.group_num}}件成团，已拼{{item.salenum}}件</view>
+                                <view class='moneycancle'>活动商品：{{item.goods_name}}</view>
+                                <!-- <view class="free">{{item.group_num}}件成团，已拼{{item.salenum}}件</view> -->
                             </view>
-                            <view class='txt txt2'>零售价：{{item.shop_price}}</view>
-                            <view class='txt txt2'>活动商品：{{item.goods_name}}</view>
+                            <!-- <view class='txt txt2'>零售价：{{item.shop_price}}</view>
+                                <view class='txt txt2'>活动商品：{{item.goods_name}}</view> -->
                         </view>
                         <view class='text'>
-                            <view class='btn active ' catchtap="{{item.is_finished == 1?'':'cancleTap'}}" data-pt_id='{{item.pt_id}}'>已结束
+                            <view class='btn active ' catchtap="{{item.is_finished == 1?'':'cancleTap'}}" data-gift_id='{{item.gift_id}}'>已结束
                             </view>
                         </view>
                     </view>
@@ -412,23 +432,23 @@
                     <view class='content'>
                         <view class='left' catchtap="touseList({{item}})">
                             <view class='moneyBox'>
-                                <view class='moneycancle'>￥{{item.pt_price}}</view>
-                                <view class="free">{{item.group_num}}件成团，已拼{{item.salenum}}件</view>
+                                <view class='moneycancle'>活动商品：{{item.goods_name}}</view>
                             </view>
-                            <view class='txt txt2'>零售价：{{item.shop_price}}</view>
-                            <view class='txt txt2'>活动商品：{{item.goods_name}}</view>
+                            <!-- <view class='txt txt2'>零售价：{{item.shop_price}}</view>
+                                <view class='txt txt2'>活动商品：{{item.goods_name}}</view> -->
                         </view>
-                        <view class='text' wx:if="{{item.salenum>=item.group_num}}" >
-                            <view class='btn active '>
-                                已成团
+                        <!-- <view class='text' wx:if="{{item.salenum>=item.group_num}}" >
+                                <view class='btn active '>
+                                    已成团
+                                </view>
                             </view>
-                        </view>
-                        <view class='text' wx:else >
-                            <view class='btn active '>
-                                进行中
-                            </view>
-                            <view class='btn active ' catchtap="{{item.is_finished == 1?'':'cancleTap'}}" data-pt_id='{{item.pt_id}}'>结束活动
-                            </view>
+                            <view class='text' wx:else >
+                                <view class='btn active '>
+                                    进行中
+                                </view>
+                                
+                            </view> -->
+                        <view class='btn active ' catchtap="{{item.is_finished == 1?'':'cancleTap'}}" data-gift_id='{{item.gift_id}}'>结束活动
                         </view>
                     </view>
                     <view class='time'>{{item.start_time_t}} 00:00:00——{{item.end_time_t}} 23:59:59
@@ -437,13 +457,13 @@
             </view>
         </view>
         <!-- <view class='' wx:if="{{currentType==2}}">
-                    <form bindsubmit='submitTap'>
-                        <view class='textarea'>
-                            <textarea placeholder='请输入会员活动规则' name="rules" value='{{rules}}'></textarea>
-                            <button class='btn' formType="submit">上传规则</button>
-                        </view>
-                    </form>
-                </view> -->
+                        <form bindsubmit='submitTap'>
+                            <view class='textarea'>
+                                <textarea placeholder='请输入会员活动规则' name="rules" value='{{rules}}'></textarea>
+                                <button class='btn' formType="submit">上传规则</button>
+                            </view>
+                        </form>
+                    </view> -->
     </view>
 </template>
 
@@ -475,61 +495,62 @@
             activitylist: [],
             rules: '',
             choose_good_id: 0,
-            choose_good:'',
-            choose_gift:[],
-            choose_user_id:0,
-            choose_user_name:'',
-            choose_properties:[],
-            pt_price:0,
-            group_num:0,
-            goods_name_new:'',
-            shop_price:0.00
+            choose_good: '',
+            choose_gift: [],
+            choose_user_id: 0,
+            choose_user_name: '',
+            choose_properties: [],
+            pt_price: 0,
+            group_num: 0,
+            goods_name_new: '',
+            shop_price: 0.00
         };
         computed = {};
         methods = {
-            addGift(){
+            delGift(index) {
+                this.choose_gift.splice(index, 1)
+            },
+            addGift() {
                 this.choose_gift.push({
-
                 })
             },
             ptPriceChange(e) {
-              this.pt_price = e.detail.value;
+                this.pt_price = e.detail.value;
             },
-            groupNumChange(index,e) {
-              this.choose_gift[index].goods_change_number = e.detail.value;
+            groupNumChange(index, e) {
+                console.log(" e.detail.value", e.detail.value)
+                this.choose_gift[index].goods_num = e.detail.value;
             },
-            goodNameChange(index,e) {
-              this.choose_gift[index].goods_change_name = e.detail.value;
-             
+            goodNameChange(index, e) {
+                this.choose_gift[index].goods_change_name = e.detail.value;
             },
-            togoodsList(type,index) {
-             index=type=="gou"?'':index
+            togoodsList(type, index) {
+                index = type == "gou" ? '' : index
                 wx.navigateTo({
-                    url: 'my_console_gift_goodslist?type='+type+'&index='+index,
+                    url: 'my_console_gift_goodslist?type=' + type + '&index=' + index,
                 })
             },
-          
             touseList(item) {
-                var pt_id = item.pt_id;
+                var gift_id = item.gift_id;
                 var order_status = 0;
-                if(item.is_finished && item.salenum<item.group_num){
-                  order_status = 3;
-                }else if(item.is_finished && item.salenum>=item.group_num){
-                  order_status = 2;
-                }else if(item.salenum>=item.group_num){
-                  order_status = 1;
+                if (item.is_finished && item.salenum < item.group_num) {
+                    order_status = 3;
+                } else if (item.is_finished && item.salenum >= item.group_num) {
+                    order_status = 2;
+                } else if (item.salenum >= item.group_num) {
+                    order_status = 1;
                 }
                 wx.navigateTo({
-                    url: 'orderList?pt_id=' + pt_id +'&order_status=' + order_status
+                    url: 'orderList?gift_id=' + gift_id + '&order_status=' + order_status
                 })
             },
             //终止活动
             async cancleTap(e) {
                 var that = this;
-                var pt_id = e.currentTarget.dataset.pt_id;
+                var gift_id = e.currentTarget.dataset.gift_id;
                 let mRes = await util.showModalBig('终止当前活动？');
                 if (mRes.confirm) {
-                    that.cancleActivity(pt_id);
+                    that.cancleActivity(gift_id);
                 }
             },
             statusTap(index) {
@@ -549,19 +570,47 @@
             //表单数据提交
             async formSubmit(e) {
                 var that = this;
-                
-               console.log("e",e.detail.value)
-               var number=e.detail.value
+                var number = e.detail.value.number
+                console.log("e", e.detail.value)
+                if (this.choose_good == "" || this.choose_good.goods_name == "") {
+                    util.showToast("请选择商品")
+                    return
+                }
+                if (number == "") {
+                    util.showToast("请填写商品数量")
+                    return
+                }
+                if (this.choose_gift.length == 0) {
+                    util.showToast("赠品不能为空")
+                    return
+                }
+                for (var i = 0; i < this.choose_gift.length; i++) {
+                    var item = this.choose_gift[i]
+                    if (!item.goods_name || item.goods_name == '') {
+                        util.showToast("赠品名称不能为空")
+                        return
+                    }
+                    if (!item.goods_change_name || item.goods_change_name == '') {
+                        util.showToast("赠品新名称不能为空")
+                        return
+                    }
+                    if (item.goods_num == '' || item.goods_num < 0) {
+                        util.showToast("赠品数量不能小于零")
+                        return
+                    }
+                }
                 //获取bgid,然后网络提交
                 let data = {
                     suppliers_id: this.suppliers_id,
                     goods_id: that.choose_good.goods_id,
-                    // goods_name: that.choose_good.goods_name,
-                    goods:this.choose_gift,
+                    original_img: that.choose_good.original_img != '' ? that.choose_good.original_img : that.choose_good.original_img1,
+                    goods_name: that.choose_good.goods_name,
+                    goods: this.choose_gift,
                     start_time: that.date,
                     end_time: that.date2,
+                    goods_num: number
                 };
-                console.log("data",data)
+                console.log("data", data)
                 // return
                 let res = await newapi.gifts_add(data);
                 if (res.data.code == 0) {
@@ -575,12 +624,12 @@
         };
         events = {};
         // 终止活动
-        async cancleActivity(pt_id) {
+        async cancleActivity(gift_id) {
             var that = this;
             let data = {
-                pt_id: pt_id
+                gift_id
             };
-            await newapi.pintuan_stop(data);
+            await newapi.gifts_stop(data);
             that.getActivityList();
         }
         //已添加的活动列表

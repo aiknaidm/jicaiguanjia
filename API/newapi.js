@@ -195,6 +195,7 @@ const newapi = {
     salesman_suppliers: (data) => fetch(`${host_chk}/salesman_suppliers`, 'GET', data),
     gifts_add: (data) => fetch(`${host_chk}/gifts_add`, 'POST', data),
     gifts_list: (data) => fetch(`${host_chk}/gifts_list`, 'POST', data),
+    gifts_stop: (data) => fetch(`${host_chk}/gifts_stop`, 'POST', data),
 
 
 

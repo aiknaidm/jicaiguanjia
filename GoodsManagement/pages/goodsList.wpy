@@ -592,7 +592,7 @@ display: inline-block;
     <view class="total">
         商品总数：{{total}}
       </view>
-   <!-- <text bindtap="fuzhi" class="to-copy" >复制到黑河</text> -->
+   <text bindtap="fuzhi" class="to-copy" >复制到五常</text>
     <view class='search-title'>
        <view @tap="statusTap3({{index}})" class="status-label {{index == currentType ? 'active' : ''}} {{isclick?'down':'up'}}" wx:for-items="{{statusType2}}" wx:key="{{index}}" data-index="{{index}}" data-name="{{item.name}}">
         <view class='border'>{{item}}
@@ -797,7 +797,7 @@ display: inline-block;
         console.log("list",list,list.toString())
         util.showLoading("加载中");
           newapi.copy_goods_sel({base_supp_id :523,
-          suppliers_id: 501,
+          suppliers_id: 832,
           goods_id:list.toString()}).then(res=>{
             util.hideLoading();
           if(res.data.code==0)

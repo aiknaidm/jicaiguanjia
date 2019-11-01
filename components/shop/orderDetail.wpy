@@ -418,6 +418,14 @@
   .fuwufei.active{
     max-height : 1000px;
   }
+  .goods-list .a-goods.gift-goods {
+    background: #fff;
+  }
+  .goods-list .a-goods.gift-goods .img-box,
+  .goods-list .gift-goods .img-box .img {
+    width: 100rpx;
+    height: 100rpx;
+  }
 </style>
 <template>
   <view>
@@ -506,6 +514,7 @@
                 </view>
               </view>
             </view>
+          
           </block>
         </form>
       </slot>

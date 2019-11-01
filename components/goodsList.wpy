@@ -514,65 +514,25 @@ overflow: hidden;
         // wx.navigateBack();
       },
       searchTap(val) {
-        console.log("val", val);
+         this.$emit("searchTap",val)
+       
         // if (this.ssButton == "确定") {
-        this.initdata.page = 1;
-        this.initdata.keyword = val;
-        this.getShopList(this.initdata);
+       
         // } else {
         //   //wx.navigateBack();
         // }
       },
     };
     events = {};
-    initData() {
-      var data = {
-        keyword: '',
-        page: 1,
-        suppliers_id: this.suppliers_id
-      };
-      return data;
-    }
+    
     async onLoad(option) {
       var that = this;
       this.setData({
         ssButton: "确定",
         buttonClass: "queding",
       })
-      this.suppliers_id = this.$parent.$parent.globalData.suppliers_id ?
-        this.$parent.$parent.globalData.suppliers_id :
-        (await this.$parent.$parent.getYizhanInfo()).suppliers_id;
-      this.initdata = this.initData();
-
-      this.getShopList(this.initdata);
+      
     }
-    onReachBottom() {
-      if (this.isMoreData) {
-        util.showLoading();
-        this.initdata.page = this.initdata.page + 1;
-        this.getShopList(this.initdata);
-      }
-    }
-    async getShopList(data) {
-      if (!this.suppliers_id) {
-        util.showToast('获取店铺信息失败，请稍后再试');
-      }
-      util.showLoading();
-      let res = await newapi.search(data);
-      wx.hideLoading();
-      if (res.data.code == 0) {
-        if (this.initdata.page == 1) this.list = res.data.data;
-        else this.list.push(...res.data.data);
-        if (res.data.data.length < 10) {
-          this.isMoreData = false;
-        }
-        console.log(this.list);
-        this.$apply();
-      } else {
-        wx.navigateBack({
-          delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
-        });
-      }
-    }
+   
   }
 </script>
