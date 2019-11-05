@@ -242,7 +242,7 @@
             selectGoods(y) {
                 this.y = y;
                 wx.navigateTo({
-                    url: '/brand/goodsList?pname=activity'
+                    url: '/YizhanConsolePages/brand/goodsList?pname=activity'
                 });
             },
             addActivity() {
