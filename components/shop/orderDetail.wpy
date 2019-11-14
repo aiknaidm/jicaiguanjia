@@ -477,6 +477,9 @@
               <text class="iconfont icon-icon-"></text>
             </view>
             <view class="right-box">
+              <view class="name-tel" wx:if="{{orderDetail.company}}">
+                <view>公司名称：{{orderDetail.company}}</view>
+              </view>
               <view class="name-tel">
                 <view>收货人：{{orderDetail.consignee}}</view>
                 <view>{{orderDetail.mobile}}</view>

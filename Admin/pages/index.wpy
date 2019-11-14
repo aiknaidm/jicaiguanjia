@@ -184,7 +184,7 @@
           if (i > 99) {
             clearInterval(timer);
           }
-        }, 500);
+        }, 800);
         // let data = {
         //   page: "Admin/pages/erweima",
         // };

@@ -30,7 +30,11 @@
         </view>
         <view class="section">
           <view class="name">配送员信息</view>
-          <input class="input" name="info" placeholder="配送员姓名电话" disabled="{{orderDetail.order_status!=2 || orderDetail.shipping_status!=0}}" />
+          <input class="input" name="info" placeholder="配送员姓名电话" value="{{orderDetail.peisongyuan}}" disabled="{{orderDetail.order_status!=2 || orderDetail.shipping_status!=0}}" />
+        </view>
+        <view class="section">
+          <view class="name">备注</view>
+          <input class="input" name="remark" placeholder="请填写备注" value="{{orderDetail.remark}}" disabled="{{orderDetail.order_status!=2 || orderDetail.shipping_status!=0}}" />
         </view>
         <!-- <view class="section">
                   <view class="name">配送员电话</view>
@@ -93,6 +97,7 @@
         var fahuo = e.detail.value.fahuo;
         var yujisongda = e.detail.value.time;
         var peisongyuan = e.detail.value.info;
+        var remark = e.detail.value.remark;
         var order_id = this.id
         let mRes = await util.showModalBig('你确定要发货吗');
         if (mRes.confirm) {
@@ -103,6 +108,7 @@
             yujisongda,
             peisongyuan,
             fahuodan,
+            remark,
             order_id
           }
           this.fahuo(data);

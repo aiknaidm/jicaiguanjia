@@ -227,6 +227,9 @@ button.ss-my-d {
         <view class='name' >备注：{{item.pay_note}}</view>
         <!-- <view class="total-price">{{item.pay_id==2?"微信昵称：":"银行卡号："}}{{item.pay_note}}</view> -->
       </view>
+			 <view class="price-box" wx:if="{{item.company}}">
+        <view class='name' >公司名称：{{item.company}}</view>
+      </view>
       <view class="address-box">
         <text class='iconfont icon-icon-'></text>
         <view @tap="textPaste" data-con="{{item.region}} {{item.address}}">{{item.region}} {{item.address}}</view>
