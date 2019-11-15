@@ -374,7 +374,7 @@
                         选择商品：<input placeholder='请选择活动优惠商品' disabled='true' bindtap="togoodsList('zeng',{{index}})" value='{{item.goods_name}}' />
                     </view>
                     <view class='name'>
-                        新商品名：<input placeholder='请填写新商品名' value='' @input="goodNameChange({{index}})" />
+                        新商品名：<input placeholder='请填写新商品名' value='{{item.goods_change_name}}' @input="goodNameChange({{index}})" />
                     </view>
                     <view class='name'>
                         数量：<input placeholder='请填写数量' type="number" @input="groupNumChange({{index}})" />

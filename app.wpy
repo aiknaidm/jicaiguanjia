@@ -179,7 +179,8 @@
             'pages/coupon/goodsList',
             'pages/coupon/couponUseList',
             'pages/gift/my_console_gift',
-            'pages/gift/my_console_gift_goodslist'
+            'pages/gift/my_console_gift_goodslist',
+            'pages/my_setSalesmanDetail'
           ]
         },
         {

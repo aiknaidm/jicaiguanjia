@@ -44,6 +44,7 @@
           parent.choose_good = item
         } else {
           parent.choose_gift[this.index] = item
+          parent.choose_gift[this.index].goods_change_name = item.goods_name
         }
         wx.navigateBack({
           delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
@@ -61,7 +62,7 @@
       this.getShopList(this.initdata);
     }
     onReachBottom() {
-      console.log("1111111111")
+     
       if (this.isMoreData) {
         util.showLoading();
         this.initdata.page = this.initdata.page + 1;

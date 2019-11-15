@@ -452,6 +452,7 @@ overflow: hidden;
               <view class="goods-title" data-id="{{item.goods_id}}">
                 {{item.goods_name}}
                 <text wx:if="{{item.hdky==1}}">支持会员卡</text>
+                <text wx:if="{{item.is_delete==1}}">已下架</text>
               </view>
               <view class='goods-num'>
                 <text class='red'>价格：￥{{item.shop_price}}</text>
