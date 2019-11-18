@@ -199,6 +199,7 @@ const newapi = {
     gifts_add: (data) => fetch(`${host_chk}/gifts_add`, 'POST', data),
     gifts_list: (data) => fetch(`${host_chk}/gifts_list`, 'POST', data),
     gifts_stop: (data) => fetch(`${host_chk}/gifts_stop`, 'POST', data),
+    Salesman_detail: (data) => fetch(`${host_chk}/Salesman_detail`, 'get', data),
 
 
 

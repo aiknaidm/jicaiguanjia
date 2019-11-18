@@ -71,7 +71,7 @@
 <view class='container' bindtap='hiddenclose'>
 <view class='list'>
  <block wx:for="{{adminList}}" wx:key="index">
-    <view class='headPortrait '>
+    <view class='headPortrait ' @tap="todetail({{item}})">
       <view class='img'>
         <image src="{{item.avatar?item.avatar:'https://lmbge.com/upload/avatar/weixin3.png'}}" data-user_id='{{item.id}}' mode='aspectFill'/>
     
@@ -111,6 +111,9 @@ export default class my_setSalesman extends wepy.page {
   computed = {};
   components = {};
   methods = {
+    todetail(item){
+      wx.navigateTo({ url: 'my_setSalesmanDetail?id='+item.id });
+    },
     async delSalesman(e) {
       let user_id = e.currentTarget.dataset.user_id;
       let suppliers_id = this.$parent.globalData.suppliers_id;

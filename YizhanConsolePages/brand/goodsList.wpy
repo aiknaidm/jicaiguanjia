@@ -210,9 +210,10 @@
       var res = await newapi.search(data);
       var datas = res.data.data
       if (this.brand_id) {
-        var parent = this.$parent.$pages["/brand/setBrand"]
+        var parent = this.$parent.$pages["/YizhanConsolePages/brand/setBrand"]
         var x = parent.x
         var y = parent.y
+        // console.log(parent.brands);
         this.chooseGoodsList = parent.brands[x].brand[y].goods;
       } else if (this.pname == 'activity'){
         var parent = this.$parent.$pages["/ConsolePages/pages/my_console_setActivity"]
