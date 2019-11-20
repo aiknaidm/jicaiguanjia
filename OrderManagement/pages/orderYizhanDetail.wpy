@@ -270,6 +270,14 @@
         var yujisongda = e.detail.value.time;
         var peisongyuan = e.detail.value.info;
         var order_id = this.id
+      
+        for(var i=0;i<this.goodsMap.length;i++){
+          var item=this.goodsMap[i]
+if(item.cost_price==0){
+  util.showModal('请填写成本价');
+  return
+}
+        }
         let mRes = await util.showModalBig('你确定要发货吗');
         if (mRes.confirm) {
           var data = {

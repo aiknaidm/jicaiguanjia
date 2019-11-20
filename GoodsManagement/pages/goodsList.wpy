@@ -535,7 +535,7 @@
     background-color: #fff;
     border-radius: 90px;
     padding: 10rpx 20rpx;
-    margin-right: 40rpx;
+    margin-right: 20rpx;
     font-size: 28rpx;
   }
   .jiesuan-box .to-pay-btn.no-select {
@@ -592,7 +592,10 @@ display: inline-block;
     <view class="total">
         商品总数：{{total}}
       </view>
-   <text bindtap="fuzhi" class="to-copy" wx:if="{{suppliers_id==76}}">复制到尚志</text>
+   <text bindtap="fuzhi('76','523')" class="to-copy" wx:if="{{suppliers_id==76}}">企业购复制到尚志</text>
+   <text bindtap="fuzhi('523','501')" class="to-copy" wx:if="{{suppliers_id==523}}">尚志复制到黑河</text>
+   <text bindtap="fuzhi('523','538')" class="to-copy" wx:if="{{suppliers_id==523}}">尚志复制到延寿</text>
+   <text bindtap="fuzhi('523','832')" class="to-copy" wx:if="{{suppliers_id==523}}">尚志复制到五常</text>
     <view class='search-title'>
        <view @tap="statusTap3({{index}})" class="status-label {{index == currentType ? 'active' : ''}} {{isclick?'down':'up'}}" wx:for-items="{{statusType2}}" wx:key="{{index}}" data-index="{{index}}" data-name="{{item.name}}">
         <view class='border'>{{item}}
@@ -778,9 +781,9 @@ display: inline-block;
         this.ishowxiajialist=false;
         this.statusType2[0]=this.xiajialist[index+1]
       },
-      fuzhi(){
-        if(this.suppliers_id!=76){
-           util.showToast("只能复制企业购")
+      fuzhi(base_supp_id,suppliers_id){
+        if(this.suppliers_id!=base_supp_id){
+           util.showToast("当前不能复制")
           return
         }
         var list=[]
@@ -797,8 +800,9 @@ display: inline-block;
 
         console.log("list",list,list.toString())
         util.showLoading("加载中");
-          newapi.copy_goods_sel({base_supp_id :76,
-          suppliers_id: 523,
+          newapi.copy_goods_sel({
+          base_supp_id,
+          suppliers_id,
           goods_id:list.toString()}).then(res=>{
             util.hideLoading();
           if(res.data.code==0)
