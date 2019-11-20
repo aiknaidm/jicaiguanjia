@@ -219,6 +219,19 @@
     font-size: 26rpx;
     display: inline-block;
   }
+  .quxiao-btn {
+    background: #aaaaaa;
+    border: 1rpx solid #aaaaaa;
+    color: #ffffff;
+    border-radius: 50rpx;
+    width: 164rpx;
+    height: 60rpx;
+    line-height: 60rpx;
+    text-align: center;
+    margin: 20rpx 30rpx 20rpx auto;
+    font-size: 26rpx;
+    display: inline-block;
+  }
   .confirm-btn-quxiao {
     border: 1px solid #ccc;
     color: #333;
@@ -435,6 +448,7 @@
           <slot name="orderStatus">
             <view wx:if="{{orderDetail.order_status==-1}}"></view>
             <view wx:elif="{{orderDetail.order_status==0}}"></view>
+            <view wx:elif="{{orderDetail.order_status==5}}">已取消</view>
             <view wx:elif="{{orderDetail.order_status==1}}" class="order-status-bg">待付款</view>
             <view wx:elif="{{orderDetail.order_status==2&&orderDetail.shipping_status==0}}" class="order-status-bg">待发货</view>
             <view wx:elif="{{orderDetail.order_status==2&&orderDetail.shipping_status==1}}" class="order-status-bg">待收货</view>
@@ -460,6 +474,7 @@
             <view class="right-text">
               <view wx:if="{{orderDetail.order_status==-1}}"></view>
               <view wx:elif="{{orderDetail.order_status==0}}"></view>
+              <view wx:elif="{{orderDetail.order_status==5}}">已取消</view>
               <view wx:elif="{{orderDetail.order_status==1}}" class="order-status-bg">待付款</view>
               <view wx:elif="{{orderDetail.order_status==2&&orderDetail.shipping_status==0}}" class="order-status-bg">待发货</view>
               <view wx:elif="{{orderDetail.order_status==2&&orderDetail.shipping_status==1}}" class="order-status-bg">待收货</view>

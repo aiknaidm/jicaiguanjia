@@ -51,6 +51,7 @@
                 <radio value="0" checked="false" color='red' />否
               </label>
         </radio-group>
+        <button class="quxiao-btn" @tap="cancelorder({{orderDetail.order_id}})" wx:if="{{orderDetail.pay_id==2}}">取消订单</button>
         <button class="confirm-btn" form-type="submit" data-order_id="{{orderDetail.order_id}}">发货</button>
       </view>
     </form>
@@ -83,6 +84,23 @@
     };
     computed = {};
     methods = {
+      async cancelorder(id){
+        let mRes = await util.showModalBig('确定取消订单吗？');
+        if (mRes.confirm) {
+          var data = {
+            id
+          }
+          var res = await newapi.cancelorder(data);
+          this.orderDetail.order_status = 5;
+          var order_status = this.$parent.$pages['/OrderManagement/pages/orderList']
+          .thisindex;
+          this.$parent.$pages['/OrderManagement/pages/orderList'].getOrderList(
+          order_status,
+          1
+          );
+          util.showToast("取消成功");
+        }
+      },
       bindDateChange: function(e) {
         console.log('picker发送选择改变，携带值为', e.detail.value)
         this.time = e.detail.value

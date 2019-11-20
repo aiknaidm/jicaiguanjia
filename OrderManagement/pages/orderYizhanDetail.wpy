@@ -50,7 +50,7 @@
             <block wx:for-items="{{goodsMap}}" wx:key="{{index}}">
               <view class="a-goods" data-id="{{item.goods_id}}">
                 <view>
-                  <checkbox value="{{item.rec_id}}" wx:if="{{orderDetail.order_status==2&&item.suppliers_id==0 }}" />
+                  <checkbox value="{{item.rec_id}}" wx:if="{{orderDetail.order_status==2&&item.suppliers_id==0&&item.cost_price>0 }}" />
                 </view>
                 <view class="img-box">
                   <image src="{{item.goods_imgs}}" class="img" />
