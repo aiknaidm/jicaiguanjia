@@ -1,0 +1,136 @@
+<style lang="less" scoped>
+    page {}
+    .kehu-detail {
+        background: #fff;
+        text-align: center;
+        font-size: 30rpx;
+        padding: 40rpx 0;
+        input,
+        .picker {
+            height: 60rpx;
+            padding: 20rpx;
+            background: #f0f0f0;
+            width: 85%;
+            margin: auto;
+            margin-bottom: 20rpx;
+            text-align: left
+        }
+        .picker {
+            color: #888;
+        }
+    }
+    button {
+        background: #e50012;
+        color: #fff;
+        width: 85%;
+        display: block;
+        margin: auto;
+    }
+</style>
+<template>
+    <view class="kehu-detail">
+        <form @submit="addKehu">
+            <view>
+                <input name="name" placeholder="客户姓名" value="{{item.name}}"></input>
+            </view>
+            <view>
+                <input name="mobile" placeholder="手机号码" value="{{item.mobile}}"></input>
+            </view>
+            <view>
+                <picker class="picker" mode="region" name="city"  bindchange="bindRegionChange" value="{{region}}" custom-item="{{customItem}}">
+                    <view wx:if="{{region.length==0}}">
+                        选择城市
+                    </view>
+                    <view wx:else>
+                        {{region[0]}}-{{region[1]}}-{{region[2]}}
+                    </view>
+                </picker>
+            </view>
+            <button formType="submit">提交</button>
+        </form>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy';
+    import newapi from '../../API/newapi';
+    import util from '../../utils/index';
+    export default class message extends wepy.page {
+        config = {
+            navigationBarTitleText: '编辑客户信息'
+        };
+        components = {};
+        data = {
+            keyword: '',
+            page: 1,
+            isMoreData: true,
+            messageList: [],
+            region: [],
+            item:{}
+        };
+        computed = {};
+        methods = {
+            addKehu(e) {
+                console.log("e", e);
+                var data = e.detail.value
+                data.city=data.city.toString()
+                if(this.item)  data.id=this.item.id
+                var type = this.type
+                if(this.item) 
+                data.suppliers_id = this.suppliers_id
+                newapi.add_kehu(data).then(res => {
+                    console.log("res".res)
+                    if (res.data.code != 0)
+                        util.showToast(res.data.message)
+                    else if (type == 0) {
+                        // add
+                        util.showToast("添加成功")
+                    } else if (type == 1)
+                        // edit
+                        util.showToast("编辑成功")
+                })
+            },
+            bindRegionChange(e) {
+                this.region = e.detail.value
+            }
+        };
+        onLoad(option) {
+            try {
+                    if(option.item) {
+                console.log(option.item)
+                this.item=JSON.parse( option.item )
+                this.region=this.item.city.split(',')
+            this.type=1
+            }else{
+                this.type=0
+            }
+            this.suppliers_id = this.$parent.globalData.suppliers_id
+            } catch (error) {
+                util.showToast("参数错误")
+            }
+        
+        }
+        getMessage() {
+            newapi.slogan_list({
+                keyword: this.keyword,
+                page: this.page
+            }).then(res => {
+                if (this.page == 1) {
+                    this.isMoreData = true;
+                    this.messageList = res.data.data;
+                } else
+                    this.messageList.push(...res.data.data);
+                if (res.data.data.length < 10) this.isMoreData = false;
+                else this.isMoreData = true;
+                this.$apply();
+                wx.hideLoading();
+            });
+        }
+        onReachBottom() {
+            if (this.isMoreData) {
+                util.showLoading();
+                this.page = this.page + 1;
+                this.getMessage();
+            }
+        }
+    }
+</script>

@@ -144,9 +144,9 @@
       console.log("isyizhan",is_yizhan,"isjion",is_join)
       var path;
       if (is_yizhan == 1) {
-        path = '/pages/home?suppliers_id=' + suppliers_id+'&share_suppliers_id='+suppliers_id+'&share_user_id='+userInfo.user_id;
+        path = '/pages/home?suppliers_id=' + suppliers_id+'&share_suppliers_id='+suppliers_id+'&share_user_id='+userInfo.user_id+'&sales_id='+userInfo.user_id;
       }else if(is_join==1){
-        path = '/pages/home?suppliers_id=' + yizhanInfo.yizhan_suppliers_id+'&share_suppliers_id='+suppliers_id+'&share_user_id='+userInfo.user_id;
+        path = '/pages/home?suppliers_id=' + yizhanInfo.yizhan_suppliers_id+'&share_suppliers_id='+suppliers_id+'&share_user_id='+userInfo.user_id+'&sales_id='+userInfo.user_id;
       } else {
         path = '/Shop/pages/index?suppliers_id=' +
           suppliers_id +

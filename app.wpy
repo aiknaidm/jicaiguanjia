@@ -122,7 +122,9 @@
             'pages/orderYizhanDetail',
             'pages/orderYizhanList',
             'pages/orderYizhanDetailShop',
-            'pages/orderYizhanDetail2'
+            'pages/orderYizhanDetail2',
+            'pages/pingjia',
+
           ]
         },
         {
@@ -217,8 +219,11 @@
             'shop/fuwufei',
             'shop/message',
             'yizhan/yizhan-check',
+            'yizhan/yizhan-check2',
+            'yizhan/yizhan-check2-shoplist',
             'yizhan/yizhan-add',
             'yizhan/yizhan-apply',
+            'yizhan/catList',
             'design/design',
             'worker/my_setBanggeInfo',
             'brand/setBrand',
@@ -235,7 +240,9 @@
             'design/my_designerCaseList',
             'design/my_designerCaseDetail',
             'design/my_designerCaseDetailDec',
-            'design/my_designerIntroSet'
+            'design/my_designerIntroSet',
+            'client/clientInfo',
+            'client/clientAdd',
           ]
         },
         {

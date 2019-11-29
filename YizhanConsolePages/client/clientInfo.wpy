@@ -1,0 +1,173 @@
+<style lang="less" scoped>
+    .message-lists {
+        width: 95%;
+        margin: auto;
+        font-size: 30rpx;
+    }
+    .message-list {
+        // width: 90%;
+        position: relative;
+        margin: auto;
+        border-radius: 20rpx;
+        margin-top: 20rpx;
+        background: #fff;
+        padding: 40rpx;
+        position: relative;
+        overflow: hidden;
+        text {
+            display: inline-block;
+            width: 200rpx;
+        }
+        .copy {
+            border: 1px solid #e50012;
+            color: #e50012;
+            text-align: center;
+            padding: 10rpx 0;
+            border-radius: 10rpx;
+            font-size: 28rpx;
+            width: 150rpx;
+            float: right;
+            margin-top: 20rpx; // position: absolute;
+            // top: 40rpx;
+            // right: 40rpx;
+        }
+        .imgs {
+            // width: 100%;
+            // height: 150rpx;
+            overflow: scroll;
+            white-space: nowrap;
+            margin-top: 20rpx;
+            image {
+                width: 60rpx;
+                height: 60rpx;
+                display: inline-block;
+                margin-right: 20rpx;
+            }
+        }
+    }
+    .addShop {
+        width: 100rpx;
+        height: 100rpx;
+        text-align: center;
+        line-height: 100rpx;
+        color: #fff;
+        background: #e50012;
+        position: absolute;
+        bottom: 50rpx;
+        left: 50%;
+        margin-left: -50rpx;
+        border-radius: 50%;
+    }
+    .phone{
+        width: 60rpx;
+        height: 60rpx;
+        position: absolute;
+        bottom: 30rpx;
+        right: 30rpx;
+    }
+</style>
+<template>
+    <view>
+        <search @buttonTap.user="searchTap"></search>
+        <view class="message-lists">
+            <block wx:if="{{kehuList.length>0}}">
+                <view class="message-list" wx:for="{{kehuList}}" wx:key="{{index}}">
+                    <view> 客户姓名：{{item.name}}</view>
+                    <view> 客户手机：{{item.mobile}}</view>
+                    <view> 所在城市：{{item.city}}</view>
+                    <image
+                      src="/images/phone.png"
+                      mode="scaleToFill"
+                      lazy-load="false" class="phone"  @tap.stop="call({{item.id}},{{item.mobile}})">
+                    </image>
+                    <!-- <text class="copy">删除</text> -->
+                </view>
+            </block>
+            <block wx:else>
+                <noOrder></noOrder>
+            </block>
+        </view>
+        </view>
+</template>
+<script>
+    import wepy from 'wepy';
+    import newapi from '../../API/newapi';
+    import util from '../../utils/index';
+    import noOrder from '../../components/noOrder';
+    import search from '../../components/search';
+    export default class message extends wepy.page {
+        config = {
+            navigationBarTitleText: '宣传语'
+        };
+        components = {
+            noOrder,
+            search
+        };
+        data = {
+            keyword: '',
+            page: 1,
+            isMoreData: true,
+            kehuList: []
+        };
+        computed = {};
+        methods = {
+            searchTap(e) {
+                this.keyword = e
+                this.page=1
+                this.getKehu();
+            },
+            call(id,phoneNumber) {
+                //    util.de
+newapi.kehu_panduan({id}).then(res=>{
+    var that=this
+    if(res.data.code==1){
+        util.showToast(res.data.message)
+return
+    }
+      wx.makePhoneCall({
+                    phoneNumber: phoneNumber,//仅为示例，并非真实的电话号码
+                    success:function(res){
+                        console.log(res)
+                            newapi.kehu_log({yizhan_suppliers_id:that.suppliers_id,mobile:phoneNumber})
+                    }
+                })
+})
+              
+            },
+            toDetail(item) {
+                var item = JSON.stringify(item)
+                wx.navigateTo({
+                    url: "/YizhanConsolePages/client/clientAdd?item=" + item
+                });
+            }
+        };
+        onShow() {
+            this.suppliers_id = this.$parent.globalData.suppliers_id
+            this.getKehu();
+        }
+        getKehu() {
+            newapi.kehu_list({
+                keyword: this.keyword,
+                page: this.page,
+                suppliers_id: this.suppliers_id
+            }).then(res => {
+                if (this.page == 1) {
+                    this.isMoreData = true;
+                    this.kehuList = res.data.data.data;
+                } else
+                    this.kehuList.push(...res.data.data.data);
+                if (res.data.data.data.length < 10) this.isMoreData = false;
+                else this.isMoreData = true;
+                this.$apply();
+                wx.hideLoading();
+            });
+        }
+        onReachBottom() {
+            if (this.isMoreData) {
+                util.showLoading();
+                this.page = this.page + 1;
+                this.getKehu();
+            }
+        }
+    }
+</script>

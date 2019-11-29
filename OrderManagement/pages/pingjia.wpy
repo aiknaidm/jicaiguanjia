@@ -1,0 +1,244 @@
+<style lang="less" scope>
+    /* pages/pj/index.wxss */
+    page {
+        background: #fff;
+    }
+    .container {
+        background-color: #fff;
+        font-size: 30rpx;
+    }
+    .goods-list {
+        width: 100%;
+        background-color: #fff;
+    }
+    .goods-list .list-title {
+        font-size: 28rpx;
+        color: #000;
+        padding: 30rpx 0 25rpx 30rpx;
+        border-top: 16rpx solid #f0f0f0;
+        display: flex;
+    }
+    .goods-list .list-title text {
+        color: #e50012;
+        font-size: 45rpx;
+        margin-right: 10rpx;
+    }
+    .goods-list .a-goods {
+        /* width: 720rpx; */
+        /* margin-left: 30rpx; */
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid #eee;
+        padding: 30rpx 30rpx 30rpx 0;
+        background-color: #fff;
+    }
+    .goods-list .a-goods .img-box {
+        width: 160rpx;
+        height: 160rpx;
+        /* overflow: hidden; */
+        margin-right: 20rpx;
+        /* background-color: #d8d8d8; */
+        padding-left: 30rpx;
+    }
+    .goods-list .img-box .img {
+        width: 160rpx;
+        height: 160rpx;
+    }
+    .goods-list .a-goods .text-box {
+        /* width: 510rpx; */
+        display: flex;
+        box-sizing: border-box;
+        padding-top: 10rpx;
+        flex: 10;
+    }
+    .a-goods .text-box .arow02 {
+        font-size: 23rpx;
+        color: #888;
+        width: 150rpx;
+        text-align: right;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .goods-name {
+        text {
+            background: #e50012;
+            color: #fff;
+            padding: 4rpx 8rpx;
+            margin-left: 10rpx;
+            font-size: 20rpx;
+            border-radius: 5rpx;
+            font-weight: 100;
+        }
+    }
+    .a-goods .text-box .arow01 {
+        flex: 1;
+        color: #333;
+        font-size: 30rpx;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .a-goods .text-box .arow02 .goods-price {
+        font-size: 26rpx;
+        color: #000000;
+    }
+    .a-goods .text-box .arow01 .goods-label {
+        font-size: 26rpx;
+        color: #999;
+    }
+    .a-goods .text-box .arow .goods-num {
+        font-size: 26rpx;
+        color: #999;
+    }
+    .pj image {
+        width: 50rpx;
+        height: 50rpx;
+    }
+    .pj image:first-child {
+        margin-left: 40rpx;
+        margin-right: 5rpx;
+    }
+    .pj {
+        padding: 20rpx 30rpx;
+        border-top: 1px solid #eee;
+        display: flex;
+        align-items: center;
+    }
+    .pj-content {
+        border-bottom: 1px solid #eee;
+    }
+    .fabu {
+        text-align: right;
+        padding: 40rpx;
+    }
+    .fabu button {
+        width: 30%;
+        float: right;
+        background-color: #e50012;
+        color: #fff;
+        height: 80rpx;
+        line-height: 80rpx;
+    }
+</style>
+
+<template>
+    <view class='container'>
+        <form bindsubmit="bindSave">
+            <view class="order-pingjia">
+                <view wx:for="{{goodsMap}}" wx:for-index="indexx" wx:key="{{indexx}}">
+                    <view class="goods-list">
+                        <!-- <view class="list-title">商品信息</view> -->
+                        <view class="a-goods" @tap="toGoodDetailsTap({{item.goods_id}})">
+                            <view class="img-box">
+                                <image src="{{item.goods_imgs}}" class="img" />
+                            </view>
+                            <view class="text-box">
+                                <view class="arow01">
+                                    <view class="goods-name">{{item.goods_name}}
+                                        <!-- <text wx:if="{{item.hdky}}">可用会员卡</text> -->
+                                    </view>
+                                    <view class="goods-label">{{item.goods_attr}}</view>
+                                </view>
+                                <view class="arow02">
+                                    <view class="goods-price">¥ {{item.goods_price}}</view>
+                                    <view class="goods-num">x {{item.goods_number}}</view>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                    <view class='pj'>商品评价
+                        <image wx:for-items="12345" wx:for-index="indexy" wx:key="{{indexy}}" wx:for-item="image_item" src="{{datas[indexx].comment_rank-0>indexy-0?'/images/iconfont-xing-active.png':'/images/iconfont-xing.png'}}" @tap='clickStar({{indexx}},{{indexy}})'></image>
+                    </view>
+                    <view class='pj pj-content'>
+                        <textarea name='pingjia' disabled="{{!isEidt}}" value="{{datas[indexx].content}}" @input="contentChange" data-index="{{indexx}}" placeholder='请输入评价'></textarea>
+                    </view>
+                    <view class='fabu' wx:if="{{isEidt}}">
+                        <button type="warn" formType="submit">发表</button>
+                    </view>
+                </view>
+            </view>
+        </form>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy';
+    import newapi from '../../API/newapi';
+    import util from '../../utils/index';
+    export default class details extends wepy.page {
+        config = {
+            navigationBarTitleText: '评价'
+        };
+        components = {
+        };
+        data = {
+            goodsMap: [],
+            star: [],
+            datas:[],
+            isEidt:false
+        };
+        computed = {};
+        methods = {
+            bindSave(){
+newapi.pingjia({pingjia:this.datas}).then(res=>{
+    console.log("res",res)
+    if(res.data.code!=0){
+        util.showToast(res.data.message)
+        return
+    }
+    util.showToast("评价成功");
+    this.$parent.$pages['/Shop/pages/orderList'].getOrderList(5,1);
+    thiswx.navigateBack({
+      delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+    });
+})
+            },
+            contentChange(e){
+                var x= e.currentTarget.dataset.index;
+                console.log(e)
+                this.datas[x].content=e.detail.value
+            },
+            clickStar: function(x, y) {
+                // console.log(imgsrc);
+               if(!this.isEidt){
+                   return
+               }
+                
+                this.datas[x].comment_rank = y + 1
+            },
+        };
+        events = {};
+        onLoad(option) {
+            //  this.initStar();
+            this.getOrderDetail(option.id);
+            if(option.type=="read"){
+                this.isEidt=false
+            }
+        };
+        async getOrderDetail(id) {
+            let data = {
+                order_id:id
+            };
+            let res = await newapi.orderDetail(data);
+            wx.hideLoading();
+            this.orderDetail = res.data.data.orderList;
+            this.goodsMap = res.data.data.goodsMap;
+            var pingjia=res.data.data.pingjia;
+            this.goodsMap.forEach((item, index) => {
+                this.datas[index]={}
+                this.datas[index].comment_rank=pingjia[index].comment_rank
+                this.datas[index].rec_id=item.rec_id
+                this.datas[index].content=pingjia[index].content
+            })
+          console.log("this.datas",pingjia,this.datas)
+            this.$apply();
+        }
+     
+        initStar() {
+            this.star = []
+            for (var i = 0; i < 5; j++) {
+                this.star[i] = "/images/iconfont-xing.png"
+            }
+        }
+    }
+</script>

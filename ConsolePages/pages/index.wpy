@@ -503,6 +503,20 @@
         url: '/ConsolePages/pages/gift/my_console_gift',
         bgcolor: '#10b3b1'
       },
+       {
+        icon: '/images/console/fabushangpin.png',
+        num: 0,
+        display_name: '加盟',
+        url: '/YizhanConsolePages/yizhan/yizhan-check2',
+        bgcolor: '#10b3b1'
+      },
+       {
+        icon: '/images/console/fabushangpin.png',
+        num: 0,
+        display_name: '客户信息',
+        url: '/YizhanConsolePages/client/clientInfo',
+        bgcolor: '#10b3b1'
+      },
       ] ,
       is_designer: true,
       height: 0,

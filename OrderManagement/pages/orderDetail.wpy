@@ -14,6 +14,16 @@
       text-align: left
     }
   }
+  .pingjia{
+text-align: right;
+padding:0 40rpx 40rpx 0; 
+text{
+  font-size: 28rpx;
+  padding: 15rpx 40rpx;
+  border-radius: 50rpx;
+border: 1px solid #ddd;
+}
+  }
 </style>
 <template>
   <view class="container">
@@ -55,6 +65,9 @@
         <button class="confirm-btn" form-type="submit" data-order_id="{{orderDetail.order_id}}">发货</button>
       </view>
     </form>
+    <view class="pingjia" @tap="toPingjia({{orderDetail.order_id}})" wx:if="{{pingjia.length>0}}">
+     <text> 查看评论</text>
+    </view>
     <popupbox :popupdata.sync="popupdata" @formSubmit.user="formSubmit"></popupbox>
   </view>
 </template>
@@ -81,9 +94,13 @@
       time: 0,
       popupdata: {},
       goodIndex: 0,
+      pingjia:[]
     };
     computed = {};
     methods = {
+       toPingjia(id){
+        wx.navigateTo({ url: 'pingjia?id='+id });
+      },
       async cancelorder(id){
         let mRes = await util.showModalBig('确定取消订单吗？');
         if (mRes.confirm) {
@@ -236,6 +253,7 @@
       wx.hideLoading();
       this.orderDetail = res.data.data.orderList;
       this.goodsMap = res.data.data.goodsMap;
+      this.pingjia=res.data.data.pingjia;
       this.orderDetail.add_time = util.formatTime(this.orderDetail.add_time);
       this.orderDetail.pay_time = util.formatTime(this.orderDetail.pay_time);
       this.orderDetail.confirm_time = util.formatTime(this.orderDetail.confirm_time);

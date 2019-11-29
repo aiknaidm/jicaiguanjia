@@ -29,7 +29,7 @@
   }
   .status-box .status-label {
     text-align: center;
-    font-size: 30rpx;
+    font-size: 28rpx;
     padding: 0px 40rpx;
     flex: 1;
     position: relative;

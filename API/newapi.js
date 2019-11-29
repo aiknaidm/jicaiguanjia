@@ -200,6 +200,15 @@ const newapi = {
     gifts_list: (data) => fetch(`${host_chk}/gifts_list`, 'POST', data),
     gifts_stop: (data) => fetch(`${host_chk}/gifts_stop`, 'POST', data),
     Salesman_detail: (data) => fetch(`${host_chk}/Salesman_detail`, 'get', data),
+    suppliers_list1: (data) => fetch(`${host_chk}/suppliers_list1`, 'get', data),
+    suppliers_join1: (data) => fetch(`${host_chk}/suppliers_join1`, 'get', data),
+    kehu_list: (data) => fetch(`${host_chk}/kehu_list`, 'get', data),
+    add_kehu: (data) => fetch(`${host_chk}/add_kehu`, 'get', data),
+    del_kehu: (data) => fetch(`${host_chk}/del_kehu`, 'get', data),
+    kehu_panduan: (data) => fetch(`${host_chk}/kehu_panduan`, 'get', data),
+    kehu_log: (data) => fetch(`${host_chk}/kehu_log`, 'get', data),
+    suppliers_category: (data) => fetch(`${host_chk}/suppliers_category`, 'get', data),
+    edit_suppliers_level: (data) => fetch(`${host_chk}/edit_suppliers_level`, 'get', data),
 
 
 

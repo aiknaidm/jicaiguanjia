@@ -1,0 +1,256 @@
+<style lang="less">
+  .container {
+    margin-top: 100rpx;
+  }
+  .suppliers-list {
+    padding: 30rpx 40rpx;
+    border-bottom: 10rpx solid #f0f0f0;
+    line-height: 40rpx;
+    display: flex;
+    align-items: center;
+  }
+  .supplier-img {
+    width: 120rpx;
+    height: 120rpx;
+    margin-right: 10rpx;
+  }
+  .supplier-img image {
+    width: 100%;
+    height: 100%;
+  }
+  .supplier-content {
+    flex: 1;
+  }
+  /*搜索框  */
+  .ss-my {
+    display: flex;
+    background-color: #f0f0f0;
+    text-align: center;
+    width: 100%;
+    height: 92rpx;
+    position: fixed;
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+  }
+  .ss-my.active {
+    display: flex;
+  }
+  .ss-my-c {
+    display: flex;
+    flex: 1;
+    margin-left: 10px;
+  }
+  .ss-my-c image {
+    width: 30rpx;
+    height: 30rpx;
+  }
+  .ss-my-c-img {
+    background-color: #fff;
+    width: 60rpx;
+    height: 60rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px 0 0 3px;
+  }
+  .ss-my-c-ipt {
+    background-color: #fff;
+    height: 60rpx;
+    line-height: 60rpx;
+    flex: 1;
+  }
+  .ss-my-c-ipt input {
+    width: 100%;
+    height: 100%;
+    font-size: 30rpx;
+  }
+  .ss-my-c-x {
+    background-color: #fff;
+    width: 60rpx;
+    height: 60rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0px 3px 3px 0px;
+  }
+  .ss-my-d {
+    width: 100rpx;
+    height: 60rpx;
+    border: 1px solid #f0f0f0;
+    text-align: center;
+    line-height: 60rpx;
+    border-radius: 10rpx;
+    font-size: 28rpx;
+    background-color: #fff;
+    margin-left: 10rpx;
+    margin-right: 10px;
+    color: #e50012;
+  }
+  .ss-hot {
+    padding: 24rpx;
+    background-color: #fff;
+  }
+  .ss-title {
+    display: flex;
+    justify-content: space-between;
+    font-size: 30rpx;
+  }
+  .ss-title view:last-child {
+    font-size: 28rpx;
+    color: #e50112;
+  }
+  .ss-content {
+    display: flex;
+    margin-top: 24rpx;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+  .ss-content view {
+    margin-right: 24rpx;
+    padding: 15rpx 20rpx;
+    background-color: #f0f0f0;
+    margin-bottom: 24rpx;
+    border-radius: 10rpx;
+    font-size: 30rpx;
+  }
+  .queding {
+    background-color: #fff;
+    color: #333;
+  }
+</style>
+<template>
+  <view class="container">
+    <!--搜索  -->
+    <!-- <form report-submit @submit='getFormId'> -->
+    <view class="ss-my {{showSearch?'active':''}}">
+      <view class='ss-my-c'>
+        <view class='ss-my-c-img'>
+          <image src='/images/s.png' />
+        </view>
+        <view class='ss-my-c-ipt'>
+          <input value='{{keyword}}' placeholder='输入关键词' @input="searchIpt" />
+        </view>
+        <view class='ss-my-c-x'>
+          <text hidden='true'></text>
+        </view>
+      </view>
+      <button class="ss-my-d button-hover" @tap='buttonTap' form-type='submit'>
+                          确定
+                        </button>
+    </view>
+    <!-- </form> -->
+    
+    <view class="suppliers-list" wx:for="{{suppliers_list}}" wx:key="{{index}}" @tap="addSupplier({{item}})">
+      <view class="supplier-img">
+        <image src="{{item.img}}" lazy-load="false" />
+      </view>
+      <view class="supplier-content">
+        <view class="">店铺名：{{item.suppliers_desc}}</view>
+        <view class="">店主信息：{{item.username}} {{item.mobile}}</view>
+        <view class="" wx:if="{{item.end_time}}">到期时间：{{item.end_time_new}}<text class="red">{{item.is_expire?"（已到期）":""}}</text> </view>
+        <view class="" wx:else>到期时间：<text class="red">未激活 </text></view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import newapi from '../../API/newapi';
+  import util from '../../utils/index';
+  import myList from '../../components/myList';
+  export default class newslist extends wepy.page {
+    config = {
+      navigationBarTitleText: '易站列表'
+    };
+    components = {
+      myList
+    };
+    data = {
+      suppliers_list: [],
+      isMoreData: true
+    };
+    computed = {};
+    methods = {
+    
+      getFormId(e) {
+        util.submitFormId(e.detail.formId);
+      },
+      searchIpt(e) {
+        this.inputValue = e.detail.value;
+      },
+      buttonTap() {
+        this.searchValue = this.inputValue;
+        this.getjllist(1, this.searchValue);
+      },
+    async  addSupplier (item) {
+       var res=await util.showModalBig("你确定要添加这个店铺吗")
+       if(res.confirm){
+           newapi.suppliers_join1({
+               suppliers_id:item.suppliers_id,
+                  yizhan_suppliers_id:this.suppliers_id,
+           }).then(res=>{
+               if(res.data.code==0){
+util.showToast("添加成功")
+               }else
+util.showToast(res.data.message)
+
+               this.getjllist();
+           })
+       }
+      }
+    };
+    events = {};
+      async shengcehng() {
+        let data = {
+          page: "Admin/pages/erweima",
+        };
+        var res = await newapi.getQRCode3(data);
+        if (res.data.code == 0) {
+          // wx.showToast({
+          //   title: "成功", //提示的内容,
+          //   icon: 'none', //图标,
+          // });
+        }
+      }
+    async getIndexNewsList(id) {}
+    // 获取管理的易站列表
+    async getjllist(page = 1, keyword) {
+      if (keyword)
+        var data = {
+          page,
+          keyword
+        };
+      else
+        var data = {
+          page
+        };
+      let res = await newapi.suppliers_list1(data);
+      wx.hideLoading();
+      var that = this;
+      res.data.data.forEach(function(item, index) {
+        res.data.data[index].end_time_new = util.formatDate(item.end_time);
+        res.data.data[index].is_expire = that.newData > item.end_time * 1000;
+      });
+      if (page == 1) this.suppliers_list = res.data.data;
+      else this.suppliers_list.push(...res.data.data);
+      this.datas = res.data.data;
+      if (res.data.data.length == 0) this.isMoreData = false;
+      this.$apply();
+    }
+    async onShow() {}
+    onLoad(option) {
+     this.suppliers_id=option.suppliers_id
+      this.getjllist();
+      this.$apply();
+    }
+    onReachBottom() {
+      if (this.isMoreData) {
+        util.showLoading();
+        this.getjllist(this.datas.current_page + 1, this.searchValue);
+      }
+    }
+  }
+</script>
