@@ -489,6 +489,13 @@
         url: '/pages/myerweima',
         bgcolor: '#10b3b1'
       },
+       {
+        icon: '/images/console/fabushangpin.png',
+        num: 0,
+        display_name: '下单',
+        url: '/YizhanConsolePages/order/index',
+        bgcolor: '#10b3b1'
+      },
       {
         icon: '/images/console/fabushangpin.png',
         num: 0,

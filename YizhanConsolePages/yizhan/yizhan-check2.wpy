@@ -94,7 +94,7 @@
   }
   .list {
     background-color: #fff;
-    width: 60%;
+    width: 80%;
     text-align: center;
     line-height: 88rpx;
     font-size: 30rpx; // max-height: 600rpx;
@@ -116,7 +116,7 @@
   }
   .body-view {
    
-    border: 1px solid #f0f0f0
+    // border: 1px solid #f0f0f0
   }
   .top {
     background: #e50012;
@@ -202,6 +202,13 @@
         right: 10rpx;
         
     }
+    .section__title{
+      width: 250rpx;
+    }
+    .info{
+      display: flex;
+      // flex-wrap: wrap;
+    }
 </style>
 <template>
   <view class='container'>
@@ -274,13 +281,13 @@
             <slider @change.stop="sliderChange2" min="40" max="60" value="{{bili}}" show-value/>
           </view>
         </view> -->
-        <view >
+        <view class="info" >
           <text class="section__title">设置行业</text>
           <view class="body-view" @tap="toChooseHangye">
             {{hangye_list[hangye]}}
           </view>
         </view>
-        <view class=""  @tap="toChooseCat">
+        <view class="info"  @tap="toChooseCat">
           <text class="section__title">设置所属分类</text>
           <view class="body-view">
              <view wx:for="{{catList}}" wx:key="index" class="cat-list">
@@ -358,7 +365,8 @@
       noOrder
     };
     methods = {
-      toChooseCat(){
+      toChooseCat(index){
+       
         wx.navigateTo({ url: '/YizhanConsolePages/yizhan/catList' });
       },
       stop() {
@@ -465,6 +473,7 @@
                 // this.shenheList[index].level = this.level;
                 // this.shenheList[index].bili = this.bili / 100;
                 this.shenheList[index].hangye = this.hangye;
+                this.shenheList[index].sale_category = this.catList;
               }
             })
             this.$apply();
@@ -493,6 +502,7 @@
           this.hangye = item.hangye;
           this.isShowSlider = true;
           this.id = id
+           this.catList=item.sale_category
           this.$apply();
           //   console.log("this.list",this.list);
           //    let mRes2 = await util.showActionSheet(this.list);

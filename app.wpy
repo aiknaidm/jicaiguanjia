@@ -102,7 +102,12 @@
   // setStore(store);
   export default class extends wepy.app {
     config = {
-      pages: ['pages/home', 'pages/my', 'pages/shoperweima', 'pages/myerweima'],
+      pages: ['pages/home', 
+      'pages/my', 
+      'pages/shoperweima', 
+      'pages/myerweima'
+      
+      ],
       subPackages: [{
           root: 'IndexPages',
           pages: [
@@ -111,7 +116,14 @@
             'pages/indexNewsList',
             'pages/newsList',
             'pages/renzheng',
-            'pages/renzhengDetail'
+            'pages/renzhengDetail',
+            'pages/qianbao/index',
+            'pages/qianbao/setBankCardList',
+          'pages/qianbao/setBankCardInfo',
+          'pages/qianbao/balance',
+          'pages/qianbao/withdraw',
+          'pages/qianbao/yue',
+          'pages/qianbao/yue-detail'
           ]
         },
         {
@@ -207,6 +219,7 @@
         {
           root: 'YizhanConsolePages',
           pages: [
+            'order/index',
             'earnings/index',
             'earnings/withdraw',
             'earnings/shareList',
@@ -252,7 +265,8 @@
         {
           root: 'group',
           pages: ['pages/my_console_setGroup','pages/my_console_setYizhanGroup']
-        }
+        },
+        
       ],
       window: {
         backgroundTextStyle: 'light',

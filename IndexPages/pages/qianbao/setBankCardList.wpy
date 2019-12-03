@@ -1,0 +1,157 @@
+<style>
+/* pages/qb-bangding/index.wxss */
+/* page{
+  background-color: #262a31;
+} */
+.container{
+  font-size: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-bottom: 200rpx;
+background-color: #fff;
+padding-top: 15rpx;
+}
+page{
+  height: 100%;
+  background-color: #fff;
+}
+.qb-card{
+  width: 686rpx;
+  height: 224rpx;
+  background-color: #3b5f93;
+  margin:15rpx auto;
+  /* position: absolute; */
+  border-top: 1px solid #fff;
+
+  border-radius:5px;
+  /* box-shadow: 0px 0px 10px 1px #262a31; */
+  display: flex;
+  padding-left: 40rpx;
+  padding-top: 30rpx;
+  color: #fff;
+  overflow: hidden;
+}
+.qb-card:first-child{
+  /* margin-top: 40rpx; */
+}
+.qb-card .img2{
+  width: 80rpx;
+  height: 80rpx;
+  border-radius:20px; 
+  margin-right: 40rpx;
+  background-color: #fff;
+  
+
+}
+.qb-card-img,qb-card-c{
+  position: relative;
+  z-index: 15;
+}
+.qb-card .img{
+filter: grayscale(1); -webkit-filter: grayscale(1) invert(1); -moz-filter:grayscale(1); -ms-filter:grayscale(1); -o-filter:grayscale(1);
+position: absolute;
+top: -10rpx;
+right: -100rpx;
+opacity: 0.2;
+height: 100%;
+width:400rpx;
+height:400rpx;
+}
+.qb-card-detail{
+  display: flex;
+  width: 100%;
+  position: relative;
+}
+.addcard{
+  position:fixed;
+  width: 100%;
+  padding: 20rpx;
+  background-color: #fff;
+  text-align: center;
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: center;
+  align-items: center;
+  bottom: 20px;
+  box-shadow: 0px 3px 10px 1px #262a31;
+  z-index: 100;
+}
+.addcard{
+  width:380rpx;
+height:100rpx;
+background:rgba(227,38,34,1);
+border-radius:20rpx;
+color:#fff;
+margin: auto;
+font-size: 34rpx;
+     padding:0  ;                 
+}
+.addcard image{
+  width: 40rpx;
+  height: 40rpx;
+margin-right:20rpx;
+  
+}
+</style>
+
+<template>
+    <!--pages/qb-bangding/index.wxml-->
+    <view class='container'>
+        <!-- <view class='qb-card' wx:for-items="{{card}}" wx:key="{{index}}"  style='top:{{(index*180)}}rpx;background-color:{{item.yinhang=="b"?"#3b5f93":""}};background-color:{{item.yinhang=="c"?"#296b68":""}};background-color:{{item.yinhang=="a"?"#bd3b4a":""}};z-index:{{index}}' >
+        <view class='qb-card-img'>
+          <image src='{{item.background}}' class='img2'></image>
+        </view>  -->
+        <view class='qb-card' wx:for-items="{{bankCardList}}" wx:key="{{index}}" style='background-color:{{item.color}};z-index:{{index}}'>
+            <view data-id='{{item.id}}' data-userid='{{item.user_id}}' class='qb-card-detail'>
+                <view class='qb-card-img'>
+                    <image src='{{item.logo}}' class='img2'></image>
+                </view>
+                <view class='qb-card-c'>
+                    <view>{{item.yinhang}}</view>
+                    <view>卡号 {{item.cardnumber}}</view>
+                </view>
+                <image src='{{item.logo}}' class='img'></image>
+            </view>
+        </view>
+        <view class="addcard" style='top:{{(card.length*180+180)}}rpx;z-index:{{card.length}}' bindtap='goBd'>
+            <image src='/images/add.png'></image>添加银行卡
+        </view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import newapi from '../../../API/newapi';
+import util from '../../../utils/index';
+export default class setBankCard extends wepy.page {
+  config = {
+    navigationBarTitleText: '绑定银行卡'
+  };
+  components = { };
+  data = {
+   bankCardList:[]
+  };
+  computed = {};
+  methods = {
+    goBd (){
+      wx.navigateTo({ url: 'setBankCardInfo' });
+    },
+
+  };
+  async onShow(option) {
+   this.suppliers_id = this.$parent.globalData.suppliers_id?this.$parent.globalData.suppliers_id:""
+      // var yizhanInfo =  this.$parent.globalData.yizhanInfo? this.$parent.globalData.yizhanInfo:await this.$parent.getYizhanInfo(suppliers_id);
+      // this.suppliers_id = suppliers_id==""?yizhanInfo.suppliers_id:suppliers_id;
+
+   this.getBankCardList();
+  }
+    async getBankCardList(){
+      var res=await newapi.couser_kalist({suppliers_id:this.suppliers_id}).then(res=>{
+        this.bankCardList=res.data.data
+        this.$apply();
+      })
+    }
+}
+</script>

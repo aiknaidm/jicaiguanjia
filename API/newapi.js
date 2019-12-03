@@ -209,6 +209,13 @@ const newapi = {
     kehu_log: (data) => fetch(`${host_chk}/kehu_log`, 'get', data),
     suppliers_category: (data) => fetch(`${host_chk}/suppliers_category`, 'get', data),
     edit_suppliers_level: (data) => fetch(`${host_chk}/edit_suppliers_level`, 'get', data),
+    // 钱包
+    couser_qianbao: (data) => fetch(`${host_chk}/couser_qianbao`, 'get', data),
+    couser_addka: (data) => fetch(`${host_chk}/couser_addka`, 'get', data),
+    couser_kalist: (data) => fetch(`${host_chk}/couser_kalist`, 'get', data),
+    couser_tixian: (data) => fetch(`${host_chk}/couser_tixian`, 'get', data),
+    couser_syjl: (data) => fetch(`${host_chk}/couser_syjl`, 'get', data),
+    order_new: (data) => fetch(`${host_chk}/order_new`, 'post', data),
 
 
 

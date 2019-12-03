@@ -1,0 +1,544 @@
+<style lang="less">
+    .topNavR {
+        background: #fff;
+        height: 126rpx;
+        line-height: 126rpx;
+        font-size: 18px;
+        display: inline-block;
+        margin-left: 40rpx;
+    }
+    .topNavL {
+        border: none;
+        background-color: #fff;
+        display: inline-block;
+        margin-left: 58rpx;
+    }
+    .topNavL image {
+        width: 32rpx;
+        height: 30rpx;
+    }
+    .cameraBox {
+        height: 154rpx;
+        background-color: #f2f2f2;
+        line-height: 204rpx;
+        display: flex; // flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        overflow-x: scroll;
+    }
+    .camera {
+        width: 102rpx;
+        height: 106rpx;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        margin-right: 30rpx;
+    }
+    .camera image {
+        width: 102rpx;
+        height: 106rpx;
+    }
+    .inputBox {
+        padding: 0 36rpx;
+        border-bottom: 1px solid #e4e4e4;
+    }
+    .title {
+        width: 100%;
+        height: 100rpx;
+        line-height: 100rpx;
+    }
+    .listBox {
+        height: 90rpx;
+        line-height: 90rpx;
+        border-bottom: 1px solid#e4e4e4;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .listBox4 {
+        height: auto;
+        line-height: 90rpx;
+        border-bottom: 1px solid#e4e4e4;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .listBoxAdd {
+        height: 90rpx;
+        line-height: 90rpx;
+        border-bottom: 1px solid#e4e4e4;
+        display: flex;
+        /* justify-content: space-between; */
+        align-items: center;
+        color: #e50012;
+    }
+    .listOption {
+        display: inline-block;
+        padding: 0 56rpx;
+        padding-right: 10rpx;
+        width: 150rpx;
+        position: relative
+    }
+    .listOption.req::before {
+        content: "*";
+        position: absolute;
+        left: 20rpx;
+        top: 10rpx;
+        color: #e50012;
+    }
+    .listOptionAdd {
+        display: inline-block;
+        margin-left: 36rpx;
+        /* width: 150rpx; */
+    }
+    .del {
+        background-color: #e50012;
+        width: 90px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        position: absolute;
+        right: -90px;
+        top: 0;
+        height: 100%;
+        z-index: 100; // -webkit-transform: translateX(90px);
+        // transform: translateX(90px);
+        // -webkit-transition: all 0.4s;
+        // transition: all 0.4s;
+    }
+    .formatBox.touch-move-active {
+        left: -90px;
+    }
+    .listOptionImages {
+        display: flex;
+        flex: 1;
+        padding-left: 20rpx;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .formatBox {
+        display: flex;
+        justify-content: space-between;
+        border-top: 10rpx solid#e4e4e4;
+        position: relative;
+        left: 0;
+        transition: left 0.4s;
+        -webkit-transition: left 0.4s;
+    }
+    .itouch {
+        width: 100%;
+        width: 100%;
+        line-height: 22px;
+        margin-right: 0;
+        -webkit-transition: all 0.4s;
+        transition: all 0.4s;
+        -webkit-transform: translateX(90px);
+        transform: translateX(90px);
+        margin-left: -90px;
+    }
+    .itouch .listBox {}
+    .listOptionImages input {
+        flex: 1;
+        font-size: 28rpx;
+        padding-right: 10rpx;
+    }
+    .format {
+        font-size: 25rpx;
+        margin: 0;
+        margin-left: 5rpx;
+    }
+    .goodsList .listBox {
+        border: 0px solid;
+    }
+    .goodsList .list {
+        padding: 40rpx;
+        border-bottom: 1px solid #e4e4e4;
+        max-height: 250rpx;
+        overflow: scroll;
+    }
+    .goodsList .list .list-label {
+        padding: 10rpx 40rpx;
+        border: 1px solid #e4e4e4;
+        margin-right: 20rpx;
+        margin-bottom: 20rpx;
+        border-radius: 10rpx;
+        color: #888;
+        display: inline-block;
+        position: relative;
+    }
+    .goodsList .list .list-label .icon-guanbi {
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        right: -10rpx;
+        top: -10rpx;
+        border: 0px solid;
+        background-color: #fff;
+        color: #e50012;
+        /* border-radius:50%;
+                                            wid */
+        width: 45rpx;
+        height: 45rpx;
+        text-align: center;
+        font-size: 44rpx;
+        display: inline-block;
+    }
+    .goodsList .list .list-label.active {
+        border: 1px solid #e50012;
+        color: #e50012;
+    }
+    .listOptionImages button {
+        margin: 0;
+        padding: 0 30rpx;
+        margin-left: 10rpx;
+        line-height: 60rpx;
+        height: 60rpx;
+        font-size: 26rpx;
+        margin-right: 20rpx;
+    }
+    .listOptionImages in .listOptionImages image {
+        width: 22rpx;
+        height: 22rpx;
+    }
+    .publish {
+        margin-top: 48rpx;
+        text-align: center;
+        background-color: #e50012;
+        color: #fff;
+        height: 88rpx;
+        line-height: 88rpx;
+        border-radius: 0;
+    }
+    .showname {
+        margin-right: 30rpx;
+    }
+    .goodsDetail {
+        justify-content: flex-end;
+        padding-right: 20rpx;
+    }
+    .showprice {
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        width: 50rpx;
+        margin-right: 60rpx;
+        height: 90rpx;
+        line-height: 90rpx;
+        vertical-align: top;
+        float: right;
+    }
+    .shownnum {
+        margin: 0;
+        padding: 0;
+        /* text-align: center; */
+        /* width: 50rpx; */
+        margin-right: 60rpx;
+        height: 90rpx;
+        line-height: 90rpx;
+        vertical-align: top;
+        float: right;
+        /* text-align: right; */
+        flex: 1;
+    }
+    .icon-arrow-right {
+        color: #aaa;
+    }
+    .close {
+        width: 35rpx;
+        height: 35rpx;
+        background-color: #e50012;
+        border-radius: 50%;
+        color: #fff;
+        text-align: center;
+        line-height: 30rpx;
+        position: absolute;
+        right: -15rpx;
+        top: -15rpx;
+    }
+    .listBox2 {
+        height: 200rpx;
+        justify-content: flex-start
+    }
+    .listBox2 image {
+        width: 80rpx;
+        height: 80rpx;
+    }
+    .listBox3 .listOption {
+        width: 300rpx;
+    }
+    .tishi {
+        background: #fff;
+        color: #888;
+        padding: 20rpx;
+        text-align: center;
+    }
+</style>
+
+<template>
+    <form report-submit bindsubmit='getFormId'>
+        <view class="container">
+            <block wx:for="{{goodsList}}" wx:key="{{index}}">
+                <view class="listBox listBox2">
+                    <view class="listOption">商品图</view>
+                    <image wx:if="{{item.goods_img==''}}" src="/images/add_img.png" @tap='chooseImg({{index}})' mode='aspectFit' />
+                    <image wx:else src="{{item.goods_img}}" @tap='chooseImg({{index}})' mode='aspectFit' />
+                </view>
+                <view class="listBox">
+                    <view class="listOption req">商品名</view>
+                    <input class="shownnum" placeholder="请输入商品标题" type="text" name="goods_name" @input="goodsNameChange({{index}})" />
+                </view>
+                <view class="listBox">
+                    <view class="listOption">规格</view>
+                    <input class="shownnum" type='digit' name="goods_attr" @input="goodsAttrChange({{index}})" />
+                </view>
+                <view class="listBox">
+                    <view class="listOption req">价格</view>
+                    <input class="shownnum" type='digit' name="floor_price" @input="goodsPriceChange({{index}})" />
+                </view>
+                 <view class="listBox">
+                    <view class="listOption req">成本价格</view>
+                    <input class="shownnum" type='digit' name="cost_price" @input="costPriceChange({{index}})" />
+                </view>
+                <view class="listBox">
+                    <view class="listOption req">数量</view>
+                    <input class="shownnum" type='digit' name="buy_number" @input="buyNumberChange({{index}})" />
+                </view>
+            </block>
+            <view class="listBoxAdd" @tap='addGoods'>
+                <text class=' listOptionAdd iconfont icon-icon02'></text>
+                <view class='listOption format'>添加商品</view>
+            </view>
+            <view class="listBox">
+                    <view class="listOption req">订单备注</view>
+                    <input class="shownnum" type='digit' name="remark" @input="remarkChange" />
+                </view>
+             
+            <view>
+                总价：{{order_amount}}{{order_amount.toFixed(2)}}
+            </view>
+            <!-- <view class="listBox listBox3">
+                            <view class="listOption">是否可用会员卡</view>
+                            <view class="listOptionImages goodsDetail">
+                              <switch checked="{{hdky}}" name="hdky" bindchange="switch1Change" color="#e50012" />
+                            </view>
+                          </view> -->
+            <button form-type='submit' class="publish">生成订单</button>
+        </view>
+    </form>
+</template>
+
+<script>
+    import wepy from 'wepy';
+    import util from '../../utils/index';
+    import api from '../../API/api';
+    import newapi from '../../API/newapi';
+    export default class newslist extends wepy.page {
+        config = {
+            navigationBarTitleText: '添加商品'
+        };
+        components = {};
+        data = {
+            brandList: [],
+            goodsList: [],
+           order_amount:0,
+           remark:'',
+        };
+        computed = {};
+        methods = {
+            chooseAttrImg(index) {
+                wepy
+                    .chooseImage({
+                        count: 1, // 默认9
+                        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                        sourceType: ['album', 'camera'] // 可以指定来源是相册还是相机，默认二者都有
+                    })
+                    .then(res => {
+                        var that = this;
+                        // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+                        var tempFilePaths = res.tempFilePaths;
+                        this.goods_attr[index].img_url = tempFilePaths[0];
+                        this.goods_attr[index].upload = true;
+                        console.log(" this.goods_attr", this.goods_attr);
+                        this.$apply();
+                    })
+                    .catch(res => {});
+            },
+            delAttrImg(index) {
+                this.goods_attr[index].img_url = '';
+                this.goods_attr[index].upload = false;
+                this.$apply();
+            },
+            switch1Change() {},
+            // 删除图片
+            delImg(i) {
+                this.imgSrc.splice(i, 1);
+            },
+            // 上传图片
+            async chooseImg(index) {
+           
+                wepy
+                    .chooseImage({
+                        count: 1, // 默认9
+                        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                        sourceType: ['album', 'camera'] // 可以指定来源是相册还是相机，默认二者都有
+                    })
+                    .then(res => {
+                        var that = this;
+                        // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+                        var tempFilePaths = res.tempFilePaths;
+                        this.goodsList[index].upload = true;
+                        this.goodsList[index].goods_img = tempFilePaths[0];
+                        this.$apply();
+                    })
+                    .catch(res => {});
+            },
+            goodsNameChange(index, e) {
+                this.goodsList[index].goods_name = e.detail.value
+            },
+            goodsAttrChange(index, e) {
+                this.goodsList[index].goods_attr = e.detail.value
+            },
+            goodsPriceChange(index, e) {
+                this.goodsList[index].goods_price = e.detail.value
+                this.countPrice()
+
+            },
+            buyNumberChange(index, e) {
+                this.goodsList[index].buy_number = e.detail.value
+                this.countPrice()
+            },
+            costPriceChange(index, e){
+                 this.goodsList[index].cost_price = e.detail.value
+            },
+            remarkChange(e){
+                this.remark=e.detail.value
+            },
+            // 添加规格
+            addGoods() {
+                var goods = {
+                    buy_number: '',
+                    goods_price: '',
+                    goods_attr: '',
+                    goods_name: '',
+                    goods_img: '',
+                };
+                this.goodsList.push(goods);
+            },
+            getFormId(e) {
+                // util.submitFormId(e.detail.formId);
+                this.setOrder();
+            }
+        };
+        events = {};
+        countPrice(){
+            var order_amount=0
+            this.goodsList.forEach((item,index)=>{
+                if(item.goods_price!=''&&item.buy_number!='')
+               order_amount+=parseFloat(item.goods_price) * parseFloat(item.buy_number)
+            })
+            this.order_amount=order_amount
+        }
+        async upImg(img_url) {
+            util.showLoading('上传中');
+            try {
+                var res = await wepy.uploadFile({
+                    url: api.upload,
+                    filePath: img_url,
+                    name: 'file',
+                    header: {
+                        Accept: 'application/json'
+                    }
+                });
+                wx.hideLoading();
+                var datas = JSON.parse(res.data.trim());
+                if (datas.code == 0) {
+                    return datas.data.pic_url;
+                }
+            } catch (error) {
+                let mRes = await util.showModalBig(
+                    '图片' + img_url + '上传失败'
+                );
+                if (mRes.confirm) {
+                    await this.upImg(img_url);
+                }
+            }
+        }
+        // 生成订单
+        async setOrder() {
+            var order = [{
+                "suppliers_id": 847,
+                "suppliers_name": "吉品仓",
+                "goodsList": [{
+                    "goods_id": 26101,
+                    "goods_imgs": "https://lmbge.com/upload/20191116/9192e6adc188ae5790c73b6c4d3e5ca3.jpg",
+                    "goods_price": "88.00",
+                    "cost_price": "0.00",
+                    "buy_number": 1,
+                    "goods_name": "意大利斐拉克艺术漆",
+                    "goods_attr_id": "",
+                    "goods_attr": "",
+                    "suppliers_name": "吉品仓",
+                    "yunfei": 0,
+                    "hdky": 0,
+                    "youhuiquan": []
+                }],
+                "yunfei": 0
+            }]
+            order[0].suppliers_id = this.suppliers_id
+            order[0].suppliers_name = this.suppliers_name
+            order[0].goodsList = this.goodsList
+            order[0].remark=this.remark
+            order[0].order_amount=this.order_amount
+            for (var i = 0; i < this.goodsList.length; i++) {
+                var item = this.goodsList[i];
+                // if (item.goods_imgs == '') {
+                //     util.showModal('图片不能为空')
+                //     return;
+                // }
+                if (item.goods_name == '') {
+                    util.showModal('商品名称不能为空')
+                    return;
+                }
+                if (item.goods_price == '') {
+                    util.showModal('商品价格不能为空')
+                    return;
+                }
+                 if (item.cost_price == '') {
+                    util.showModal('商品成本价格不能为空')
+                    return;
+                }
+                if (item.buy_number == '') {
+                    util.showModal('图片不能为空')
+                    return;
+                }
+                if (item.upload) {
+                    item.goods_img = await this.upImg(item.goods_img)
+                    item.upload =false
+                }
+            }
+            newapi.order_new(order[0]).then(res=>{
+                if(res.data.code!=0){
+                    util.showToast(res.data.message)
+                    return
+                }
+                  util.showToast('创建成功')
+            })
+        }
+        count
+        async onLoad(option) {
+            try {
+                this.goodsId = '';
+                await this.$parent.loginInfo();
+                this.suppliers_id = this.$parent.globalData.suppliers_id ?
+                    this.$parent.globalData.suppliers_id :
+                    (await this.$parent.getYizhanInfo()).suppliers_id;
+                this.suppliers_name = this.$parent.globalData.yizhanInfo.suppliers_name
+            } catch (error) {}
+        }
+    }
+</script>

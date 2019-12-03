@@ -1,0 +1,257 @@
+<style lang="" scoped>
+.jifen-top{
+    height: 450rpx;
+    background: linear-gradient(0deg,rgba(255,36,120,1),rgba(255,77,77,1));
+    color: #fff;
+    text-align: center;
+    position: relative;
+}
+.jifen-text{
+    padding-top: 100rpx;
+    font-size: 30rpx;
+}
+.jifen-num{
+    font-size: 88rpx;
+    padding: 20rpx;
+}
+.jifen-button{
+    position: absolute;
+    bottom: -65rpx;
+    height: 130rpx;
+   width: 690rpx;
+   display: flex;
+   justify-content: space-around;
+   left: 50%;
+   margin-left: -345rpx;
+   background: #fff;
+   border-radius: 50px;
+   align-items: center;
+   box-shadow: 0px 3px 5px 1px #bbb;
+}
+.btn{
+    flex: 1;
+    color: #333;
+    height: 80rpx;
+    line-height: 80rpx;
+    font-size: 32rpx;
+    display: flex;
+    align-items: center;
+
+    justify-content: center;
+}
+.btn .image{
+    width: 40rpx;
+    height:40rpx;
+    padding: 10rpx;
+    border-radius: 50%;
+    background: #FF4D62;
+    display: flex;
+    align-items: center;
+
+    justify-content: center;
+    margin-right: 20rpx;
+
+}
+.btn .image image{
+      width: 35rpx;
+    height:35rpx;
+}
+.btn:first-child{
+    border-right: 1px solid #f0f0f0
+}
+
+.status-box .status-label:first-child{
+    text-align: right;
+    justify-content: flex-end;
+    margin-right:40rpx;
+}
+.status-box .status-label:last-child{
+    text-align: left;
+    justify-content: flex-start;
+    margin-left: 40rpx;
+}
+ .status-box .status-label.active,
+    .status-box .status-label {
+        border-bottom: 0rpx solid transparent;
+    }
+    .jifen-detail{
+        
+    }
+     .jifen-detail-title{
+         padding:20rpx 33rpx ;
+         /* border-bottom: 1rpx solid #f0f0f0; */
+     }
+    .jifen-detail-title::before{
+        content: " ";
+        display: inline-block;
+       width: 6rpx;
+      
+        height: 25rpx;
+         border-radius: 2rpx; background: #FF4D62;
+         margin-right: 10rpx;
+        
+    }
+    .icon-xiala{
+        margin-left: 10rpx;
+    }
+    .jifen-detail-info{
+        display: flex;
+        justify-content: space-between;
+        padding: 33rpx;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .name{
+        font-size: 35rpx;
+        
+    }
+    .time{
+        color: 24rpx;
+        color: #939393;
+    }
+</style>
+<template>
+    <view class="container">
+
+      <view class="jifen-detail">
+          <view class="jifen-detail-title">
+              明细
+          </view>
+            <view class="status-box search-title">
+            <view class="status-label">
+                <view class="section">
+                    <picker mode="date" value="{{date}}" start="2015-09" end="2099-09" fields="month" bindchange="bindDateChange">
+                        <view class="picker">
+                            {{date}} <text class='iconfont icon-xiala'></text>
+                        </view>
+                    </picker>
+                </view>
+            </view>
+            <view class="status-label" @tap="showSelect">
+                {{shaixuan[style-0-1]}}<text class='iconfont icon-xiala'></text>
+            </view>
+        </view>
+        <view wx:for="{{signinList}}" wx:key="index" class="jifen-detail-info" @tap="goQyg({{item}})">
+            <view class="jifen-detail-left">
+
+<view class="name">{{item.style}}</view>
+<view class="time">{{item.time}}</view>
+            </view>
+            <view class="num"></view>
+            {{style==1?"+":"-"}} {{item.shouyijin}}
+        </view>
+      </view>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy';
+    import newapi from '../../../API/newapi';
+    import util from '../../../utils/index';
+     import statusTap from '../../../components/statusTap';
+    export default class my extends wepy.page {
+        config = {
+            navigationBarTitleText: '余额明细'
+        };
+        components = {statusTap};
+        data = {
+            userinfo: {},
+               userInfo: {},
+            date: "",
+            status: 0,
+            thisclass: "status-style",
+            signinList: [],
+            shaixuan:["收入", "支出"],
+            style:1
+        };
+        methods = {
+            goQyg(item){
+wx.navigateTo({ url: '/Shop/pages/orderDetail?id='+item.order_id });
+            },
+             bindDateChange(e) {
+                this.date = e.detail.value
+                this.getSigninList()
+            },
+            async showSelect() {
+                var itemList = ["收入", "支出"]
+                var res = await util.showActionSheet(itemList)
+                if (res.tapIndex == 0) { this.style=1;this.getSigninList()} else if (res.tapIndex == 1) {this.style=2; this.getSigninList()}
+                console.log("res", res)
+            },
+            toPfb() {
+                console.log("this.userInfo.user_id", this.userinfo.user_id)
+                wx.navigateToMiniProgram({
+                    appId: "wx7e302245debd521a",
+                    path: "Shop/pages/index?suppliers_id=76&duijie_user_id=" + this.userinfo.user_id,
+                    // extraData: {
+                    //     duijie_user_id: this.userInfo.user_id
+                    // },
+                    envVersion: 'develop',
+                    // envVersion: 'trial',
+                    success(res) {
+                        // 打开成功
+                    }
+                });
+            },
+            toDetail() {
+                wx.navigateTo({
+                    url: 'jifenDetail'
+                });
+            },
+            toIndex() {
+                wx.switchTab({
+                    url: '/pages/home'
+                });
+            }
+        };
+        async onLoad() {
+            this.userinfo = this.$parent.globalData.userInfo;
+            if (this.$parent.globalData.userInfo)
+                this.userinfo = this.$parent.globalData.userInfo
+            else this.userinfo = await this.$parent.getUserInfo()
+        
+            
+            var nowDate = new Date()
+            var month = nowDate.getMonth() - 0 + 1
+            if (month < 10)
+                month = "0" + month
+            var year = nowDate.getFullYear()
+            this.date = year + "-" + month
+            this.page = 1;
+            this.style = 1;
+            this.isMoreData = true;
+            
+            this.getSigninList()
+            this.$apply();
+            this.$apply();
+        }
+        async getwdsc() {}
+        getSigninList(style) {
+            var data = {
+                shijian: this.date,
+                type: this.style,
+            }
+            var page = this.page
+            newapi.couser_syjl(data, page).then(res => {
+                res.data.data.data.forEach((item,index)=>{
+                    res.data.data.data[index].time=util.formatTime(item.add_time)
+                })
+                if (page == 1)
+                    this.signinList = res.data.data.data
+                else {
+                    this.signinList.push(...res.data.data.data);
+                }
+                if (this.signinList.length < 10) {
+                    this.isMoreData = false;
+                }
+                
+                this.$apply();
+            })
+        }
+        onReachBottom() {
+            if (this.isMoreData) {
+                util.showLoading();
+                this.page = this.page + 1;
+                this.getSigninList();
+            }
+        }
+    }
+</script>
