@@ -277,28 +277,64 @@
         padding: 20rpx;
         text-align: center;
     }
+    .jiesuan-box {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 100rpx;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    border-top: 1px solid #eee;
+    background-color: #fff;
+    z-index: 10;
+  }
+  .jiesuan-box .to-pay-btn {
+    width: 250rpx;
+    text-align: center;
+    height: 100%;
+    line-height: 100rpx;
+    background-color: #e64340;
+    font-size: 32rpx;
+    color: #ffffff;
+    border-radius: 0;
+    margin: 0;
+  }
+  .jiesuan-box .left-price {
+    display: flex;
+    width: 500rpx;
+    justify-content: flex-end;
+    line-height: 100rpx;
+    font-size: 28rpx;
+    box-sizing: border-box;
+  }
+  .jiesuan-box .total {
+    color: #e64340;
+    text-align: right;
+    padding: 0 30rpx 0 0;
+  }
 </style>
 
 <template>
-    <form report-submit bindsubmit='getFormId'>
+    <form >
         <view class="container">
             <block wx:for="{{goodsList}}" wx:key="{{index}}">
                 <view class="listBox listBox2">
                     <view class="listOption">商品图</view>
-                    <image wx:if="{{item.goods_img==''}}" src="/images/add_img.png" @tap='chooseImg({{index}})' mode='aspectFit' />
-                    <image wx:else src="{{item.goods_img}}" @tap='chooseImg({{index}})' mode='aspectFit' />
+                    <image wx:if="{{item.goods_img==''}}" data-index="{{index}}" src="/images/add_img.png" @tap='chooseImg' mode='aspectFit' />
+                    <image wx:else src="{{item.goods_img}}"  @tap="{{isdisable?'':'chooseImg'}}" mode='aspectFit' />
                 </view>
                 <view class="listBox">
                     <view class="listOption req">商品名</view>
-                    <input class="shownnum" placeholder="请输入商品标题" type="text" name="goods_name" @input="goodsNameChange({{index}})" />
+                    <input class="shownnum" placeholder="请输入商品标题" disabled="{{isdisable}}" type="text" name="goods_name" @input="goodsNameChange({{index}})" />
                 </view>
                 <view class="listBox">
                     <view class="listOption">规格</view>
-                    <input class="shownnum" type='digit' name="goods_attr" @input="goodsAttrChange({{index}})" />
+                    <input class="shownnum" type='digit' name="goods_attr" disabled="{{isdisable}}" @input="goodsAttrChange({{index}})" />
                 </view>
                 <view class="listBox">
                     <view class="listOption req">价格</view>
-                    <input class="shownnum" type='digit' name="floor_price" @input="goodsPriceChange({{index}})" />
+                    <input class="shownnum" type='digit' name="floor_price" disabled="{{isdisable}}" @input="goodsPriceChange({{index}})" />
                 </view>
                  <view class="listBox">
                     <view class="listOption req">成本价格</view>
@@ -306,28 +342,34 @@
                 </view>
                 <view class="listBox">
                     <view class="listOption req">数量</view>
-                    <input class="shownnum" type='digit' name="buy_number" @input="buyNumberChange({{index}})" />
+                    <input class="shownnum" type='digit' name="buy_number" disabled="{{isdisable}}" @input="buyNumberChange({{index}})" />
                 </view>
             </block>
-            <view class="listBoxAdd" @tap='addGoods'>
+            <view class="listBoxAdd" @tap="{{isdisable?'':'addGoods'}}">
                 <text class=' listOptionAdd iconfont icon-icon02'></text>
                 <view class='listOption format'>添加商品</view>
             </view>
             <view class="listBox">
                     <view class="listOption req">订单备注</view>
-                    <input class="shownnum" type='digit' name="remark" @input="remarkChange" />
+                    <input class="shownnum" type='digit' name="remark"  disabled="{{isdisable}}" @input="remarkChange" />
                 </view>
              
-            <view>
-                总价：{{order_amount}}{{order_amount.toFixed(2)}}
-            </view>
+        
+             <view class="jiesuan-box">
+          <view class="left-price">
+            <view class="total">合计：¥ {{order_amount}}</view>
+          </view>
+            <button  class="to-pay-btn" disabled="{{isclick}}" @tap="getFormId" >{{buttonTxt}}</button>
+         
+        </view>
             <!-- <view class="listBox listBox3">
                             <view class="listOption">是否可用会员卡</view>
                             <view class="listOptionImages goodsDetail">
                               <switch checked="{{hdky}}" name="hdky" bindchange="switch1Change" color="#e50012" />
                             </view>
                           </view> -->
-            <button form-type='submit' class="publish">生成订单</button>
+          
+           
         </view>
     </form>
 </template>
@@ -347,9 +389,14 @@
             goodsList: [],
            order_amount:0,
            remark:'',
+           buttonTxt:'生成订单',
+           isdisable:false
         };
         computed = {};
         methods = {
+            toyzg(){
+
+            },
             chooseAttrImg(index) {
                 wepy
                     .chooseImage({
@@ -379,8 +426,9 @@
                 this.imgSrc.splice(i, 1);
             },
             // 上传图片
-            async chooseImg(index) {
-           
+            async chooseImg(e) {
+                // console.log('e',e)
+           var index=e.currentTarget.dataset.index
                 wepy
                     .chooseImage({
                         count: 1, // 默认9
@@ -429,9 +477,24 @@
                 };
                 this.goodsList.push(goods);
             },
-            getFormId(e) {
+            getFormId() {
+                var order_id=this.order_id?this.order_id:0
                 // util.submitFormId(e.detail.formId);
+                if(this.buttonTxt=='生成订单')
                 this.setOrder();
+                else 
+                 wx.navigateToMiniProgram({
+                    appId:"wx87bfbcfe887faf4d",
+                    path:"Shop/pages/toPayShareOrder?order_id="+order_id,
+                    // extraData: {
+                    //     duijie_user_id: this.userInfo.user_id
+                    // },
+                    envVersion: 'develop',
+                    // envVersion: 'trial',
+                    success(res) {
+                        // 打开成功
+                    }
+                });
             }
         };
         events = {};
@@ -470,6 +533,7 @@
         }
         // 生成订单
         async setOrder() {
+            console.log("1111",111111)
             var order = [{
                 "suppliers_id": 847,
                 "suppliers_name": "吉品仓",
@@ -494,6 +558,10 @@
             order[0].goodsList = this.goodsList
             order[0].remark=this.remark
             order[0].order_amount=this.order_amount
+            if(this.goodsList.length==0){
+                  util.showModal('商品不能为空')
+                return
+            }
             for (var i = 0; i < this.goodsList.length; i++) {
                 var item = this.goodsList[i];
                 // if (item.goods_imgs == '') {
@@ -527,13 +595,27 @@
                     return
                 }
                   util.showToast('创建成功')
+                  this.buttonTxt='分享订单'
+                  this.order_id=res.data.data
+                  this.isdisable=true
+                  this.$apply()
+                  
             })
         }
-        count
+        // onShareAppMessage(res){
+        //     if(res.from=='button'){
+        //          return {
+        //             title: '分享了一个xxx',
+        //             path: '/page/user?id=123'
+        //          }
+        //     }
+      
+        // }
         async onLoad(option) {
             try {
                 this.goodsId = '';
-                await this.$parent.loginInfo();
+              var res=  await this.$parent.loginInfo();
+              console.log(res)
                 this.suppliers_id = this.$parent.globalData.suppliers_id ?
                     this.$parent.globalData.suppliers_id :
                     (await this.$parent.getYizhanInfo()).suppliers_id;

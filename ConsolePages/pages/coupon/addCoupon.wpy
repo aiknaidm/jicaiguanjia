@@ -381,6 +381,10 @@
                 <text>选择用户：</text>
                 <input class='' name="user_name" bindtap='touserList' value='{{choose_user_name}}' />
             </view>
+            <view class='promotion-name'>
+                <text>赠送张数：</text>
+                <input class='' name="number"  value='' />
+            </view>
             <!-- </view> -->
             <view class='promotion-submit'>
                 <button class=' main-bgcolorg' bindtap='over'>取消创建</button>
@@ -536,6 +540,7 @@
                 var youhuiname = e.detail.value.youhuiname;
                 var moneyman = Number(e.detail.value.moneyman);
                 var moneyfan = Number(e.detail.value.moneyfan);
+                var number=e.detail.value.number;
                 if (youhuiname == '') {
                     util.showModal('请填写优惠券名称');
                     return;
@@ -563,7 +568,8 @@
                     end_time: that.date2,
                     user_id: that.choose_user_id,
                     user_name: that.choose_user_name,
-                    suppliers_id: this.suppliers_id
+                    suppliers_id: this.suppliers_id,
+                    number
                 };
                 let res = await newapi.promotion_add(data);
                 if (res.data.code == 0) {

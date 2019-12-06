@@ -1,362 +1,367 @@
 <style lang="less">
-.container {
-  display: block;
-  padding: 0;
-}
-.ss-my {
-  display: flex;
-
-  text-align: center;
-  width: 100%;
-  height: 92rpx;
-  justify-content: center;
-  align-items: center;
-}
-
-.ss-my.active {
-  display: flex;
-}
-
-.ss-my-c {
-  display: flex;
-  flex: 1;
-  margin-left: 10px;
-  background-color: #f0f0f0;
-  border: 1px solid #f0f0f0;
-}
-
-.ss-my-c image {
-  width: 30rpx;
-  height: 30rpx;
-}
-
-.ss-my-c-img {
-  background-color: #fff;
-  width: 60rpx;
-  height: 60rpx;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 3px 0 0 3px;
-}
-
-.ss-my-c-ipt {
-  background-color: #fff;
-  height: 60rpx;
-  line-height: 60rpx;
-  flex: 1;
-}
-
-.ss-my-c-ipt input {
-  width: 100%;
-  height: 100%;
-  font-size: 30rpx;
-}
-
-.ss-my-c-x {
-  background-color: #fff;
-  width: 60rpx;
-  height: 60rpx;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 0px 3px 3px 0px;
-}
-
-.ss-my-d {
-  width: 100rpx;
-  height: 60rpx;
-  border: 1px solid #f0f0f0;
-  text-align: center;
-  line-height: 60rpx;
-  border-radius: 10rpx;
-  font-size: 28rpx;
-  color: #fff;
-  margin-left: 10rpx;
-  margin-right: 10px;
-  background: #e50012;
-}
-
-.ss-hot {
-  padding: 24rpx;
-  background-color: #fff;
-}
-
-.ss-title {
-  display: flex;
-  justify-content: space-between;
-  font-size: 30rpx;
-}
-
-.ss-title view:last-child {
-  font-size: 28rpx;
-  color: #e50112;
-}
-
-.ss-content {
-  display: flex;
-  margin-top: 24rpx;
-  flex-wrap: wrap;
-  flex: 1;
-}
-
-.ss-content view {
-  margin-right: 24rpx;
-  padding: 15rpx 20rpx;
-  background-color: #f0f0f0;
-  margin-bottom: 24rpx;
-  border-radius: 10rpx;
-  font-size: 30rpx;
-}
-
-.queding {
-  background-color: #fff;
-  color: #333;
-}
-.no-order {
-  color: #666;
-}
-
-.list {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-}
-.headPortrait {
-  /* background: #e50012; */ /* vertical-align: middle; */
-  margin: 20rpx 0;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 180rpx;
-}
-.headPortrait .img {
-  border-radius: 50%;
-  width: 100rpx;
-  height: 100rpx;
-  line-height: 100rpx;
-  text-align: center;
-  color: #aaa;
-  border: 1px solid #eee;
-}
-.headPortrait .text {
-  text-align: center;
-  width: 180rpx;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.headPortrait text.icon-close {
-  position: absolute;
-  display: inline-block;
-  right: -10rpx;
-  top: -10rpx;
-  color: #e50012;
-  font-size: 30rpx;
-  width: 40rpx;
-  height: 40rpx;
-  border-radius: 50%;
-  border: 1px solid #e50012;
-  text-align: center;
-  line-height: 40rpx;
-  background: #fff;
-}
-
-.headPortrait.redborder .img {
-  border: 1px solid #e50012;
-}
-
-.headPortrait .iconfont {
-  font-size: 60rpx;
-}
-
-.headPortrait image {
-  width: 100rpx;
-  height: 100rpx;
-  display: inline-block;
-  border-radius: 50%;
-  overflow: hidden;
-}
+  .container {
+    display: block;
+    padding: 0;
+  }
+  .ss-my {
+    display: flex;
+    text-align: center;
+    width: 100%;
+    height: 92rpx;
+    justify-content: center;
+    align-items: center;
+  }
+  .ss-my.active {
+    display: flex;
+  }
+  .ss-my-c {
+    display: flex;
+    flex: 1;
+    margin-left: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #f0f0f0;
+  }
+  .ss-my-c image {
+    width: 30rpx;
+    height: 30rpx;
+  }
+  .ss-my-c-img {
+    background-color: #fff;
+    width: 60rpx;
+    height: 60rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px 0 0 3px;
+  }
+  .ss-my-c-ipt {
+    background-color: #fff;
+    height: 60rpx;
+    line-height: 60rpx;
+    flex: 1;
+  }
+  .ss-my-c-ipt input {
+    width: 100%;
+    height: 100%;
+    font-size: 30rpx;
+  }
+  .ss-my-c-x {
+    background-color: #fff;
+    width: 60rpx;
+    height: 60rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0px 3px 3px 0px;
+  }
+  .ss-my-d {
+    width: 100rpx;
+    height: 60rpx;
+    border: 1px solid #f0f0f0;
+    text-align: center;
+    line-height: 60rpx;
+    border-radius: 10rpx;
+    font-size: 28rpx;
+    color: #fff;
+    margin-left: 10rpx;
+    margin-right: 10px;
+    background: #e50012;
+  }
+  .ss-hot {
+    padding: 24rpx;
+    background-color: #fff;
+  }
+  .ss-title {
+    display: flex;
+    justify-content: space-between;
+    font-size: 30rpx;
+  }
+  .ss-title view:last-child {
+    font-size: 28rpx;
+    color: #e50112;
+  }
+  .ss-content {
+    display: flex;
+    margin-top: 24rpx;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+  .ss-content view {
+    margin-right: 24rpx;
+    padding: 15rpx 20rpx;
+    background-color: #f0f0f0;
+    margin-bottom: 24rpx;
+    border-radius: 10rpx;
+    font-size: 30rpx;
+  }
+  .queding {
+    background-color: #fff;
+    color: #333;
+  }
+  .no-order {
+    color: #666;
+  }
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .headPortrait {
+    /* background: #e50012; */
+    /* vertical-align: middle; */
+    margin: 20rpx 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 180rpx;
+  }
+  .headPortrait .img {
+    border-radius: 50%;
+    width: 100rpx;
+    height: 100rpx;
+    line-height: 100rpx;
+    text-align: center;
+    color: #aaa;
+    border: 1px solid #eee;
+  }
+  .headPortrait .text {
+    text-align: center;
+    width: 180rpx;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .headPortrait text.icon-close {
+    position: absolute;
+    display: inline-block;
+    right: -10rpx;
+    top: -10rpx;
+    color: #e50012;
+    font-size: 30rpx;
+    width: 40rpx;
+    height: 40rpx;
+    border-radius: 50%;
+    border: 1px solid #e50012;
+    text-align: center;
+    line-height: 40rpx;
+    background: #fff;
+  }
+  .headPortrait.redborder .img {
+    border: 1px solid #e50012;
+  }
+  .headPortrait .iconfont {
+    font-size: 60rpx;
+  }
+  .headPortrait image {
+    width: 100rpx;
+    height: 100rpx;
+    display: inline-block;
+    border-radius: 50%;
+    overflow: hidden;
+  }
 </style>
 <template>
-<view class='container'>
-  <!--搜索  -->
-  <view class="ss-my {{showSearch?'active':''}}">
-    <view class='ss-my-c'>
-      <view class='ss-my-c-img'>
-        <image src='/images/s.png'/>
+  <view class='container'>
+    <!--搜索  -->
+    <view class="ss-my {{showSearch?'active':''}}">
+      <view class='ss-my-c'>
+        <view class='ss-my-c-img'>
+          <image src='/images/s.png' />
+        </view>
+        <view class='ss-my-c-ipt'>
+          <input value='{{keyword}}' placeholder='请输入您要搜索的用户昵称' bindinput="searchIpt" />
+        </view>
+        <view class='ss-my-c-x'>
+          <text hidden='true'></text>
+        </view>
       </view>
-      <view class='ss-my-c-ipt'>
-        <input value='{{keyword}}' placeholder='请输入您要搜索的用户昵称' bindinput="searchIpt"/>
-      </view>
-      <view class='ss-my-c-x'>
-        <text hidden='true'></text>
+      <view class='ss-my-d {{buttonClass}}' @tap='buttonTap'>
+        {{ssButton}}
       </view>
     </view>
-    <view class='ss-my-d {{buttonClass}}' @tap='buttonTap'>
-      {{ssButton}}
-    </view>
-
-  </view>
-		<block wx:if="{{adminList.length==0}}">
-		<!-- <view class='no-order'>	</view> -->
-    <noorder :text.sync="text"></noorder>
-		</block>
-  <view class='list' wx:else>
-    <block wx:for="{{adminList}}" wx:key="index">
-      <view class='headPortrait '>
-			  <view class='img'>
-        <image src="{{item.avatar?item.avatar:'https://lmbge.com/upload/avatar/weixin3.png'}}" data-user_id="{{(type=='member'||type=='coupon')?item.user_id:item.id}}" data-user_name="{{(type=='member'||type=='coupon')?item.user_name:item.user_nickname}}" bindtap='addManager' mode='aspectFill'/>
-      </view>
-      <view class='text' wx:if="{{type=='member'||type=='coupon'}}">{{item.user_name?item.user_name:'jc'+item.user_id}}</view>
-      <view class='text' wx:else>{{item.user_nickname?item.user_nickname:'jc'+item.id}}</view>
-      </view>
+    <block wx:if="{{adminList.length==0}}">
+      <!-- <view class='no-order'>	</view> -->
+      <noorder :text.sync="text"></noorder>
     </block>
-	
+    <view class='list' wx:else>
+      <block wx:for="{{adminList}}" wx:key="index">
+        <view class='headPortrait '>
+          <view class='img'>
+            <image src="{{item.avatar?item.avatar:'https://lmbge.com/upload/avatar/weixin3.png'}}" data-user_id="{{(type=='member'||type=='coupon')?item.user_id:item.id}}" data-user_name="{{(type=='member'||type=='coupon')?item.user_name:item.user_nickname}}" bindtap='addManager'
+              mode='aspectFill' />
+          </view>
+          <view class='text' wx:if="{{type=='member'||type=='coupon'}}">{{item.user_name?item.user_name:'jc'+item.user_id}}</view>
+          <view class='text' wx:else>{{item.user_nickname?item.user_nickname:'jc'+item.id}}</view>
+        </view>
+      </block>
+    </view>
   </view>
-	
-</view>
 </template>
 
 <script>
-import wepy from 'wepy';
-import api from '../../API/api';
-import newapi from '../../API/newapi';
-import util from '../../utils/index';
-import noorder from '../../components/noOrder';
-export default class my_addManagerInfo extends wepy.page {
-  config = {
-    navigationBarTitleText: '用户搜索'
-  };
-  data = {
-    ssButton: '搜索',
-    keyword: '',
-    type: '',
-    adminList: [],
-    text: ''
-  };
-  computed = {};
-  components = { noorder };
-  methods = {
-    searchIpt: function(e) {
-      this.keyword = e.detail.value;
-    },
-    async buttonTap() {
-      var keyword = this.keyword;
-      let data = { keyword };
-      var res;
-      if (this.type == 'member' || this.type == 'coupon') {
-        res = await newapi.find_users_c(data);
-      } else {
-        res = await newapi.find_users(data);
-      }
-      this.adminList = res.data.data;
-      this.text = '您搜索的昵称不存在，请更换关键词试试。';
-      this.$apply();
-    },
-    async addManager(e) {
-      var user_id = e.currentTarget.dataset.user_id;
-      var user_name = e.currentTarget.dataset.user_name;
-      var suppliers_id = this.$parent.globalData.suppliers_id;
-      var sales_id = this.sales_id ? this.sales_id : '';
-      let mRes = await util.showModalBig('确定要添加吗');console.log("user_id",user_id,"sales_id",sales_id);
-      if (mRes.confirm) {
-        let data = {
-          user_id,
-          suppliers_id,
-          sales_id
-        };
-        var res;
-        if (this.type == 'member') {
-          res = await newapi.addMember(data);
-        } else if (this.type == 'salesman') {
-          res = await newapi.addSalesman(data);
-        } else if (this.type == 'designer') {
-          res = await newapi.addDesigner(data);
-        } else if (this.type == 'coupon') {
-          console.log("11111111",user_name,user_id);
-          console.log("11111111",this.$parent.$pages['/ConsolePages/pages/coupon/addCoupon']);
-          this.$parent.$pages['/ConsolePages/pages/coupon/addCoupon'].choose_user_name = user_name;
-          this.$parent.$pages['/ConsolePages/pages/coupon/addCoupon'].choose_user_id = user_id;
-          wx.navigateBack();
-        } else {
-          wx.navigateTo({ url: '/ConsolePages/pages/my_setManagerInfo_permission?id='+user_id  });
-          return
-        }
-
-        if (res.data.code == 0) {
+  import wepy from 'wepy';
+  import api from '../../API/api';
+  import newapi from '../../API/newapi';
+  import util from '../../utils/index';
+  import noorder from '../../components/noOrder';
+  export default class my_addManagerInfo extends wepy.page {
+    config = {
+      navigationBarTitleText: '用户搜索'
+    };
+    data = {
+      ssButton: '搜索',
+      keyword: '',
+      type: '',
+      adminList: [],
+      text: '',
+      page: 1
+    };
+    computed = {};
+    components = {
+      noorder
+    };
+    methods = {
+      searchIpt: function(e) {
+        this.keyword = e.detail.value;
+      },
+      async buttonTap() {
+        this.getAdmin();
+      },
+      async addManager(e) {
+        var user_id = e.currentTarget.dataset.user_id;
+        var user_name = e.currentTarget.dataset.user_name;
+        var suppliers_id = this.$parent.globalData.suppliers_id;
+        var sales_id = this.sales_id ? this.sales_id : '';
+        let mRes = await util.showModalBig('确定要添加吗');
+        console.log("user_id", user_id, "sales_id", sales_id);
+        if (mRes.confirm) {
+          let data = {
+            user_id,
+            suppliers_id,
+            sales_id
+          };
+          var res;
           if (this.type == 'member') {
-            await util.showModal('添加会员成功');
-            this.$parent.$pages[
-              '/ConsolePages/pages/my_console_check'
-            ].getShenheList(this.sales_id, suppliers_id);
-            wx.navigateBack({
-              delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
-            });
+            res = await newapi.addMember(data);
+          } else if (this.type == 'salesman') {
+            res = await newapi.addSalesman(data);
           } else if (this.type == 'designer') {
-            await util.showModal('添加设计师成功');
-            // this.$parent.$pages[
-            //   '/designer/my_designerList'
-            // ].designerList(suppliers_id);
-            wx.navigateBack({
-              delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+            res = await newapi.addDesigner(data);
+          } else if (this.type == 'coupon') {
+            this.$parent.$pages['/ConsolePages/pages/coupon/addCoupon'].choose_user_name = user_name;
+            this.$parent.$pages['/ConsolePages/pages/coupon/addCoupon'].choose_user_id = user_id;
+            wx.navigateBack();
+          } else {
+            wx.navigateTo({
+              url: '/ConsolePages/pages/my_setManagerInfo_permission?id=' + user_id
             });
-          } 
-          // else if (this.type == 'salesman') {
-          //   let mRes = await util.showModalBig(
-          //     '业务员添加成功，同时将改用户设为管理员吗'
-          //   );
-          //   if (mRes.confirm) {
-          //     let data = {
-          //       user_id,
-          //       suppliers_id
-          //     };
-          //     let res0 = await newapi.addManager(data);
-          //     if (res0.data.code == 0) {
-          //       util.showToast('设置成功');
-          //     } else {
-          //       util.showToast(res0.message);
-          //     }
-          //   }
-          //   wx.navigateBack({
-          //     delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
-          //   });
-          // } 
-          // else if(this.type == 'manager'){
-          //   wx.navigateTo({ url: 'my_setManagerInfo_permission?id='+user_id });
-          // }
-          // else {
-          //   let mRes = await util.showModalBig(
-          //     '管理员添加成功，同时将改用户设为业务员吗'
-          //   );
-          //   if (mRes.confirm) {
-          //     let data = {
-          //       user_id,
-          //       suppliers_id
-          //     };
-          //     let res0 = await newapi.addSalesman(data);
-
-          //     if (res0.data.code == 0) util.showToast('设置成功');
-          //     else util.showToast(res0.message);
-          //   }
-          //   wx.navigateBack({
-          //     delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
-          //   });
-          // }
-        } else {
-          util.showToast(res.data.message);
+            return
+          }
+          if (res.data.code == 0) {
+            if (this.type == 'member') {
+              await util.showModal('添加会员成功');
+              this.$parent.$pages[
+                '/ConsolePages/pages/my_console_check'
+              ].getShenheList(this.sales_id, suppliers_id);
+              wx.navigateBack({
+                delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+              });
+            } else if (this.type == 'designer') {
+              await util.showModal('添加设计师成功');
+              // this.$parent.$pages[
+              //   '/designer/my_designerList'
+              // ].designerList(suppliers_id);
+              wx.navigateBack({
+                delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+              });
+            }
+            // else if (this.type == 'salesman') {
+            //   let mRes = await util.showModalBig(
+            //     '业务员添加成功，同时将改用户设为管理员吗'
+            //   );
+            //   if (mRes.confirm) {
+            //     let data = {
+            //       user_id,
+            //       suppliers_id
+            //     };
+            //     let res0 = await newapi.addManager(data);
+            //     if (res0.data.code == 0) {
+            //       util.showToast('设置成功');
+            //     } else {
+            //       util.showToast(res0.message);
+            //     }
+            //   }
+            //   wx.navigateBack({
+            //     delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+            //   });
+            // } 
+            // else if(this.type == 'manager'){
+            //   wx.navigateTo({ url: 'my_setManagerInfo_permission?id='+user_id });
+            // }
+            // else {
+            //   let mRes = await util.showModalBig(
+            //     '管理员添加成功，同时将改用户设为业务员吗'
+            //   );
+            //   if (mRes.confirm) {
+            //     let data = {
+            //       user_id,
+            //       suppliers_id
+            //     };
+            //     let res0 = await newapi.addSalesman(data);
+            //     if (res0.data.code == 0) util.showToast('设置成功');
+            //     else util.showToast(res0.message);
+            //   }
+            //   wx.navigateBack({
+            //     delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+            //   });
+            // }
+          } else {
+            util.showToast(res.data.message);
+          }
         }
       }
+    };
+    events = {};
+    async getAdmin(){
+      var page = this.page
+        var keyword = this.keyword;
+        let data = {
+          keyword,
+          page
+        };
+        if(this.type == 'coupon'){
+            this.suppliers_id = this.$parent.globalData.suppliers_id 
+          data.suppliers_id=this.suppliers_id
+        }
+        var res;
+        if (this.type == 'member' || this.type == 'coupon') {
+          res = await newapi.find_users_c(data);
+        } else {
+          res = await newapi.find_users(data);
+        }
+        if (page == 1) {
+          this.adminList = res.data.data;
+          this.isMoreData = true
+        } else this.adminList.push(...res.data.data);
+        if (res.data.data.length < 30) this.isMoreData = false;
+        this.text = '您搜索的昵称不存在，请更换关键词试试。';
+         util.hideLoading();
+        this.$apply();
     }
-  };
-  events = {};
-  onLoad(options) {
-    if (options.type) {
-      this.type = options.type;
+    onReachBottom() {
+      if (this.isMoreData) {
+        util.showLoading();
+        this.page = this.page + 1;
+        this.getAdmin();
+      }
     }
-    if (options.sales_id && options.sales_id != '')
-      this.sales_id = options.sales_id;
+    onLoad(options) {
+      if (options.type) {
+        this.type = options.type;
+      }
+      if (options.sales_id && options.sales_id != '')
+        this.sales_id = options.sales_id;
+    }
   }
-}
 </script>
