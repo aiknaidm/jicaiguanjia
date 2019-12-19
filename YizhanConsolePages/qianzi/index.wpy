@@ -1,0 +1,186 @@
+<style lang="less">
+    /* pages/handWriting.wxss */
+    page {
+        background: #fbfbfb;
+        height: auto;
+        overflow: hidden;
+    }
+    .wrapper {
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        align-content: center;
+        flex-direction: row;
+        justify-content: center;
+        font-size: 28rpx;
+    }
+    .hand-writing {
+        background: #fff;
+        width: 100%;
+        height: 100vh;
+    }
+    .hand-right {
+        display: inline-flex;
+        align-items: center;
+        height: 100%;
+        width: 60px;
+    }
+    .hand-center {
+        border: 1rpx dashed #e9e9e9;
+        flex: 1;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+    .hand-title {
+        transform: rotate(90deg);
+        flex: 1;
+        position: absolute;
+        width: 100px;
+        right: -19px;
+    }
+    .hand-left {
+        height: 100vh;
+        width: 60px;
+    }
+    .del-btn {
+        position: absolute;
+        top: 130px;
+        bottom: 16px;
+        transform: rotate(90deg);
+        color: #02d000;
+        height: 36px;
+    }
+    .del-btn image {
+        position: absolute;
+        top: 13rpx;
+        left: 25rpx;
+    }
+    .sub-btn {
+        position: absolute;
+        bottom: 52rpx;
+        color: #999999;
+        transform: rotate(90deg);
+        margin-bottom: 30rpx;
+    }
+</style>
+<template>
+    <view class="wrapper">
+        <view class="hand-left">
+            <button catchtap="retDraw" class="del-btn">清除</button>
+            <button catchtap="subCanvas" class="sub-btn">保存</button>
+        </view>
+        <view class="hand-center">
+            <canvas class="hand-writing" disable-scroll="true" bindtouchstart="uploadScaleStart" bindtouchmove="uploadScaleMove" bindtouchend="uploadScaleEnd" canvas-id="handWriting"></canvas>
+        </view>
+        <view class="hand-right">
+            <view class="hand-title">手写签名</view>
+        </view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy';
+    import SignaturePad from '../../utils/signature_pad.js'
+    import newapi from '../../API/newapi';
+    import api from '../../API/api';
+    import util from '../../utils/index';
+    let signaturePad = {};
+    let pix = 7;
+    let penColor = 'black';
+    let lineWidth = 0.6;
+    export default class details extends wepy.page {
+        config = {
+            navigationBarTitleText: '签名'
+        };
+        components = {};
+        data = {
+            penColor: 'black',
+            lineWidth: 0.6,
+            isEmpty: true
+        };
+        computed = {};
+        methods = {
+            subCanvas() {
+                console.log(111111111)
+                this.onConfirm()
+            }, //保存canvas图像
+            uploadScaleStart(e) {
+                const item = {
+                    penColor: penColor,
+                    lineWidth: lineWidth
+                };
+                signaturePad._handleTouchStart(e, item);
+            },
+            uploadScaleMove(e) {
+                signaturePad._handleTouchMove(e);
+            },
+            uploadScaleEnd(e) {
+                signaturePad._handleTouchEnd(e);
+                const isEmpty = signaturePad.isEmpty();
+                console.log("isEmpty", signaturePad.isEmpty())
+                this.isEmpty = isEmpty
+            },
+            retDraw() {
+                signaturePad.clear();
+                console.log("isEmpty", signaturePad.isEmpty())
+                const isEmpty = signaturePad.isEmpty();
+                this.isEmpty = isEmpty
+            },
+        };
+        events = {};
+        onLoad(options) {
+            var ctx = wx.createCanvasContext('handWriting');
+            const data = {
+                devicePixelRatio: pix,
+            };
+            signaturePad = new SignaturePad(ctx, data);
+                this.suppliers_id= options.suppliers_id
+        }
+        getSysInfo() {
+            var that = this
+            wx.getSystemInfo({
+                success: function(res) {
+                    pix = res.pixelRatio
+                    that.setData({
+                        width: res.windowWidth * pix,
+                        height: res.windowHeight * pix
+                    })
+                }
+            })
+        }
+      async onConfirm() {
+          util.showLoading("上传中")
+            console.log("this.isEmpty", this.isEmpty)
+            if (this.isEmpty) {
+                return false
+            }
+          
+            var canvasImg = await wepy.canvasToTempFilePath({
+                canvasId: 'handWriting',
+            })
+            this.modalShow = false,
+                this.hiddenLoading = false
+            this.$apply();
+            var imgRes = await wepy
+                .uploadFile({
+                    url: api.upload,
+                    filePath: canvasImg.tempFilePath,
+                    name: 'file',
+                    header: {
+                        Accept: 'application/json'
+                    }
+                })
+             var datas = JSON.parse(imgRes.data.trim());
+            newapi.qianming_tijiao({
+                suppliers_id: this.suppliers_id,
+                qianming: datas.data.pic_url
+            }).then(res => {
+                util.hideLoading()
+                wx.redirectTo({
+                    url: '/YizhanConsolePages/client/clientInfo'
+                });
+            })
+        } //模态框保存签名操作
+    }
+</script>

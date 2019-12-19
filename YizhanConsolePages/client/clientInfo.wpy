@@ -143,6 +143,8 @@ return
         };
         onShow() {
             this.suppliers_id = this.$parent.globalData.suppliers_id
+            if(!this.suppliers_id )
+            
             this.getKehu();
         }
         getKehu() {

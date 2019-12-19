@@ -283,14 +283,14 @@
           <!-- <myList :tabItem="item" wx:elif="{{item.is_salesman==1&&yizhanInfo.is_salesman==1}}"></myList> -->
           <!-- </block> -->
         </view>
-        <view class="info_list">
+        <!-- <view class="info_list">
           <block>
         
             <repeat for="{{item2}}" key="index2" index="index2" item="item2">
             <myList :tabItem="item2"></myList>
           </repeat>
           </block>
-        </view>
+        </view> -->
 
       </form>
     </view>
@@ -579,7 +579,7 @@
         this.is_designer = true
       else
         this.is_designer = false
-      console.log(this.is_designer);
+      return res.data.data
       // console.log("permission",this.permission)
       this.$apply();
     }
@@ -695,7 +695,9 @@
     //   }
     // }
     async init(suppliers_id) {
-      let yizhanInfo = await this.$parent.getYizhanInfo(suppliers_id);
+      let yizhanInfo = await this.getpermission(this.suppliers_id);
+      this.$parent.globalData.yizhanInfo=yizhanInfo
+      this.$parent.globalData.suppliers_id=yizhanInfo.suppliers_id
       if (!yizhanInfo.is_admin && !yizhanInfo.is_salesman && !yizhanInfo.is_designer) {
         let mRes = await util.showModalBig(
           '您还不是批发商，没有管理权限，赶紧去注册吧'
@@ -802,7 +804,7 @@
       // this.orderNum();
       this.getjllist();
       // this.isexpired(yizhanInfo);
-      this.getpermission(this.suppliers_id)
+      
       // this.isSalesman();
       // this.ishasCard();
       this.height = wx.getSystemInfoSync().windowHeight;

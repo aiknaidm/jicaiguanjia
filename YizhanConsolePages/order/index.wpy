@@ -477,15 +477,26 @@
                 };
                 this.goodsList.push(goods);
             },
-            getFormId() {
+          async  getFormId() {
                 var order_id=this.order_id?this.order_id:0
                 // util.submitFormId(e.detail.formId);
-                if(this.buttonTxt=='生成订单')
-                this.setOrder();
-                else 
+                if(this.buttonTxt=='生成订单'){
+                   this.setOrder();
+                   
+                }
+          
+                else {
+                       var xiaochengxu={
+                    yizhangou:'wx87bfbcfe887faf4d',
+                    jipincang:'wxf48cdd6a7dae8c21',
+                    shanghai:'',
+                    qiyegou:'wx7e302245debd521a'
+                }
+                   
+                }
                  wx.navigateToMiniProgram({
-                    appId:"wx87bfbcfe887faf4d",
-                    path:"Shop/pages/toPayShareOrder?order_id="+order_id,
+                    appId: xiaochengxu[this.datas.xiaochengxu],
+                    path:"Shop/pages/toPayShareOrder?order_id="+order_id+'&type=share',
                     // extraData: {
                     //     duijie_user_id: this.userInfo.user_id
                     // },
@@ -533,7 +544,6 @@
         }
         // 生成订单
         async setOrder() {
-            console.log("1111",111111)
             var order = [{
                 "suppliers_id": 847,
                 "suppliers_name": "吉品仓",
@@ -589,18 +599,18 @@
                     item.upload =false
                 }
             }
-            newapi.order_new(order[0]).then(res=>{
-                if(res.data.code!=0){
+          var res=await newapi.order_new(order[0])
+ if(res.data.code!=0){
                     util.showToast(res.data.message)
                     return
                 }
+              
                   util.showToast('创建成功')
                   this.buttonTxt='分享订单'
                   this.order_id=res.data.data
                   this.isdisable=true
+             this.datas=res.data
                   this.$apply()
-                  
-            })
         }
         // onShareAppMessage(res){
         //     if(res.from=='button'){

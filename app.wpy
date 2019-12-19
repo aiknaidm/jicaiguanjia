@@ -256,6 +256,8 @@
             'design/my_designerIntroSet',
             'client/clientInfo',
             'client/clientAdd',
+            'qianzi/index',
+            'qianzi/details'
           ]
         },
         {

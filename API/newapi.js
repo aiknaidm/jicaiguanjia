@@ -216,6 +216,7 @@ const newapi = {
     couser_tixian: (data) => fetch(`${host_chk}/couser_tixian`, 'get', data),
     couser_syjl: (data) => fetch(`${host_chk}/couser_syjl`, 'get', data),
     order_new: (data) => fetch(`${host_chk}/order_new`, 'post', data),
+    qianming_tijiao: (data) => fetch(`${host_chk}/qianming_tijiao`, 'post', data),
 
 
 

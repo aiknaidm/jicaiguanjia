@@ -1,0 +1,90 @@
+<style lang="less">
+.button{
+  position: fixed;
+  width: 300rpx;
+ left: 225rpx;
+  bottom: 40rpx;
+background: #e50012;
+color: #fff;
+}
+</style>
+<template>
+  <view>
+    <htmlParser :parserName="name1" :parserContent.sync="articleDetail"/>
+    <button class="button" @tap='toInfo'>签字确认</button>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import htmlParser from '../../components/htmlParser';
+import newapi from '../../API/newapi';
+import util from '../../utils/index';
+export default class details extends wepy.page {
+  config = {
+    navigationBarTitleText: '文章详情'
+  };
+  components = { htmlParser };
+  data = {
+    articleDetail: {
+      post_content: "<text style='color: gray;'>暂无内容 </text>"
+    }
+  };
+  computed = {};
+  methods = {
+  async  toInfo(){
+      let suppliers_id=this.$parent.globalData.suppliers_id 
+      if(!suppliers_id){
+let yizhanInfo = await this.$parent.getYizhanInfo();
+suppliers_id=yizhanInfo.suppliers_id
+      }
+       
+
+      wx.navigateTo({ url: '/YizhanConsolePages/qianzi/index?suppliers_id='+suppliers_id });
+    }
+  };
+  events = {};
+  async getArticleDetail(id) {
+    util.showLoading();
+    let data = { id };
+    let res = await newapi.articleDetail(data);
+    wx.hideLoading();
+    this.articleDetail = res.data.data;
+    this.articleDetail.published_time = util.formatDate(this.articleDetail.published_time);
+    
+
+    this.articleDetail.post_content = this.articleDetail.post_content.replace(
+      /\<img/gi,
+      '<img style="max-width:100%;height:auto" '
+    );
+
+    this.$apply();
+  }
+ async getRules(){
+ util.showLoading();
+    let res = await newapi.shop_rules();
+    wx.hideLoading();
+     this.articleDetail = res.data.data;
+    this.articleDetail.published_time = util.formatDate(this.articleDetail.add_time);
+this.articleDetail.post_title = this.articleDetail.title;
+    this.articleDetail.post_content = this.articleDetail.content.replace(
+      /\<img/gi,
+      '<img style="max-width:100%;height:auto" '
+    );
+    this.$apply();
+  }
+  async onLoad(option) {
+     this.getRules();
+// console.log("option",option)
+//      if (option.type == 'rule'){
+// wx.setNavigationBarTitle({
+//         title: '吉采易站规则'
+//       });
+      
+//      }
+
+//       else
+//           this.getArticleDetail(10);
+  }
+}
+</script>
