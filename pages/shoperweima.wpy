@@ -93,6 +93,8 @@
           path = '/pages/home?suppliers_id=' + this.$parent.globalData.suppliers_id;
         } else if(this.$parent.globalData.suppliers_id==525) {
           appId = "wxedc203036acbc9e4";
+        } else if(this.$parent.globalData.suppliers_id==847) {
+          appId = "wxf48cdd6a7dae8c21";
         } else {
           appId = "wx7e302245debd521a";
           path = '/Shop/pages/index?suppliers_id=' +
@@ -147,6 +149,8 @@
         path = '/pages/home?suppliers_id=' + suppliers_id+'&share_suppliers_id='+suppliers_id+'&share_user_id='+userInfo.user_id+'&sales_id='+userInfo.user_id;
       }else if(is_join==1){
         path = '/pages/home?suppliers_id=' + yizhanInfo.yizhan_suppliers_id+'&share_suppliers_id='+suppliers_id+'&share_user_id='+userInfo.user_id+'&sales_id='+userInfo.user_id;
+      }else if(suppliers_id==847){
+        path = '/pages/home';
       } else {
         path = '/Shop/pages/index?suppliers_id=' +
           suppliers_id +
