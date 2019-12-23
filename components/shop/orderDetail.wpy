@@ -590,11 +590,13 @@
       <view class="wuliu-text wuliu-date red" @tap="showFahuodan({{orderDetail.fahuodan}})" wx:if="{{orderDetail.fahuodan!=''}}">查看发货单</view>
     </view>
     <!-- 按钮 -->
+    <orderbutton :orderDetail.sync="orderDetail"  :xiaochengxu.sync="orderDetail.xiaochengxu"></orderbutton>
     <!-- <orderbutton :orderDetail.sync="orderDetail"></orderbutton> -->
   </view>
 </template>
 <script>
   import wepy from 'wepy';
+    import orderbutton from '../../components/shop/orderbutton';
   export default class List extends wepy.component {
     props = {
       orderDetail: {
@@ -611,7 +613,7 @@
     data = {
       fuwufeiActive:true
     };
-    components = {};
+    components = {orderbutton};
     events = {};
     methods = {
       showMore(){

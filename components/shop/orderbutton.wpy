@@ -7,15 +7,25 @@
 
       <view
         class="btn cancel-btn"
-        wx:if="{{orderDetail.order_status==1}}"
-        @tap.stop="cancelOrderTap({{orderDetail.id}})"
+        wx:if="{{orderDetail.user_id==0&&orderDetail.order_status!=5}}"
+        @tap.stop="cancelOrderTap({{orderDetail.order_id}})"
       >取消订单</view>
-     
       <view
+        class="btn topay-btn"
+        wx:if="{{orderDetail.user_id==0&&orderDetail.order_status!=5}}"
+        @tap.stop="shareOrderTap({{orderDetail.order_id}},{{orderDetail.xiaochengxu}})"
+      >分享订单</view>
+       <view
+        class="btn topay-btn"
+        wx:if="{{orderDetail.user_id==0&&orderDetail.order_status!=5}}"
+        @tap.stop="getErweima({{orderDetail.order_id}},{{orderDetail.xiaochengxu}})"
+      >二维码</view>
+      <erweima :erweima.sync="erweima" wx:if="{{isShow}}" @hiddenErweima.user="hiddenErweima"></erweima>
+      <!-- <view
         class="btn topay-btn"
         wx:if="{{orderDetail.order_status==2&&orderDetail.shipping_status==1}}"
         @tap.stop="confirmBtnTap({{orderDetail.id}})"
-      >确认收货</view>
+      >确认收货</view> -->
 
   </view>
 </template>
@@ -23,27 +33,76 @@
 import wepy from 'wepy';
 import newapi from '../../API/newapi';
 import util from '../../utils/index';
+import erweima from '../../components/erweima';
 export default class orderbutton extends wepy.component {
   props = {
     orderDetail: {
       type: Object,
       default: {},
       twoWay: true
+    },
+    xiaochengxu: {
+      type: String,
+      default: 'yizhangou',
+      twoWay: true
     }
   };
-  data = {};
+  data = {
+    isShow:false,
+    erweima:''
+  };
 
   events = {};
-
+components={erweima}
   methods = {
+    hiddenErweima(){
+                this.isShow=false
+            },
+            getErweima(order_id,xiaochengxu){
+               util.showLoading("生成二维码中")
+                this.isShow=true
+                var order_id=order_id?order_id:0
+                var datas={
+                   xiaochengxu: xiaochengxu,  
+                   path: "Shop/pages/toPayShareOrder?order_id="+order_id+'&type=share'   
+                }
+                newapi.getQRCode4(datas).then(res=>{
+                    this.erweima=res.data.data;
+                    wx.hideLoading();
+                    this.$apply();
+                })
+            },
     // 取消订单
     async cancelOrderTap(id) {
       let mRes = await util.showModalBig('你确定要取消订单吗');
       if (mRes.confirm) {
         var res = await this.toCancelOrder(id);
-        if (res.data.code == 0) this.$emit('cancelOrderTap');
+        if (res.data.code == 0) {this.orderDetail.user_id=-1;this.$emit('cancelOrderTap')}
         else util.showToast('取消失败');
       }
+    },
+    shareOrderTap(order_id){
+  
+                       var xiaochengxu={
+                    yizhangou:'wx87bfbcfe887faf4d',
+                    jipincang:'wxf48cdd6a7dae8c21',
+                    shanghai:'',
+                    qiyegou:'wx7e302245debd521a'
+                }
+                  var that=this
+                 wx.navigateToMiniProgram({
+                    appId: xiaochengxu[this.xiaochengxu],
+                    path:"Shop/pages/toPayShareOrder?order_id="+order_id+'&type=share',
+                    // extraData: {
+                    //     duijie_user_id: this.userInfo.user_id
+                    // },
+                    envVersion: 'develop',
+                    // envVersion: 'trial',
+                    success(res) {
+                        // 打开成功
+                    }
+                }); 
+                
     },
     // 确认收货
     async confirmBtnTap(id) {
@@ -58,7 +117,7 @@ export default class orderbutton extends wepy.component {
   // 取消订单
   async toCancelOrder(id) {
     let data = { id };
-    return await newapi.cancelOrder(data);
+    return await newapi.cancelorder(data);
   }
   // 确认收货
   async toConfirmBtn(id) {

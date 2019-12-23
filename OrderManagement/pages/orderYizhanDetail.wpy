@@ -322,15 +322,16 @@ if(item.cost_price==0){
     };
     events = {
       cancelOrderTap: res => {
-        this.$parent.$pages['/Shop/pages/orderList'].events.cancelOrderTap(
-          this.id
-        );
+              // console.log(this.$parent.$pages['/OrderManagement/pages/orderList'])
+        // this.$parent.$pages['/Shop/pages/orderList'].$events.cancelOrderTap(
+        //   this.id
+        // );
         this.getOrderDetail(this.id);
       },
       confirmBtnTap: res => {
-        this.$parent.$pages['/Shop/pages/orderList'].events.confirmBtnTap(
-          this.id
-        );
+        // this.$parent.$pages['/Shop/pages/orderList'].$events.confirmBtnTap(
+        //   this.id
+        // );
         this.getOrderDetail(this.id);
       }
     };

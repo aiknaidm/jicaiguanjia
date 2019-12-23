@@ -95,6 +95,7 @@
        
         <view slot="btn" class="price-box price-box2">
           <view wx:if="{{thisindex==1 && suppliers_id == cur_suppliers_id}}" class="btn topay-btn" @tap="orderDetail({{item}})">去发货</view>
+         <orderbutton wx:else :orderDetail.sync="item" :index.sync="index" :xiaochengxu.sync="xiaochengxu"></orderbutton>
         </view>
       </orderList>
     </repeat>
@@ -141,7 +142,8 @@
       ishowjoinlist: false,
       is_yizhan: 0,
       cur_suppliers_name: "查看本店",
-      joinlist: []
+      joinlist: [],
+      xiaochengxu:'yizhangou'
     };
     computed = {};
     events = {
@@ -253,6 +255,7 @@
       wx.hideLoading();
       var orderList = res.data.data.orderList;
       var goodsMap = res.data.data.goodsMap;
+        this.xiaochengxu=res.data.data.xiaochengxu
       orderList.forEach((item, index) => {
         orderList[index].add_time = util.formatDate(item.add_time);
       });
@@ -290,7 +293,7 @@
     }
     async onLoad(option) {
       util.showLoading();
-      await this.$parent.loginInfo();
+      
       this.suppliers_id = option.suppliers_id ?
         option.suppliers_id :
         this.$parent.globalData.suppliers_id;
@@ -299,11 +302,15 @@
       this.thisindex = option.order_status;
       this.isMoreData = true;
       this.page = 1;
+      
+    }
+  async  onShow(){
+      await this.$parent.loginInfo();
       this.is_yizhan = this.$parent.globalData.yizhanInfo.is_yizhan;
       if (this.is_yizhan == 1) {
         this.joinlist = await this.yizhan_join_list();
       }
-      this.getOrderList(option.order_status, this.page);
+      this.getOrderList(this.thisindex, this.page);
     }
     onReachBottom() {
       if (this.isMoreData) {

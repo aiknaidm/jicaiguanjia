@@ -148,7 +148,8 @@
             'pages/addGoodsShop',
             'pages/goodsList',
             'pages/changeGoodsInfo',
-            'pages/my_console_catDelete'
+            'pages/my_console_catDelete',
+            'pages/pingjiaSelect'
           ]
         },
         {

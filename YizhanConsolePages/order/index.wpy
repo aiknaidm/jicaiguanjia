@@ -58,6 +58,11 @@
         justify-content: space-between;
         align-items: center;
     }
+    .listBox.disable{
+        height: 70rpx;
+        line-height: 70rpx;
+        border-bottom: 0px solid#e4e4e4;
+    }
     .listBox4 {
         height: auto;
         line-height: 90rpx;
@@ -264,6 +269,10 @@
         height: 200rpx;
         justify-content: flex-start
     }
+     .listBox2.disable{
+         height: auto;
+         
+     }
     .listBox2 image {
         width: 80rpx;
         height: 80rpx;
@@ -289,6 +298,13 @@
     background-color: #fff;
     z-index: 10;
   }
+  .jiesuan-box .to-pay{
+      display: flex;
+     
+  }
+    .jiesuan-box .to-pay button:first-child{
+ border-right: 1px solid #fff;
+    }
   .jiesuan-box .to-pay-btn {
     width: 250rpx;
     text-align: center;
@@ -313,45 +329,46 @@
     text-align: right;
     padding: 0 30rpx 0 0;
   }
+  
 </style>
 
 <template>
     <form >
         <view class="container">
             <block wx:for="{{goodsList}}" wx:key="{{index}}">
-                <view class="listBox listBox2">
+                <view class="listBox listBox2 {{isdisable?'disable':''}}">
                     <view class="listOption">商品图</view>
                     <image wx:if="{{item.goods_img==''}}" data-index="{{index}}" src="/images/add_img.png" @tap='chooseImg' mode='aspectFit' />
                     <image wx:else src="{{item.goods_img}}"  @tap="{{isdisable?'':'chooseImg'}}" mode='aspectFit' />
                 </view>
-                <view class="listBox">
+                <view class="listBox {{isdisable?'disable':''}}">
                     <view class="listOption req">商品名</view>
                     <input class="shownnum" placeholder="请输入商品标题" disabled="{{isdisable}}" type="text" name="goods_name" @input="goodsNameChange({{index}})" />
                 </view>
-                <view class="listBox">
+                <view class="listBox {{isdisable?'disable':''}}">
                     <view class="listOption">规格</view>
                     <input class="shownnum" type='digit' name="goods_attr" disabled="{{isdisable}}" @input="goodsAttrChange({{index}})" />
                 </view>
-                <view class="listBox">
+                <view class="listBox {{isdisable?'disable':''}}">
                     <view class="listOption req">价格</view>
                     <input class="shownnum" type='digit' name="floor_price" disabled="{{isdisable}}" @input="goodsPriceChange({{index}})" />
                 </view>
-                 <view class="listBox">
+                 <view class="listBox {{isdisable?'disable':''}}">
                     <view class="listOption req">成本价格</view>
                     <input class="shownnum" type='digit' name="cost_price" @input="costPriceChange({{index}})" />
                 </view>
-                <view class="listBox">
+                <view class="listBox {{isdisable?'disable':''}}">
                     <view class="listOption req">数量</view>
                     <input class="shownnum" type='digit' name="buy_number" disabled="{{isdisable}}" @input="buyNumberChange({{index}})" />
                 </view>
             </block>
-            <view class="listBoxAdd" @tap="{{isdisable?'':'addGoods'}}">
+            <view class="listBoxAdd" wx:if="{{!isdisable}}" @tap="{{isdisable?'':'addGoods'}}">
                 <text class=' listOptionAdd iconfont icon-icon02'></text>
                 <view class='listOption format'>添加商品</view>
             </view>
-            <view class="listBox">
+            <view class="listBox {{isdisable?'disable':''}}">
                     <view class="listOption req">订单备注</view>
-                    <input class="shownnum" type='digit' name="remark"  disabled="{{isdisable}}" @input="remarkChange" />
+                    <input class="shownnum" type='text' name="remark"  disabled="{{isdisable}}" @input="remarkChange" />
                 </view>
              
         
@@ -359,9 +376,14 @@
           <view class="left-price">
             <view class="total">合计：¥ {{order_amount}}</view>
           </view>
-            <button  class="to-pay-btn" disabled="{{isclick}}" @tap="getFormId" >{{buttonTxt}}</button>
+          <view class="to-pay">
+              <button  class="to-pay-btn" wx:if="{{isdisable}}" @tap="getErweima" >二维码</button>
+              <button  class="to-pay-btn" disabled="{{isclick}}" @tap="getFormId" >{{buttonTxt}}</button>
+          </view>
+            
          
         </view>
+      <erweima :erweima.sync="erweima" wx:if="{{isShow}}" @hiddenErweima.user="hiddenErweima"></erweima>
             <!-- <view class="listBox listBox3">
                             <view class="listOption">是否可用会员卡</view>
                             <view class="listOptionImages goodsDetail">
@@ -379,23 +401,44 @@
     import util from '../../utils/index';
     import api from '../../API/api';
     import newapi from '../../API/newapi';
+    import erweima from '../../components/erweima';
+    
     export default class newslist extends wepy.page {
         config = {
             navigationBarTitleText: '添加商品'
         };
-        components = {};
+        components = {erweima};
         data = {
             brandList: [],
             goodsList: [],
            order_amount:0,
            remark:'',
            buttonTxt:'生成订单',
-           isdisable:false
+           isdisable:false,
+           isShow:false,
+           erweima:''
         };
         computed = {};
         methods = {
             toyzg(){
 
+            },
+            hiddenErweima(){
+                this.isShow=false
+            },
+            getErweima(){
+               util.showLoading("生成二维码中")
+                this.isShow=true
+                var order_id=this.order_id?this.order_id:0
+                var datas={
+                   xiaochengxu: this.datas.xiaochengxu,  
+                   path: "Shop/pages/toPayShareOrder?order_id="+order_id+'&type=share'   
+                }
+                newapi.getQRCode4(datas).then(res=>{
+                    this.erweima=res.data.data;
+                    wx.hideLoading();
+                    this.$apply();
+                })
             },
             chooseAttrImg(index) {
                 wepy
@@ -492,10 +535,9 @@
                     shanghai:'',
                     qiyegou:'wx7e302245debd521a'
                 }
-                   
-                }
+                  var that=this
                  wx.navigateToMiniProgram({
-                    appId: xiaochengxu[this.datas.xiaochengxu],
+                    appId: xiaochengxu[that.datas.xiaochengxu],
                     path:"Shop/pages/toPayShareOrder?order_id="+order_id+'&type=share',
                     // extraData: {
                     //     duijie_user_id: this.userInfo.user_id
@@ -505,7 +547,9 @@
                     success(res) {
                         // 打开成功
                     }
-                });
+                }); 
+                }
+                
             }
         };
         events = {};
@@ -609,7 +653,7 @@
                   this.buttonTxt='分享订单'
                   this.order_id=res.data.data
                   this.isdisable=true
-             this.datas=res.data
+                    this.datas=res.data
                   this.$apply()
         }
         // onShareAppMessage(res){
@@ -625,7 +669,6 @@
             try {
                 this.goodsId = '';
               var res=  await this.$parent.loginInfo();
-              console.log(res)
                 this.suppliers_id = this.$parent.globalData.suppliers_id ?
                     this.$parent.globalData.suppliers_id :
                     (await this.$parent.getYizhanInfo()).suppliers_id;
