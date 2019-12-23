@@ -97,7 +97,7 @@
     import search from '../../components/search';
     export default class message extends wepy.page {
         config = {
-            navigationBarTitleText: '宣传语'
+            navigationBarTitleText: '客户信息'
         };
         components = {
             noOrder,

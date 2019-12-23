@@ -1,0 +1,115 @@
+<style lang="less" scope>
+  .detail{
+    padding:20rpx 40rpx;
+    border-bottom: 1px solid #f0f0f0;
+}
+.userinfo{
+    display: flex;
+    align-items: center;
+    image{
+        width: 100rpx;
+        height: 100rpx;
+        border-radius: 50%;
+        margin-right: 40rpx;
+    }
+}
+.userinfo-text{
+    .userinfo-name{
+        font-size: 34rpx;
+        line-height: 40rpx;
+    }
+    .userinfo-time{
+        font-size: 28rpx;
+        color: #aaa
+    }
+}
+.userinfo-comment{
+    padding-top: 30rpx;
+} 
+</style>
+
+<template>
+    <view class='container'>
+        <block wx:for="{{goodpingjia}}" wx:if="{{goodpingjia.length>0}}">
+            <view class="detail">
+                <view class="userinfo">
+                    <image src="{{item.avatar}}"></image>
+                    <view class="userinfo-text">
+                        <view class="userinfo-name">
+                            {{item.user_name}}
+                        </view>
+                        <view class="userinfo-time">
+                            {{item.add_time}}
+                        </view>
+                    </view>
+                </view>
+                <view class="userinfo-comment">
+                    {{item.content}}
+                </view>
+            </view>
+        </block>
+        <block wx:if="{{goodpingjia.length==0}}">
+            <noorder text="还没人评价呢" showBtn="0"></noorder>
+        </block>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy';
+    import newapi from '../../API/newapi';
+    import util from '../../utils/index';
+    export default class pingjiaSelect extends wepy.page {
+       config = {
+            navigationBarTitleText: '评价'
+        };
+        components = {noorder};
+        data = {
+            goodpingjia: [],
+            page: 1
+        };
+        computed = {};
+        methods = {}
+        getgoodpingjia() {
+            wx.showLoading({
+              title: '加载中...', //提示的内容,
+              mask: true, //显示透明蒙层，防止触摸穿透,
+              success: res => {}
+            });
+            var goods_id = this.goods_id
+            var page = this.page
+            newapi.goodpingjia({
+                goods_id,
+                page
+            }).then(res => {
+                wx.hideLoading();
+                var datas = res.data.data.data
+                datas.forEach((item, index) => {
+                    datas[index].add_time = util.formatDate(item.add_time);
+                    //orderList[index].zhekou=(item.original_amount-item.order_amount).toFixed(2)
+                });
+                if (page == 1) {
+                    this.goodpingjia = datas
+                } else {
+                    this.goodpingjia.push(...datas)
+                }
+                if (this.goodpingjia.length < 10) {
+                    this.isMoreData = false;
+                } else
+                    this.isMoreData = true;
+                    this.$apply()
+            })
+        }
+        onLoad(option) {
+            this.goods_id = option.goods_id
+            this.isMoreData = true
+            this.page = 1
+            this.getgoodpingjia();
+        }
+        onReachBottom() {
+            if (this.isMoreData) {
+                util.showLoading();
+                this.page = this.page + 1;
+                this.getgoodpingjia();
+            }
+        }
+    }
+</script>
