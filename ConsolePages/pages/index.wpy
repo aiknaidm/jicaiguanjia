@@ -532,6 +532,10 @@
     computed = {};
     methods = {
       showyizhan: function() {
+      wx.requestSubscribeMessage({
+        tmplIds: ['gEyxw0pG-FekEpPBGNxSwyWUb6KrTjk59LJe0ePJur4'],
+        success (res) { }
+      })
         this.right = 1;
       },
       hiddenyizhan: function() {
