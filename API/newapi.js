@@ -218,6 +218,7 @@ const newapi = {
     order_new: (data) => fetch(`${host_chk}/order_new`, 'post', data),
     qianming_tijiao: (data) => fetch(`${host_chk}/qianming_tijiao`, 'post', data),
     getQRCode4: (data) => fetch(`${host_chk}/getQRCode4`, 'post', data),
+    add_submessage: (data) => fetch(`${host_chk}/add_submessage`, 'get', data),
 
 
 
