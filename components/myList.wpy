@@ -64,9 +64,9 @@ button {
 </style>
 <template>
 
-  <button form-type="submit" class="weui_cell" @tap="toUrl({{tabItem.url}},{{tabItem.type}})" tabItem="列表内容">
+  <view class="weui_cell" @tap="toUrl({{tabItem.url}},{{tabItem.type}})" tabItem="列表内容">
     <view class="weui_cell_hd" style="background:{{tabItem.bgcolor}}" wx:if="{{tabItem.icon&&tabItem.icon!=''}}">
-      <image src="{{tabItem.icon}}" />
+      <image @tap="dingyue" src="{{tabItem.icon}}" />
      
     </view>
     <view class="weui_cell_hd weui_cell_hd2" wx:else>
@@ -78,10 +78,11 @@ button {
     </view>
     <view wx:if="{{tabItem.unreadNum}}" class="badge">{{tabItem.unreadNum}}</view>
     <view class="with_arrow" wx:if="{{tabItem.is_fufei==1}}">付费</view>
-  </button>
+  </view>
 </template>
 <script>
 import wepy from 'wepy';
+import newapi from '../API/newapi';
 
 export default class myList extends wepy.component {
   props = {
@@ -94,6 +95,15 @@ export default class myList extends wepy.component {
   events = {};
 
   methods = {
+    dingyue() {
+      wx.requestSubscribeMessage({
+        tmplIds: ['gEyxw0pG-FekEpPBGNxSwyWUb6KrTjk59LJe0ePJur4'],
+        success (res) {
+          let data = {};
+          newapi.add_submessage(data);
+         }
+      })
+    },
     toUrl(url, type) {
       if (type && type == 1) {
         wx.navigateToMiniProgram({
