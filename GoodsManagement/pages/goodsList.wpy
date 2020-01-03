@@ -596,6 +596,8 @@ display: inline-block;
    <text bindtap="fuzhi('523','501')" class="to-copy" wx:if="{{suppliers_id==523}}">尚志复制到黑河</text>
    <text bindtap="fuzhi('523','538')" class="to-copy" wx:if="{{suppliers_id==523}}">尚志复制到延寿</text>
    <text bindtap="fuzhi('523','832')" class="to-copy" wx:if="{{suppliers_id==523}}">尚志复制到五常</text>
+   <text bindtap="fuzhi('523','497')" class="to-copy" wx:if="{{suppliers_id==523}}">尚志复制到青岛</text>
+   <text bindtap="fuzhi('832','497')" class="to-copy" wx:if="{{suppliers_id==832}}">五常复制到青岛</text>
     <view class='search-title'>
        <view @tap="statusTap3({{index}})" class="status-label {{index == currentType ? 'active' : ''}} {{isclick?'down':'up'}}" wx:for-items="{{statusType2}}" wx:key="{{index}}" data-index="{{index}}" data-name="{{item.name}}">
         <view class='border'>{{item}}
