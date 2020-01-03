@@ -196,6 +196,7 @@
         </view>
       </block>
     </view>
+    <erweima :erweima.sync="erweima"></erweima>
   </view>
 </template>
 
@@ -205,6 +206,7 @@
   import newapi from '../../API/newapi';
   import util from '../../utils/index';
   import noorder from '../../components/noOrder';
+  import erweima from '../../components/erweima2';
   export default class my_addManagerInfo extends wepy.page {
     config = {
       navigationBarTitleText: '用户搜索'
@@ -215,11 +217,13 @@
       type: '',
       adminList: [],
       text: '',
-      page: 1
+      page: 1,
+      erweima: ''
     };
     computed = {};
     components = {
-      noorder
+      noorder,
+      erweima
     };
     methods = {
       searchIpt: function(e) {
@@ -251,7 +255,10 @@
           } else if (this.type == 'coupon') {
             this.$parent.$pages['/ConsolePages/pages/coupon/addCoupon'].choose_user_name = user_name;
             this.$parent.$pages['/ConsolePages/pages/coupon/addCoupon'].choose_user_id = user_id;
-            wx.navigateBack();
+            wx.navigateBack({
+              delta: 1
+            });
+            return
           } else {
             wx.navigateTo({
               url: '/ConsolePages/pages/my_setManagerInfo_permission?id=' + user_id
@@ -323,31 +330,31 @@
       }
     };
     events = {};
-    async getAdmin(){
+    async getAdmin() {
       var page = this.page
-        var keyword = this.keyword;
-        let data = {
-          keyword,
-          page
-        };
-        if(this.type == 'coupon'){
-            this.suppliers_id = this.$parent.globalData.suppliers_id 
-          data.suppliers_id=this.suppliers_id
-        }
-        var res;
-        if (this.type == 'member' || this.type == 'coupon') {
-          res = await newapi.find_users_c(data);
-        } else {
-          res = await newapi.find_users(data);
-        }
-        if (page == 1) {
-          this.adminList = res.data.data;
-          this.isMoreData = true
-        } else this.adminList.push(...res.data.data);
-        if (res.data.data.length < 30) this.isMoreData = false;
-        this.text = '您搜索的昵称不存在，请更换关键词试试。';
-         util.hideLoading();
-        this.$apply();
+      var keyword = this.keyword;
+      let data = {
+        keyword,
+        page
+      };
+      if (this.type == 'coupon') {
+        this.suppliers_id = this.$parent.globalData.suppliers_id
+        data.suppliers_id = this.suppliers_id
+      }
+      var res;
+      if (this.type == 'member' || this.type == 'coupon') {
+        res = await newapi.find_users_c(data);
+      } else {
+        res = await newapi.find_users(data);
+      }
+      if (page == 1) {
+        this.adminList = res.data.data;
+        this.isMoreData = true
+      } else this.adminList.push(...res.data.data);
+      if (res.data.data.length < 30) this.isMoreData = false;
+      this.text = '您搜索的昵称不存在，请更换关键词试试。';
+      util.hideLoading();
+      this.$apply();
     }
     onReachBottom() {
       if (this.isMoreData) {
@@ -362,6 +369,25 @@
       }
       if (options.sales_id && options.sales_id != '')
         this.sales_id = options.sales_id;
+      this.getErweima();
+    }
+    async getErweima() {
+      console.log(this.type)
+      let data={}
+      if (this.type == 'salesman') {
+         data = {
+          xiaochengxu: 'guanjia',
+          path: '/YizhanConsolePages/yizhan/hexinMember'
+        }
+      } else if(this.type == 'member'){
+         data = {
+          xiaochengxu: 'guanjia',
+          path: '/YizhanConsolePages/yizhan/yunMember'
+        }
+      }
+      let res = await newapi.getQRCode4(data)
+      this.erweima = res.data.data
+      this.$apply()
     }
   }
 </script>

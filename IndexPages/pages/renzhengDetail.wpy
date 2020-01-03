@@ -297,7 +297,9 @@
               </label>
         </checkbox-group>
       </view>
-      <button class='rz-submit' formType="submit" wx:if="{{!isuserDetail}}" disabled='{{issubmit}}'>提交</button>
+       <button class='rz-submit' @tap="selectShop" wx:if="{{type!=0}}">选择店铺</button>
+      <button class='rz-submit' formType="submit" wx:elif="{{!isuserDetail}}" disabled='{{issubmit}}'>提交</button>
+     
       <button class='rz-submit' @tap="backIndex" wx:else>回到首页</button>
       <!-- <button class='rz-submit' disabled='true' wx:if="{{userDetail.user_status=='0'}}">审核中...</button> -->
     </form>
@@ -333,10 +335,19 @@
       // shareCode: '',
       shopImg: 0,
       address: '',
-      isOpenSetting: false
+      isOpenSetting: false,
+      type:0
     };
     computed = {};
     methods = {
+      selectShop(){
+       var parent= this.$parent.$pages["/YizhanConsolePages/yizhan/hexinMember"]
+       parent.suppliers_id=this.userDetail.suppliers_id
+       parent.suppliers_name=this.userDetail.suppliers_desc
+      wx.navigateBack({
+  delta: 2
+})
+      },
       getAddressTap() {
         this.$parent.checkUserLocation().then(res => {
           if (res) {
@@ -600,6 +611,7 @@
     async onLoad(option) {
       console.log(option)
      var res= await this.$parent.loginInfo();
+     this.type=option.type?option.type:0
      this.share_user_id=option.user_id?option.user_id:0
       var suppliers_id = option.suppliers_id ? option.suppliers_id : ''
       this.share_suppliers_id= option.share_suppliers_id ? option.share_suppliers_id : ''

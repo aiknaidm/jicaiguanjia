@@ -29,8 +29,8 @@
 
 <script>
 import wepy from 'wepy';
-import newapi from '../../API/newapi';
-import util from '../../utils/index';
+import newapi from '../API/newapi';
+import util from '../utils/index';
 export default class newslist extends wepy.page {
   config = {
     navigationBarTitleText: '店铺列表'
@@ -42,7 +42,7 @@ export default class newslist extends wepy.page {
   computed = {};
   methods = {
     toSuppliersDetail (id){
-     wx.navigateTo({ url: 'renzhengDetail?suppliers_id='+id+'&type='+this.type });
+     wx.navigateTo({ url: 'renzhengDetail?suppliers_id='+id });
     }
   };
   events = {};
@@ -68,7 +68,6 @@ export default class newslist extends wepy.page {
     await this.$parent.loginInfo();
     let shareCode = option.shareCode;
     this.shareCode = shareCode;
-    this.type=option.type
     if (shareCode) var yizhanInfo = await this.bindSuperior(shareCode);
     
     // else var yizhanInfo = await this.$parent.getYizhanInfo();

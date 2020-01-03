@@ -86,7 +86,7 @@
         </view>
       </view> -->
     </view>
-  
+
   </view>
 </template>
 
@@ -94,13 +94,15 @@
   import wepy from 'wepy';
   import newapi from '../../API/newapi';
   import util from '../../utils/index';
+  
   export default class my_setManagerInfo extends wepy.page {
     config = {
       navigationBarTitleText: '管理员绑定'
     };
     data = {
       adminList: [],
-      isshowclose: false
+      isshowclose: false,
+      
     };
     computed = {};
     components = {};
@@ -141,6 +143,7 @@
     async onShow() {
        let suppliers_id = this.$parent.globalData.suppliers_id;
       this.managerList(suppliers_id);
+     
     }
     async managerList(suppliers_id) {
      
@@ -153,5 +156,6 @@
         this.$apply();
       }
     }
+
   }
 </script>

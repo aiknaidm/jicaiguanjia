@@ -993,8 +993,7 @@ display: inline-block;
           '改标题',
           '改价格',
           '改库存',
-          '改全部',
-          '评价'
+          '改全部'
         ]);
         switch (mRes.tapIndex) {
           case 0:
@@ -1031,12 +1030,6 @@ display: inline-block;
             // 改全部
             wx.navigateTo({
               url: 'addGoodsInfo?id=' + id + '&index=' + index
-            });
-            break;
-             case 5:
-            // 改全部
-            wx.navigateTo({
-              url: 'pingjiaSelect?id=' + id + '&index=' + index
             });
             break;
           default:

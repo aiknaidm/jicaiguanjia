@@ -1,5 +1,6 @@
 <style lang="less">
   @import './font/font.wxss';
+  @import './common/lib/animate.wxss';
   page {
     position: relative;
     height: 100%;
@@ -238,6 +239,9 @@
             'yizhan/yizhan-add',
             'yizhan/yizhan-apply',
             'yizhan/catList',
+            'yizhan/my_setYizhanSalesman',
+            'yizhan/hexinMember',
+            
             'design/design',
             'worker/my_setBanggeInfo',
             'brand/setBrand',

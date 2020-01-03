@@ -1,0 +1,143 @@
+<style lang="less">
+.bg{
+      background: rgba(0, 0, 0, 0.5);
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      .erweima{
+          width: 500rpx;
+          height: 600rpx;
+          border-radius: 10rpx;
+          background: #fff;
+          margin: 100rpx auto;
+          margin-bottom: 20rpx;
+          text-align: center;
+          image{
+              width: 80%;
+              height: auto;
+              margin-top: 40rpx;
+          }
+      }
+      .btn-close{
+          width: 100rpx;
+          height: 100rpx;
+          margin: auto;
+          color: #fff;
+        font-size: 50rpx;
+        text-align: center;
+        line-height: 100rpx;
+        // border: 1px solid #fff;
+        // border-radius: 50%;
+      }
+
+  }
+  .erweimabtn{
+      width: 100rpx;
+      height: 100rpx;
+      border-radius: 50%;
+      background: #e50012;
+      color: #fff;
+      position: fixed;
+      bottom: 100rpx;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      image{
+          width:50%;
+          height: 50%;
+      }
+  }
+  .canvasdrawer{
+    //   display: none
+  }
+</style>
+<template>
+<view>
+    <view class="erweimabtn" @tap="showErweima">
+        <image
+          src="/images/erweima.png"
+          mode="scaleToFill"
+          lazy-load="false">
+        </image>
+    </view>
+   <view class="bg " wx:if="{{isShow}}">
+            <view class="erweima animated fadeIn">
+                    <image src="{{erweima}}" mode="widthFix" @tap="tapErweima"></image>
+                    <view>扫一扫加成为会员</view>
+            </view>
+            <view class="btn-close" @tap="hiddenErweima">
+                x
+            </view>
+            
+        </view>
+</view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class erweima extends wepy.component {
+    props = {
+     erweima:String
+    }
+
+    data = {
+        isShow:false
+    }
+    events = {
+     
+    }
+component={}
+    watch = {
+    erweima(nowVal,b1){
+         var a = wx.getSystemInfoSync().windowWidth / 375;
+      var height = wx.getSystemInfoSync().windowHeight;
+      var width = wx.getSystemInfoSync().windowWidth;
+        this.painting = {
+        width: 375 * a,
+        height: 474 * a,
+        clear: true,
+        views: [{
+            type: 'image',
+            //url: 'https://d.funcodeit.com/test/onepayqrcode_template.jpg',
+            url: nowVal,
+            top: 0,
+            left: 0,
+            width: 375 * a,
+            height: 474 * a
+          },
+          {
+            type: 'text',
+            content: '成为我的会员',
+            fontSize: 15 * a,
+            width: 180 * a,
+            top: 400 * a,
+            left: 180 * a,
+            color: '#aaa',
+            textAlign: 'center',
+            bolder: false
+          }
+        ]
+      };
+    }
+    }
+
+    methods = {
+        tapErweima(){
+            wx.previewImage({
+  current: this.erweima, // 当前显示图片的http链接
+  urls: [this.erweima] // 需要预览的图片http链接列表
+})
+        },
+        showErweima(){
+            this.isShow=true
+        },
+    hiddenErweima(){
+         this.isShow=false
+    }
+    }
+  }
+</script>

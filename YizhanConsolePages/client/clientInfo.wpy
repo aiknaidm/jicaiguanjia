@@ -58,27 +58,26 @@
         margin-left: -50rpx;
         border-radius: 50%;
     }
-    .phone{
+    .phone {
         width: 60rpx;
         height: 60rpx;
         position: absolute;
-        bottom: 30rpx;
+        top: 30rpx;
         right: 30rpx;
     }
 </style>
 <template>
     <view>
         <search @buttonTap.user="searchTap"></search>
+        <statusTap :statusType.sync="statusType" @statusTap.user="statusTap"></statusTap>
         <view class="message-lists">
             <block wx:if="{{kehuList.length>0}}">
                 <view class="message-list" wx:for="{{kehuList}}" wx:key="{{index}}">
                     <view> 客户姓名：{{item.name}}</view>
                     <view> 客户手机：{{item.mobile}}</view>
                     <view> 所在城市：{{item.city}}</view>
-                    <image
-                      src="/images/phone.png"
-                      mode="scaleToFill"
-                      lazy-load="false" class="phone"  @tap.stop="call({{item.id}},{{item.mobile}})">
+                    <view wx:if="{{type==0}}">客户房型：{{item.remark}}</view>
+                    <image src="/images/phone.png" mode="scaleToFill" lazy-load="false" class="phone" @tap.stop="call({{item.id}},{{item.mobile}})">
                     </image>
                     <!-- <text class="copy">删除</text> -->
                 </view>
@@ -87,7 +86,7 @@
                 <noOrder></noOrder>
             </block>
         </view>
-        </view>
+    </view>
 </template>
 <script>
     import wepy from 'wepy';
@@ -95,44 +94,64 @@
     import util from '../../utils/index';
     import noOrder from '../../components/noOrder';
     import search from '../../components/search';
+    import statusTap from '../../components/statusTap';
     export default class message extends wepy.page {
         config = {
             navigationBarTitleText: '客户信息'
         };
         components = {
             noOrder,
-            search
+            search,
+            statusTap
         };
         data = {
             keyword: '',
             page: 1,
             isMoreData: true,
-            kehuList: []
+            kehuList: [],
+            statusType: ["装修", "选材"],
+            type:0
         };
         computed = {};
         methods = {
+            statusTap(e) {
+                console.log('e', e)
+                this.page = 1
+                this.type=e
+                if ( this.type == 0)
+                    this.getKehu()
+                if ( this.type == 1)
+                    this.getKehu1()
+            },
             searchTap(e) {
                 this.keyword = e
-                this.page=1
-                this.getKehu();
+                this.page = 1
+                if ( this.type == 0)
+                    this.getKehu()
+                if ( this.type == 1)
+                    this.getKehu1()
             },
-            call(id,phoneNumber) {
+            call(id, phoneNumber) {
                 //    util.de
-newapi.kehu_panduan({id}).then(res=>{
-    var that=this
-    if(res.data.code==1){
-        util.showToast(res.data.message)
-return
-    }
-      wx.makePhoneCall({
-                    phoneNumber: phoneNumber,//仅为示例，并非真实的电话号码
-                    success:function(res){
-                        console.log(res)
-                            newapi.kehu_log({yizhan_suppliers_id:that.suppliers_id,mobile:phoneNumber})
+                newapi.kehu_panduan({
+                    id
+                }).then(res => {
+                    var that = this
+                    if (res.data.code == 1) {
+                        util.showToast(res.data.message)
+                        return
                     }
+                    wx.makePhoneCall({
+                        phoneNumber: phoneNumber, //仅为示例，并非真实的电话号码
+                        success: function(res) {
+                            console.log(res)
+                            newapi.kehu_log({
+                                yizhan_suppliers_id: that.suppliers_id,
+                                mobile: phoneNumber
+                            })
+                        }
+                    })
                 })
-})
-              
             },
             toDetail(item) {
                 var item = JSON.stringify(item)
@@ -143,11 +162,51 @@ return
         };
         onShow() {
             this.suppliers_id = this.$parent.globalData.suppliers_id
-            if(!this.suppliers_id )
-            
-            this.getKehu();
+            if(!this.suppliers_id)
+          {  wx.navigateBack({
+              delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+            });
+            return}
+           if ( this.type == 0)
+                    this.getKehu()
+                if ( this.type == 1)
+                    this.getKehu1()
         }
         getKehu() {
+            newapi.kehu_list({
+                keyword: this.keyword,
+                page: this.page,
+                suppliers_id: this.suppliers_id
+            }).then(res => {
+                if (this.page == 1) {
+                    this.isMoreData = true;
+                    this.kehuList = res.data.data.data;
+                } else
+                    this.kehuList.push(...res.data.data.data);
+                if (res.data.data.data.length < 10) this.isMoreData = false;
+                else this.isMoreData = true;
+                this.$apply();
+                wx.hideLoading();
+            });
+        }
+        getKehu() {
+            newapi.zxkehu_list({
+                keyword: this.keyword,
+                page: this.page,
+                suppliers_id: this.suppliers_id
+            }).then(res => {
+                if (this.page == 1) {
+                    this.isMoreData = true;
+                    this.kehuList = res.data.data.data;
+                } else
+                    this.kehuList.push(...res.data.data.data);
+                if (res.data.data.data.length < 10) this.isMoreData = false;
+                else this.isMoreData = true;
+                this.$apply();
+                wx.hideLoading();
+            });
+        }
+        getKehu1() {
             newapi.kehu_list({
                 keyword: this.keyword,
                 page: this.page,
@@ -168,7 +227,10 @@ return
             if (this.isMoreData) {
                 util.showLoading();
                 this.page = this.page + 1;
-                this.getKehu();
+                 if ( this.type == 0)
+                    this.getKehu()
+                if ( this.type == 1)
+                    this.getKehu1()
             }
         }
     }

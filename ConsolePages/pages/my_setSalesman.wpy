@@ -93,6 +93,7 @@
     </view>
   </view>
 </view>
+
 </view>
 </template>
 
@@ -100,13 +101,15 @@
 import wepy from 'wepy';
 import newapi from '../../API/newapi';
 import util from '../../utils/index';
+
 export default class my_setSalesman extends wepy.page {
   config = {
     navigationBarTitleText: '业务员绑定'
   };
   data = {
     adminList: [],
-    isshowclose: false
+    isshowclose: false,
+    
   };
   computed = {};
   components = {};
@@ -144,7 +147,9 @@ export default class my_setSalesman extends wepy.page {
   events = {};
   async onShow() {
     this.salesmanList();
+
   }
+
   async salesmanList() {
     let suppliers_id = this.$parent.globalData.suppliers_id;
     let data = { suppliers_id };

@@ -1,53 +1,62 @@
 <style lang="less" scope>
-  .detail{
-    padding:20rpx 40rpx;
-    border-bottom: 1px solid #f0f0f0;
-}
-.userinfo{
-    display: flex;
-    align-items: center;
-    image{
-        width: 100rpx;
-        height: 100rpx;
-        border-radius: 50%;
-        margin-right: 40rpx;
+    .detail {
+        padding: 20rpx 40rpx;
+        border-bottom: 1px solid #f0f0f0;
+        display: flex;
+        align-items: center
     }
-}
-.userinfo-text{
-    .userinfo-name{
-        font-size: 34rpx;
-        line-height: 40rpx;
+    .userinfo {
+        display: flex;
+        align-items: center;
+        image {
+            width: 100rpx;
+            height: 100rpx;
+            border-radius: 50%;
+            margin-right: 40rpx;
+        }
     }
-    .userinfo-time{
-        font-size: 28rpx;
-        color: #aaa
+    .userinfo-text {
+        .userinfo-name {
+            font-size: 34rpx;
+            line-height: 40rpx;
+        }
+        .userinfo-time {
+            font-size: 28rpx;
+            color: #aaa
+        }
     }
-}
-.userinfo-comment{
-    padding-top: 30rpx;
-} 
+    .userinfo-comment {
+        padding-top: 30rpx;
+    }
 </style>
 
 <template>
     <view class='container'>
-        <block wx:for="{{goodpingjia}}" wx:if="{{goodpingjia.length>0}}">
-            <view class="detail">
-                <view class="userinfo">
-                    <image src="{{item.avatar}}"></image>
-                    <view class="userinfo-text">
-                        <view class="userinfo-name">
-                            {{item.user_name}}
-                        </view>
-                        <view class="userinfo-time">
-                            {{item.add_time}}
+        <search @buttonTap.user="searchTap"></search>
+        <checkbox-group >
+            <label class="checkbox" wx:for="{{goodpingjia}}" wx:if="{{goodpingjia.length>0}}" @tap="checkboxChange({{item}},{{index}})">
+        
+        <view class="detail">
+            <checkbox value="{{item.name}}" checked="{{item.status}}" />
+                   <view>
+                        <view class="userinfo">
+                        <image src="{{item.goods_imgs}}"></image>
+                        <view class="userinfo-text">
+                            <view class="userinfo-name">
+                                {{item.goods_name}}
+                            </view>
+                            <view class="userinfo-time">
+                                {{item.add_time}}
+                            </view>
                         </view>
                     </view>
+                    <view class="userinfo-comment">
+                        {{item.user_name}}：{{item.content}}
+                    </view>
+                   </view>
                 </view>
-                <view class="userinfo-comment">
-                    {{item.content}}
-                </view>
-            </view>
-        </block>
+      </label>
+        </checkbox-group>
         <block wx:if="{{goodpingjia.length==0}}">
             <noorder text="还没人评价呢" showBtn="0"></noorder>
         </block>
@@ -57,33 +66,56 @@
     import wepy from 'wepy';
     import newapi from '../../API/newapi';
     import util from '../../utils/index';
+    import noorder from '../../components/noOrder';
+    import search from '../../components/search';
     export default class pingjiaSelect extends wepy.page {
-       config = {
+        config = {
             navigationBarTitleText: '评价'
         };
-        components = {noorder};
+        components = {
+            noorder,search
+        };
         data = {
             goodpingjia: [],
             page: 1
         };
         computed = {};
-        methods = {}
+        methods = {
+            searchTap(keyword){
+                this.keyword=keyword
+                this.page=1
+                this.getgoodpingjia()
+            },
+            checkboxChange(e,index){
+                util.showLoading()
+                e.id=e.comment_id
+                e.status=e.status?0:1
+this.goodpingjia[index].status=!this.goodpingjia[index].status
+newapi.pingjia_edit(e).then(res=>{
+util.hideLoading();
+})
+            }
+        }
         getgoodpingjia() {
             wx.showLoading({
-              title: '加载中...', //提示的内容,
-              mask: true, //显示透明蒙层，防止触摸穿透,
-              success: res => {}
+                title: '加载中...', //提示的内容,
+                mask: true, //显示透明蒙层，防止触摸穿透,
+                success: res => {}
             });
             var goods_id = this.goods_id
             var page = this.page
-            newapi.goodpingjia({
+            var keyword = this.keyword
+            newapi.pingjia_list({
                 goods_id,
-                page
+                page,
+                keyword
             }).then(res => {
                 wx.hideLoading();
                 var datas = res.data.data.data
                 datas.forEach((item, index) => {
                     datas[index].add_time = util.formatDate(item.add_time);
+                    if(item.status==1)  datas[index].status=true
+                    else  datas[index].status=false
                     //orderList[index].zhekou=(item.original_amount-item.order_amount).toFixed(2)
                 });
                 if (page == 1) {
@@ -95,13 +127,14 @@
                     this.isMoreData = false;
                 } else
                     this.isMoreData = true;
-                    this.$apply()
+                this.$apply()
             })
         }
         onLoad(option) {
             this.goods_id = option.goods_id
             this.isMoreData = true
             this.page = 1
+            this.keyword=''
             this.getgoodpingjia();
         }
         onReachBottom() {

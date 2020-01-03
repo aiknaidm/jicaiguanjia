@@ -218,6 +218,10 @@ const newapi = {
     order_new: (data) => fetch(`${host_chk}/order_new`, 'post', data),
     qianming_tijiao: (data) => fetch(`${host_chk}/qianming_tijiao`, 'post', data),
     getQRCode4: (data) => fetch(`${host_chk}/getQRCode4`, 'post', data),
+    pingjia_list: (data) => fetch(`${host_chk}/pingjia_list`, 'get', data),
+    pingjia_edit: (data) => fetch(`${host_chk}/pingjia_edit`, 'post', data),
+    zxkehu_list: (data) => fetch(`${host_chk}/zxkehu_list`, 'post', data),
+    sqdaogou: (data) => fetch(`${host_chk}/sqdaogou`, 'post', data),
 
 
 
