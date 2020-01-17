@@ -572,9 +572,9 @@
 <template>
   <view class="container {{isshowbiaoti||showSearch||isShowGoodsList?'hidden':''}}">
     <view class="copy-btn">
-      <text @tap="showCopyList(76)">复制吉采专营商品</text>
+      <text @tap="showCopyList(76)">复制企业购商品</text>
+      <text @tap="showCopyList(497)">复制青岛一站购商品</text>
       <text @tap="showCopyList(523)">复制尚志一站购商品</text>
-      <!-- <text @tap="showCopyList(497)">复制黄岛一站购商品</text> -->
     </view>
     <view class='search-title '>
       <view @tap="statusTap({{index}})" class="status-label {{index == currentType ? 'active' : ''}} {{isclick?'down':'up'}}" wx:for-items="{{statusType}}" wx:key="{{index}}" data-index="{{index}}" data-name="{{item.name}}">
