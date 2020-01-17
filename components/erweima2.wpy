@@ -67,7 +67,8 @@
    <view class="bg " wx:if="{{isShow}}">
             <view class="erweima animated fadeIn">
                     <image src="{{erweima}}" mode="widthFix" @tap="tapErweima"></image>
-                    <view>扫一扫加成为会员</view>
+                    <view>扫一扫加入我们</view>
+                    <!-- <view>扫一扫加入我们</view> -->
             </view>
             <view class="btn-close" @tap="hiddenErweima">
                 x

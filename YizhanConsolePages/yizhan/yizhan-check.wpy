@@ -257,9 +257,18 @@
             {{hangye_list[hangye]}}
           </view>
         </view>
+         <view class="info"  @tap="toChooseCat">
+          <text class="section__title">设置所属分类</text>
+          <view class="body-view">
+             <view wx:for="{{catList}}" wx:key="index" class="cat-list">
+                        {{item.cat_name}}
+                    </view>
+          </view>
+        </view>
         <button @tap.stop="toShenhe()">提交</button>
       </view>
     </view>
+        <erweima :erweima.sync="erweima"></erweima>
   </view>
 </template>
 
@@ -270,6 +279,7 @@
   import newapi from '../../API/newapi';
   import util from '../../utils/index';
   import search from '../../components/search';
+   import erweima from '../../components/erweima2';
   export default class my_console_check extends wepy.page {
     config = {
       navigationBarTitleText: '管理加盟店铺'
@@ -304,15 +314,21 @@
       ],
       hangye_sel: 0,
       bili_sel: 0,
-      placeholder: "请输入店铺名称"
+      placeholder: "请输入店铺名称",
+           erweima:''
     };
     computed = {};
     components = {
       search,
       statusTap,
-      noOrder
+      noOrder,
+      erweima
     };
     methods = {
+         toChooseCat(index){
+       
+        wx.navigateTo({ url: '/YizhanConsolePages/yizhan/catList' });
+      },
       stop() {
         return
       },
@@ -544,8 +560,19 @@
         (await this.$parent.getYizhanInfo()).suppliers_id;
       this.currentStatu = 0
       this.getShenheList(this.suppliers_id, this.currentStatu)
+      this.getErweima();
     }
     async onShow() {}
+     async getErweima() {
+      console.log(this.type)
+      let data = {
+          xiaochengxu: 'guanjia',
+          path: '/YizhanConsolePages/yizhan/hexinMember?yizhan_suppliers_id='+this.suppliers_id
+        }
+      let res = await newapi.getQRCode4(data)
+      this.erweima = res.data.data
+      this.$apply()
+    }
     onReachBottom() {
       if (this.isMoreData) {
         this.page = this.page + 1;

@@ -175,7 +175,7 @@
       line-height: 100rpx;
       color: #fff;
       background: #e50012;
-      position: absolute;
+      position: fixed;
      bottom: 50rpx;
      left: 50%;
      margin-left: -50rpx;

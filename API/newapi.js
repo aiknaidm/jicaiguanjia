@@ -229,6 +229,8 @@ const newapi = {
     chk_copy_shuju_err2: (data) => fetch(`${host_chk}/chk_copy_shuju_err2`, 'get', data),
     chk_copy_shuju_err3: (data) => fetch(`${host_chk}/chk_copy_shuju_err3`, 'get', data),
     chk_copy_shuju_err4: (data) => fetch(`${host_chk}/chk_copy_shuju_err4`, 'get', data),
+    Salesman_list: (data) => fetch(`${host_chk}/Salesman_list`, 'get', data),
+    zhiye: (data) => fetch(`${host_chk}/zhiye`, 'get', data),
 
 
 
