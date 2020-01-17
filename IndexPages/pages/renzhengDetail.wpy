@@ -120,7 +120,7 @@
     border-radius: 0px;
     margin: 0;
     /* height: 84rpx;
-       line-height: 84rpx; */
+           line-height: 84rpx; */
     background-color: #e50012;
   }
   .rz-submit {
@@ -132,7 +132,7 @@
     display: flex;
     justify-content: space-between;
     /* border-bottom: 1px solid #ddd;
-      padding-right: 10%; */
+          padding-right: 10%; */
   }
   .smsCode input {
     width: 336rpx;
@@ -207,16 +207,15 @@
     width: 102rpx;
     height: 106rpx;
   }
+  .qianzi{
+    width: 200rpx;
+    height: 200rpx;
+    
+  }
 </style>
 <template>
   <view class='container'>
     <form bindsubmit="formSubmit">
-      <view class="title" style="padding:40rpx;text-align:left">店铺logo</view>
-      <view class="cameraBox">
-        <view class="camera" @tap="{{isuserDetail?'':'addShopImg'}}">
-          <image src="{{shopImg.img_url?shopImg.img_url:'/images/add_img.png'}}" />
-        </view>
-      </view>
       <view class="input-area">
         <view class="input-log section">
           <view class="label">
@@ -228,6 +227,38 @@
             <text>*</text>验证码</view>
           <input name="smscode" maxlength='4' type="number" placeholder="验证码" bindinput="listenerSmsCodeInput" disabled='{{isuserDetail}}' />
           <button bindtap="getSmsCode" disabled="{{smsCodeDisabled}}" style="background-color:{{getSmsCodeBtnColor}}" class="getSmsCodeBtn">{{getSmsCodeBtnTxt}}</button>
+        </view>
+      </view>
+      <view class="section">
+        <view class="label">选择职业</view>
+        <picker bindchange="bindProfessionChange" value="{{multiIndex}}" range="{{multiArray}}">
+          <view class="picker">
+            {{multiArray[multiIndex]}}
+          </view>
+        </picker>
+      </view>
+      <view class="title" style="padding:40rpx;text-align:left">店铺logo</view>
+      <view class="cameraBox">
+        <view class="camera" @tap="{{isuserDetail?'':'addShopImg'}}" data-type='logo'>
+          <image src="{{shopImg.img_url?shopImg.img_url:'/images/add_img.png'}}" />
+        </view>
+      </view>
+      <view class="title" style="padding:40rpx;text-align:left" wx:if="{{multiIndex>1}}">上传营业执照</view>
+      <view class="cameraBox" wx:if="{{multiIndex>1}}">
+        <view class="camera" @tap="{{isuserDetail?'':'addShopImg'}}"  data-type='zhizhao'>
+          <image src="{{zhizhao.img_url?zhizhao.img_url:'/images/add_img.png'}}" />
+        </view>
+      </view>
+      <view class="title" style="padding:40rpx;text-align:left">上传身份证正面</view>
+      <view class="cameraBox">
+        <view class="camera" @tap="{{isuserDetail?'':'addShopImg'}}" data-type='sfz1'>
+          <image src="{{sfz1.img_url?sfz1.img_url:'/images/add_img.png'}}" />
+        </view>
+      </view>
+      <view class="title" style="padding:40rpx;text-align:left">上传身份证反面</view>
+      <view class="cameraBox">
+        <view class="camera" @tap="{{isuserDetail?'':'addShopImg'}}" data-type='sfz2'>
+          <image src="{{sfz2.img_url?sfz2.img_url:'/images/add_img.png'}}" />
         </view>
       </view>
       <view class="section">
@@ -245,28 +276,28 @@
         </view>
       </view>
       <!-- <view class="section">
-          <view class="label label2">
-            <text>*</text>pc管理账号</view>
-          <view class="label-right">
-            <input name="pcusername" class="input" type="text" value="{{userDetail.suppliers_name}}" disabled='{{isuserDetail}}' />
-          </view>
-        </view>
-        <view class="section">
-          <view class="label label2">
-            <text>*</text>pc管理密码</view>
-          <view class="label-right">
-            <input name="password" class="input" type="text" value="{{password}}" disabled/>
-          </view>
-        </view> -->
-      <!-- <view class="section">
-          <view class="label">
-            <text>*</text>所属地区</view>
-          <picker mode="region" disabled="{{isuserDetail}}" @change="bindRegionChange">
-            <view class="picker">
-              {{region[0]}}-{{region[1]}}-{{region[2]}}
+              <view class="label label2">
+                <text>*</text>pc管理账号</view>
+              <view class="label-right">
+                <input name="pcusername" class="input" type="text" value="{{userDetail.suppliers_name}}" disabled='{{isuserDetail}}' />
+              </view>
             </view>
-          </picker>
-        </view> -->
+            <view class="section">
+              <view class="label label2">
+                <text>*</text>pc管理密码</view>
+              <view class="label-right">
+                <input name="password" class="input" type="text" value="{{password}}" disabled/>
+              </view>
+            </view> -->
+      <!-- <view class="section">
+              <view class="label">
+                <text>*</text>所属地区</view>
+              <picker mode="region" disabled="{{isuserDetail}}" @change="bindRegionChange">
+                <view class="picker">
+                  {{region[0]}}-{{region[1]}}-{{region[2]}}
+                </view>
+              </picker>
+            </view> -->
       <view class="section">
         <view class="label">选择地址</view>
         <button wx:if="{{isOpenSetting}}" open-type="openSetting" bindopensetting="getAddressTap" class="label-right">{{region[0]}}-{{region[1]}}-{{region[2]}}</button>
@@ -282,24 +313,28 @@
           <input value="{{address}}" name="address" disabled/>
         </view>
       </view>
-      <!-- <view class="section" wx:if='{{!isuserDetail}}'>
-          <view class="label label2">
-            邀请码</view>
-          <view class="label-right">
-            <input name="shareCode" class="input" type="text" value="{{shareCode}}" />
-          </view>
-        </view> -->
+      <view class="section" wx:if='{{!isuserDetail}}'>
+              <view class="label label2">
+                邀请码</view>
+              <view class="label-right">
+                <input name="shareCode" class="input" type="text" value="{{shareCode}}" />
+              </view>
+            </view>
       <view class='check' wx:if='{{!isuserDetail}}'>
         <checkbox-group bindchange="agreeClick">
           <label class="checkbox">
-                <checkbox value="{{isAgreed}}" checked="{{isAgreed}}" />
-                <text >我已阅读</text><text class='main-color'  catchtap='showtext'>吉采易站批发版规则</text><text >，同意在吉采易站批发版开店</text>
-              </label>
+                    <checkbox value="{{isAgreed}}" checked="{{isAgreed}}" />
+                    <text >我已阅读</text><text class='main-color'  catchtap='showtext'>一站购平台使用协议</text><text >，同意在吉采管家开店</text>
+                  </label>
         </checkbox-group>
       </view>
-       <button class='rz-submit' @tap="selectShop" wx:if="{{type!=0}}">选择店铺</button>
+     <block wx:if="{{!isuserDetail}}">
+        <view @tap="toQianzi">去 签字 </view>
+      <image class="qianzi" @tap="toQianzi" src="{{qianming}}" wx:if="{{qianming!=''}}"></image>
+      <image class="qianzi" @tap="toQianzi" src="/images/qianzi.png" wx:else></image>
+     </block>
+      <button class='rz-submit' @tap="selectShop" wx:if="{{type==1}}">选择店铺</button>
       <button class='rz-submit' formType="submit" wx:elif="{{!isuserDetail}}" disabled='{{issubmit}}'>提交</button>
-     
       <button class='rz-submit' @tap="backIndex" wx:else>回到首页</button>
       <!-- <button class='rz-submit' disabled='true' wx:if="{{userDetail.user_status=='0'}}">审核中...</button> -->
     </form>
@@ -332,21 +367,28 @@
       password: '123456',
       smsCodeDisabled: false,
       isAgreed: false,
-      // shareCode: '',
+      shareCode: '',
       shopImg: 0,
       address: '',
+      sfz1:{},
+      sfz2:{},
+      zhizhao:{},
       isOpenSetting: false,
-      type:0
+      type: 0,
+      multiArray: [],
+      multiIndex: 0,
+      qianming:''
     };
     computed = {};
     methods = {
-      selectShop(){
-       var parent= this.$parent.$pages["/YizhanConsolePages/yizhan/hexinMember"]
-       parent.suppliers_id=this.userDetail.suppliers_id
-       parent.suppliers_name=this.userDetail.suppliers_desc
-      wx.navigateBack({
-  delta: 2
-})
+     
+      selectShop() {
+        var parent = this.$parent.$pages["/YizhanConsolePages/yizhan/hexinMember"]
+        parent.suppliers_id = this.userDetail.suppliers_id
+        parent.suppliers_name = this.userDetail.suppliers_desc
+        wx.navigateBack({
+          delta: 2
+        })
       },
       getAddressTap() {
         this.$parent.checkUserLocation().then(res => {
@@ -362,7 +404,9 @@
         })
       },
       // 上传店铺logo
-      async addShopImg() {
+      async addShopImg(e) {
+        console.log("e", e)
+        var type = e.currentTarget.dataset.type
         wepy
           .chooseImage({
             count: 1, // 默认9
@@ -371,11 +415,30 @@
           })
           .then(res => {
             var that = this;
-            // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
             var tempFilePaths = res.tempFilePaths;
-            this.shopImg = {}
-            this.shopImg.img_url = tempFilePaths[0];
-            this.shopImg.upload = true
+            // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+            if (type == 'logo') {
+              this.shopImg = {}
+              this.shopImg.img_url = tempFilePaths[0];
+              this.shopImg.upload = true
+            }
+            else if(type=='sfz1'){
+               this.sfz1 = {}
+              this.sfz1.img_url = tempFilePaths[0];
+              this.sfz1.upload = true
+            }
+             else if(type=='sfz2'){
+               this.sfz2 = {}
+              this.sfz2.img_url = tempFilePaths[0];
+              this.sfz2.upload = true
+            }
+            else if(type=='zhizhao'){
+               this.zhizhao = {}
+              this.zhizhao.img_url = tempFilePaths[0];
+              this.zhizhao.upload = true
+            }else{
+              console.log("type",type)
+            }
             this.$apply();
           })
           .catch(res => {});
@@ -394,9 +457,17 @@
       // 同意免责条款
       agreeClick: function(e) {
         this.isAgreed = !this.isAgreed;
+      
+      },
+      toQianzi(){
+wx.navigateTo({ url: '/YizhanConsolePages/qianzi/index?type=shop' });
       },
       listenerPhoneInput(e) {
+        this.code=''
         this.phone = e.detail.value;
+      },
+      bindProfessionChange(e) {
+        this.multiIndex = e.detail.value;
       },
       //联网获取验证码
       async getSmsCode() {
@@ -497,9 +568,23 @@
           var smscode = e.detail.value.smscode;
           var realname = e.detail.value.realname;
           var storename = e.detail.value.storename;
+          var zhiye=this.multiArray[this.multiIndex] 
+          var qianming=this.qianming
           // var pcusername = e.detail.value.pcusername;
           // var password = '123456';
-          // var share_code = e.detail.value.shareCode;
+          var share_code = e.detail.value.shareCode;
+           if (!this.zhizhao.img_url&&this.multiIndex>1) {
+            util.showModal('请上传营业执照');
+            return;
+          }
+          if (!this.sfz1.img_url) {
+            util.showModal('请上传身份证正面');
+            return;
+          }
+          if (!this.sfz2.img_url) {
+            util.showModal('请上传身份证反面');
+            return;
+          }
           if (realname == '') {
             util.showModal('请填写姓名');
             return;
@@ -524,6 +609,10 @@
             util.showModal('请同意吉采易站批发版规则');
             return;
           }
+         if(this.qianming=='') {
+           util.showModal('请签名');
+            return;
+         }
           var sheng = this.region[0];
           var shi = this.region[1];
           var qu = this.region[2];
@@ -533,6 +622,16 @@
           });
           if (!this.shopImg.upload) var img = this.shopImg.img_url == 0 ? "" : this.shopImg.img_url;
           else var img = await this.upImg(this.shopImg.img_url);
+          // 营业执照
+          if (!this.zhizhao.upload) var yyzz = this.zhizhao.img_url == 0 ? "" : this.zhizhao.img_url;
+          else var yyzz = await this.upImg(this.zhizhao.img_url);
+          // 身份证正面
+          if (!this.sfz1.upload) var sfz_z = this.sfz1.img_url == 0 ? "" : this.sfz1.img_url;
+          else var sfz_z = await this.upImg(this.sfz1.img_url);
+          // 身份证反面
+          if (!this.sfz2.upload) var sfz_f = this.sfz2.img_url == 0 ? "" : this.sfz2.img_url;
+          else var sfz_f = await this.upImg(this.sfz2.img_url);
+          
           wx.showLoading({
             title: '卖力加载中...', //提示的内容,
             mask: true, //显示透明蒙层，防止触摸穿透,
@@ -543,22 +642,39 @@
             sheng,
             shi,
             qu,
+            yyzz,
+            sfz_z,
+            sfz_f,
+            qianming,
             // suppliers_name: "jc",
             // password,
             suppliers_desc: storename,
-            // share_code: share_code,
+            share_code: share_code,
             img,
             address: this.address,
             longitude: this.longitude,
             latitude: this.latitude,
-            share_user_id:this.share_user_id,
-            share_suppliers_id:this.share_suppliers_id
+            share_user_id: this.share_user_id,
+            share_suppliers_id: this.share_suppliers_id
           };
           let res = await newapi.renzheng(data);
           wx.hideLoading();
           if (res.data.code == 0) {
-            util.showToast('注册成功');
+          
+            if (this.type == 2) {
+              var parent = this.$parent.$pages["/YizhanConsolePages/yizhan/hexinMember"]
+              parent.suppliers_id = res.data.data.suppliers_id
+              parent.suppliers_name = storename
+              wx.navigateBack({
+                delta: 2
+              })
+            }else{
+            
+  util.showToast('注册成功');
             this.isuserDetail = true;
+            this.$parent.globalData.suppliers_id=res.data.data.suppliers_id
+            wx.navigateTo({ url: 'pay?suppliers_id='+res.data.data.suppliers_id+'&share_code='+share_code});
+            }
           } else {
             this.issubmit = false;
             util.showModal(res.data.message);
@@ -610,14 +726,23 @@
     }
     async onLoad(option) {
       console.log(option)
-     var res= await this.$parent.loginInfo();
-     this.type=option.type?option.type:0
-     this.share_user_id=option.user_id?option.user_id:0
+      wx.showLoading({
+        title: '加载中...', //提示的内容,
+        mask: true, //显示透明蒙层，防止触摸穿透,
+        success: res => {}
+      });
+      this.getProfession();
+      var res = await this.$parent.loginInfo();
+      this.type = option.type ? option.type : 0
+      this.share_user_id = option.user_id ? option.user_id : 0
       var suppliers_id = option.suppliers_id ? option.suppliers_id : ''
-      this.share_suppliers_id= option.share_suppliers_id ? option.share_suppliers_id : ''
-      var yizhanInfo = await this.$parent.getYizhanInfo(suppliers_id);
+      this.share_suppliers_id = option.share_suppliers_id ? option.share_suppliers_id : ''
+      
+      wx.hideLoading();
       if (suppliers_id != '') {
+
         this.isuserDetail = true;
+        var yizhanInfo = await this.$parent.getYizhanInfo(suppliers_id);
         this.userDetail = yizhanInfo;
         this.region[0] = yizhanInfo.sheng;
         this.region[1] = yizhanInfo.shi;
@@ -626,6 +751,13 @@
         this.shopImg = {}
         this.shopImg.img_url = yizhanInfo.img
         this.shopImg.upload = false
+        this.sfz1.img_url=yizhanInfo.sfz_z
+        this.sfz1.upload=false
+        this.sfz2.img_url=yizhanInfo.sfz_f
+        this.sfz2.upload=false
+         this.zhizhao.img_url=yizhanInfo.yyzz
+        this.zhizhao.upload=false
+        
         this.address = yizhanInfo.address;
         console.log("this.address", yizhanInfo.address)
       } else {
@@ -657,14 +789,20 @@
       this.$apply();
     }
     onShareAppMessage(res) {
-      console.log("this.$parent.globalData.userInfo.user_id",this.$parent.globalData.userInfo.user_id)
+      console.log("this.$parent.globalData.userInfo.user_id", this.$parent.globalData.userInfo.user_id)
       // console.log(res, 'suppliers_id=' + this.suppliers_id + '&share_suppliers_id=' + this.$parent.globalData.share_suppliers_id + '&share_user_id=' + this.$parent.globalData.user_id);
-      var path = '/IndexPages/pages/renzhengDetail?user_id=' + this.$parent.globalData.userInfo.user_id ;
+      var path = '/IndexPages/pages/renzhengDetail?user_id=' + this.$parent.globalData.userInfo.user_id;
       return {
         title: "装饰材料一站购",
         path: path,
         // imageUrl: this.shareImage
       };
+    }
+    getProfession() {
+      newapi.zhiye().then(res => {
+        this.multiArray = res.data.data
+        this.$apply();
+      })
     }
     async upImg(img_url) {
       util.showLoading('上传中');

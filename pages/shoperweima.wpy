@@ -96,13 +96,14 @@
         } else if(this.$parent.globalData.suppliers_id==847) {
           appId = "wxf48cdd6a7dae8c21";
         } else {
-          appId = "wx7e302245debd521a";
-          path = '/Shop/pages/index?suppliers_id=' +
-            this.$parent.globalData.suppliers_id +
-            '&sales_id=' +
-            this.sales_id +
-            '&sales_name=' +
-            this.yizhanInfo.user_nickname;
+          appId = "wx87bfbcfe887faf4d";
+           path = '/pages/home?suppliers_id=' + this.$parent.globalData.suppliers_id;
+          // path = '/Shop/pages/index?suppliers_id=' +
+          //   this.$parent.globalData.suppliers_id +
+          //   '&sales_id=' +
+          //   this.sales_id +
+          //   '&sales_name=' +
+          //   this.yizhanInfo.user_nickname;
         }
         wx.navigateToMiniProgram({
           appId,
@@ -152,12 +153,13 @@
       }else if(suppliers_id==847){
         path = '/pages/home';
       } else {
-        path = '/Shop/pages/index?suppliers_id=' +
-          suppliers_id +
-          '&sales_id=' +
-          this.sales_id +
-          '&sales_name=' +
-          this.sales_name;
+        // path = '/Shop/pages/index?suppliers_id=' +
+        //   suppliers_id +
+        //   '&sales_id=' +
+        //   this.sales_id +
+        //   '&sales_name=' +
+        //   this.sales_name;
+           path = '/pages/home?suppliers_id=' + suppliers_id+'&share_suppliers_id='+suppliers_id+'&share_user_id='+userInfo.user_id+'&sales_id='+userInfo.user_id;
       }
       let data = {
         path,

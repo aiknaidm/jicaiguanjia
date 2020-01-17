@@ -106,59 +106,94 @@
     flex-wrap: wrap;
     align-items: center;
   }
+  // .headPortrait {
+  //   /* background: #e50012; */
+  //   /* vertical-align: middle; */
+  //   margin: 20rpx 0;
+  //   position: relative;
+  //   display: flex;
+  //   flex-direction: column;
+  //   align-items: center;
+  //   width: 180rpx;
+  // }
+  // .headPortrait .img {
+  //   border-radius: 50%;
+  //   width: 100rpx;
+  //   height: 100rpx;
+  //   line-height: 100rpx;
+  //   text-align: center;
+  //   color: #aaa;
+  //   border: 1px solid #eee;
+  // }
+  // .headPortrait .text {
+  //   text-align: center;
+  //   width: 180rpx;
+  //   overflow: hidden;
+  //   text-overflow: ellipsis;
+  //   white-space: nowrap;
+  // }
+  // .headPortrait text.icon-close {
+  //   position: absolute;
+  //   display: inline-block;
+  //   right: -10rpx;
+  //   top: -10rpx;
+  //   color: #e50012;
+  //   font-size: 30rpx;
+  //   width: 40rpx;
+  //   height: 40rpx;
+  //   border-radius: 50%;
+  //   border: 1px solid #e50012;
+  //   text-align: center;
+  //   line-height: 40rpx;
+  //   background: #fff;
+  // }
+  // .headPortrait.redborder .img {
+  //   border: 1px solid #e50012;
+  // }
+  // .headPortrait .iconfont {
+  //   font-size: 60rpx;
+  // }
+  // .headPortrait image {
+  //   width: 100rpx;
+  //   height: 100rpx;
+  //   display: inline-block;
+  //   border-radius: 50%;
+  //   overflow: hidden;
+  // }
   .headPortrait {
-    /* background: #e50012; */
-    /* vertical-align: middle; */
-    margin: 20rpx 0;
-    position: relative;
+     width: 100%;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 180rpx;
-  }
-  .headPortrait .img {
-    border-radius: 50%;
-    width: 100rpx;
-    height: 100rpx;
-    line-height: 100rpx;
-    text-align: center;
-    color: #aaa;
-    border: 1px solid #eee;
-  }
-  .headPortrait .text {
-    text-align: center;
-    width: 180rpx;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .headPortrait text.icon-close {
-    position: absolute;
-    display: inline-block;
-    right: -10rpx;
-    top: -10rpx;
-    color: #e50012;
-    font-size: 30rpx;
-    width: 40rpx;
-    height: 40rpx;
-    border-radius: 50%;
-    border: 1px solid #e50012;
-    text-align: center;
-    line-height: 40rpx;
     background: #fff;
-  }
-  .headPortrait.redborder .img {
-    border: 1px solid #e50012;
-  }
-  .headPortrait .iconfont {
-    font-size: 60rpx;
-  }
-  .headPortrait image {
-    width: 100rpx;
-    height: 100rpx;
-    display: inline-block;
-    border-radius: 50%;
-    overflow: hidden;
+    padding: 30rpx;
+    border-radius: 20rpx;
+    // margin-bottom: 20rpx;
+    position: relative;
+    border-bottom: 1px solid #f0f0f0;
+    .img {
+      width: 100rpx;
+      height: 100rpx;
+      margin-right: 20rpx;
+      image {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .text {}
+    .btn {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      view {
+        padding: 0 20rpx;
+        line-height: 60rpx;
+        background: #e50012;
+        color: #fff;
+        margin-bottom: 10rpx;
+        margin-right: 30rpx;
+        border-radius: 50px;
+        text-align: center
+      }
+    }
   }
 </style>
 <template>
@@ -186,17 +221,35 @@
     </block>
     <view class='list' wx:else>
       <block wx:for="{{adminList}}" wx:key="index">
-        <view class='headPortrait '>
+        <!-- <view class='headPortrait '>
           <view class='img'>
             <image src="{{item.avatar?item.avatar:'https://lmbge.com/upload/avatar/weixin3.png'}}" data-user_id="{{(type=='member'||type=='coupon')?item.user_id:item.id}}" data-user_name="{{(type=='member'||type=='coupon')?item.user_name:item.user_nickname}}" bindtap='addManager'
               mode='aspectFill' />
           </view>
           <view class='text' wx:if="{{type=='member'||type=='coupon'}}">{{item.user_name?item.user_name:'jc'+item.user_id}}</view>
           <view class='text' wx:else>{{item.user_nickname?item.user_nickname:'jc'+item.id}}</view>
+        </view> -->
+         <view class='headPortrait '>
+          <view class='img'>
+           <image src="{{item.avatar?item.avatar:'https://lmbge.com/upload/avatar/weixin3.png'}}" data-user_id="{{(type=='member'||type=='coupon')?item.user_id:item.id}}" data-user_name="{{(type=='member'||type=='coupon')?item.user_name:item.user_nickname}}"
+              mode='aspectFill' />
+            <!-- <text class='iconfont icon-close' wx:if="{{isshowclose}}" data-user_id='{{item.id}}' catchtap='delManager'></text> -->
+          </view>
+          <view class='text'>
+           
+            <view  wx:if="{{type=='member'||type=='coupon'}}">姓名：{{item.user_name?item.user_name:'jc'+item.user_id}}</view>
+          <view  wx:else>姓名：{{item.user_nickname?item.user_nickname:'jc'+item.id}}</view>
+         
+            <!-- <view>权限：{{item.user_nickname?item.user_nickname:'jc'+item.id}}</view> -->
+          </view>
+          <view class="btn">
+            <view class="edit"  bindtap='addManager'>确定</view>
+           
+          </view>
         </view>
       </block>
     </view>
-    <erweima :erweima.sync="erweima"></erweima>
+    <erweima :erweima.sync="erweima" wx:if="{{erweima!=''}}"></erweima>
   </view>
 </template>
 
@@ -384,6 +437,8 @@
           xiaochengxu: 'guanjia',
           path: '/YizhanConsolePages/yizhan/yunMember'
         }
+      }else{
+        return
       }
       let res = await newapi.getQRCode4(data)
       this.erweima = res.data.data

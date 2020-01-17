@@ -167,6 +167,20 @@
   .jy-top-view {
     flex: 1;
   }
+  .addShop{
+      width: 100rpx;
+      height: 100rpx;
+      text-align: center;
+      line-height: 100rpx;
+      color: #fff;
+      background: #e50012;
+      position: fixed;
+    bottom: 50rpx;
+     right: 50%;
+     margin-left: -50rpx;
+     border-radius: 50%;
+
+  }
 </style>
 <template>
   <view class='container'>
@@ -184,39 +198,19 @@
       </view>
     </view>
     <search @buttonTap.user="searchTap" :placeholder="placeholder"></search>
-    <statusTap :statusType="statusType" :currentType.sync="status" @statusTap.user="statusTap">
-    </statusTap>
+   
     <view class='checkLists'>
-      <!--未审核  -->
-      <view class='check-list' wx:if="{{currentStatu==0}}" wx:for="{{shenheList}}" wx:key="{{index}}">
-        <view class='check-list-img'>
-          <image src='{{item.img}}' />
-        </view>
-        <view class='check-list-content'>
-          <view>姓名：{{item.username}}</view>
-          <view  wx:if="{{item.suppliers_name!=''}}">店铺名称：{{item.suppliers_name}}</view>
-           <view>行业：{{item.hangye==0?'-':hangye_list[item.hangye]}}</view>
-          <view @tap.stop='tocallphone({{item.mobile}})'>手机号码：{{item.mobile}}
-            <text class='iconfont icon-shouji'></text>
-          </view>
-        </view>
-        <view class='check-list-btn'>
-          <form report-submit bindsubmit='getFormId'>
-            <button @tap.stop='showSlider({{item}})'>审核</button>
-          </form>
-        </view>
-      </view>
       <!--已审核  -->
-      <view class='check-list checked-list' wx:if="{{currentStatu==1}}" wx:for="{{shenheList}}" wx:key="{{index}}">
+      <view class='check-list checked-list' wx:for="{{shenheList}}" wx:key="{{index}}">
         <view class='check-list-img'>
-          <image src='{{item.img}}' />
+          <image src='{{item.avatar}}' />
         </view>
         <view class='check-list-content'>
-          <view>姓名：{{item.username}}</view>
-          <view>店铺名称：{{item.suppliers_name}}</view>
-          <view>等级：{{item.level}} | 分成比：{{item.bili*100}}%</view>
-          <view>行业：{{item.hangye==0?'-':hangye_list[item.hangye]}}</view>
-          <view @tap.stop='tocallphone({{item.mobile}})'>手机号码：{{item.mobile}}
+          <view>姓名：{{item.user_nickname}}</view>
+          <view wx:if="{{item.suppliers_name!=''}}">店铺名称：{{item.suppliers_desc}}</view>
+          <!-- <view>等级：{{item.level}} | 分成比：{{item.bili*100}}%</view> -->
+          <view wx:if="{{item.hangye!=0}}">行业：{{item.hangye==0?'-':hangye_list[item.hangye]}}</view>
+          <view wx:if="{{item.mobile}}" @tap.stop='tocallphone({{item.mobile}})'>手机号码：{{item.mobile}}
             <text class='iconfont icon-shouji'></text>
           </view>
         </view>
@@ -261,7 +255,9 @@
         <button @tap.stop="toShenhe()">提交</button>
       </view>
     </view>
-    <erweima :erweima.sync="erweima"></erweima>
+<view class='addShop' @tap="todetail">
+                                          <text class="iconfont icon-tianjia-copy">
+                                      </view>
   </view>
 </template>
 
@@ -272,7 +268,7 @@
   import newapi from '../../API/newapi';
   import util from '../../utils/index';
   import search from '../../components/search';
-  import erweima from '../../components/erweima2';
+ 
   export default class my_console_check extends wepy.page {
     config = {
       navigationBarTitleText: '管理导购会员'
@@ -308,16 +304,21 @@
       hangye_sel: 0,
       bili_sel: 0,
       placeholder: "请输入店铺名称",
-      erweima:''
+ 
     };
     computed = {};
     components = {
       search,
       statusTap,
       noOrder,
-      erweima
+      
     };
     methods = {
+      todetail(item){
+       wx.navigateTo({
+        url: '/ConsolePages/pages/my_addManagerInfo?type=salesman'
+      });
+    },
       stop() {
         return
       },
@@ -428,8 +429,8 @@
       },
       //解除关系提示
       async toJiechu(item) {
-        var id = item.id
-        let mRes = await util.showActionSheet(['解除关系', '设置行业、等级及分成']);
+        var id = item.user_id
+        let mRes = await util.showActionSheet(['解除关系']);
         if (mRes.tapIndex == 0) {
           this.doshenhe(id, 0);
         } else {
@@ -472,7 +473,7 @@
         mask: true, //显示透明蒙层，防止触摸穿透,
       });
       //   shenhe 0 未审核 1已审核
-      let res = await newapi.suppliers_join_list({
+      let res = await newapi.Salesman_list({
         suppliers_id,
         shenhe,
         keyword: this.keyword,
@@ -481,7 +482,8 @@
       });
       wx.hideLoading();
       if (res.data.code == 0) {
-        var datas = res.data.data.data
+        var datas = res.data.data
+        // this.shenheList = datas
         if (this.page == 1) {
           this.shenheList = datas
         } else {
@@ -515,53 +517,36 @@
     //   }
     // }
     //审核
-    async doshenhe(id, shenhe) {
+    async doshenhe(user_id, shenhe) {
       util.showLoading('审核中...');
       let suppliers_id = this.suppliers_id;
       var shenhe = shenhe;
       let data = {
-        id,
-        shenhe
+        user_id,
+        suppliers_id
+        
       };
-      let res = await newapi.shenhe_suppliers_join(data);
+      let res = await newapi.delSalesman(data);
       wx.hideLoading();
       if (res.data.code == 0) {
-        if (shenhe == 1) {
-          newapi.edit_suppliers_level({
-            id,
-            level: this.level,
-            bili: this.bili / 100,
-            hangye: this.hangye
-          }).then(res => {
-            util.showToast("设置成功");
-          });
-        }
+      
         this.page = 1;
         this.getShenheList(this.suppliers_id, this.currentStatu);
       } else {
         util.showToast(res.data.message)
       }
     }
-    async onLoad(option) {
+    async onShow(option) {
       this.page = 1;
       this.suppliers_id = this.$parent.globalData.suppliers_id ?
         this.$parent.globalData.suppliers_id :
         (await this.$parent.getYizhanInfo()).suppliers_id;
       this.currentStatu = 0
       this.getShenheList(this.suppliers_id, this.currentStatu)
-      this.getErweima();
+
     }
-    async onShow() {}
-     async getErweima() {
-      console.log(this.type)
-      let data = {
-          xiaochengxu: 'guanjia',
-          path: '/YizhanConsolePages/yizhan/hexinMember?yizhan_suppliers_id='+this.suppliers_id
-        }
-      let res = await newapi.getQRCode4(data)
-      this.erweima = res.data.data
-      this.$apply()
-    }
+    // async onShow() {}
+    
     onReachBottom() {
       if (this.isMoreData) {
         this.page = this.page + 1;

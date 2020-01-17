@@ -124,7 +124,8 @@
           'pages/qianbao/balance',
           'pages/qianbao/withdraw',
           'pages/qianbao/yue',
-          'pages/qianbao/yue-detail'
+          'pages/qianbao/yue-detail',
+          'pages/pay'
           ]
         },
         {
@@ -430,7 +431,7 @@
       let data = {
         suppliers_id
       };
-      let res = await newapi.getYizhanInfo(data);
+      let res = await newapi.managers_permission(data);
       if (res.data.code == 0) {
         this.globalData.yizhanInfo = res.data.data;
         this.globalData.suppliers_id = res.data.data.suppliers_id;

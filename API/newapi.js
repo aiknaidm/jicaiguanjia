@@ -225,6 +225,8 @@ const newapi = {
     sqdaogou: (data) => fetch(`${host_chk}/sqdaogou`, 'post', data),
 
     add_submessage: (data) => fetch(`${host_chk}/add_submessage`, 'get', data),
+    Salesman_list: (data) => fetch(`${host_chk}/Salesman_list`, 'get', data),
+    zhiye: (data) => fetch(`${host_chk}/zhiye`, 'get', data),
 
 
 

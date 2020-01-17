@@ -127,18 +127,7 @@
   <view class='container'>
     <view>
       <search @buttonTap.user="searchTap"></search>
-      <checkbox-group name="checkboxbox">
-        <view class='kind' wx:for="{{goodsList}}" wx:key="{{index}}" @tap="checkboxChange({{index}})" bindlongpress='showActionSheet({{index}},{{item.brand_id}},{{item.brand_name}},{{item.brand_logo}})'>
-          <view class="kind-1">
-            <view>
-              <checkbox value="{{item.cat_id}}" checked="{{item.checked}}" disabled="{{(!isCheck&&item.cat_id!=0)}}" /> {{item.cat_name}} </view>
-            <!-- <view class='del' bindtap='showActionSheet({{index}},{{item.brand_id}},{{item.brand_name}},{{item.brand_logo}})'> 编辑</view> -->
-          </view>
-        </view>
-      </checkbox-group>
-      <view class="add" bindtap='addBrandTap'>
-        确定
-      </view>
+      <catList @getCatList.user="getCatList" :chooseGoodsList.sync="chooseGoodsList"></catList>
     </view>
   </view>
 </template>
@@ -149,120 +138,36 @@
   import api from '../../API/api';
   import util from '../../utils/index';
   import search from '../../components/search';
+  import catList from '../../components/catList';
   export default class brand_Manage extends wepy.page {
     config = {
       navigationBarTitleText: '选择商品'
     };
     data = {
-      goodsList: [],
-      isShowUptBrand: '',
-      imgSrc: [],
-      keyword: '',
-      suppliers_id: 0,
-      page: 1,
-      goods_id: [],
-      chooseGoodsList: [],
-      pname: '',
-      isCheck: true
+      chooseGoodsList: -1
     };
     computed = {};
     components = {
       search,
+      catList
     };
     methods = {
-      checkboxChange: function(i) {
-        this.goodsList[i].checked = !this.goodsList[i].checked;
-        if (this.goodsList[i].cat_id == 0 && this.goodsList[i].checked) {
-          this.isCheck = false
-           var parent = this.$parent.$pages["/YizhanConsolePages/yizhan/yizhan-check2"]
-      // console.log(parent.brands);
-      parent.catList= [{
-            cat_name: "新家装修",
-            cat_id: "0"
-          }]
-          return
-        }
-        this.isCheck = true
-        var find = false;
-        this.chooseGoodsList.forEach((item, index) => {
-          if (item.cat_id == this.goodsList[i].cat_id) {
-            if (!this.goodsList[i].checked) {
-              this.chooseGoodsList.splice(index, 1);
-              find = true;
-            }
-          }
-        })
-        if (!find) {
-          this.chooseGoodsList.push(this.goodsList[i]);
-        }
-      },
-      addBrandTap: function() {
+      getCatList(e) {
+        this.parent.catList = e
         wx.navigateBack({
           delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
         });
-      },
-      searchTap(val) {
-        this.isMoreData = true;
-        this.keyword = val;
-        this.page = 1;
-        this.getGoodsList();
-      },
-    };
-    events = {};
-    async getGoodsList() {
-      util.showLoading();
-      let data = {
-        page: this.page,
-        keyword: this.keyword,
-      }
-      var res = await newapi.suppliers_category(data);
-      var datas = res.data.data
-      if (this.page == 1)
-        datas.unshift({
-          cat_id: 0,
-          cat_name: '装修新家',
-        })
-      var parent = this.$parent.$pages["/YizhanConsolePages/yizhan/yizhan-check2"]
-      // console.log(parent.brands);
-      this.chooseGoodsList = parent.catList;
-    
-      for (var i = 0; i < this.chooseGoodsList.length; i++) {
-        if(this.chooseGoodsList[i].cat_id==0){
-          this.isCheck=false;
-           
-        }
-        for (var j = 0; j < datas.length; j++) {        
-          if (datas[j].cat_id == this.chooseGoodsList[i].cat_id) {
-            
-            datas[j].checked = true;
-            break;
-          }
-        }
-      }
-      if (this.page == 1) {
-        this.goodsList = datas;
-      } else {
-        this.goodsList.push(...datas)
-      }
-      if (datas.length < 10) {
-        this.isMoreData = false;
-      } else {
-        this.isMoreData = true;
-      }
-      util.hideLoading();
-      this.$apply();
-    }
-    onReachBottom() {
-      if (this.isMoreData) {
-        this.page = this.page + 1;
-        this.getGoodsList();
       }
     }
-    async onLoad(option) {
-      console.log("option", option)
-      this.page = 1;
-      this.getGoodsList();
+    onLoad(options) {
+      this.type = options.type
+      if (this.type == "daogou") {
+        let parent = this.$parent.$pages["/YizhanConsolePages/yizhan/hexinMember"]
+        this.parent = parent
+        if (parent.catList)
+          this.chooseGoodsList = parent.catList
+        console.log("this.chooseGoodsList", this.chooseGoodsList)
+      }
     }
-    onUnload() {}
   }
 </script>

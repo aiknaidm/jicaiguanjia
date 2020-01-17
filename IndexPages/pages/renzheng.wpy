@@ -42,7 +42,10 @@ export default class newslist extends wepy.page {
   computed = {};
   methods = {
     toSuppliersDetail (id){
+      if(id)
      wx.navigateTo({ url: 'renzhengDetail?suppliers_id='+id+'&type='+this.type });
+     else
+     wx.navigateTo({ url: 'renzhengDetail'});
     }
   };
   events = {};

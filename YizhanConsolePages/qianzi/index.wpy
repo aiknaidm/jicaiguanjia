@@ -102,7 +102,7 @@
         computed = {};
         methods = {
             subCanvas() {
-                console.log(111111111)
+              
                 this.onConfirm()
             }, //保存canvas图像
             uploadScaleStart(e) {
@@ -135,6 +135,7 @@
                 devicePixelRatio: pix,
             };
             signaturePad = new SignaturePad(ctx, data);
+            this.type=options.type
                 this.suppliers_id= options.suppliers_id
         }
         getSysInfo() {
@@ -172,6 +173,14 @@
                     }
                 })
              var datas = JSON.parse(imgRes.data.trim());
+              if(this.type=='shop'){
+                   this.$parent.$pages['/IndexPages/pages/renzhengDetail'].qianming= datas.data.pic_url
+                    util.hideLoading()
+                    wx.navigateBack({
+                      delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+                    });
+                   return
+               }
             newapi.qianming_tijiao({
                 suppliers_id: this.suppliers_id,
                 qianming: datas.data.pic_url
