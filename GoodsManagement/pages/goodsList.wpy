@@ -599,6 +599,15 @@ display: inline-block;
    <text bindtap="fuzhi('523','497')" class="to-copy" wx:if="{{suppliers_id==523}}">尚志复制到青岛</text>
    <text bindtap="fuzhi('832','497')" class="to-copy" wx:if="{{suppliers_id==832}}">五常复制到青岛</text>
    <text bindtap="fuzhi('497','901')" class="to-copy" wx:if="{{suppliers_id==497}}">青岛复制到望奎</text>
+   <text bindtap="fuzhi('523','908')" class="to-copy" wx:if="{{suppliers_id==523}}">尚志复制到一型</text>
+   <text bindtap="fuzhi('523','909')" class="to-copy" wx:if="{{suppliers_id==523}}">尚志复制到二型</text>
+   <text bindtap="fuzhi('832','908')" class="to-copy" wx:if="{{suppliers_id==832}}">五常复制到一型</text>
+   <text bindtap="fuzhi('832','909')" class="to-copy" wx:if="{{suppliers_id==832}}">五常复制到二型</text>
+   <text bindtap="fuzhi('497','908')" class="to-copy" wx:if="{{suppliers_id==497}}">青岛复制到一型</text>
+   <text bindtap="fuzhi('497','909')" class="to-copy" wx:if="{{suppliers_id==497}}">青岛复制到二型</text>
+   <text bindtap="fuzhi('501','908')" class="to-copy" wx:if="{{suppliers_id==501}}">黑河复制到一型</text>
+   <text bindtap="fuzhi('501','909')" class="to-copy" wx:if="{{suppliers_id==501}}">黑河复制到二型</text>
+   <text bindtap="fuzhi('908','901')" class="to-copy" wx:if="{{suppliers_id==908}}">一型复制到望奎</text>
     <view class='search-title'>
        <view @tap="statusTap3({{index}})" class="status-label {{index == currentType ? 'active' : ''}} {{isclick?'down':'up'}}" wx:for-items="{{statusType2}}" wx:key="{{index}}" data-index="{{index}}" data-name="{{item.name}}">
         <view class='border'>{{item}}

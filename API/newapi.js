@@ -225,6 +225,10 @@ const newapi = {
     sqdaogou: (data) => fetch(`${host_chk}/sqdaogou`, 'post', data),
 
     add_submessage: (data) => fetch(`${host_chk}/add_submessage`, 'get', data),
+    chk_copy_shuju_err1: (data) => fetch(`${host_chk}/chk_copy_shuju_err1`, 'get', data),
+    chk_copy_shuju_err2: (data) => fetch(`${host_chk}/chk_copy_shuju_err2`, 'get', data),
+    chk_copy_shuju_err3: (data) => fetch(`${host_chk}/chk_copy_shuju_err3`, 'get', data),
+    chk_copy_shuju_err4: (data) => fetch(`${host_chk}/chk_copy_shuju_err4`, 'get', data),
 
 
 
