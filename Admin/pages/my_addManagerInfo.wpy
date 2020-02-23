@@ -105,8 +105,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-  }
-  // .headPortrait {
+  } // .headPortrait {
   //   /* background: #e50012; */
   //   /* vertical-align: middle; */
   //   margin: 20rpx 0;
@@ -161,12 +160,11 @@
   //   overflow: hidden;
   // }
   .headPortrait {
-     width: 100%;
+    width: 100%;
     display: flex;
     background: #fff;
     padding: 30rpx;
-    border-radius: 20rpx;
-    // margin-bottom: 20rpx;
+    border-radius: 20rpx; // margin-bottom: 20rpx;
     position: relative;
     border-bottom: 1px solid #f0f0f0;
     .img {
@@ -222,29 +220,25 @@
     <view class='list' wx:else>
       <block wx:for="{{adminList}}" wx:key="index">
         <!-- <view class='headPortrait '>
+            <view class='img'>
+              <image src="{{item.avatar?item.avatar:'https://lmbge.com/upload/avatar/weixin3.png'}}" data-user_id="{{(type=='member'||type=='coupon')?item.user_id:item.id}}" data-user_name="{{(type=='member'||type=='coupon')?item.user_name:item.user_nickname}}" bindtap='addManager'
+                mode='aspectFill' />
+            </view>
+            <view class='text' wx:if="{{type=='member'||type=='coupon'}}">{{item.user_name?item.user_name:'jc'+item.user_id}}</view>
+            <view class='text' wx:else>{{item.user_nickname?item.user_nickname:'jc'+item.id}}</view>
+          </view> -->
+        <view class='headPortrait ' @tap="toDetail({{item}})">
           <view class='img'>
-            <image src="{{item.avatar?item.avatar:'https://lmbge.com/upload/avatar/weixin3.png'}}" data-user_id="{{(type=='member'||type=='coupon')?item.user_id:item.id}}" data-user_name="{{(type=='member'||type=='coupon')?item.user_name:item.user_nickname}}" bindtap='addManager'
-              mode='aspectFill' />
-          </view>
-          <view class='text' wx:if="{{type=='member'||type=='coupon'}}">{{item.user_name?item.user_name:'jc'+item.user_id}}</view>
-          <view class='text' wx:else>{{item.user_nickname?item.user_nickname:'jc'+item.id}}</view>
-        </view> -->
-         <view class='headPortrait '>
-          <view class='img'>
-           <image src="{{item.avatar?item.avatar:'https://lmbge.com/upload/avatar/weixin3.png'}}" 
-              mode='aspectFill' />
+            <image src="{{item.avatar?item.avatar:'https://lmbge.com/upload/avatar/weixin3.png'}}" mode='aspectFill' />
             <!-- <text class='iconfont icon-close' wx:if="{{isshowclose}}" data-user_id='{{item.id}}' catchtap='delManager'></text> -->
           </view>
           <view class='text'>
-           
-            <view  wx:if="{{type=='member'||type=='coupon'}}">姓名：{{item.user_name?item.user_name:'jc'+item.user_id}}</view>
-          <view  wx:else>姓名：{{item.user_nickname?item.user_nickname:'jc'+item.id}}</view>
-         
+            <view wx:if="{{type=='member'||type=='coupon'}}">姓名：{{item.user_name?item.user_name:'jc'+item.user_id}}</view>
+            <view wx:else>姓名：{{item.user_nickname?item.user_nickname:'jc'+item.id}}</view>
             <!-- <view>权限：{{item.user_nickname?item.user_nickname:'jc'+item.id}}</view> -->
           </view>
           <view class="btn">
-            <view class="edit"  bindtap='addManager' data-user_id="{{(type=='member'||type=='coupon')?item.user_id:item.id}}" data-user_name="{{(type=='member'||type=='coupon')?item.user_name:item.user_nickname}}">确定</view>
-           
+            <view class="edit" catchtap='addManager' data-user_id="{{(type=='member'||type=='coupon')?item.user_id:item.id}}" data-user_name="{{(type=='member'||type=='coupon')?item.user_name:item.user_nickname}}">确定</view>
           </view>
         </view>
       </block>
@@ -279,6 +273,17 @@
       erweima
     };
     methods = {
+      toDetail(item) {  
+        this.$parent.globalData.admin_userInfo=item
+        wx.navigateTo({
+          url: '/Admin/pages/my_addManagerInfo_detail?id=' + item.id + '&suppliers_id=' + this.suppliers_id
+        })
+      },
+      // manager_list(){
+      //   wx.navigateTo({
+      //         url: '/ConsolePages/pages/my_setManagerInfo_detail?id=' + user_id
+      //       })
+      // },
       searchIpt: function(e) {
         this.keyword = e.detail.value;
       },
@@ -314,7 +319,7 @@
             return
           } else {
             wx.navigateTo({
-              url: '/ConsolePages/pages/my_setManagerInfo_permission?id=' + user_id
+              url: '/ConsolePages/pages/my_setManagerInfo_permission?id=' + user_id+'&suppliers_id='+this.suppliers_id
             });
             return
           }
@@ -386,7 +391,7 @@
     async getAdmin() {
       var page = this.page
       var keyword = this.keyword;
-      var suppliers_id = this.$parent.globalData.suppliers_id?this.$parent.globalData.suppliers_id:0;
+      var suppliers_id = this.$parent.globalData.suppliers_id ? this.$parent.globalData.suppliers_id : 0;
       let data = {
         keyword,
         page,
@@ -422,24 +427,27 @@
       if (options.type) {
         this.type = options.type;
       }
+       if (options.suppliers_id) {
+        this.suppliers_id = options.suppliers_id;
+      }
       if (options.sales_id && options.sales_id != '')
         this.sales_id = options.sales_id;
       this.getErweima();
     }
     async getErweima() {
       // console.log(this.type)
-      let data={}
+      let data = {}
       if (this.type == 'salesman') {
-         data = {
+        data = {
           xiaochengxu: 'guanjia',
           path: '/YizhanConsolePages/yizhan/hexinMember'
         }
-      } else if(this.type == 'member'){
-         data = {
+      } else if (this.type == 'member') {
+        data = {
           xiaochengxu: 'guanjia',
           path: '/YizhanConsolePages/yizhan/yunMember'
         }
-      }else{
+      } else {
         return
       }
       let res = await newapi.getQRCode4(data)

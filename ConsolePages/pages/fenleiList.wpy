@@ -1,0 +1,139 @@
+<style lang="less">
+
+</style>
+
+<template>
+    <div>
+        <fenlei  @getfenlei.user="getfenlei" :chLists.sync="chLists"   :isShowCh.sync="isShowCh" ></fenlei>
+    </div>
+</template>
+
+<script>
+    import wepy from 'wepy';
+    import newapi from '../../API/newapi';
+    import util from '../../utils/index';
+    import fenlei from '../../components/fenleiList';
+    export default class zhuangxiuchlist extends wepy.page {
+        config = {
+            navigationBarTitleText: '填写装修信息'
+        };
+        components = {
+            fenlei
+        };
+        data = {
+            chLists: [],
+            isShowCh: true,
+            home_cat: {},
+            cats: [],
+            noCats: [],
+               page: 1,
+            isMoreData: true
+        }
+        methods = {
+            async getfenlei(cats) {
+                // this.cat = cat;
+                var parent = this.$parent.$pages["/ConsolePages/pages/my_setShopStyle"];
+                var type = this.type
+                if (type == 1) {
+                    if ((cats.length+1) % 4 != 0) {
+                        var res = await util.showModalBig("为了更好的视觉效果，建议您选择四的倍数，确定要继续吗")
+                        if (res.confirm) {} else {
+                            return
+                        }
+                    }
+                    // cats.push({
+                    //     cat_id:0,
+                    //     cat_name:'全部分类'
+                    // })
+                }
+                if (type == 2) {
+                    if ((cats.length) % 2 != 0) {
+                        var res = await util.showModalBig("为了更好的视觉效果，建议您选择二的倍数，确定要继续吗")
+                        if (res.confirm) {} else {
+                            return
+                        }
+                    }
+                }
+                parent.home_cat["cat" + type] = cats;
+                wepy.navigateBack({
+                    delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+                });
+            }
+        }
+         onReachBottom() {
+            if (this.isMoreData) {
+                
+                this.page = this.page + 1;
+                this.getFwjg()
+            }
+        }
+        async getFwjg() {
+            if (!this.$parent.globalData.suppliers_id) {
+                let res = await this.$parent.loginInfo();
+                let yizhanInfo = await this.$parent.getYizhanInfo();
+            }
+            var suppliers_id = this.$parent.globalData.suppliers_id
+            newapi.cat_manage({
+                suppliers_id,page:this.page
+            }).then(res => {
+                this.chList = res.data.data
+                this.chList.forEach((item, index) => {
+                    this.chList[index].checked = false
+                    this.chList[index].disabled = false
+                    this.cats.forEach((cat_item, cat_index) => {
+                        if (cat_item.cat_id == item.cat_id)
+                            this.chList[index].checked = true
+                    })
+                    this.noCats.forEach((cat_item, cat_index) => {
+                        if (cat_item.cat_id == item.cat_id)
+                            this.chList[index].disabled = true
+                    })
+                    this.chList[index].xiaofenlei.forEach((item2, index2) => {
+                        this.chList[index].xiaofenlei[index2].checked = false
+                        this.chList[index].xiaofenlei[index2].disabled = false
+                        this.cats.forEach((cat_item, cat_index) => {
+                            if (cat_item.cat_id == item2.cat_id)
+                                this.chList[index].xiaofenlei[index2].checked = true
+                        })
+                        this.noCats.forEach((cat_item, cat_index) => {
+                            if (cat_item.cat_id == item2.cat_id) {
+                                this.chList[index].xiaofenlei[index2].disabled = true
+                                this.chList[index].disabled = true
+                            }
+                        })
+                    })
+                })
+                if (this.page == 1) {
+                    this.chLists = this.chList
+                } else {
+                    this.chLists.push(...this.chList)
+                }
+                console.log("this.chList.length <20",this.chList.length <20)
+                if (this.chList.length <20) {
+                    this.isMoreData = false;
+                } else {
+                    this.isMoreData = true;
+                }
+                this.$apply()
+            })
+        }
+        onLoad(option) {
+            this.type = option.type
+     
+            var parent = this.$parent.$pages["/ConsolePages/pages/my_setShopStyle"];
+            var home_cat = parent.home_cat;
+            this.cats = home_cat["cat" + this.type] ? home_cat["cat" + this.type] : [];
+            this.noCats = [];
+            this.isShowCh=true
+            // console.log("this.cats",this.cats)
+            for (var i = 1; i <= 3; i++) {
+                if (this.type != i) {
+                    this.noCats.push(...home_cat["cat" + i])
+                }
+            }
+            this.getFwjg();
+            // console.log(" this.noCat", this.noCats)
+        }
+      
+    }
+</script>

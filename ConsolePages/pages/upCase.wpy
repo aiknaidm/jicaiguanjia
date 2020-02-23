@@ -281,7 +281,7 @@
             <view class="btnBox">
                 <navigator url="addCaseDec">
                     <view class="listBox">
-                        <view class="listOption">商品详情</view>
+                        <view class="listOption">案例详情</view>
                         <view class="listOptionImages goodsDetail">
                             <label class="showname">{{content==""?"":"已填写"}}</label>
                             <text class='iconfont icon-arrow-right'></text>

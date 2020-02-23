@@ -197,7 +197,8 @@
             'pages/coupon/couponUseList',
             'pages/gift/my_console_gift',
             'pages/gift/my_console_gift_goodslist',
-            'pages/my_setSalesmanDetail'
+            'pages/my_setSalesmanDetail',
+            'pages/fenleiList'
           ]
         },
         {
@@ -216,7 +217,9 @@
             'pages/permission',
             'pages/brandManage',
             'pages/jmfManage',
-            'pages/erweima'
+            'pages/erweima',
+            'pages/my_addManagerInfo',
+            'pages/my_addManagerInfo_detail'
           ]
         },
         {
@@ -314,7 +317,8 @@
         'wxf48cdd6a7dae8c21',
         'wx7e302245debd521a',
         'wx87bfbcfe887faf4d',
-        'wxedc203036acbc9e4'
+        'wxedc203036acbc9e4',
+        'wx0d37285e7e208791'
       ]
     };
     globalData = {

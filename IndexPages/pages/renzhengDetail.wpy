@@ -243,8 +243,8 @@
           <image src="{{shopImg.img_url?shopImg.img_url:'/images/add_img.png'}}" />
         </view>
       </view>
-      <view class="title" style="padding:40rpx;text-align:left" wx:if="{{multiIndex>1}}">上传营业执照</view>
-      <view class="cameraBox" wx:if="{{multiIndex>1}}">
+      <view class="title" style="padding:40rpx;text-align:left" wx:if="{{multiIndex==2||multiIndex==4}}">上传营业执照</view>
+      <view class="cameraBox" wx:if="{{multiIndex==2||multiIndex==4}}">
         <view class="camera" @tap="{{isuserDetail?'':'addShopImg'}}"  data-type='zhizhao'>
           <image src="{{zhizhao.img_url?zhizhao.img_url:'/images/add_img.png'}}" />
         </view>
@@ -573,7 +573,7 @@ wx.navigateTo({ url: '/YizhanConsolePages/qianzi/index?type=shop' });
           // var pcusername = e.detail.value.pcusername;
           // var password = '123456';
           var share_code = e.detail.value.shareCode;
-           if (!this.zhizhao.img_url&&this.multiIndex>1) {
+           if (!this.zhizhao.img_url&&(this.multiIndex==2||this.multiIndex==4)) {
             util.showModal('请上传营业执照');
             return;
           }
@@ -737,7 +737,7 @@ wx.navigateTo({ url: '/YizhanConsolePages/qianzi/index?type=shop' });
       this.share_user_id = option.user_id ? option.user_id : 0
       var suppliers_id = option.suppliers_id ? option.suppliers_id : ''
       this.share_suppliers_id = option.share_suppliers_id ? option.share_suppliers_id : ''
-      
+      this.shareCode=option.shareCode ? option.shareCode : ''
       wx.hideLoading();
       if (suppliers_id != '') {
 

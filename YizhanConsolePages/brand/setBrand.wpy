@@ -155,14 +155,14 @@
                             <image src="/images/add_img.png" />
                         </view>
                     </view>
-                    <view class="section2">
+                    <!-- <view class="section2">
                         <view class="banner-img" wx:if="{{item_brand.pc_brand_img!=''}}" @tap="addBannerImg({{index}},{{index_brand}},'pc')">
                             <image src="{{item_brand.pc_brand_img}}" />
                         </view>
                         <view class="banner-img" @tap="addBannerImg({{index}},{{index_brand}},'pc' )" wx:else>
                             <image src="/images/add_img.png" />
                         </view>
-                    </view>
+                    </view> -->
                     <view class="section">
                         <view class="banner-name">
                             到期时间：

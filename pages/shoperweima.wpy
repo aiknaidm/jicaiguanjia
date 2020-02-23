@@ -88,16 +88,21 @@
         this.is_join= this.yizhanInfo.is_join;
         var appId = "";
         var path = "";
+   
         if (this.is_yizhan == 1||this.is_join==1) {
           appId = "wx87bfbcfe887faf4d";
           path = '/pages/home?suppliers_id=' + this.$parent.globalData.suppliers_id;
+     
         } else if(this.$parent.globalData.suppliers_id==525) {
           appId = "wxedc203036acbc9e4";
+       
         } else if(this.$parent.globalData.suppliers_id==847) {
           appId = "wxf48cdd6a7dae8c21";
+         
         } else {
-          appId = "wx87bfbcfe887faf4d";
+          appId = "wx0d37285e7e208791";
            path = '/pages/home?suppliers_id=' + this.$parent.globalData.suppliers_id;
+          
           // path = '/Shop/pages/index?suppliers_id=' +
           //   this.$parent.globalData.suppliers_id +
           //   '&sales_id=' +
@@ -111,7 +116,7 @@
           // extraData: {
           // 	suppliers_id: suppliers_id,
           // },
-          envVersion: 'release',
+          envVersion: 'develop',
           // envVersion: 'trial',
           success(res) {
             // 打开成功

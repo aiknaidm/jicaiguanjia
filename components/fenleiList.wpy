@@ -1,0 +1,328 @@
+<style lang="less">
+    .container {
+        margin-bottom: 150rpx;
+    }
+    .kind {
+        border-bottom: 8rpx solid #f0f0f0;
+    }
+    .kind-1 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2rpx solid #f0f0f0;
+        padding: 20rpx 40rpx;
+    }
+    .kind-1 text {
+        color: #999999;
+        -webkit-transform: rotate(90deg);
+        -moz-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        -o-transform: rotate(90deg);
+        transform: rotate(90deg);
+        -webkit-transition: transform 0.2s;
+        -moz-transition: transform 0.2s;
+        -ms-transition: transform 0.2s;
+        -o-transition: transform 0.2s;
+        transition: transform 0.2s;
+    }
+    .kind-1 .active {
+        -webkit-transform: rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+        -ms-transform: rotate(-90deg);
+        -o-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+    }
+    .kind-1 view {
+        display: flex;
+        align-items: center;
+        line-height: 50rpx;
+        image {
+            width: 50rpx;
+            height: 50rpx;
+            margin: 0 20rpx;
+        }
+    }
+    .kind-1 text {
+        float: right;
+    }
+    .lists {
+        display: none;
+    }
+    .lists .list,
+    .lists .addGoods {
+        margin-left: 120rpx;
+        border-bottom: 1px solid #f0f0f0;
+        padding: 20rpx 40rpx;
+    }
+    .lists .addGoods {
+        color: #e50012;
+    }
+    .lists.active {
+        display: block;
+    }
+    .list {
+        display: flex;
+        line-height: 50rpx;
+        image {
+            width: 50rpx;
+            height: 50rpx;
+            margin: 0 20rpx;
+        }
+    }
+    .add {
+        width: 600rpx;
+        height: 90rpx;
+        margin: auto;
+        line-height: 90rpx;
+        text-align: center; // background: #303030;
+        color: #fff;
+        position: fixed;
+        bottom: 40rpx;
+        left: 50%;
+        margin-left: -300rpx;
+        border-radius: 10rpx;
+    }
+    .delete {
+        text-align: center;
+        background-color: #e50012;
+        color: #eee;
+        line-height: 80rpx;
+    }
+    .add-box {
+        background: #fff;
+        border-top: 3px solid #e50012;
+        width: 80%;
+    }
+    .add-box .title {
+        padding: 20rpx 40rpx;
+        font-size: 35rpx;
+        text-align: center;
+    }
+    .add-box .content {
+        padding: 20rpx 40rpx;
+    }
+    .add-box .content input {
+        font-size: 30rpx;
+        width: 100%;
+        min-width: 450rpx;
+    }
+    .add-box .btn {
+        display: flex;
+        border: 1px solid #f0f0f0;
+    }
+    .add-box .btn view {
+        flex: 1;
+        text-align: center;
+        font-size: 30rpx;
+        line-height: 80rpx;
+        border-right: 1px solid #f0f0f0;
+    }
+    .del {
+        width: 600rpx;
+        height: 85rpx;
+        margin: auto;
+        line-height: 90rpx;
+        text-align: center;
+        background: #e50012;
+        color: #fff;
+        position: fixed;
+        bottom: 40rpx;
+        left: 50%;
+        margin-left: -300rpx;
+        border-radius: 10rpx;
+        flex: 1;
+    } //   上传图片
+    .cameraBox {
+        height: 204rpx;
+        background-color: #f2f2f2;
+        line-height: 204rpx;
+        display: flex; // flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        overflow-x: scroll;
+    }
+    .camera {
+        width: 102rpx;
+        height: 106rpx;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        margin-right: 30rpx;
+    }
+    .camera image {
+        width: 102rpx;
+        height: 106rpx;
+    }
+    .inputBox {
+        padding: 0 36rpx;
+        border-bottom: 1px solid #e4e4e4;
+    }
+    .title {
+        width: 100%;
+        height: 100rpx;
+        line-height: 100rpx;
+    }
+    .listBox {
+        height: 90rpx;
+        line-height: 90rpx;
+        border-bottom: 1px solid#e4e4e4;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .listBoxAdd {
+        height: 90rpx;
+        line-height: 90rpx;
+        border-bottom: 1px solid#e4e4e4;
+        display: flex;
+        /* justify-content: space-between; */
+        align-items: center;
+        color: #e50012;
+    }
+    .listOption {
+        display: inline-block;
+        margin: 0 36rpx;
+        margin-right: 10rpx;
+        width: 180rpx;
+    }
+    .listOptionAdd {
+        display: inline-block;
+        margin-left: 36rpx;
+        /* width: 150rpx; */
+    }
+    .close {
+        width: 35rpx;
+        height: 35rpx;
+        background-color: #e50012;
+        border-radius: 50%;
+        color: #fff;
+        text-align: center;
+        line-height: 30rpx;
+        position: absolute;
+        right: -15rpx;
+        top: -15rpx;
+    }
+</style>
+
+<template>
+    <div>
+        <!--pages/my-kindManage/index.wxml-->
+        <view class='container'>
+            <form @submit="formSubmit">
+                <checkbox-group name="radiobox">
+                    <view class='kind' wx:for="{{chLists}}" wx:for-index="indexx" wx:key="{{indexx}}">
+                        <view class="kind-1" data-index="{{indexx}}" @tap="clickKind({{indexx}})">
+                            <view>
+                                <label @tap.stop="clickdafenlei({{indexx}},{{item.cat_id}},{{item.cat_name}},{{item.cat_img}})">
+                                                                                            <checkbox  value="{{item.cat_id}}" checked="{{item.checked}}" disabled="{{item.disabled}}" data-indexx="{{indexx}}" data-catid="{{item.cat_id}}"  />
+                                                                                          </label>
+                                <image src="{{item.cat_img}}"></image>{{item.cat_name}}</view>
+                            <text class="iconfont icon-arrow-right {{chLists[indexx].open?'active':''}}"></text>
+                        </view>
+                        <view class="lists {{chLists[indexx].open?'active':''}}">
+                            <label wx:for="{{item.xiaofenlei}}" class="list" wx:for-item="itemName" wx:for-index="indexy" wx:key="{{indexy}}" data-indexx="{{indexx}}" data-indexy="{{indexy}}" data-catid="{{itemName.cat_id}}" @tap='clickxiaolei({{indexx}},{{indexy}},{{itemName.cat_id}},{{itemName.cat_name}},{{itemName.cat_img}})'>
+                                                                                            <checkbox value="{{itemName.cat_id}}" disabled="{{itemName.disabled}}" checked="{{itemName.checked}}"/><image src="{{itemName.cat_img}}"></image>{{itemName.cat_name}}</label>
+                            <view wx:if="{{is_join!=1}}" class="addGoods" bindtap='addLittleKindTap' data-parent_id='{{item.cat_id}}'>
+                                <text class="iconfont icon-tianjia-copy mian-color"></text>添加分类
+                            </view>
+                        </view>
+                    </view>
+                </checkbox-group>
+                <view class="add" wx:if="{{is_join!=1}}">
+                    <button class='del' formType="submit">确定</button>
+                </view>
+            </form>
+        </view>
+    </div>
+</template>
+
+<script>
+    import wepy from 'wepy';
+    import newapi from '../API/newapi';
+    import util from '../utils/index';
+    export default class fenleilist extends wepy.page {
+        config = {
+            navigationBarTitleText: '选择分类'
+        };
+        props = {
+            chLists: {
+                type: Array,
+                default: []
+            },
+            noCats: {
+                type: Array,
+                default: []
+            },
+            isShowCh: {
+                type: Boolean,
+                default: true
+            },
+        };
+        data = {
+        
+         
+        }
+        methods = {
+            formSubmit(e) {
+                var cat_id = []
+                var cat = []
+                for (var i = 0; i < this.chLists.length; i++) {
+                    var item = this.chLists[i]
+                    if (item.checked) {
+                        cat_id.push(item.cat_id);
+                        cat.push(item)
+                        continue;
+                    }
+                    for (var j = 0; j < item.xiaofenlei.length; j++) {
+                        var item2 = item.xiaofenlei[j]
+                        if (item2.checked) {
+                            cat.push(item2)
+                            cat_id.push(item2.cat_id);
+                        }
+                    }
+                }
+                console.log("cat", cat)
+                this.$emit("getfenlei", cat)
+            },
+            toDetail(id) {
+                wx.navigateTo({
+                    url: 'zhuangxiu?fg=' + id + '&zx=' + this.zx
+                });
+            },
+            clickKind: function(index) {
+                // var index = e.currentTarget.dataset.index;
+                this.chLists[index].open = !this.chLists[index].open;
+            },
+            clickdafenlei(x, catid, catName, catImg) {
+                this.chLists[x].checked = !this.chLists[x].checked
+                this.x = x;
+                this.y = -1;
+                this.chLists[x].xiaofenlei.forEach((item, index) => {
+                    this.chLists[x].xiaofenlei[index].checked = this.chLists[x].checked
+                })
+                this.$apply();
+            },
+            clickxiaolei(x, y, catid, catName, catImg) {
+                this.x = x;
+                this.y = y;
+                this.chLists[x].xiaofenlei[y].checked = !this.chLists[x].xiaofenlei[y].checked
+                var isAll = true
+                this.chLists[x].xiaofenlei.forEach((item, index) => {
+                    if (!this.chLists[x].xiaofenlei[index].checked) {
+                        isAll = false
+                    }
+                })
+                if (isAll) this.chLists[x].checked = true
+                else this.chLists[x].checked = false
+                this.$apply();
+            },
+        }
+        onLoad(option) {
+            // this.getFwjg();
+        }
+       
+    }
+</script>

@@ -78,7 +78,7 @@ export default class newslist extends wepy.page {
       datas = this.content;
       datas.suppliers_id = this.suppliers_id;
       datas.goods_id = this.content.id;
-     datas.money = this.share_code&&this.share_code!=''?this.content.youhui_price:this.content.goods_price;
+     datas.isHasShareCode = this.share_code&&this.share_code!=''?1:0;
       var datas2 = {};
       datas2.suppliers_id = this.suppliers_id;
       var res = await util.fwfwxpay(this.suppliers_id, datas, this.share_code);

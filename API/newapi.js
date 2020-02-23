@@ -55,6 +55,8 @@ const newapi = {
 
     yhxq: (data) => fetch(`${host_chk}/yhxq`, 'GET', data),
     findManagers: (data) => fetch(`${host_chk}/find_managers`, 'GET', data),
+    findManagers1: (data) => fetch(`${host_chk}/find_managers1`, 'GET', data),
+    manager_list: (data) => fetch(`${host_chk}/manager_list`, 'GET', data),
     verifyCode: (data) => fetch(`${host_chk}/chk_share_code`, 'GET', data),
     renewList: () => fetch(`${host_chk}/fuwufei`, 'GET'),
     fwfpaylist: (data) => fetch(`${host_chk}/fwfpaylist`, 'GET', data),

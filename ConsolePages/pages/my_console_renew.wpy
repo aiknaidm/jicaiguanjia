@@ -78,7 +78,7 @@
       </view>
       <view class='txt'>
         <view wx:if="{{yizhanInfo.end_time}}">服务费到期时间：{{yizhanInfo.end_time}}</view>
-        <view>店铺进行商品批发交易时选择线上支付，另收取1%财务服务费</view>
+        <view>店铺进行商品批发交易时选择线上支付，另收取1.2%财务服务费</view>
       </view>
       <view class='xufei' bindtap="toRenewRecord">续费记录</view>
     </view>

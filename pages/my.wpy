@@ -77,7 +77,8 @@ export default class my extends wepy.page {
         icon: '/images/share.png',
         text: '钱包',
         url: '/IndexPages/pages/qianbao/index'
-      }
+      },
+
      
     ],
     isShowprompt: false
@@ -99,7 +100,6 @@ export default class my extends wepy.page {
       this.$apply();
     },
     hiddenPrompt(){
-        console.log(1111111111111)
         this.isShowprompt=false
       },
     toBannerDetail2: function() {
@@ -152,7 +152,7 @@ export default class my extends wepy.page {
       this.$apply();
     }
     // 判断身份
-    if (userInfo.user_type >= 5) {
+    if (userInfo.user_type >= 4) {
       this.tabList = [
         {
           icon: '/images/icon_normal.png',

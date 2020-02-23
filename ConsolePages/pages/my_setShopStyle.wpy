@@ -161,7 +161,7 @@
     border-radius: 0px;
     margin: 0;
     /* height: 84rpx;
-               line-height: 84rpx; */
+                         line-height: 84rpx; */
     background-color: #e50012;
   }
   .smsCode button[disabled] {
@@ -184,7 +184,7 @@
     display: flex;
     justify-content: space-between;
     /* border-bottom: 1px solid #ddd;
-              padding-right: 10%; */
+                        padding-right: 10%; */
   }
   .smsCode input {
     width: 336rpx;
@@ -277,8 +277,63 @@
     position: absolute;
     right: 40rpx;
     top: 40rpx;
-    color:#e50012;
-    
+    color: #e50012;
+  }
+  .check-list {
+    text-align: left;
+    padding: 40rpx;
+    border-bottom: 8rpx solid #f0f0f0;
+  }
+  .cat-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20rpx 0;
+    margin-top: 20rpx;
+    border-top: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+    image {
+      width: 50rpx;
+      height: 50rpx;
+    }
+  }
+  .cat-list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #fff;
+    padding: 20rpx;
+    background: #f0f0f0;
+    border-radius: 10rpx;
+    overflow: hidden;
+    margin-top: 20rpx;
+    image {
+      width: 150rpx;
+      height: 150rpx;
+      border: 1px solid #fff;
+    }
+    .cat-img {
+      width: 150rpx;
+      height: 150rpx;
+      border: 2px solid #fff;
+      text-align: center;
+      line-height: 150rpx;
+      background: #fff;
+    }
+    input {
+      background: #fff;
+      padding:0 20rpx;
+      width: 100rpx;
+       border-radius: 2rpx;
+    }
+  }
+  .label{
+    display: flex;
+    justify-content: space-between;
+    image{
+      width:50rpx;
+      height:50rpx;
+    }
   }
 </style>
 <template>
@@ -302,6 +357,56 @@
           <image src="/images/add_img.png" mode='aspectFit' />
         </view>
       </view>
+      <view class="title" style="padding:40rpx;text-align:center;position: relative;">首页分类设置
+      </view>
+      <checkbox-group name="checkbox">
+        <view class="check-list">
+          <label class="label">
+                         <!-- <checkbox  value="1" checked="{{item.checked}}" data-indexx="{{indexx}}" data-catid="{{item.cat_id}}"  /> -->
+                         样式一
+                         <image src="/images/wenhao.png" @tap="showShuoming('https://lmbge.com/upload/1234/ys1.jpg')"></image>
+                 </label>
+          <view class="cat-title" @tap="xuanze(1)">选择分类
+            <image src="/images/enter.png"></image>
+          </view>
+          <view class="cat-list" wx:for="{{home_cat.cat1}}" wx:key="{{index}}" @longpress.stop="delCatList({{index}},1)">
+            <input value="{{item.sort_order?item.sort_order:50}}" placeholder="排序" @input="changeInput" data-index="{{index}}" data-type="1"></input>
+            <view>{{item.cat_name}}</view>
+            <image wx:if="{{item.cat_img&&item.cat_img.length>0}}" src="{{item.cat_img}}" @tap="clickImg({{index}},1)"></image>
+            <view wx:else class="cat-img" @tap="clickImg({{index}},1)">选择图片</view>
+          </view>
+        </view>
+        <view class="check-list">
+          <label class="label">
+                         <!-- <checkbox  value="2" checked="{{item.checked}}" data-indexx="{{indexx}}" data-catid="{{item.cat_id}}"  /> -->
+                         样式二<image src="/images/wenhao.png" @tap="showShuoming('https://lmbge.com/upload/1234/ys2.jpg')"></image>
+                 </label>
+          <view class="cat-title" @tap="xuanze(2)">选择分类
+            <image src="/images/enter.png"></image>
+          </view>
+          <view class="cat-list" wx:for="{{home_cat.cat2}}" wx:key="{{index}}" @longpress.stop="delCatList({{index}},2)" >
+            <input value="{{item.sort_order}}" placeholder="排序" @input="changeInput" data-index="{{index}}" data-type="2"></input>
+            <view>{{item.cat_name}}</view>
+            <image wx:if="{{item.cat_img&&item.cat_img.length>0}}" src="{{item.cat_img}}" @tap="clickImg({{index}},2)"></image>
+            <view wx:else class="cat-img" @tap="clickImg({{index}},2)">选择图片</view>
+          </view>
+        </view>
+        <view class="check-list">
+          <label class="label">
+                         <!-- <checkbox  value="3" checked="{{item.checked}}" data-indexx="{{indexx}}" data-catid="{{item.cat_id}}"  /> -->
+                         样式三<image src="/images/wenhao.png" @tap="showShuoming('https://lmbge.com/upload/1234/ys3.jpg')"></image>
+                 </label>
+          <view class="cat-title" @tap="xuanze(3)">选择分类
+            <image src="/images/enter.png"></image>
+          </view>
+          <view class="cat-list" wx:for="{{home_cat.cat3}}" wx:key="{{index}}" @longpress.stop="delCatList({{index}},3)">
+            <input value="{{item.sort_order?item.sort_order:50}}" placeholder="排序" @input="changeInput"  data-index="{{index}}" data-type="3"></input>
+            <view>{{item.cat_name}}</view>
+            <image wx:if="{{item.cat_img&&item.cat_img.length>0}}" src="{{item.cat_img}}" @tap="clickImg({{index}},3)"></image>
+            <view wx:else class="cat-img" @tap="clickImg({{index}},3)">选择图片</view>
+          </view>
+        </view>
+      </checkbox-group>
       <view class="title" style="padding:40rpx;text-align:center" hidden="{{is_yizhan==1}}">添加背景图</view>
       <view class="cameraBox" hidden="{{is_yizhan==1}}">
         <view class="camera" @tap='chooseBgImg'>
@@ -343,6 +448,7 @@
       navigationBarTitleText: '店铺装修'
     };
     data = {
+      cat: [],
       shopImg: 0,
       userDetail: {},
       region: [],
@@ -400,11 +506,24 @@
       address: '',
       is_friend_disabled: false,
       bgImg: 0,
-      is_yizhan:0
+      is_yizhan: 0,
+      home_cat: {}
     };
     computed = {};
     components = {};
     methods = {
+      showShuoming(img){
+     
+       wx.previewImage({
+  current: img, // 当前显示图片的http链接
+  urls: [img] // 需要预览的图片http链接列表
+})
+      },
+      xuanze(type) {
+        wx.navigateTo({
+          url: "fenleiList?type=" + type
+        });
+      },
       toSet() {
         wx.navigateTo({
           url: '/banner/setBanner'
@@ -533,17 +652,28 @@
       bindRegionChange(e) {
         this.region = e.detail.value;
       },
+      async delCatList(index, type) {
+        var res = await util.showModalBig("你确定要删除吗")
+        if (res.confirm)
+          this.home_cat['cat' + type].splice(index, 1)
+          this.$apply();
+      },
+      changeInput(e){
+        var type=e.currentTarget.dataset.type;
+        var index=e.currentTarget.dataset.index;
+        this.home_cat['cat' + type][index].sort_order=e.detail.value
+      },
       //表单数据提交
       async formSubmit(e) {
         var param = e.detail.value;
         var that = this;
         var suppliers_id = this.$parent.globalData.suppliers_id;
-        console.log("param.is_picture ", param.is_picture);
         var is_picture = param.is_picture ? 0 : 1;
         // var is_friend = param.is_friend ? 1 : 0;
         // var is_chakan = param.is_chakan ? 1 : 0;
         var gonggao = param.gonggao;
         var jianjie = this.userDetail.jianjie;
+        var checkbox = param.checkbox
         // 上传图片
         if (!this.shopImg.upload) var shopImg = this.shopImg.img_url == 0 ? '' : this.shopImg.img_url
         else var shopImg = await this.upImg(this.shopImg.img_url)
@@ -556,6 +686,7 @@
             return;
           }
         }
+        console.log("checkbox", checkbox);
         var i = 0;
         for (var i = 0; i < this.imgSrc.length; i++) {
           if (this.imgSrc[i].upload) {
@@ -567,6 +698,30 @@
             this.goods_imgs.push(this.imgSrc[i].img_url);
           }
         }
+        var home_cat = {}
+        for (var i = 1; i <= 3; i++) {
+          var cat = this.home_cat['cat' + i]
+          if (cat) {
+            home_cat['cat' + i] = cat
+            for (var j = 0; j < cat.length; j++) {
+              var item = cat[j]
+              if(!item.sort_order||item.sort_order.length==0){
+                item.sort_order=50
+              }
+              if (item.cat_img && item.cat_img.length > 0) {
+                if (item.upload) {
+                  var img = await this.upImg(item.cat_img);
+                  item.cat_img = img
+                  item.upload = false
+                }
+              } else {
+                util.showModalBig("分类图片不能为空~")
+                return
+              }
+            }
+          }
+        }
+        console.log("home_cat", home_cat);
         var goods_img = this.goods_imgs[0];
         var img_url = this.goods_imgs.toString();
         util.showLoading();
@@ -579,7 +734,8 @@
           img: shopImg,
           gonggao,
           jianjie,
-          bg_img: bgImg
+          bg_img: bgImg,
+          home_cat
         };
         let res = await newapi.supplier_upd(data);
         wx.hideLoading();
@@ -592,6 +748,25 @@
           util.showModal(res.data.message);
         }
         this.$apply();
+      },
+      clickImg(index, type) {
+        wepy
+          .chooseImage({
+            count: 1, // 默认9
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'] // 可以指定来源是相册还是相机，默认二者都有
+          })
+          .then(res => {
+            var that = this;
+            // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+            var tempFilePaths = res.tempFilePaths;
+            console.log(this.home_cat['cat' + type], index, this.home_cat['cat' + type][index])
+            // this.home_cat['cat'+type][index]={}
+            this.home_cat['cat' + type][index].cat_img = tempFilePaths[0];
+            this.home_cat['cat' + type][index].upload = true;
+            this.$apply();
+          })
+          .catch(res => {});
       }
     };
     events = {};
@@ -619,8 +794,7 @@
       this.suppliers_id = suppliers_id;
       this.isSetAbout = this.userDetail.jianjie == '' ? false : true
       this.userDetail.jianjie = util.html_decode(this.userDetail.jianjie);
-        this.is_yizhan = this.$parent.globalData.yizhanInfo.is_yizhan;
-
+      this.is_yizhan = this.$parent.globalData.yizhanInfo.is_yizhan;
       console.log("this.userDetail", this.userDetail);
       wepy.getLocation().then(res => {}).catch(res => {
         this.isOpenSetting = true
@@ -642,7 +816,7 @@
           ad_link: item.ad_link,
           content: item.content,
           type: item.type,
-          name:item.name
+          name: item.name
         })
       })
       this.shopImg = {}
@@ -651,6 +825,7 @@
       this.bgImg = {}
       this.bgImg.img_url = res.data.data.bg_img;
       this.bgImg.upload = false;
+      this.home_cat = res.data.data.home_cat
       console.log("this.shopImg", this.shopImg);
       this.$apply();
       return res.data.data;

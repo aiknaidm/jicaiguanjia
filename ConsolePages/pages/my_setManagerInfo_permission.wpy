@@ -114,6 +114,9 @@
           }).then(res => {
             if (res.data.code == 0) util.showToast("提交成功")
             else util.showToast(res.data.messages)
+             wepy.navigateBack({
+               delta:1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+             });
           })
         } else {
           newapi.addManager({
@@ -125,6 +128,10 @@
             if (res.data.code == 0){
               util.showToast("提交成功")
              this.$parent.$pages['/ConsolePages/pages/my_setManagerInfo'].managerList(this.suppliers_id);
+             wepy.navigateBack({
+               delta:2 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+             });
+             
             } 
             else util.showToast(res.data.messages)
           })
@@ -157,7 +164,12 @@
     async onShow() {}
     async onLoad(option) {
       console.log(option);
-      this.suppliers_id = this.$parent.globalData.suppliers_id;
+      if(option.suppliers_id){
+this.suppliers_id =option.suppliers_id
+      }else{
+ this.suppliers_id = this.$parent.globalData.suppliers_id;
+      }
+     
       this.id = option.id;
       this.type = option.type;
       if (!this.suppliers_id) {

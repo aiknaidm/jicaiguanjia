@@ -57,7 +57,7 @@ this.articleDetail.post_title = this.articleDetail.title;
 console.log("option",option)
      if (option.type == 'rule'){
 wx.setNavigationBarTitle({
-        title: '吉采易站规则'
+        title: '平台使用协议'
       });
        this.getRules();
      }

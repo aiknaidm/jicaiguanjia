@@ -359,9 +359,75 @@
     align-items: center;
     margin: 20rpx 0;
   }
+  .body-bg {
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+  .list {
+    background-color: #fff;
+    width: 60%;
+    text-align: center;
+    line-height: 88rpx;
+    font-size: 30rpx;
+    max-height: 450rpx;
+    overflow: scroll;
+  }
+  .list view {
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .icon-jiantou {
+    font-size: 12px;
+    margin-left: 10rpx;
+    color: #e50012;
+  }
+   .search-title {
+    display: flex;
+    justify-content: space-between;
+    line-height: 55rpx;
+    font-size: 28rpx;
+    align-items: center;
+    background-color: #fff;
+    z-index: 10;
+    padding: 20rpx;
+    .sure-btn {
+      border-radius: 50px;
+      padding: 0 20rpx;
+      border: 1px solid #e50012;
+      color: #e50012;
+      font-size: 26rpx;
+    }
+    .sure-btn2 {
+      border: 1px solid #aaa;
+      color: #aaa;
+    }
+  }
 </style>
 <template>
   <view class='container'>
+    <view class='body-bg' wx:if="{{isShowSalesList}}" bindtap='hiddenSalesList' touchstart='hiddenbg' touchmove="hiddenbg">
+      <view class='list'>
+        <view wx:for="{{adminList}}" wx:key="{{index}}" @tap='changeShopList({{item.id}},{{item.user_nickname}})'>
+          {{item.user_nickname}}
+        </view>
+      </view>
+    </view>
+    <view class='search-title ' wx:if="{{adminList.length!=0}}">
+      <view bindtap="buttonTap" class=" up">
+        <view class='border'>{{salesmanName}}
+          <text class='iconfont icon-jiantou'></text>
+        </view>
+        <!-- <view class="num">会员<text class="green">{{num}}</text>名</view> -->
+      </view>
+      <!-- <view class="sure-btn {{qurenNum==0?'sure-btn2':''}}" @tap="{{qurenNum==0?'':'toSureList'}}" wx:if="{{is_kthy==1&&sales_id==0}}">充值待确认</view> -->
+    </view>
     <view class='jy-top'>
       <view class=''>
         <view class='jy-top-money red'>总成交额￥{{zonge}}</view>
@@ -391,6 +457,7 @@
         </view>
       </picker>
     </view>
+    
     <view class="jy-top-left">
       <picker mode="date" value="{{start_time}}" end="{{now_time}}" bindchange="bindStartTimeChange">
         {{start_time}}
@@ -406,15 +473,15 @@
     <view wx:for-items="{{goodsMap}}" wx:key="{{index}}" class='list-box'>
       <view @tap="orderDetail({{orderList[index].order_id}})">
         <view wx:if="{{item.length==1}}" class="img-box1">
-          <image src="{{item[0].goods_imgs}}" class="goods-img" />
-          <view class="img-box1-1">
-            <view>{{item[0].goods_name}}</view>
-            <view class="img-box1-guige">{{item[0].goods_attr}}</view>
-          </view>
-          <view class="img-box1-2">
-            <view>￥{{item[0].goods_price}}</view>
-            <view>x{{item[0].goods_number}}</view>
-          </view>
+          <image src="{{item[0].goods_imgs}}" class="goods-img">
+            <view class="img-box1-1">
+              <view>{{item[0].goods_name}}</view>
+              <view class="img-box1-guige">{{item[0].goods_attr}}</view>
+            </view>
+            <view class="img-box1-2">
+              <view>￥{{item[0].goods_price}}</view>
+              <view>x{{item[0].goods_number}}</view>
+            </view>
         </view>
         <scroll-view class="goods-img-container" scroll-x="true" wx:else>
           <view class="img-box" wx:for-items="{{item}}" wx:key="{{index2}}">
@@ -427,17 +494,6 @@
         <view class="total-price">共{{item.length}}件商品 合计：<text class="red">¥ {{orderList[index].order_amount}}</text></view>
       </view>
     </view>
-    <!-- <view  class='img-box1'>
-                                                        <image src="{{item.goods_imgs}}" class="goods-img"/>
-                                                        <view class='img-box1-1'>
-                                                          <view>{{item.goods_name}}</view>
-                                                          <view class='img-box1-guige'>{{item.goods_attr}}</view>
-                                                        </view>
-                                                        <view class='img-box1-2'>
-                                                          <view>{{item.pay_time}}</view>
-                                                          <view class='red'>￥{{item.goods_price}}</view>
-                                                        </view>
-                                                      </view> -->
     <popupbox :popupdata.sync="popupdata" @formSubmit.user="formSubmit">
       <view slot="other" class="checkbox">
         <checkbox-group class="radio-group" bindchange="radioChange">
@@ -464,6 +520,9 @@
       popupbox
     };
     data = {
+      isShowSalesList:false,
+      adminList: [],
+      salesmanName: '选择业务员',
       datas: {},
       paramtime: '2019-01',
       currtime: '2019-01',
@@ -617,6 +676,20 @@
         this.datas.page = 1;
         this.showtxt = true;
         this.getMoneyData(this.datas);
+      },
+       buttonTap: function() {
+        this.isShowSalesList = true;
+      },
+      hiddenSalesList: function() {
+        this.isShowSalesList = false;
+      },
+      changeShopList: function(sales_id, name) {
+        this.isShowSalesList = false;
+        this.salesmanName = name;
+        this.datas.sales_id = sales_id;
+        this.datas.page = 1;
+        this.getMoneyData(this.datas);
+   
       }
     };
     events = {};
@@ -661,6 +734,17 @@
       datas.end_time = nowYear + '-' + nowMoth + '-' + nowDate;
       return datas;
     }
+      async salesmanList(suppliers_id) {
+      let data = {
+        suppliers_id,
+        getall: 1
+      };
+      let res = await newapi.findSalesman(data);
+      if (res.data.code == 0) {
+        this.adminList = res.data.data;
+        this.$apply();
+      }
+    }
     async onLoad(option) {
       this.isMoreData = true;
       this.page = 1;
@@ -669,9 +753,9 @@
       } else {
         this.suppliers_id = this.$parent.globalData.suppliers_id;
       }
-      
       this.datas = this.init(this.suppliers_id);
       this.getMoneyData(this.datas);
+      this.salesmanList(this.suppliers_id)
       this.now_time = this.datas.end_time;
       this.end_time = this.datas.end_time;
       this.start_time = this.datas.start_time;

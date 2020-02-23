@@ -115,7 +115,10 @@ export default class newslist extends wepy.page {
     }
   };
   components = {};
-  data = {};
+  data = {
+    painting:{},
+    code:''
+  };
   computed = {};
   methods = {
     eventSave() {
@@ -158,7 +161,7 @@ export default class newslist extends wepy.page {
     // var suppliers_id = app.globalData.yizhanInfo.suppliers_id;
     var that = this;
     let data = {
-      path: '/IndexPages/pages/renzheng',
+      path: '/IndexPages/pages/renzhengDetail',
     };
     let res = await newapi.getShareImg(data);
     util.showLoading('绘制图片中');
@@ -166,7 +169,7 @@ export default class newslist extends wepy.page {
     var height = wx.getSystemInfoSync().windowHeight;
     var width = wx.getSystemInfoSync().windowWidth;
     var canvasHeight = height - 105 * a;
-    that.data.painting = {
+    that.painting = {
       width: canvasHeight / 1.77,
       height: canvasHeight,
       clear: false,
@@ -235,24 +238,24 @@ export default class newslist extends wepy.page {
         }
       ]
     };
-    that.setData({
-      painting: that.data.painting,
-      code: res.data.data.share_code
-    });
+    that.code=res.data.data.share_code
+
+    that.$apply();
   }
   /**
    * 用户点击右上角分享
    */
   onShareAppMessage(res) {
-    if (res.from == 'button') {
-      that.setData({
-        path: 'pages/my-renzheng/index?&shareCode=' + that.data.code,
-        title: '分享'
-      });
-    }
+    // if (res.from == 'button') {
+   
+       var  path= '/IndexPages/pages/renzhengDetail?&shareCode=' + this.code;
+       var  title= '分享'
+    
+    // console.log("path",path)
+    // }
     return {
-      title: that.data.title,
-      path: that.data.path,
+      title:title,
+      path:path,
       success: function(res) {
         // 转发成功
       },
