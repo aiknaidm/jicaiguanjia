@@ -199,7 +199,8 @@
             'pages/gift/my_console_gift',
             'pages/gift/my_console_gift_goodslist',
             'pages/my_setSalesmanDetail',
-            'pages/fenleiList'
+            'pages/fenleiList',
+            'pages/share_set'
           ]
         },
         {

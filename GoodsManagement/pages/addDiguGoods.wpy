@@ -708,7 +708,7 @@ display: inline-block;
         <view class="all-selected  {{isallSelect?'active':''}}" bindtap="bindAllSelect">全选</view>
       </view>
       <view>
-           <text class="to-pay-btn" bindtap="fuzhi('935',{{my_suppliers_id}})"  wx:if="{{del}}" >复制商品到易站</text>
+           <text class="to-pay-btn" bindtap="fuzhi('935',{{my_suppliers_id}})"  wx:if="{{del}}" >复制商品到店铺</text>
         <!-- <text class="to-pay-btn " bindtap="deleteSelected" wx:if="{{del}}">删除</text>
         <text class="to-pay-btn" bindtap="clickbtn" wx:if="{{del}}">设置会员卡</text>
         <text class="to-pay-btn" bindtap="clickghs" wx:if="{{del && is_yizhan}}">设置供货商</text> -->

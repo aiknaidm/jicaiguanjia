@@ -1,0 +1,144 @@
+<style lang="less">
+  .container {
+    background-color: #fff;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .section{
+    padding: 40rpx 20rpx;
+   display: flex;
+   border-bottom: 1px solid #f0f0f0;
+   .radio-item{
+     margin-bottom: 10rpx;
+   }
+.text{
+width: 250rpx;
+}
+  }
+.button{
+  margin-top: 40rpx;
+  padding-bottom: 40rpx;
+  button{
+    width: 90%;
+    margin: auto;
+    background: #e50012;
+    color: #fff;
+  }
+}
+</style>
+<template>
+  <view class='container'>
+    <view class="section"><view class="text">选择奖励方式：</view> <radio-group class="radio-group" bindchange="radioChange">
+      <radio class="radio" wx:for-items="{{items}}" wx:key="name" value="{{item.value}}" checked="{{incomeInfo.income_type==index+1}}">
+        <view class="radio-item">{{item.name}}</view>
+      </radio>
+    </radio-group></view>
+   
+    <view class="section" wx:if="{{incomeInfo.income_type==2}}"><view class="text">选择续费店铺：</view>  <picker bindchange="bindPickerChange" value="{{bossIndex}}" range="{{bossList}}" wx:if="{{incomeInfo.income_type==2}}">
+      <view class="picker">
+        {{bossList[bossIndex]}}
+      </view>
+    </picker></view>
+  
+    <view class="button">
+      <button @tap="submitInfo">提交</button>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import newapi from '../../API/newapi';
+  import util from '../../utils/index';
+  export default class share extends wepy.page {
+    config = {
+      navigationBarTitleText: '分享设置'
+    };
+    components = {};
+    data = {
+      incomeInfo: {
+        income_type: 1,
+        income_suppliers_name: '',
+        income_suppliers_id: ''
+      },
+      items: [{
+        name: "返现100元",
+        value: "1",
+      }, {
+        name: "延长3个月店铺使用时间",
+        value: "2"
+      }],
+      bossList: [],
+      bossIndex: 0
+    };
+    computed = {};
+    methods = {
+      radioChange(e) {
+        this.incomeInfo.income_type = e.detail.value
+        if (this.incomeInfo.income_type == 1) {
+          this.incomeInfo.income_suppliers_name = ""
+          this.incomeInfo.income_suppliers_id = ""
+        }
+      },
+      bindPickerChange(e) {
+        console.log(e)
+        this.bossIndex = e.detail.value
+        this.incomeInfo.income_suppliers_name = this.bossList[this.bossIndex]
+        this.incomeInfo.income_suppliers_id = this.bossIdList[this.bossIndex]
+      },
+      submitInfo() {
+        if (this.bossIndex == 0 && this.incomeInfo.income_type == 2) {
+          util.showToast('请选择店铺')
+          return
+        }
+        newapi.income_method(this.incomeInfo).then(res => {
+          if (res.data.code != 0) {
+            util.showToast(res.data.message)
+          } else
+            util.showToast('提交成功')
+        })
+      }
+    };
+    events = {};
+    async incomeMethod() {}
+    async getIncomeInfo() {
+      newapi.income_info().then(res => {
+        console.log("res", res)
+        this.incomeInfo = res.data.data
+        this.$apply()
+        return res.data.data
+      }).then(incomeInfo => {
+        this.getBossList(incomeInfo)
+      })
+    }
+    async getBossList(incomeInfo) {
+      var res = await newapi.bossList();
+      var incomeInfo = incomeInfo
+      console.log("incomeInfo======", incomeInfo)
+      var bossList = res.data.data;
+      if (bossList.length != 0) {
+        this.bossList = bossList;
+        var bossList = ['选择店铺']
+        var bossIdList = ['0']
+        this.bossList.forEach((item, index) => {
+          bossList.push(item.suppliers_desc)
+          bossIdList.push(item.suppliers_id)
+          if (item.suppliers_id == incomeInfo.income_suppliers_id) {
+            this.bossIndex = index
+          }
+        })
+        this.bossList = bossList
+        this.bossIdList = bossIdList
+        this.$apply();
+      } else wx.navigateTo({
+        url: '/IndexPages/pages/renzhengDetail'
+      });
+    }
+    async onLoad(option) {
+      await this.$parent.loginInfo();
+      this.getIncomeInfo();
+      // this.getBossList();
+    }
+  }
+</script>

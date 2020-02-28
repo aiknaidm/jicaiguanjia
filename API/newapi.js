@@ -225,6 +225,8 @@ const newapi = {
     pingjia_edit: (data) => fetch(`${host_chk}/pingjia_edit`, 'post', data),
     zxkehu_list: (data) => fetch(`${host_chk}/zxkehu_list`, 'post', data),
     sqdaogou: (data) => fetch(`${host_chk}/sqdaogou`, 'post', data),
+    income_method: (data) => fetch(`${host_chk}/income_method`, 'post', data),
+    income_info: (data) => fetch(`${host_chk}/income_info`, 'post', data),
 
     add_submessage: (data) => fetch(`${host_chk}/add_submessage`, 'get', data),
     chk_copy_shuju_err1: (data) => fetch(`${host_chk}/chk_copy_shuju_err1`, 'get', data),

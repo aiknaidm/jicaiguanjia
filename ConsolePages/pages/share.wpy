@@ -1,222 +1,243 @@
 <style lang="less">
-.container {
-  background-color: #fff;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+  .container {
+    background-color: #fff;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: url("https://lmbge.com/upload/1234/bj1.png");
+    background-size: contain;
+    background-position: center;
+  }
+  .withdraw {
+    color: #333;
+    background-color: #fff;
+    width: 662rpx;
+    border-radius: 10rpx;
+    // padding: 40rpx;
+    position: relative;
+    margin: 0 auto 34rpx auto;
+    border-radius:9px 9px 0px 0px;
+  }
+  .withdraw .iconfont {
+    color: #aaa;
+  }
+  .control-content{
+    display: flex;
+    padding: 40rpx;
+    justify-content: space-around;
+    text-align: center;
+  }
+  .all-withdraw {
+    flex: 1;
+    line-height: 50rpx;
+    border-right: 1px solid #aaa
+  }
+  .can-withdraw {
+    flex: 1;
+    line-height: 50rpx;
+  }
+  .can-withdraw .red {
+    font-size: 28rpx;
+  }
+    .all-withdraw .money,.can-withdraw .money{
+    font-size: 45rpx;
+    padding:20rpx 10rpx;
+  }
+  .to-withdraw {
+    position: absolute;
+    height: 66rpx;
+    right: 0;
+    top: 37rpx;
+    padding: 0 30rpx 0 50rpx;
+    // margin-top: -33rpx;
+    line-height: 66rpx;
+    background: rgba(255,255,255,0.5);
+    border-radius: 50px 0 0 50px;
+    color: #fff;
+  }
+  .control-title {
+    // background-color: #e50012;
+    // display: flex;
+    padding: 128rpx 0 0 0;
+  }
+  .control-title.code {
+    background: #f0f0f0;
+    padding: 30rpx 40rpx;
+  }
+  .control-title .yaoqingma {
+    line-height: 88rpx;
+    // background-color: rgba(255, 255, 255, 1);
+    position: relative;
+    padding: 0 40rpx 0 50rpx;
+    border-radius: 50rpx 0 0 50rpx;
+    color: #fff;
+  }
+  .control-code{
+    background:linear-gradient(24deg,rgba(255,203,65,1) 0%,rgba(254,176,55,1) 100%);
+border-radius:9px 9px 0px 0px;
+  }
+  .control-title .copy {
+    padding: 0 30rpx;
+    // background-color: #e50012;
+    line-height: 88rpx;
+    border-radius:  50rpx ;
+    color: #fff;
+    border: 1px solid #fff;
+  }
+  .control-erweima{
+    width: 662rpx;
+    margin:0 auto;
+    background: #fff;
+    border-radius: 10rpx;
+    padding-bottom: 50rpx;
+.poster-btn{
+  width:464rpx;
+height:88rpx;
+background:linear-gradient(53deg,rgba(254,200,67,1) 0%,rgba(252,130,53,1) 100%);
+border-radius:44rpx;
+margin:17rpx auto;
+text-align: center;
+font-size: 30rpx;
+line-height: 88rpx;
+color: #fff;
 }
-
-.withdraw {
-  color: #333;
-  background-color: #fff;
-  display: flex;
-  width: 100%;
-  border-radius: 10rpx;
-  padding: 40rpx;
-  position: relative;
-  justify-content: space-between;
+.share-guize{
+  color: #EF4848;
+  text-align: right;
+   padding: 36rpx 24rpx;
 }
-.withdraw .iconfont {
-  color: #aaa;
-}
-.all-withdraw {
-  flex: 1;
-  line-height: 50rpx;
-}
-
-.can-withdraw {
-  flex: 1;
-  line-height: 50rpx;
-}
-.can-withdraw .red {
-  font-size: 35rpx;
-}
-.to-withdraw {
-  position: absolute;
-  height: 66rpx;
-  right: 0;
-  top: 50%;
-  padding: 0 30rpx 0 50rpx;
-  margin-top: -33rpx;
-  line-height: 66rpx;
-  background: #e50012;
-  border-radius: 50px 0 0 50px;
-  color: #fff;
-}
-
-.control-title {
-  background-color: #e50012;
-  display: flex;
-  padding: 20rpx 40rpx 40rpx 40rpx;
-  align-items: center;
-  color: #fff;
-  position: relative;
-  height: 100rpx;
-  justify-content: center;
-  padding: 20rpx 0;
-}
-.control-title.code {
-  background: #f0f0f0;
-  padding: 30rpx 40rpx;
-}
-.control-title .yaoqingma {
-  line-height: 88rpx;
-  background-color: rgba(255, 255, 255, 1);
-  position: relative;
-  padding: 0 40rpx 0 80rpx;
-  border-radius: 50rpx 0 0 50rpx;
-  color: #333;
-}
-
-.control-title .copy {
-  padding: 0 40rpx;
-  background-color: #e50012;
-  line-height: 88rpx;
-  border-radius: 0 50rpx 50rpx 0;
-  color: #fff;
-}
-
-.control-content {
-  text-align: center;
-}
-.control-content .share-guize text {
-  color: #14c09a;
-  font-size: 40rpx;
-  line-height: 110rpx;
-}
-
-.poster-btn {
-  width: 600rpx;
-  text-align: center;
-  line-height: 88rpx;
-  color: #fff;
-  border-radius: 50px;
-  background: #e50012;
-  margin: auto;
-}
-
-.qrcode {
-}
-
-.qrcode image {
-  width: 350rpx;
-  height: 380rpx;
-  margin: 50rpx auto;
-}
+  }
+  .qrcode {
+   text-align: center;
+  
+  }
+  .qrcode image {
+    width: 350rpx;
+    height: 380rpx;
+    margin: 0 auto;
+  }
+  
 </style>
 <template>
   <view class='container'>
-  <view class='control-title'>
-    <view class='withdraw'>
-      <view class='all-withdraw' @tap='toShareList(0)'>
-        <view>分享所得总收益
-          <text class='iconfont icon-f11'></text>
+    <view class='control-title'> 
+      <view class='to-withdraw' @tap="setWithdraw">设置</view>
+      <view class='withdraw'>
+        <view class='control-code'>
+          <text class='yaoqingma'>邀请码：{{qrcode.share_code}}</text>
+          <text class='copy' @tap='copy({{qrcode.share_code}})'>复制</text>
         </view>
-        <view class=''>￥{{qrcode.zong}}</view>
-      </view>
-      <view class='can-withdraw' @tap='toShareList(1)' >
-        <view>可提现收益
-          <text class='iconfont icon-f11'></text>
+       <view class="control-content">
+          <view class='all-withdraw' @tap='toShareList(0)'>
+          <view>分享所得总收益
+            <!-- <text class='iconfont icon-f11'></text> -->
+          </view>
+          <view class='red'><text class="money">{{qrcode.zong}}</text>元</view>
+          <view class='red'>去查看></view>
         </view>
-        <view class='red'>￥{{qrcode.ketx}}</view>
+        <view class='can-withdraw' @tap='toShareList(1)'>
+          <view>可提现收益
+            <text class='iconfont icon-f11'></text>
+          </view>
+          <view class='red'><text class="money">{{qrcode.ketx}}</text>元</view>
+          <view class='red'  @tap='toWithdraw'>去提现></view>
+        </view>
+       </view>
+       
       </view>
-      <view class='to-withdraw' @tap='toWithdraw'>提现</view>
+    </view>
+    <view class='control-erweima'>
+      <view class='share-guize' @tap='toShareRule'>
+        <text class='iconfont icon-iconmianxingshujuwenhao'></text> 分享规则
+      </view>
+      
+      <view class='qrcode'>
+        <image src="{{qrcode.qrcode2}}" />
+      </view>
+      <navigator url='poster'>
+        <view class='poster-btn'>生成推广海报</view>
+      </navigator>
     </view>
   </view>
-  <view class='control-title code'>
-    <view class='yaoqingma'>邀请码：{{qrcode.share_code}}</view>
-    <view class='copy' @tap='copy({{qrcode.share_code}})'>复制邀请码</view>
-
-  </view>
-  <view class='control-content'>
-    <view class='share-guize' @tap='toShareRule'>
-      <text class='iconfont icon-iconmianxingshujuwenhao' ></text> 分享规则
-    </view>
-
-    <navigator url='poster'>
-      <view class='poster-btn'>生成推广海报</view>
-    </navigator>
-    <view class='qrcode'>
-      <image src="{{qrcode.qrcode2}}"/>
-    </view>
-  </view>
-
-</view>
 </template>
 
 <script>
-import wepy from 'wepy';
-import newapi from '../../API/newapi';
-import util from '../../utils/index';
-export default class share extends wepy.page {
-  config = {
-    navigationBarTitleText: '分享'
-  };
-  components = {};
-  data = {
-    qrcode: {}
-  };
-  computed = {};
-  methods = {
-    copy(share_code) {
-      // 复制邀请码
-      wx.setClipboardData({
-        data: share_code,
-        success(res) {
-          wx.getClipboardData({
-            success(res) {}
+  import wepy from 'wepy';
+  import newapi from '../../API/newapi';
+  import util from '../../utils/index';
+  export default class share extends wepy.page {
+    config = {
+      navigationBarTitleText: '分享'
+    };
+    components = {};
+    data = {
+      qrcode: {}
+    };
+    computed = {};
+    methods = {
+      setWithdraw(){
+        wx.navigateTo({ url: 'share_set' });
+      },
+      copy(share_code) {
+        // 复制邀请码
+        wx.setClipboardData({
+          data: share_code,
+          success(res) {
+            wx.getClipboardData({
+              success(res) {}
+            });
+          }
+        });
+      },
+      toShareRule() {
+        wx.navigateTo({
+          url: 'shareRule'
+        });
+      },
+      toWithdraw: function() {
+        if (this.qrcode && this.qrcode.ketx == 0) {
+          util.showModal('你还没有可以提现的金额，去分享试试');
+        } else {
+          wx.navigateTo({
+            url: 'withdraw?ketx=' + this.qrcode.ketx
           });
         }
-      });
-    },
-    toShareRule() {
-      wx.navigateTo({
-        url: 'shareRule'
-      });
-    },
-    toWithdraw: function() {
-      if (this.qrcode && this.qrcode.ketx == 0) {
-        util.showModal('你还没有可以提现的金额，去分享试试');
-      } else {
+      },
+      // 跳转收益列表页面
+      toShareList(status) {
         wx.navigateTo({
-          url: 'withdraw?ketx=' + this.qrcode.ketx
+          url: 'shareList?status=' +
+            status +
+            '&zong=' +
+            this.qrcode.zong +
+            '&ketx=' +
+            this.qrcode.ketx
         });
       }
-    },
-    // 跳转收益列表页面
-    toShareList(status) {
-      wx.navigateTo({
-        url:
-          'shareList?status=' +
-          status +
-          '&zong=' +
-          this.qrcode.zong +
-          '&ketx=' +
-          this.qrcode.ketx
-      });
-    }
-  };
-  events = {};
-
-  async getCode() {
-    util.showLoading();
-
-    let data = {
-      path: '/IndexPages/pages/renzhengDetail',
     };
-    let res = await newapi.getShareImg(data);
-    if (res.data.code == 0) {
-      wx.hideLoading();
-      this.qrcode = res.data.data;
-    } else {
-      wx.hideLoading();
-      util.showToast('获取邀请码失败');
+    events = {};
+    async getCode() {
+      util.showLoading();
+      let data = {
+        path: '/IndexPages/pages/renzhengDetail',
+      };
+      let res = await newapi.getShareImg(data);
+      if (res.data.code == 0) {
+        wx.hideLoading();
+        this.qrcode = res.data.data;
+      } else {
+        wx.hideLoading();
+        util.showToast('获取邀请码失败');
+      }
+      this.$apply();
     }
-    this.$apply();
+    async onLoad(option) {
+      await this.$parent.loginInfo();
+      this.getCode();
+    }
   }
-  async onLoad(option) {
-    await this.$parent.loginInfo();
-    this.getCode();
-  }
-}
 </script>
