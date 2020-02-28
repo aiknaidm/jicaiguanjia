@@ -256,13 +256,15 @@
     async onShow() {}
     onLoad() {
       this.newData = new Date().getTime();
+      this.page=1;
       this.getjllist();
       this.$apply();
     }
     onReachBottom() {
       if (this.isMoreData) {
         util.showLoading();
-        this.getjllist(this.datas.current_page + 1, this.searchValue);
+        
+        this.getjllist(++this.page , this.searchValue);
       }
     }
   }

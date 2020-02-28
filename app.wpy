@@ -151,7 +151,8 @@
             'pages/goodsList',
             'pages/changeGoodsInfo',
             'pages/my_console_catDelete',
-            'pages/pingjiaSelect'
+            'pages/pingjiaSelect',
+            'pages/addDiguGoods'
           ]
         },
         {

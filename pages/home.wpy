@@ -306,7 +306,7 @@ button::after {
         <image src="http://wsc.jicaizx.com/images/ad2.jpg?{{date}}" mode="aspectFill"/>
       </swiper-item> -->
       <block wx:for="{{carousel}}" wx:key="{{index}}">
-        <swiper-item bindtap="toBannerDetail({{item.url}})">
+        <swiper-item bindtap="toBannerDetail({{item.url}},{{item.ad_type}})">
           <image src="http://maijia.jicaizx.com/{{item.content}}?{{date}}" mode="aspectFill"/>
         </swiper-item>
       </block>
@@ -407,6 +407,7 @@ export default class Index extends wepy.page {
   async getCarousel() {
     let res = await newapi.carousel();
     this.carousel = res.data.data;
+
     this.$apply();
   }
   computed = {};
@@ -423,10 +424,12 @@ export default class Index extends wepy.page {
         url: '/IndexPages/pages/newsList'
       });
     },
-    toBannerDetail: function(url) {
+    toBannerDetail: function(url,ad_type) {
+   this.$parent.globalData.url=url
+  this.$parent.globalData.ad_type=ad_type
       if (url != '0') {
         wx.navigateTo({
-          url: '/IndexPages/pages/details?id=' + url
+          url: '/IndexPages/pages/details?id=' + url+'&type='+ad_type
         });
       }
     },

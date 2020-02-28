@@ -534,7 +534,7 @@
       this.initData(this.suppliers_id, this.sales_id);
       this.getShenheList();
       var vip_level = this.$parent.globalData.vip_level;
-      console.log(this.$parent.globalData.vip_level);
+      // console.log(this.$parent.globalData.vip_level);
       var list = []
       for (var i = 0; i < vip_level; i++) {
         list.push("会员等级" + (i + 1));

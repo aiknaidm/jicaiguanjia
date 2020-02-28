@@ -706,6 +706,7 @@
       let yizhanInfo = await this.getpermission(this.suppliers_id);
       this.$parent.globalData.yizhanInfo=yizhanInfo
       this.$parent.globalData.suppliers_id=yizhanInfo.suppliers_id
+      this.$parent.globalData.vip_level=yizhanInfo.vip_level
       if (!yizhanInfo.is_admin && !yizhanInfo.is_salesman && !yizhanInfo.is_designer) {
         let mRes = await util.showModalBig(
           '您还不是批发商，没有管理权限，赶紧去注册吧'

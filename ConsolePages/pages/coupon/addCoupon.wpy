@@ -392,8 +392,8 @@
             </view>
         </form>
         <view class='promotion-activity' wx:if="{{currentType==1}}">
-            <view class="promotion-activity-list {{item.promotion_state==2?'promotion-activity-list2':''}}" wx:for="{{activitylist}}" wx:key='{{index}}' data-id='{{item.promotion_id}}' data-index="{{index}}">
-                <view wx:if="{{item.promotion_state==2}}">
+            <view class="promotion-activity-list {{item.promotion_state==2||item.end_time<nowDate?'promotion-activity-list2':''}}" wx:for="{{activitylist}}" wx:key='{{index}}' data-id='{{item.promotion_id}}' data-index="{{index}}">
+                <view wx:if="{{item.promotion_state==2||item.end_time<nowDate}}">
                     <view class='content'>
                         <view class='left' catchtap="touseList({{item.promotion_id}})">
                             <view class='moneyBox'>
@@ -405,7 +405,7 @@
                             <view class='txt txt2'>活动商品：{{item.goods_name}}</view>
                         </view>
                         <view class='text'>
-                            <view class='btn active ' catchtap="{{item.promotion_state==2?'':'cancleTap'}}" data-promotion_id='{{item.promotion_id}}'>活动终止
+                            <view class='btn active ' catchtap="{{item.promotion_state==2||item.end_time<nowDate?'':'cancleTap'}}" data-promotion_id='{{item.promotion_id}}'>活动终止
                             </view>
                         </view>
                     </view>
@@ -424,7 +424,7 @@
                             <view class='txt txt2'>活动商品：{{item.goods_name}}</view>
                         </view>
                         <view class='text'>
-                            <view class='btn active ' catchtap="{{item.promotion_state==2?'':'cancleTap'}}" data-promotion_id='{{item.promotion_id}}'>终止活动
+                            <view class='btn active ' catchtap="{{item.promotion_state==2||item.end_time<nowDate?'':'cancleTap'}}" data-promotion_id='{{item.promotion_id}}'>终止活动
                             </view>
                         </view>
                     </view>
@@ -475,7 +475,8 @@
             choose_good_name:'',
             choose_user_id:0,
             choose_user_name:'',
-            page:1
+            page:1,
+            nowDate:(new Date().getTime())/1000
         };
         computed = {};
         methods = {
@@ -524,6 +525,7 @@
             statusTap(index) {
                 this.currentType = index;
                 this.currentStatu = this.statusType[index];
+                console.log("this.currentStatu",this.currentType)
             },
             changeMoney(e) {
                 this.money = e.detail.value;
@@ -606,7 +608,7 @@
         //已添加的活动列表
         async getActivityList() {
             var that = this;
-            clearInterval(t1);
+            // clearInterval(t1);
             let data = {
                 suppliers_id: this.suppliers_id,
                 page:this.page
@@ -632,20 +634,27 @@ this.isMoreData=false
 this.isMoreData=true
             }
             this.$apply();
-            var newDate = new Date().getTime();
-            that.activitylist = this.setState(newDate, datas).datas;
-            that.$apply();
-            t1 = setInterval(res => {
-                var {
-                    datas,
-                    stop
-                } = this.setState(newDate, that.activitylist);
-                if (stop) {
-                    clearInterval(t1);
-                }
-                that.activitylist = datas;
+            t1=setInterval(res => {
+              
+                that.nowDate = (new Date().getTime())/1000;
+                console.log()
                 that.$apply();
-            }, 1000);
+            },1000)
+           
+            // this.activitylist = this.setState(newDate, this.activitylist).datas;
+            // that.$apply();
+            // var ts={};
+            // ts['t'+this.page] = setInterval(res => {
+            //     var {
+            //         datas,
+            //         stop
+            //     } = that.setState(newDate,that.activitylist);
+            //     if (stop) {
+            //         clearInterval(ts['t'+that.page]);
+            //     }
+            //     that.activitylist = datas;
+            //     that.$apply();
+            // }, 1000);
         }
         setState(newDate, datas) {
             var stop = true;

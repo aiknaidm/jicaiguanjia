@@ -152,7 +152,31 @@ export default class my extends wepy.page {
       this.$apply();
     }
     // 判断身份
-    if (userInfo.user_type >= 4) {
+     if (userInfo.user_type == 4) {
+this.tabList = [
+        {
+          icon: '/images/icon_normal.png',
+          display_name: '注册',
+          url: '/IndexPages/pages/renzheng'
+        },
+        {
+          icon: '/images/console.png',
+          display_name: '管理工作台',
+          url: '/ConsolePages/pages/index'
+        },
+        {
+          icon: '/images/share.png',
+          display_name: '分享',
+          url: '/ConsolePages/pages/share'
+        },     
+         {
+        icon: '/images/share.png',
+        text: '钱包',
+        url: '/IndexPages/pages/qianbao/index'
+      }]
+      this.$apply();
+     }
+    else if (userInfo.user_type > 4) {
       this.tabList = [
         {
           icon: '/images/icon_normal.png',
