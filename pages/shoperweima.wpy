@@ -99,6 +99,9 @@
         } else if(this.$parent.globalData.suppliers_id==847) {
           appId = "wxf48cdd6a7dae8c21";
          
+        } else if(this.$parent.globalData.suppliers_id==76) {
+          appId = "wx7e302245debd521a";
+         
         } else {
           appId = "wx0d37285e7e208791";
            path = '/pages/home?suppliers_id=' + this.$parent.globalData.suppliers_id;
