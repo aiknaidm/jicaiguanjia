@@ -184,7 +184,7 @@ export default class newslist extends wepy.page {
           util.showLoading('上传中...');
           wepy
             .uploadFile({
-              url: api.upload,
+              url: api.upload_oss,
               filePath: tempFilePaths + '',
               name: 'file',
               header: {

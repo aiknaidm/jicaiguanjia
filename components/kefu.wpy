@@ -1,0 +1,61 @@
+<style lang="less">
+  .kefu{
+    position: fixed;
+    right: 0;
+    top: 430rpx;
+    z-index: 1000;
+button{
+    width: 95rpx;
+    height:95rpx;
+    border-radius: 50%;
+    background-image: url('https://lmbge.com/upload/1234/kefu2.png') ;
+    background-repeat: no-repeat ;
+    background-size: 70% 70%;
+    background-position: center;
+    
+    background-color: #fff;
+    box-shadow:0px 11px 21px 3px rgba(0, 0, 0, 0.13);
+    // padding: 20rpx;
+    // background-color: aqua;
+    
+}
+  }
+</style>
+<template>
+  <view class="kefu" style="top:{{y*2}}rpx">
+ <button open-type="contact" bindcontact="handleContact" @longpress="longpress" @touchmove="touchmove" ></button>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class kefu extends wepy.component {
+    data = {
+     y:330
+    }
+
+    events = {
+     
+    }
+
+    methods = {
+      longpress(e){
+
+
+
+      },
+      touchmove(e){
+          // console.log("e",e)
+    
+this.y=e.changedTouches[0].clientY
+         
+      },
+      touchend(){
+        // this.y=e.changedTouches[0].pageY  
+      }
+    }
+
+    onLoad () {
+    }
+  }
+</script>

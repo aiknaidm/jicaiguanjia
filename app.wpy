@@ -103,7 +103,10 @@
   // setStore(store);
   export default class extends wepy.app {
     config = {
-      pages: ['pages/home', 
+      pages: [
+        'pages/a-index', 
+
+        'pages/home', 
       'pages/my', 
       'pages/shoperweima', 
       'pages/myerweima'
@@ -138,7 +141,7 @@
             'pages/orderYizhanDetailShop',
             'pages/orderYizhanDetail2',
             'pages/pingjia',
-
+'pages/browseNum'
           ]
         },
         {
@@ -153,6 +156,7 @@
             'pages/my_console_catDelete',
             'pages/pingjiaSelect',
             'pages/addDiguGoods'
+            
           ]
         },
         {
@@ -200,7 +204,8 @@
             'pages/gift/my_console_gift_goodslist',
             'pages/my_setSalesmanDetail',
             'pages/fenleiList',
-            'pages/share_set'
+            'pages/share_set',
+            'pages/add_live',
           ]
         },
         {

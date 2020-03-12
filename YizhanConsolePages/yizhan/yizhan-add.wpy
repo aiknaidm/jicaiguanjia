@@ -225,19 +225,22 @@
       <button @tap="apply" wx:if="{{shenhe==0}}" style="background-color:#eb4b45">加盟易站</button>
     </view>
     <view class="img" wx:if="{{shenhe==2}}">
-      <image src="https://lmbge.com/upload/1234/join_3.png">
+      <image src="https://lmbge.com/upload/1234/join_3.png " mode="widthFix" >
 
       </image>
       <view >申请加入当地易站</view>
       <button style="background-color:#5777e1">等待审核中~</button>
     </view>
    <view class="img" wx:if="{{shenhe==1}}">
-      <image src="https://lmbge.com/upload/1234/join_2.png">
+      <image src="https://lmbge.com/upload/1234/join_2.png" mode="widthFix" >
 
       </image>
       <view><text>恭喜你，你的账号审核成功,\n已加入{{join_yizhan_name}}</text></view>
       <button @tap="toyizhangou" style="background-color:#71a154" >查看本地易站</button>
     </view>
+    <popupbox :popupdata.sync="popupdata" @formSubmit.user="formSubmit">
+
+    </popupbox>
   </view>
 </template>
 
@@ -245,18 +248,50 @@
   import wepy from 'wepy';
   import newapi from '../../API/newapi';
   import util from '../../utils/index';
-  //   import search from '../../components/search';
+    import popupbox from '../../components/popupbox';
   export default class my_console_check extends wepy.page {
     config = {
       navigationBarTitleText: '加入一站购'
     };
     data = {
       shenhe: 0,
-      join_yizhan_name:''
+      join_yizhan_name:'',
+      popupdata:{
+      isshowpopup: false,
+      title: '添加店铺',
+      inputList: [
+        {
+          name: '',
+          placeholder: '请填写店铺名称 ',
+          inputName: 'name'
+        },
+       
+      ]
+    }
     };
     computed = {};
-    components = {};
+    components = {popupbox};
     methods = {
+      formSubmit(e){
+console.log("e",e)
+// return
+newapi.sq_join({yizhan_suppliers_id:this.yizhan_suppliers_id,
+suppliers_id:this.suppliers_id,
+suppliers_name:e.detail.value.name
+}).then(res=>{
+ if (res.data.code == 0) {
+          util.showModal("申请成功，请耐心等待易站经理审核通过")
+           this.shenhe = 2
+          this.$parent.globalData.suppliers_id=res.data.data.suppliers_id
+          this.$apply()
+        } else {
+          this.shenhe = 0
+          this.popupdata.isshowpopup=true
+          // util.showModal(res.data.message)
+          this.$apply()
+        }
+})
+      },
       toyizhangou(){
         var appId = "wx87bfbcfe887faf4d";
         var path = "pages/home";
@@ -286,6 +321,7 @@
           this.$apply()
         } else {
           this.shenhe = 0
+          this.popupdata.isshowpopup=true
           // util.showModal(res.data.message)
           this.$apply()
         }

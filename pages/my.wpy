@@ -19,14 +19,56 @@
 .info_list .weui_cell_hd {
   margin-bottom: 0;
 }
+.body-bg{
+  z-index: 2000;
+.yindao1{
+  position: absolute;
+  top: 350rpx;
+  left: 0;
+  width: 412rpx;
+}
+.yindao2{
+  position: absolute;
+  top: 400rpx;
+  left: 31rpx;
+  width: 614rpx;
+}
+.yindao3{
+  position: absolute;
+  left: 34rpx;
+  top: 400rpx;
+  width: 650rpx;
+}
+.yindao4{
+  position: absolute;
+  top: 300rpx;
+  left: 79rpx;
+  width: 630rpx;
+}
+.yindao_button{
+   position: absolute;
+  top: 1060rpx;
+  left: 50%;
+  margin-left: -145rpx;
+  width:290rpx;
+  height: 82rpx;
+  line-height: 82rpx;
+  background:rgba(255,255,255,1);
+border-radius:10rpx;
+
+
+}
+  }
 </style>
 <template>
   <view class="container">
     <userInfo :userData.sync="userInfo" @getUserInfo2.user="getUserInfo2"></userInfo>
+   
     <view class="info_list">
       <repeat for="{{tabList}}" wx:key="{{index}}">
         <myList :tabItem="item"></myList>
       </repeat>
+      
     </view>
     <!-- <view class='ad'  @tap='toBannerDetail2' >
       <image src='http://wsc.jicaizx.com/images/ad1.jpg'  mode='aspectFill'/>
@@ -41,6 +83,12 @@
       <view class="info_list">
         <myList :tabItem="myRenzheng"></myList>
       </view>-->
+    <kefu></kefu>
+    <view class="body-bg" wx:if="{{is_my_jiao==0}}" @tap="nextImg">
+<image src="https://lmbge.com/upload/1234/yindao.png" wx:if="{{is_my_jiao_num==0}}" class="yindao1" mode="widthFix"></image>
+
+<!-- <button class="yindao_button" wx:if="{{is_my_jiao_num==0||is_my_jiao_num==3}}" @tap="hiddenImg">知道了</button> -->
+    </view>
   </view>
 </template>
 
@@ -51,6 +99,7 @@ import util from '../utils/index';
 import userInfo from '../components/userinfo';
 import myList from '../components/myList';
 import prompt from '../components/prompt';
+import kefu from '../components/kefu';
 export default class my extends wepy.page {
   config = {
     navigationBarTitleText: '我的'
@@ -58,10 +107,13 @@ export default class my extends wepy.page {
   components = {
     userInfo,
     myList,
-    prompt
+    prompt,
+    kefu
   };
   data = {
     userInfo: {},
+    is_my_jiao_num:0,
+   
     tabList: [
       {
         icon: '/images/icon_normal.png',
@@ -81,10 +133,32 @@ export default class my extends wepy.page {
 
      
     ],
-    isShowprompt: false
+    isShowprompt: false,
+    is_my_jiao:1
   };
   computed = {};
   methods = {
+    // hiddenImg(){
+    //      if(this.is_jiao_num==3){
+    //        this.is_jiao=1
+    //        wx.setStorageSync('is_jiao',1)
+        
+    //      }
+    //   },
+      nextImg(){
+   
+           this.is_my_jiao=1
+           wx.setStorageSync('is_my_jiao',1)
+        
+         
+        // if(this.is_jiao_num==3){
+        //   return
+        // }
+        // this.is_jiao_num+=1;
+        // console.log( "is_jiao_num",this.is_jiao_num)
+        
+       
+      },
     getUserInfo2(e, evt) {
       console.log("this.isShowprompt",this.isShowprompt)
       this.isShowprompt = true;
@@ -129,6 +203,9 @@ export default class my extends wepy.page {
     let userInfo = await this.$parent.getUserInfo();
 
     this.userInfo = userInfo;
+     this.is_my_jiao=  wx.getStorageSync('is_my_jiao');
+    this.is_my_jiao=this.is_my_jiao?this.is_my_jiao:0
+    this.$apply();
     // 是否有获取用户信息的权限
     if (isSettingStatus) {
       if (!userInfo.unionid) {
@@ -151,61 +228,13 @@ export default class my extends wepy.page {
       this.isShowprompt = false;
       this.$apply();
     }
-    // 判断身份
-     if (userInfo.user_type == 4) {
-this.tabList = [
-        {
-          icon: '/images/icon_normal.png',
-          display_name: '注册',
-          url: '/IndexPages/pages/renzheng'
-        },
-        {
-          icon: '/images/console.png',
-          display_name: '管理工作台',
-          url: '/ConsolePages/pages/index'
-        },
-        {
-          icon: '/images/share.png',
-          display_name: '分享',
-          url: '/ConsolePages/pages/share'
-        },     
-         {
-        icon: '/images/share.png',
-        text: '钱包',
-        url: '/IndexPages/pages/qianbao/index'
-      }]
-      this.$apply();
-     }
-    else if (userInfo.user_type > 4) {
-      this.tabList = [
-        {
-          icon: '/images/icon_normal.png',
-          display_name: '注册',
-          url: '/IndexPages/pages/renzheng'
-        },
-        {
-          icon: '/images/console.png',
-          display_name: '管理工作台',
-          url: '/ConsolePages/pages/index'
-        },
-        {
-          icon: '/images/share.png',
-          display_name: '分享',
-          url: '/ConsolePages/pages/share'
-        },
-        {
-          icon: '/images/share.png',
-          display_name: '管理员界面',
-          url: '/Admin/pages/index'
-        },
-         {
-        icon: '/images/share.png',
-        text: '钱包',
-        url: '/IndexPages/pages/qianbao/index'
-      }
-      ];
-      this.$apply();
-    }
+    newapi.my_menu().then(res=>{
+      this.tabList=res.data.data
+        this.$apply();
+    })
+   
+    
+    
   }
 }
 </script>

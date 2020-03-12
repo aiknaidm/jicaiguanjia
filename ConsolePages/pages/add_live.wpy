@@ -1,0 +1,110 @@
+<style lang="less">
+.live-list{
+    width: 85%;
+    margin: auto;
+    background: #fff;
+    border-radius: 5px;
+    padding: 20rpx;
+    margin-top: 20rpx;
+    font-size: 28rpx;
+    line-height: 50rpx;
+}
+ .redborder{
+    position: fixed;
+    bottom:0;
+    left: 0;
+    width: 100%;
+    line-height: 80rpx;
+    text-align: center;
+    color: #fff;
+    background: #e50012;
+  }
+</style>
+<template>
+<view>
+   <!-- <view @tap="addLive"> 添加直播</view> -->
+   <view wx:for="{{liveList}}" wx:key="{{index}}" class="live-list">
+
+<view>房间号：{{item.roomid}}</view>
+<view>主播名：{{item.anchor_name}}</view>
+<view>直播名：{{item.name}}</view>
+<view>开始时间：{{item.start_time}}</view>
+<view>结束时间：{{item.end_time}}</view>
+   </view>
+    <view class='redborder' catchtap='addLive'>
+        <view class='img'>
+         添加直播
+        </view>
+      </view>
+  <popupbox :popupdata.sync="popupdata" @formSubmit.user="formSubmit" ></popupbox>
+
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import newapi from '../../API/newapi';
+import util from '../../utils/index';
+import popupbox from '../../components/popupbox';
+export default class newslist extends wepy.page {
+  config = {
+    navigationBarTitleText: '直播设置',
+  };
+  components = {popupbox};
+  data = {
+    liveList: [],
+    popupdata: {
+      isshowpopup: false,
+      title: '添加房间号',
+      inputList: [
+        {
+          name: '',
+          placeholder: '请填写开播房间号',
+          inputName: 'name'
+        },
+      ]
+    }
+  };
+  computed = {};
+  methods = {
+      formSubmit(e){
+          console.log(e);
+          var datas={
+               roomid:e.detail.value.name,
+               suppliers_id:this.suppliers_id
+          }
+          newapi.kt_zhibo(datas).then(res=>{
+if(res.data.code==0){
+ this.liveList.unshift(res.data.data)
+}
+          })
+      },
+     
+      addLive(){
+          this.popupdata.isshowpopup=true
+      }
+  }
+  events = {};
+  async getLiveList(suppliers_id){
+    var res=  await  newapi.zhibo_list({suppliers_id});
+    this.liveList=res.data.data;
+    this.liveList.forEach((item,index)=>{
+      this.liveList[index].start_time = util.formatTime(item.start_time)
+      this.liveList[index].end_time = util.formatTime(item.end_time)
+    })
+    this.$apply();
+  }
+  async onLoad(option) {
+      var suppliers_id=option.suppliers_id
+      this.suppliers_id=suppliers_id
+    //    if (!this.$parent.globalData.suppliers_id) {
+    //             util.showToast("登录失败")
+    //             wx.navigateBack();
+    //         } else {
+    //             this.suppliers_id = this.$parent.globalData.suppliers_id
+    //         }
+        this.getLiveList(suppliers_id);
+  }
+
+}
+</script>

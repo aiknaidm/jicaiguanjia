@@ -235,6 +235,11 @@ const newapi = {
     chk_copy_shuju_err4: (data) => fetch(`${host_chk}/chk_copy_shuju_err4`, 'get', data),
     Salesman_list: (data) => fetch(`${host_chk}/Salesman_list`, 'get', data),
     zhiye: (data) => fetch(`${host_chk}/zhiye`, 'get', data),
+    my_menu: (data) => fetch(`${host_chk}/my_menu`, 'get', data),
+    sq_join: (data) => fetch(`${host_chk}/sq_join`, 'get', data),
+    zongshuju: (data) => fetch(`${host_chk}/zongshuju`, 'get', data),
+    kt_zhibo: (data) => fetch(`${host_chk}/kt_zhibo`, 'get', data),
+    zhibo_list: (data) => fetch(`${host_chk}/zhibo_list`, 'get', data),
 
 
 

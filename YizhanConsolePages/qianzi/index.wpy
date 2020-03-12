@@ -165,7 +165,7 @@
             this.$apply();
             var imgRes = await wepy
                 .uploadFile({
-                    url: api.upload,
+                    url: api.upload_oss,
                     filePath: canvasImg.tempFilePath,
                     name: 'file',
                     header: {

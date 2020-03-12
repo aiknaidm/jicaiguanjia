@@ -218,7 +218,7 @@
       var tempFilePaths = res.tempFilePaths;
       var imgRes = await wepy
         .uploadFile({
-          url: api.upload,
+          url: api.upload_oss,
           filePath: tempFilePaths + '',
           name: 'file',
           header: {

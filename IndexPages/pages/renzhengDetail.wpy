@@ -808,7 +808,7 @@ wx.navigateTo({ url: '/YizhanConsolePages/qianzi/index?type=shop' });
       util.showLoading('上传中');
       try {
         var res = await wepy.uploadFile({
-          url: api.upload,
+          url: api.upload_oss,
           filePath: img_url,
           name: 'file',
           header: {

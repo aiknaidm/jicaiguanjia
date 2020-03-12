@@ -53,17 +53,34 @@
   /* 分享好友 */
   .share {
     position: absolute;
-    right: 40rpx;
-    bottom: 100rpx;
-    color: #fff;
+    right: -40rpx;
+    top: 40rpx;
+    color: #666;
+    background: #fff;
+    border-radius: 50px;
+    width: 250rpx;
+    text-align: center;
+    line-height: 70rpx;
   }
   .share text {
     margin-right: 10rpx;
-    color: #14c09a;
-    font-size: 30rpx;
+    color: #e50012;
+    font-size: 35rpx;
+    margin-right: 10rpx;
+    display: inline-block;
+    transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    /* IE 9 */
+    -moz-transform: rotate(270deg);
+    /* Firefox */
+    -webkit-transform: rotate(270deg);
+    /* Safari 和 Chrome */
+    -o-transform: rotate(270deg);
   }
   .share button {
-    color: #fff;
+    color: #666;
+    position: relative;
+    left: -15rpx;
   }
   .yizhan-list2 {
     position: absolute;
@@ -162,6 +179,17 @@
     display: inline-block;
     margin-top: 10rpx;
   }
+  .tab_list {
+    display: flex;
+    justify-content: space-between;
+    padding: 20rpx 40rpx;
+    line-height: 50rpx;
+    border-bottom: 16rpx solid #f0f0f0;
+    font-size: 28rpx;
+    .weui_cell {
+      text-align: center;
+    }
+  }
   .info_list .weui_cell {
     display: flex;
     flex-direction: column;
@@ -220,95 +248,154 @@
   .order_list .weui_cell_hd {
     width: auto;
   }
+  .abs {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+  }
+  .body-bg {
+    .yindao1 {
+      position: absolute;
+      top: 0rpx;
+      left: 83rpx;
+      width: 650rpx;
+    }
+    .yindao2 {
+      position: absolute;
+      top: 400rpx;
+      left: 31rpx;
+      width: 614rpx;
+    }
+    .yindao3 {
+      position: absolute;
+      left: 34rpx;
+      top: 400rpx;
+      width: 650rpx;
+    }
+    .yindao4 {
+      position: absolute;
+      top: 300rpx;
+      left: 79rpx;
+      width: 630rpx;
+    }
+    .yindao_button {
+      position: absolute;
+      top: 1060rpx;
+      left: 50%;
+      margin-left: -145rpx;
+      width: 290rpx;
+      height: 82rpx;
+      line-height: 82rpx;
+      background: rgba(255, 255, 255, 1);
+      border-radius: 10rpx;
+    }
+  }
 </style>
 <template>
-  <view style='position:relative;' class="list {{right?'active':''}}">
-    <view class=" {{right?'mask':''}}" catchtouchmove="{{right?'stopscroll':''}}" bindtap='hiddenyizhan'></view>
-    <view class="container {{right?'active':''}}">
-      <view class='control-title'>
-        <view class='control-title-img'>
-          <image src='{{yizhanInfo.img}}' />
-        </view>
-        <view>
-          <view class='control-title-txt1'>{{yizhanInfo.user_nickname}}</view>
-          <view class='control-title-txt' wx:if="{{yizhanInfo.yizhan_name!=null}}">
-            <text class='txt'>{{yizhanInfo.yizhan_name}}</text>
-            <text class='iconfont icon-qiehuan' @tap='showyizhan' wx:if="{{yizhanlist.length>1}}"></text>
+  <view class="{{is_jiao==0||right?'abs':''}}">
+    <kefu></kefu>
+    <view class="list {{right?'active':''}}">
+      <view class=" {{right?'mask':''}}" catchtouchmove="{{right?'stopscroll':''}}" bindtap='hiddenyizhan'></view>
+      <view class="container {{right?'active':''}}">
+        <view class='control-title'>
+          <view class='control-title-img'>
+            <image src='{{yizhanInfo.img}}' />
           </view>
-          <!-- <view class='control-title-txt qiehuan' bindtap='showyizhan'>切换店铺</view> -->
-        </view>
-        <!-- <view class='share'>
-          <form report-submit bindsubmit='getFormId'>
-            <navigator url='/ConsolePages/pages/share'>
-              <button form-type="submit">
-                                <text class='iconfont icon-fenxiang'></text>分享好友</button>
-            </navigator>
-          </form>
-        </view> -->
-      </view>
-      <form report-submit bindsubmit='getFormId'>
-        <!-- <view class="info_list order_list" wx:if="{{yizhanInfo.is_admin==1 && guoqi==0}}">
-              <navigator url="{{}}" open-type="navigate" hover-class="none">
-                <image src="/images/console/transaction-manage.png" />交易管理
-                <view class='hui_txt'> (您当前最多可收到{{yizhanInfo.msg_num}}条通知)</view>
-              </navigator>
-              <repeat for="{{tabList}}" wx:key="{{index}}">
-                <myList :tabItem="item"></myList>
-              </repeat>
+          <view>
+            <view class='control-title-txt1'>{{yizhanInfo.user_nickname}}</view>
+            <view class='control-title-txt' wx:if="{{yizhanInfo.yizhan_name!=null}}">
+              <text class='txt'>{{yizhanInfo.yizhan_name}}</text>
+              <text class='iconfont icon-qiehuan' @tap='showyizhan' wx:if="{{yizhanlist.length>1}}"></text>
             </view>
-            <view class="info_list" wx:if="{{yizhanInfo.is_admin==1 && guoqi==0}}">
-              <navigator url="{{}}" open-type="navigate" hover-class="none">
-                <image src="/images/console/goods-manage.png" />商品管理
+            <!-- <view class='control-title-txt qiehuan' bindtap='showyizhan'>切换店铺</view> -->
+          </view>
+          <view class='share'>
+            <form report-submit bindsubmit='getFormId'>
+              <navigator target="miniProgram" open-type="navigate" app-id='{{appId}}' path='{{path}}'>
+                <button form-type="submit">
+                                  <text class='iconfont icon-zhankai'></text>预览店铺</button>
               </navigator>
-              <repeat for="{{shopList}}" wx:key="{{index}}">
-                <myList :tabItem="item"></myList>
-              </repeat>
-            </view> -->
-        <view class="info_list" wx:for="{{permission}}" wx:for-index="index" wx:for-item="item" wx:key="{{index}}">
-          <navigator url="{{}}" open-type="navigate" hover-class="none">
-            <image src="{{item.img}}" />{{item.name}}
-            <view class='hui_txt' wx:if="{{index==0}}"> (您当前最多可收到{{yizhanInfo.msg_num}}条通知)</view>
-          </navigator>
-          <repeat for="{{item.permission}}" key="index2" index="index2" item="item2">
-            <myList :tabItem="item2"></myList>
-          </repeat>
-          <!-- <block  > -->
-          <!-- 易站所有者 -->
-          <!-- <myList :tabItem="item" wx:if="{{yizhanInfo.is_boss==1&&item.isyizhan==1&&item.is_boss==1}}"></myList> -->
-          <!-- 店铺所有者 -->
-          <!-- <myList :tabItem="item" wx:elif="{{yizhanInfo.is_boss==1&&item.is_boss==1}}"></myList> -->
-          <!-- 管理员 -->
-          <!-- <myList :tabItem="item" wx:elif="{{item.is_admin==1&&yizhanInfo.is_admin==1}}"></myList> -->
-          <!-- 业务员 -->
-          <!-- <myList :tabItem="item" wx:elif="{{item.is_salesman==1&&yizhanInfo.is_salesman==1}}"></myList> -->
-          <!-- </block> -->
+            </form>
+          </view>
         </view>
-        <!-- <view class="info_list">
-          <block>
-        
-            <repeat for="{{item2}}" key="index2" index="index2" item="item2">
-            <myList :tabItem="item2"></myList>
-          </repeat>
-          </block>
-        </view> -->
-
-      </form>
+        <form report-submit bindsubmit='getFormId'>
+          <!-- <view class="info_list order_list" wx:if="{{yizhanInfo.is_admin==1 && guoqi==0}}">
+                <navigator url="{{}}" open-type="navigate" hover-class="none">
+                  <image src="/images/console/transaction-manage.png" />交易管理
+                  <view class='hui_txt'> (您当前最多可收到{{yizhanInfo.msg_num}}条通知)</view>
+                </navigator>
+                <repeat for="{{tabList}}" wx:key="{{index}}">
+                  <myList :tabItem="item"></myList>
+                </repeat>
+              </view>
+              <view class="info_list" wx:if="{{yizhanInfo.is_admin==1 && guoqi==0}}">
+                <navigator url="{{}}" open-type="navigate" hover-class="none">
+                  <image src="/images/console/goods-manage.png" />商品管理
+                </navigator>
+                <repeat for="{{shopList}}" wx:key="{{index}}">
+                  <myList :tabItem="item"></myList>
+                </repeat>
+              </view> -->
+          <view class="tab_list">
+            <repeat for="{{dataList}}" wx:key="{{index}}">
+              <myList :tabItem="item"></myList>
+            </repeat>
+          </view>
+          <view class="info_list" wx:for="{{permission}}" wx:for-index="index" wx:for-item="item" wx:key="{{index}}">
+            <navigator url="{{}}" open-type="navigate" hover-class="none">
+              <image src="{{item.img}}" />{{item.name}}
+              <view class='hui_txt' wx:if="{{index==0}}"> (您当前最多可收到{{yizhanInfo.msg_num}}条通知)</view>
+            </navigator>
+            <repeat for="{{item.permission}}" key="index2" index="index2" item="item2">
+              <myList :tabItem="item2"></myList>
+            </repeat>
+            <!-- <block  > -->
+            <!-- 易站所有者 -->
+            <!-- <myList :tabItem="item" wx:if="{{yizhanInfo.is_boss==1&&item.isyizhan==1&&item.is_boss==1}}"></myList> -->
+            <!-- 店铺所有者 -->
+            <!-- <myList :tabItem="item" wx:elif="{{yizhanInfo.is_boss==1&&item.is_boss==1}}"></myList> -->
+            <!-- 管理员 -->
+            <!-- <myList :tabItem="item" wx:elif="{{item.is_admin==1&&yizhanInfo.is_admin==1}}"></myList> -->
+            <!-- 业务员 -->
+            <!-- <myList :tabItem="item" wx:elif="{{item.is_salesman==1&&yizhanInfo.is_salesman==1}}"></myList> -->
+            <!-- </block> -->
+          </view>
+          <!-- <view class="info_list">
+            <block>
+          
+              <repeat for="{{item2}}" key="index2" index="index2" item="item2">
+              <myList :tabItem="item2"></myList>
+            </repeat>
+            </block>
+          </view> -->
+        </form>
+      </view>
+      <view class='yizhan-list2' catchtouchmove='' style="height: {{height}}PX;overflow: hidden">
+        <scroll-view scroll-y style="height: {{height}}PX;overflow: hidden" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
+          <view class='title'>
+            我管理的店铺列表
+          </view>
+          <view style='height:100rpx' class="scroll-view-item bc_green" wx:for="{{yizhanlist}}" @tap='changeShop({{item.suppliers_id}})' wx:key="{{index}}">
+            {{item.suppliers_desc}}
+            <text class='iconfont icon-qiehuan' wx:if="{{item.suppliers_id!==userinfo.suppliers_id}}"></text>
+          </view>
+        </scroll-view>
+      </view>
+      <view class="body-bg" wx:if="{{is_jiao==0}}" @tap="nextImg">
+        <image src="https://lmbge.com/upload/1234/yindao1.png" wx:if="{{is_jiao_num==0}}" class="yindao1" mode="widthFix"></image>
+        <image src="https://lmbge.com/upload/1234/yindao2.png" wx:if="{{is_jiao_num==1}}" class="yindao2" mode="widthFix"></image>
+        <image src="https://lmbge.com/upload/1234/yindao3.png" wx:if="{{is_jiao_num==2}}" class="yindao3" mode="widthFix"></image>
+        <image src="https://lmbge.com/upload/1234/yindao4.png" wx:if="{{is_jiao_num==3}}" class="yindao4" mode="widthFix"></image>
+        <button class="yindao_button" wx:if="{{is_jiao_num==0||is_jiao_num==3}}" @tap="hiddenImg">知道了</button>
+      </view>
+      <!-- <view class="share-button">
+            <button>推广本店</button>
+            <button>推广海报</button>
+          </view> -->
     </view>
-    <view class='yizhan-list2' catchtouchmove='' style="height: {{height}}PX;overflow: hidden">
-      <scroll-view scroll-y style="height: {{height}}PX;overflow: hidden" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
-        <view class='title'>
-          我管理的店铺列表
-        </view>
-        <view style='height:100rpx' class="scroll-view-item bc_green" wx:for="{{yizhanlist}}" @tap='changeShop({{item.suppliers_id}})' wx:key="{{index}}">
-          {{item.suppliers_desc}}
-          <text class='iconfont icon-qiehuan' wx:if="{{item.suppliers_id!==userinfo.suppliers_id}}"></text>
-        </view>
-      </scroll-view>
-    </view>
-    <!-- <view class="share-button">
-          <button>推广本店</button>
-          <button>推广海报</button>
-        </view> -->
   </view>
 </template>
 
@@ -319,18 +406,24 @@
   import myList from '../../components/myList';
   import myList2 from '../../components/myList';
   import myList3 from '../../components/myList';
+  import kefu from '../../components/kefu';
   export default class newslist extends wepy.page {
     config = {
       navigationBarTitleText: '管理工作台'
     };
     components = {
-      myList,myList2,myList3
+      myList,
+      myList2,
+      myList3,
+      kefu
     };
     data = {
+      is_jiao: 1,
       yizhanInfo: {},
       yizhanlist: [],
       right: 0,
       permission: [],
+      is_jiao_num: 0,
       tabList: [{
           num: 0,
           display_name: '待付款',
@@ -480,65 +573,95 @@
         url: '/designer/admin_designerList',
         bgcolor: '#10b3b1'
       },
- 
-       item2:[
-         {
-        icon: '/images/console/fabushangpin.png',
+      item2: [{
+          icon: '/images/console/fabushangpin.png',
+          num: 0,
+          display_name: '钱包',
+          url: '/pages/myerweima',
+          bgcolor: '#10b3b1'
+        },
+        {
+          icon: '/images/console/fabushangpin.png',
+          num: 0,
+          display_name: '下单',
+          url: '/YizhanConsolePages/order/index',
+          bgcolor: '#10b3b1'
+        },
+        {
+          icon: '/images/console/fabushangpin.png',
+          num: 0,
+          display_name: '宣传语',
+          url: '/yizhan/shop/message',
+          bgcolor: '#10b3b1'
+        },
+        {
+          icon: '/images/console/fabushangpin.png',
+          num: 0,
+          display_name: '赠品',
+          url: '/ConsolePages/pages/gift/my_console_gift',
+          bgcolor: '#10b3b1'
+        },
+        {
+          icon: '/images/console/fabushangpin.png',
+          num: 0,
+          display_name: '加盟',
+          url: '/YizhanConsolePages/yizhan/yizhan-check2',
+          bgcolor: '#10b3b1'
+        },
+        {
+          icon: '/images/console/fabushangpin.png',
+          num: 0,
+          display_name: '客户信息',
+          url: '/YizhanConsolePages/client/clientInfo',
+          bgcolor: '#10b3b1'
+        },
+        {
+          icon: '/images/console/fabushangpin.png',
+          num: 0,
+          display_name: '导购会员',
+          url: '/YizhanConsolePages/yizhan/my_setYizhanSalesman',
+          bgcolor: '#10b3b1'
+        },
+      ],
+      dataList: [{
         num: 0,
-        display_name: '钱包',
-        url: '/pages/myerweima',
-        bgcolor: '#10b3b1'
-      },
-       {
-        icon: '/images/console/fabushangpin.png',
-        num: 0,
-        display_name: '下单',
-        url: '/YizhanConsolePages/order/index',
-        bgcolor: '#10b3b1'
-      },
-      {
-        icon: '/images/console/fabushangpin.png',
-        num: 0,
-        display_name: '宣传语',
-        url: '/yizhan/shop/message',
-        bgcolor: '#10b3b1'
-      },
-      {
-        icon: '/images/console/fabushangpin.png',
-        num: 0,
-        display_name: '赠品',
-        url: '/ConsolePages/pages/gift/my_console_gift',
-        bgcolor: '#10b3b1'
-      },
-       {
-        icon: '/images/console/fabushangpin.png',
-        num: 0,
-        display_name: '加盟',
-        url: '/YizhanConsolePages/yizhan/yizhan-check2',
-        bgcolor: '#10b3b1'
-      },
-       {
-        icon: '/images/console/fabushangpin.png',
-        num: 0,
-        display_name: '客户信息',
-        url: '/YizhanConsolePages/client/clientInfo',
-        bgcolor: '#10b3b1'
-      },
-       {
-        icon: '/images/console/fabushangpin.png',
-        num: 0,
-        display_name: '导购会员',
-        url: '/YizhanConsolePages/yizhan/my_setYizhanSalesman',
-        bgcolor: '#10b3b1'
-      },
-     
-      ] ,
+          text: '累计浏览 /次',
+          url: '/IndexPages/pages/renzheng'
+        },
+        {
+          // icon: '/images/icon_normal.png',
+          num: 0,
+          text: '累计访客 /次',
+          url: '/IndexPages/pages/renzheng'
+        },
+        {
+          num: 0,
+          // icon: '/images/console.png',
+          text: '累计分享 /次',
+          url: '/ConsolePages/pages/index'
+        },
+      ],
       is_designer: true,
       height: 0,
-      guoqi: 0
+      guoqi: 0,
+      path: '',
+      appId: ''
     };
     computed = {};
     methods = {
+      hiddenImg() {
+        if (this.is_jiao_num == 3) {
+          this.is_jiao = 1
+          wx.setStorageSync('is_jiao', 1)
+        }
+      },
+      nextImg() {
+        if (this.is_jiao_num == 3) {
+          return
+        }
+        this.is_jiao_num += 1;
+        console.log("is_jiao_num", this.is_jiao_num)
+      },
       showyizhan: function() {
         this.right = 1;
       },
@@ -572,7 +695,6 @@
       };
       let res = await newapi.managers_permission(data);
       this.permission = res.data.data.permission;
-
       // this.permission[2].permission.push({
       //     icon: '/images/console/ywy.png',
       //     text: '拼团管理',
@@ -581,7 +703,6 @@
       //     isadmin: 1,
       //     isfufei: 1
       //   });
-
       this.orderNum(res.data.data)
       if (res.data.data.is_designer == 1 && res.data.data.is_admin != 1 && res.data.data.is_boss != 1)
         this.is_designer = true
@@ -704,9 +825,9 @@
     // }
     async init(suppliers_id) {
       let yizhanInfo = await this.getpermission(this.suppliers_id);
-      this.$parent.globalData.yizhanInfo=yizhanInfo
-      this.$parent.globalData.suppliers_id=yizhanInfo.suppliers_id
-      this.$parent.globalData.vip_level=yizhanInfo.vip_level
+      this.$parent.globalData.yizhanInfo = yizhanInfo
+      this.$parent.globalData.suppliers_id = yizhanInfo.suppliers_id
+      this.$parent.globalData.vip_level = yizhanInfo.vip_level
       if (!yizhanInfo.is_admin && !yizhanInfo.is_salesman && !yizhanInfo.is_designer) {
         let mRes = await util.showModalBig(
           '您还不是批发商，没有管理权限，赶紧去注册吧'
@@ -725,6 +846,32 @@
       }
       this.yizhanInfo = yizhanInfo;
       this.suppliers_id = yizhanInfo.suppliers_id;
+      // shop_appid
+      var appId = ''
+      var path = ''
+      if (yizhanInfo.is_yizhan == 1 || yizhanInfo.is_join == 1) {
+        appId = "wx87bfbcfe887faf4d";
+        path = '/pages/home?suppliers_id=' + yizhanInfo.suppliers_id;
+      } else if (yizhanInfo.suppliers_id == 525) {
+        appId = "wxedc203036acbc9e4";
+      } else if (yizhanInfo.suppliers_id == 847) {
+        appId = "wxf48cdd6a7dae8c21";
+      } else {
+        appId = "wx0d37285e7e208791";
+        path = '/pages/home?suppliers_id=' + yizhanInfo.suppliers_id;
+        // path = '/Shop/pages/index?suppliers_id=' +
+        //   this.$parent.globalData.suppliers_id +
+        //   '&sales_id=' +
+        //   this.sales_id +
+        //   '&sales_name=' +
+        //   this.yizhanInfo.user_nickname;
+      }
+      this.path = path
+      this.appId = appId
+      newapi.zongshuju({suppliers_id:this.suppliers_id}).then(res=>{
+        this.dataList=res.data.data;
+        this.$apply()
+      })
       // this.permission = yizhanInfo.permission;
       // if (this.suppliers_id == 255) {
       //   this.shopList = [{
@@ -813,7 +960,6 @@
       // this.orderNum();
       this.getjllist();
       // this.isexpired(yizhanInfo);
-      
       // this.isSalesman();
       // this.ishasCard();
       this.height = wx.getSystemInfoSync().windowHeight;
@@ -827,6 +973,11 @@
         this.$parent.globalData.suppliers_id :
         '';
       this.init(this.suppliers_id);
+      this.$apply();
+    }
+    onLoad() {
+      this.is_jiao = wx.getStorageSync('is_jiao');
+      this.is_jiao = this.is_jiao ? this.is_jiao : 0
       this.$apply();
     }
   }

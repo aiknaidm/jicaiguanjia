@@ -602,7 +602,7 @@
             console.log("this.imgSrc[i]", this.imgSrc[i])
             try {
                 var res = await wepy.uploadFile({
-                    url: api.upload,
+                    url: api.upload_oss,
                     filePath: this.imgSrc[i].img_url,
                     name: 'file',
                     header: {
