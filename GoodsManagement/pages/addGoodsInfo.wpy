@@ -20,7 +20,6 @@
   .cameraBox {
     height: 204rpx;
     background-color: #f2f2f2;
-    line-height: 204rpx;
     display: flex; // flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -38,6 +37,10 @@
     margin-right: 30rpx;
   }
   .camera image {
+    width: 102rpx;
+    height: 106rpx;
+  }
+  .camera video {
     width: 102rpx;
     height: 106rpx;
   }
@@ -252,6 +255,10 @@
     right: -15rpx;
     top: -15rpx;
   }
+  .dow {
+    font-size: 10px;
+    color: #333;
+  }
   .listBox2 {
     height: auto;
   }
@@ -286,8 +293,17 @@
           <image src="{{item.img_url}}" />
           <text class="close" @tap='delImg({{index}})'>x</text>
         </view>
-        <view class="camera" @tap='chooseImg' wx:if="{{imgSrc.length<5}}">
-          <image src="/images/add_img.png" mode='aspectFit' />
+        <view class="camera" @tap="chooseImg" wx:if="{{imgSrc.length<5}}">
+          <image src="/images/add_img.png" mode="aspectFit" />
+          <text class="dow">上传图片</text>
+        </view>
+        <view class="camera" @tap='chooseVideo' wx:if="{{!goodVideo}}">
+            <image src="/images/add_img.png" mode='aspectFit' />
+            <text class="dow">上传视频</text>
+        </view>
+        <view class='camera' wx:else>
+          <video id="myVideo" src="{{goodVideo}}" binderror="videoErrorCallback"></video>
+          <text class="close" @tap='delVideo'>x</text>
         </view>
       </view>
       <view class="inputBox">
@@ -498,6 +514,7 @@
       hdky: false,
       is_hot: false,
       is_best: false,
+      goodVideo: '',
       vip_level: [],
       lev: 1,
       is_join: 0,
@@ -547,6 +564,9 @@
       delImg(i) {
         this.imgSrc.splice(i, 1);
       },
+      delVideo(){
+        this.goodVideo = "";
+      },
       // 上传图片
       async chooseImg() {
         var l = this.imgSrc.length;
@@ -568,6 +588,15 @@
             this.$apply();
           })
           .catch(res => {});
+      },
+      async chooseVideo() {
+        var that = this;
+        wx.chooseVideo({
+          success: function(res) {
+            that.goodVideo = res.tempFilePath;
+            that.$apply();
+          }
+        })
       },
       changeGoodsInput: function(e) {
         this.goodsKeyword = e.detail.value;
@@ -830,6 +859,12 @@
           }
         } 
       }
+      var goods_video = "";
+      if (this.goodVideo && this.goodVideo.startsWith("http://tmp")) {
+        goods_video = await this.upVideo();
+      }else{
+        goods_video = this.goodVideo;
+      }
       
       var goods_img = this.goods_imgs[0];
       var img_url = this.goods_imgs;
@@ -839,6 +874,7 @@
         goods_id,
         goods_img,
         img_url,
+        goods_video,
         goods_name,
         goods_sn,
         cat_id,
@@ -950,6 +986,28 @@
         if (mRes.confirm) {
           await this.upImg(img_url);
         }
+      }
+    }
+    async upVideo() {
+      util.showLoading('上传中');
+      try {
+        var res = await wepy.uploadFile({
+          url: api.upload_oss,
+          filePath: this.goodVideo,
+          name: 'file',
+          header: {
+            Accept: 'application/json'
+          }
+        });
+        wx.hideLoading();
+        var datas = JSON.parse(res.data.trim());
+        if (datas.code == 0) {
+          return datas.data.pic_url;
+        }
+      } catch (error) {
+        util.showModal(
+          '视频上传失败'
+        );
       }
     }
     // 品牌列表 用户id 店铺id 有keyword时添加查找商品
@@ -1068,6 +1126,7 @@
         this.hdky = goodsInfo.hdky;
         this.is_best = goodsInfo.is_best;
         this.is_hot = goodsInfo.is_hot;
+        this.goodVideo = goodsInfo.goods_video;
         goodsInfo.suppliers = []
         goodsInfo.provider.forEach((item, index) => {
           if (item.checked == 1)

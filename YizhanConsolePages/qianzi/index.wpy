@@ -151,11 +151,11 @@
             })
         }
       async onConfirm() {
-          util.showLoading("上传中")
             console.log("this.isEmpty", this.isEmpty)
             if (this.isEmpty) {
                 return false
             }
+            util.showLoading("上传中")
           
             var canvasImg = await wepy.canvasToTempFilePath({
                 canvasId: 'handWriting',
