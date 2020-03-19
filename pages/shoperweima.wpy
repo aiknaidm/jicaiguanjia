@@ -2,9 +2,7 @@
   page {
     background: #fff;
   }
-  .isshowerweima {
-    height: 1000rpx;
-  }
+ 
   .btn {
     padding: 20rpx 40rpx;
     border: 1px solid #e50012;
@@ -19,26 +17,70 @@
     text-align: center;
     font-size: 30rpx;
   }
+   .bg,.share__canvas1{
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left:0;
+      top:0;
+      overflow: hidden;
+  }
+  .shop-info{
+    margin-top: 100rpx;
+    text-align: center;position: relative;
+    z-index: 2;
+    // background: #fff;
+.shop-info-logo{
+width:147rpx;
+height: 147rpx;
+border-radius: 50%;
+
+}
+.shop-info-name{
+  font-size:66px;
+
+font-weight:normal;
+font-style:italic;
+color:rgba(255,255,255,1);
+line-height:91rpx;
+text-shadow:0px 9px 9px rgba(146,5,23,0.59);
+}
+  }
+  .shop-info-content{
+    width: 636rpx;
+    height: 737rpx;
+    background: #fff;
+    border-radius: 10rpx;
+     position: absolute;
+z-index: 10;
+  }
+  .content{
+
+  }
 </style>
 <template>
-  <view>
-    <view class="isshowerweima">
-      <view class="container">
-        <!-- <img src="{{shareImage}}" class="share-image" /> -->
-        <canvasdrawer painting="{{painting}}" class="canvasdrawer" bindgetImage="eventGetImage" />
-      </view>
+ 
+    <view class="share__canvas1">
+     <image class="bg draw_canvas" src="https://lmbge.com/upload/1234/shop_BJ.png" data-type="image"  data-url="https://lmbge.com/upload/1234/shop-BJ.png">
+
+        </image>
+        <view class="shop-info draw_canvas">
+          <image class=" shop-info-logo draw_canvas"></image>
+          <view class="shop-info-name draw_canvas">{{yizhanInfo.suppliers_name}}</view>
+          <view class="shop-info-content draw_canvas">
+            <image class="draw_canvas" src="https://lmbge.com/upload/1234/shop_img.png" data-type="image"  data-url="https://lmbge.com/upload/1234/shop-BJ.png"></image>
+            <image class="draw_canvas" src=""></image>
+          </view>
+        </view>
     </view>
-    <view class="bottom">
-      <button bindtap="toshop" class="btn">查看店铺</button>
-      <button bindtap="eventSave" class="btn">保存图片</button>
-    </view>
-  </view>
+   
 </template>
 
 <script>
   import wepy from 'wepy';
   import newapi from '../API/newapi';
   import util from '../utils/index';
+   import Wxml2Canvas from '../utils/canvasJS/index';
   export default class shoperweima extends wepy.page {
     config = {
       navigationBarTitleText: '我的',
@@ -46,7 +88,9 @@
         canvasdrawer: '/components/canvasdrawer/canvasdrawer'
       }
     };
-    data = {};
+    data = {
+      yizhanInfo:{}
+    };
     computed = {};
     components = {};
     methods = {
@@ -185,98 +229,7 @@
       var a = wx.getSystemInfoSync().windowWidth / 375;
       var height = wx.getSystemInfoSync().windowHeight;
       var width = wx.getSystemInfoSync().windowWidth;
-      util.showLoading('绘制图片中');
-      that.data.painting = {
-        width: 375 * a,
-        height: 474 * a,
-        clear: true,
-        views: [{
-            type: 'image',
-            //url: 'https://d.funcodeit.com/test/onepayqrcode_template.jpg',
-            url: 'https://lmbge.com/qrcode/hand.jpg',
-            top: 0,
-            left: 0,
-            width: 375 * a,
-            height: 474 * a
-          },
-          {
-            type: 'image',
-            //url: 'https://d.funcodeit.com/test/mplogo-430.jpg',
-            url: qrurl,
-            top: 50 * a,
-            left: 95 * a,
-            width: 180 * a,
-            height: 200 * a
-            // borderRadius:90,
-          },
-          // {
-          //   type: 'image',
-          //   url: '',
-          //   top: 140,
-          //   left: 145,
-          //   width: 80,
-          //   height: 80,
-          //   borderRadius:40,
-          // },
-          {
-            type: 'image',
-            //url: 'https://d.funcodeit.com/test/mplogo-430.jpg',
-            url: userInfo.avatarUrl,
-            top: 270 * a,
-            left: 150 * a,
-            width: 60 * a,
-            height: 60 * a,
-            borderRadius: 30 * a
-          },
-          {
-            type: 'text',
-            content:yizhanInfo.is_join==1?yizhanInfo.join_yizhan_name: yizhanInfo.yizhan_name,
-            fontSize: 16 * a,
-            width: 180 * a,
-            top: 335 * a,
-            left: 180 * a,
-            color: '#333',
-            textAlign: 'center',
-            bolder: false
-          },
-          {
-            type: 'text',
-            content: that.sales_id == 0 ? '' : '业务员：' + userInfo.nickName,
-            fontSize: 12 * a,
-            width: 180 * a,
-            top: 360 * a,
-            left: 180 * a,
-            color: '#aaa',
-            textAlign: 'center',
-            bolder: false
-          },
-          {
-            type: 'text',
-            content: '用微信扫描二维码',
-            fontSize: 15 * a,
-            width: 180 * a,
-            top: 380 * a,
-            left: 180 * a,
-            color: '#aaa',
-            textAlign: 'center',
-            bolder: false
-          },
-          {
-            type: 'text',
-            content: '成为我的会员',
-            fontSize: 15 * a,
-            width: 180 * a,
-            top: 400 * a,
-            left: 180 * a,
-            color: '#aaa',
-            textAlign: 'center',
-            bolder: false
-          }
-        ]
-      };
-      that.setData({
-        painting: that.data.painting
-      });
+     this.$apply()
     }
   }
 </script>

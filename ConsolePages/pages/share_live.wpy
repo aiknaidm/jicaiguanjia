@@ -1,0 +1,196 @@
+<style lang="less">
+.live-list{
+    width: 85%;
+    margin: auto;
+    background: #fff;
+    border-radius: 5px;
+    padding: 20rpx;
+    margin-top: 20rpx;
+    font-size: 28rpx;
+    line-height: 50rpx;
+}
+ .redborder{
+    position: fixed;
+    bottom:0;
+    left: 0;
+    width: 100%;
+    line-height: 80rpx;
+    text-align: center;
+    color: #fff;
+    background: #e50012;
+  }
+  .bg{
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left:0;
+      top:0;
+  }
+  .erweima-bg{
+      width:575rpx;
+      height: 602rpx;
+       position: absolute;
+      left:50%;
+      margin-left: -287rpx;
+      bottom:127rpx;
+  }
+  .text{
+      position: absolute;
+      top:120rpx;
+      left: 88rpx;
+      width: 553rpx;
+      height: 177rpx;
+      font-size:80rpx;
+
+font-weight:400;
+color:rgba(255,255,255,1);
+line-height:110rpx;
+text-shadow:3px 5px 6px rgba(231,50,50,1);
+z-index: 2;
+  }
+  .text2{
+     position: absolute;
+     bottom: 30rpx;
+     font-size: 30rpx;
+     color: #fff;
+     left: 230rpx;
+  }
+  .share__canvas{
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left:-1500rpx;
+      top:0;
+
+    //   z-index: -1;
+  }
+  .erweima{
+    position: absolute;
+    width: 255rpx;
+    height: 255rpx;
+    left: 50%;
+    margin-left: -130rpx;
+    bottom:285rpx;
+    z-index: 10
+  }
+</style>
+<template>
+<view>
+    <view class="share__canvas1" @longpress="drawImage">
+        <image class="bg draw_canvas" src="https://lmbge.com/upload/1234/live-BJ.png" data-type="image"  data-url="https://lmbge.com/upload/1234/live-BJ.png">
+
+        </image>
+        <image class="erweima-bg draw_canvas" src="https://lmbge.com/upload/1234/live-2.png" data-type="image" data-url="https://lmbge.com/upload/1234/live-2.png">
+
+        </image>
+        <image class="erweima draw_canvas" src="{{erweima}}" data-type="image" data-url="{{erweima}}"></image>
+        <text class="text draw_canvas" data-type="text" data-text="来我直播间，看材料了装修， 有问必答！">来我直播间， 看材料了装修， 有问必答！</text>
+        <text class="text2 ">长按保存图片到手机！</text>
+
+    </view>
+    <canvas canvas-id="canvas1" class="share__canvas"></canvas>
+</view>
+</template>
+
+<script>
+ import wepy from 'wepy';
+  import Wxml2Canvas from '../../utils/canvasJS/index';
+  import newapi from '../../API/newapi';
+import util from '../../utils/index';
+export default class newslist extends wepy.page {
+  config = {
+    navigationBarTitleText: '分享直播',
+  };
+  components = {};
+  data = {
+    imgs:[],
+    erweima:''
+  };
+  computed = {};
+  methods = {
+      drawImage() {
+      
+       
+  let data = {
+            list: [{
+                type: 'wxml',
+                class: '.share__canvas1 .draw_canvas', // draw_canvas指定待绘制的元素
+                limit: '.share__canvas1', // 限定绘制元素的范围，取指定元素与它的相对位置
+                x: 0,
+                y: 0
+            }]
+        }
+        this.drawImage1.draw(data);
+    },
+  }
+  events = {};
+  async getErweima(){
+    wx.showLoading({
+      title: '加载中', //提示的内容,
+      mask: true, //显示透明蒙层，防止触摸穿透,
+      success: res => {}
+    });
+   newapi.getQRCodeImg({
+     suppliers_id:this.suppliers_id,
+     path:'Live/pages/home?roomid='+this.roomid
+
+   }).then(res=>{
+     wx.hideLoading();
+    
+     this.erweima=res.data.data
+     this.$apply()
+     return res.data.data
+     
+   }).then(res=>{
+ console.log("res",res)
+ this.initImg()
+   })
+  }
+  initImg(){
+      let self = this;
+     this.drawImage1 = new Wxml2Canvas({
+            width: 750, // 宽， 以iphone6为基准，传具体数值，其他机型自动适配
+            height: 1334, // 高
+            element: 'canvas1', 
+            background: '#ffffff',
+            progress (percent) {
+                // wx.showLoading({
+                //   title: percent+"%", //提示的内容,
+                // });
+                
+            },
+            finish(url) {
+              wx.hideLoading();
+                // let imgs = self.imgs;
+                // imgs.push(url);
+
+                // self.imgs=imgs
+                self.$apply()
+                wx.saveImageToPhotosAlbum({
+            filePath: url,
+            success(res) {
+              wx.showToast({
+                title: '保存成功', //提示的内容,
+                icon: 'none', //图标,
+                duration: 2000, //延迟时间,
+                mask: true, //显示透明蒙层，防止触摸穿透,
+                success: res => {}
+              });
+            }
+          })
+            },
+            error (res) {
+            }
+        });
+
+      
+  }
+  async onLoad(option) {
+   this.roomid=option.roomid?option.roomid:1
+   this.suppliers_id=option.suppliers_id?option.suppliers_id:99
+   this.getErweima()
+  
+  }
+
+}
+</script>

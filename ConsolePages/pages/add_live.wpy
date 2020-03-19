@@ -19,6 +19,13 @@
     color: #fff;
     background: #e50012;
   }
+  .share{
+    text-align: right;
+    image{
+      width: 50rpx;
+      height: 50rpx;
+    }
+  }
 </style>
 <template>
 <view>
@@ -30,6 +37,9 @@
 <view>直播名：{{item.name}}</view>
 <view>开始时间：{{item.start_time}}</view>
 <view>结束时间：{{item.end_time}}</view>
+<view class="share" @tap="toShare({{item}})">
+  <image src="/images/share.png"></image>
+</view>
    </view>
     <view class='redborder' catchtap='addLive'>
         <view class='img'>
@@ -82,6 +92,9 @@ if(res.data.code==0){
      
       addLive(){
           this.popupdata.isshowpopup=true
+      },
+      toShare(item){
+        wx.navigateTo({ url: 'share_live?roomid='+item.roomid+'&suppliers_id='+this.suppliers_id });
       }
   }
   events = {};
@@ -95,15 +108,15 @@ if(res.data.code==0){
     this.$apply();
   }
   async onLoad(option) {
-      var suppliers_id=option.suppliers_id
-      this.suppliers_id=suppliers_id
-    //    if (!this.$parent.globalData.suppliers_id) {
-    //             util.showToast("登录失败")
-    //             wx.navigateBack();
-    //         } else {
-    //             this.suppliers_id = this.$parent.globalData.suppliers_id
-    //         }
-        this.getLiveList(suppliers_id);
+      // var suppliers_id=option.suppliers_id
+      // this.suppliers_id=suppliers_id
+       if (!this.$parent.globalData.suppliers_id) {
+                util.showToast("登录失败")
+                wx.navigateBack();
+            } else {
+                this.suppliers_id = this.$parent.globalData.suppliers_id
+            }
+        this.getLiveList(this.suppliers_id);
   }
 
 }

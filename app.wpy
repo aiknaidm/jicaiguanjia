@@ -206,6 +206,7 @@
             'pages/fenleiList',
             'pages/share_set',
             'pages/add_live',
+            'pages/share_live'
           ]
         },
         {

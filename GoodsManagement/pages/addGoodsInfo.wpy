@@ -593,7 +593,7 @@
         var that = this;
         wx.chooseVideo({
           sourceType: ['album','camera'],
-          maxDuration: 300,
+          maxDuration: 60,
           compressed: false,
           success: function(res) {
             that.goodVideo = res.tempFilePath;
