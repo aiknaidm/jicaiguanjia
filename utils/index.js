@@ -340,7 +340,19 @@ const strToTime = function(date, str) {
     var data = new Date(Date.parse(date.replace(/str/g, "/"))).getTime();
     return data
 }
-
+const randomNum=function(minNum,maxNum){ 
+    switch(arguments.length){ 
+        case 1: 
+            return parseInt(Math.random()*minNum+1,10); 
+        break; 
+        case 2: 
+            return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10); 
+        break; 
+            default: 
+                return 0; 
+            break; 
+    } 
+} 
 export default {
     strToTime,
     formatTime,
@@ -361,4 +373,5 @@ export default {
     showModal,
     showModalBig,
     showActionSheet,
+    randomNum
 }

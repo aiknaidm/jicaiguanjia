@@ -26,19 +26,11 @@
       left:0;
       top:0;
   }
-  .erweima-bg{
-      width:575rpx;
-      height: 602rpx;
-       position: absolute;
-      left:50%;
-      margin-left: -287rpx;
-      bottom:127rpx;
-  }
+ 
   .text{
-      position: absolute;
-      top:120rpx;
-      left: 88rpx;
-      width: 630rpx;
+      position: relative;
+     padding-top: 50rpx;
+      width: 640rpx;
       // height: 177rpx;
       font-size:80rpx;
 display: block;
@@ -47,6 +39,31 @@ color:rgba(255,255,255,1);
 line-height:110rpx;
 text-shadow:3px 5px 6px rgba(231,50,50,1);
 z-index: 2;
+margin: auto;
+  }
+  .info{
+     width:575rpx;
+     height: 602rpx;
+      position: relative;
+     margin: auto;
+     margin-top: 80rpx;
+     text-align: center;
+     .erweima-bg{
+       width:100%;
+       height: 100%;
+       position: absolute;
+       left: 0;
+       top: 0;
+     }
+     .erweima{
+       position: relative;
+       width: 255rpx;
+       height: 255rpx;
+       margin: auto;
+       margin-top:160rpx ;
+       // bottom:285rpx;
+       z-index: 10
+     }
   }
   .text2{
      position: absolute;
@@ -64,15 +81,7 @@ z-index: 2;
 
     //   z-index: -1;
   }
-  .erweima{
-    position: absolute;
-    width: 255rpx;
-    height: 255rpx;
-    left: 50%;
-    margin-left: -130rpx;
-    bottom:285rpx;
-    z-index: 10
-  }
+
 </style>
 <template>
 <view>
@@ -80,11 +89,15 @@ z-index: 2;
         <image class="bg draw_canvas" src="https://lmbge.com/upload/1234/live-BJ.png" data-type="image"  data-url="https://lmbge.com/upload/1234/live-BJ.png">
 
         </image>
-       <image class="erweima-bg draw_canvas" src="https://lmbge.com/upload/1234/live-2.png" data-type="image" data-url="https://lmbge.com/upload/1234/live-2.png">
-
-        </image>
-        <image class="erweima draw_canvas" src="{{erweima}}" data-type="image" data-url="{{erweima}}"></image>
-        <text class="text draw_canvas" data-type="text" data-text="来我直播间，看材料了装修， 有问必答！">来我直播间， 看材料了装修， 有问必答！</text>
+         <text class="text draw_canvas" data-type="text" data-text="{{text[text_index]}}">{{text[text_index]}}</text>
+         <view class="info draw_canvas" data-type="text">
+             <image class="erweima-bg draw_canvas" src="https://lmbge.com/upload/1234/live-2.png" data-type="image" data-url="https://lmbge.com/upload/1234/live-2.png">
+             
+              </image>
+              <image class="erweima draw_canvas" src="{{erweima}}" data-type="image" data-url="{{erweima}}"></image>
+         </view>
+      
+       
         <text class="text2 ">长按保存图片到手机！</text>
 
     </view>
@@ -103,25 +116,33 @@ export default class newslist extends wepy.page {
   };
   components = {};
   data = {
-    imgs:[],
+    img:"",
     erweima:'',
-    text:["来我直播间，看材料了装修， 有问必答！","装修材料怎么选，今晚直播，不见不散"]
+    text:["来我直播间，看材料了装修， 有问必答！","装修材料怎么选，今晚直播，不见不散","直播选材料，聊一聊，装修建材那些事"],
+    text_index:0
   };
   computed = {};
   methods = {
-      drawImage() {
-      
-       
-  let data = {
-            list: [{
-                type: 'wxml',
-                class: '.share__canvas1 .draw_canvas', // draw_canvas指定待绘制的元素
-                limit: '.share__canvas1', // 限定绘制元素的范围，取指定元素与它的相对位置
-                x: 0,
-                y: 0
-            }]
+     async drawImage() {
+        var self=this
+      let mRes = await util.showModalBig('你确定要保存图片吗');
+      if (mRes.cancel) {
+         return
+      }
+      wx.saveImageToPhotosAlbum({
+        filePath: self.img,
+        success(res) {
+          wx.showToast({
+            title: '保存成功', //提示的内容,
+            icon: 'none', //图标,
+            duration: 2000, //延迟时间,
+            mask: true, //显示透明蒙层，防止触摸穿透,
+            success: res => {}
+          });
         }
-        this.drawImage1.draw(data);
+      })
+       
+ 
     },
   }
   events = {};
@@ -165,30 +186,29 @@ export default class newslist extends wepy.page {
                 // let imgs = self.imgs;
                 // imgs.push(url);
 
-                // self.imgs=imgs
+                self.img=url
                 self.$apply()
-                wx.saveImageToPhotosAlbum({
-            filePath: url,
-            success(res) {
-              wx.showToast({
-                title: '保存成功', //提示的内容,
-                icon: 'none', //图标,
-                duration: 2000, //延迟时间,
-                mask: true, //显示透明蒙层，防止触摸穿透,
-                success: res => {}
-              });
-            }
-          })
+          
             },
             error (res) {
             }
         });
-
+ let data = {
+            list: [{
+                type: 'wxml',
+                class: '.share__canvas1 .draw_canvas', // draw_canvas指定待绘制的元素
+                limit: '.share__canvas1', // 限定绘制元素的范围，取指定元素与它的相对位置
+                x: 0,
+                y: 0
+            }]
+        }
+        this.drawImage1.draw(data);
       
   }
   async onLoad(option) {
    this.roomid=option.roomid?option.roomid:1
    this.suppliers_id=option.suppliers_id?option.suppliers_id:99
+   this.text_index=util.randomNum(0,2)
    this.getErweima()
   
   }
