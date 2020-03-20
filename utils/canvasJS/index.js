@@ -322,7 +322,7 @@ class Wxml2Canvas {
             let fixBorder = border.width;
             try {
 
-                that.ctx.stroke(x - fixBorder / 2, y - fixBorder / 2, width + fixBorder, height + fixBorder);
+                that.ctx.strokeRect(x - fixBorder / 2, y - fixBorder / 2, width + fixBorder, height + fixBorder);
 
             } catch (error) {
                 console.log(error)
@@ -359,6 +359,7 @@ class Wxml2Canvas {
             let whiteSpace = style.whiteSpace || 'wrap';
             let x = 0;
             let y = 0;
+            if(style.textShadow&&style.textShadow.length>0)
             style.textShadow = Util.transferTextShadow(style.textShadow)
 
             if (typeof style.padding === 'string') {
@@ -371,6 +372,7 @@ class Wxml2Canvas {
             if (style.background || style.border) {
                 this._drawTextBackgroud(item, style, textWidth, textHeight, isWxml);
             }
+            if(style.textShadow)
             this.ctx.setShadow(style.textShadow.offsetX, style.textShadow.offsetY, style.textShadow.blur, style.textShadow.color)
 
             // 行内文本
@@ -419,6 +421,7 @@ class Wxml2Canvas {
                         leftOffset = x + lastWidth;
                         topOffset = lineHeight * (lineNum + 1);
                     }
+                    
                 } else {
                     x = this._resetTextPositionX(item, style, textWidth, width);
                     y = this._resetTextPositionY(item, style);

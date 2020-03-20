@@ -38,10 +38,10 @@
       position: absolute;
       top:120rpx;
       left: 88rpx;
-      width: 553rpx;
-      height: 177rpx;
+      width: 630rpx;
+      // height: 177rpx;
       font-size:80rpx;
-
+display: block;
 font-weight:400;
 color:rgba(255,255,255,1);
 line-height:110rpx;
@@ -80,7 +80,7 @@ z-index: 2;
         <image class="bg draw_canvas" src="https://lmbge.com/upload/1234/live-BJ.png" data-type="image"  data-url="https://lmbge.com/upload/1234/live-BJ.png">
 
         </image>
-        <image class="erweima-bg draw_canvas" src="https://lmbge.com/upload/1234/live-2.png" data-type="image" data-url="https://lmbge.com/upload/1234/live-2.png">
+       <image class="erweima-bg draw_canvas" src="https://lmbge.com/upload/1234/live-2.png" data-type="image" data-url="https://lmbge.com/upload/1234/live-2.png">
 
         </image>
         <image class="erweima draw_canvas" src="{{erweima}}" data-type="image" data-url="{{erweima}}"></image>
@@ -104,7 +104,8 @@ export default class newslist extends wepy.page {
   components = {};
   data = {
     imgs:[],
-    erweima:''
+    erweima:'',
+    text:["来我直播间，看材料了装修， 有问必答！","装修材料怎么选，今晚直播，不见不散"]
   };
   computed = {};
   methods = {
