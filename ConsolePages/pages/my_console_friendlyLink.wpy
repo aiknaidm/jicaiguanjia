@@ -1,0 +1,496 @@
+<style lang="less">
+  .status-label {
+    background: #f0f0f0;
+    border-left: 5rpx solid #e4e4e4;
+  }
+  .icon-shouji {
+    color: #44b8f4;
+    font-size: 35rpx;
+  }
+  .icon-youcecaidan {
+    color: #e50012;
+  }
+  .green {
+    color: #10b3b1;
+  }
+  .cameraBox {
+    height: 204rpx;
+    background-color: #f2f2f2;
+    line-height: 204rpx;
+    display: flex; // flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    overflow-x: scroll;
+  }
+  .camera {
+    width: 102rpx;
+    height: 106rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-right: 30rpx;
+  }
+  .camera image {
+    width: 102rpx;
+    height: 106rpx;
+  }
+  .num {
+    font-size: 26rpx;
+    line-height: 35rpx;
+    padding-left: 20rpx;
+    color: #888;
+  }
+  .check-list {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20rpx 40rpx;
+    border-top: 8rpx solid #f0f0f0;
+    background: #fff;
+  }
+  .check-list-img {
+    width: 100rpx;
+    height: 100rpx;
+    margin-right: 10rpx;
+  }
+  .check-list-img image {
+    width: 100%;
+    height: 100%;
+  }
+  .check-list-content {
+    line-height: 40rpx;
+    flex: 1;
+  }
+  .check-list-btn {
+    // width: 60rpx;
+    text-align: right;
+  }
+  .check-list-btn button {
+    height: 55rpx;
+    color: #fff;
+    background-color: #e50012;
+    line-height: 55rpx;
+    font-size: 26rpx;
+    border-radius: 50px;
+    padding: 0 40rpx;
+  }
+  /* 添加会员 */
+  .checkLists {
+    padding-bottom: 80rpx;
+    background: #f0f0f0;
+  }
+  .addmember {
+    text-align: center;
+    line-height: 80rpx;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    background: #e50012;
+    color: #fff;
+  }
+  .status-label {
+    background-color: #fff;
+  }
+  .border {
+    display: inline-block;
+    padding: 0 20rpx;
+    background: #fff; // border-right: 1px solid #f0f0f0;
+    // max-width: 300rpx;
+  }
+  .search {
+    text-align: right;
+    padding-right: 40rpx;
+  }
+  .body-bg {
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+  .list {
+    background-color: #fff;
+    text-align: center;
+    line-height: 88rpx;
+    font-size: 30rpx; // max-height: 600rpx;
+    overflow: scroll;
+    width: 600rpx; // width: 80%;
+  }
+  .list.section_gap {
+    padding: 0 20rpx;
+  }
+  .icon-jiantou {
+    font-size: 12px;
+    margin-left: 10rpx;
+    color: #e50012;
+  }
+  .body-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .body-line .body-view {
+    // width: 60%;
+  }
+  .jy-top {
+    background-color: #f2f2f2;
+    padding: 20rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .jy-top-img image {
+    width: 70rpx;
+    height: 70rpx;
+    margin: 0 20rpx;
+  }
+  .jy-top-img {
+    display: flex;
+  }
+  .jy-top-view {
+    flex: 1;
+  }
+  .btn {
+    text-align: center;
+    height: 80rpx;
+    line-height: 80rpx;
+    background-color: #e50012;
+    margin: 150rpx;
+    border-radius: 50px;
+    color: #fff;
+  }
+</style>
+<template>
+  <view class='container'>
+    <!-- <search @buttonTap.user="searchTap" :placeholder="placeholder"></search> -->
+    <statusTap :statusType="statusType" :currentType.sync="currentType" @statusTap.user="statusTap">
+    </statusTap>
+    <view class='checkLists'>
+      <!--未审核  -->
+      <view class='check-list' wx:if="{{currentStatu==0}}" wx:for="{{auditlink}}" wx:key="{{index}}">
+        <view class='check-list-img'>
+          <image src='{{item.img}}' />
+        </view>
+        <view class='check-list-content'>
+          <view>店铺名称：{{item.suppliers_desc}}</view>
+          <!-- <view @tap.stop='tocallphone({{item.mobile}})'>手机号码：{{item.mobile}}
+                    <text class='iconfont icon-shouji'></text>
+                  </view> -->
+        </view>
+        <view class='check-list-btn'>
+          <button @tap.stop='showSlider({{item}})'>审核</button>
+        </view>
+      </view>
+      <!--待审核  -->
+      <view class='check-list checked-list' wx:if="{{currentStatu==1}}" wx:for="{{addlink}}" wx:key="{{index}}">
+        <view class='check-list-img'>
+          <image src='{{item.img}}' />
+        </view>
+        <view class='check-list-content'>
+          <view>店铺名称：{{item.suppliers_desc}}</view>
+        </view>
+        <view class='check-list-btn'>
+          <text class='iconfont icon-youcecaidan' @tap.stop='toJiechu({{item}})'></text>
+        </view>
+      </view>
+      <!--已审核  -->
+      <view class='check-list checked-list' wx:if="{{currentStatu==2}}" wx:for="{{showlink}}" wx:key="{{index}}">
+        <view class='check-list-img'>
+          <image src='{{item.img}}' />
+        </view>
+        <view class='check-list-content'>
+          <view>店铺名称：{{item.suppliers_desc}}</view>
+        </view>
+        <view class='check-list-btn'>
+          <text class='iconfont icon-youcecaidan' @tap.stop='toEdit({{item}})'></text>
+        </view>
+      </view>
+      <!--图片  -->
+      <view class='' wx:if="{{currentStatu==3}}">
+        <view class="title" style="padding:40rpx;text-align:center">店铺友情链接图</view>
+        <view class="cameraBox">
+          <view class="camera" @tap='addShopImg'>
+            <image src="{{shopImg.img_url?shopImg.img_url:'/images/add_img.png'}}" />
+          </view>
+        </view>
+        <view class='btn' @tap="add_link_img">上传图片</view>
+      </view>
+    </view>
+    <!-- <view wx:if="{{currentStatu<3 && shenheList.length==0}}">
+              <noOrder text="暂无店铺"></noOrder>
+            </view> -->
+    <view class='addmember' @tap="showSuppliersList">+添加友情店铺</view>
+    <view class='body-bg' wx:if="{{isShowSlider}}" bindtap='hiddenSuppliersList' touchstart='hiddenSuppliersList' touchmove="hiddenSuppliersList">
+      <form report-submit bindsubmit="toFindSuppliers">
+        <view class="list section_gap" wx:if="{{suppliers_list.length==0}}" @tap.stop="stop">
+          <view class="body-line">
+            <text class="section__title">店铺名</text>
+            <view class="body-view">
+              <input name="suppliers_name" value='' placeholder='请输入准确完整店铺名' />
+            </view>
+          </view>
+          <view class="body-line">
+            <text class="section__title">手机号</text>
+            <view class="body-view">
+              <input name="suppliers_mobile" value='' placeholder='请输入准确完整手机号' />
+            </view>
+          </view>
+          <button form-type='submit'>搜索</button>
+        </view>
+      </form>
+      <view class="list section_gap" @tap.stop="stop">
+        <view wx:for="{{suppliers_list}}" wx:key="{{index}}" @tap.stop="addFriend({{item}})">
+          {{item.suppliers_desc}}
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import statusTap from '../../components/statusTap';
+  import noOrder from '../../components/noOrder';
+  import newapi from '../../API/newapi';
+  import api from '../../API/api';
+  import util from '../../utils/index';
+  import search from '../../components/search';
+  export default class my_console_friendlyLink extends wepy.page {
+    config = {
+      navigationBarTitleText: '管理友情链接'
+    };
+    data = {
+      statusType: ['待处理', '待通过', '已添加', '设置链接图片'],
+      statusKey: ['0', '1', '2', '3'],
+      currentStatu: '0',
+      currentType: 0,
+      auditlink: [],
+      addlink: [],
+      showlink: [],
+      link_img: '',
+      shopImg: 0,
+      isShowSlider: false,
+      suppliers_list: [],
+    };
+    computed = {};
+    components = {
+      search,
+      statusTap,
+      noOrder,
+    };
+    methods = {
+      showSuppliersList() {
+        this.isShowSlider = true;
+        this.$apply();
+      },
+      hiddenSuppliersList() {
+        this.isShowSlider = false;
+        this.$apply();
+      },
+      async addFriend(item) {
+        let mRes = await util.showModalBig(
+          '确定向店铺【' + item.suppliers_desc + '】发送申请？'
+        );
+        if (mRes.confirm) {
+          let data = {
+            suppliers_id: this.suppliers_id,
+            link_suppliers_id: item.suppliers_id,
+            show_order: 50
+          };
+          let res = await newapi.add_link(data);
+          if (res.data.code == 0) {
+            util.showModal("申请成功");
+            this.currentType = 1;
+            this.currentStatu = 1;
+            this.getShenheList(this.suppliers_id);
+          }
+          this.isShowSlider = false;
+          this.suppliers_list = [];
+          this.$apply();
+        }
+      },
+      async addShopImg() {
+        wepy
+          .chooseImage({
+            count: 1, // 默认9
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'] // 可以指定来源是相册还是相机，默认二者都有
+          })
+          .then(res => {
+            var that = this;
+            // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+            var tempFilePaths = res.tempFilePaths;
+            this.shopImg = {}
+            this.shopImg.img_url = tempFilePaths[0];
+            this.shopImg.upload = true;
+            this.$apply();
+          })
+          .catch(res => {});
+      },
+      async add_link_img() {
+        // 上传图片
+        var suppliers_id = this.suppliers_id;
+        if (!this.shopImg.upload) var shopImg = this.shopImg.img_url == 0 ? '' : this.shopImg.img_url
+        else var shopImg = await this.upImg(this.shopImg.img_url)
+        if (shopImg == "") {
+          util.showModal("请上传图片");
+          return;
+        }
+        util.showLoading();
+        let data = {
+          suppliers_id,
+          link_img: shopImg,
+        };
+        let res = await newapi.add_link_img(data);
+        wx.hideLoading();
+      },
+      stop() {
+        return
+      },
+      statusTap(index) {
+        this.currentStatu = index;
+      },
+      //需要审核提示
+      async showSlider(item) {
+        let mRes = await util.showActionSheet(['通过', '拒绝']);
+        if (mRes.tapIndex == 0) {
+          this.doshenhe(item.link_id, '1');
+        } else if (mRes.tapIndex == 1) {
+          this.doshenhe(item.link_id, '0');
+        }
+      },
+      async toFindSuppliers(e) {
+        var suppliers_name = e.detail.value.suppliers_name;
+        var suppliers_mobile = e.detail.value.suppliers_mobile;
+        if (suppliers_name == "" && suppliers_mobile == "") {
+          util.showModal("请输入完整店铺名或手机号");
+          return;
+        }
+        let res = await newapi.suppliers_list2({
+          keyword: suppliers_name,
+          mobile: suppliers_mobile,
+        });
+        this.suppliers_list = res.data.data.data;
+        if (this.suppliers_list.length == 0) {
+          util.showModal("无此店铺，请输入完整准确店铺名或手机号");
+        }
+        this.$apply();
+      },
+      //解除关系提示
+      async toJiechu(item) {
+        let mRes = await util.showActionSheet(['取消申请']);
+        if (mRes.tapIndex == 0) {
+          this.dodellink(item.link_id);
+        }
+      },
+      async toEdit(item) {
+        let mRes = await util.showActionSheet(['解除关系']);
+        if (mRes.tapIndex == 0) {
+          this.dodellink(item.link_id);
+        }
+      },
+      tocallphone: function(phone) {
+        wx.makePhoneCall({
+          phoneNumber: phone
+        });
+      },
+      searchTap(val) {
+        this.keyword = val;
+        this.getShenheList(this.suppliers_id);
+      },
+    };
+    events = {};
+    //审核列表
+    async getShenheList(suppliers_id) {
+      wx.showLoading({
+        mask: true, //显示透明蒙层，防止触摸穿透,
+      });
+      let res = await newapi.my_addlink({
+        suppliers_id,
+      });
+      wx.hideLoading();
+      if (res.data.code == 0) {
+        var datas = res.data.data;
+        console.log(datas);
+        this.auditlink = datas.auditlink;
+        this.addlink = datas.addlink;
+        this.showlink = datas.showlink;
+      }
+      this.$apply();
+    }
+    //审核
+    async doshenhe(link_id, audit_status) {
+      util.showLoading('审核中...');
+      // let suppliers_id = this.suppliers_id;
+      let data = {
+        link_id,
+        audit_status
+      };
+      let res = await newapi.audit_link(data);
+      wx.hideLoading();
+      if (res.data.code == 0) {
+        util.showModal("成功");
+        this.getShenheList(this.suppliers_id);
+      }
+    }
+    async dodellink(link_id) {
+      util.showLoading('解除中...');
+      let data = {
+        link_id
+      };
+      let res = await newapi.del_link(data);
+      wx.hideLoading();
+      if (res.data.code == 0) {
+        util.showModal("成功");
+        this.getShenheList(this.suppliers_id);
+      }
+    }
+    async upImg(img_url) {
+      util.showLoading('上传中');
+      try {
+        var res = await wepy.uploadFile({
+          url: api.upload_oss,
+          filePath: img_url,
+          name: 'file',
+          header: {
+            Accept: 'application/json'
+          }
+        });
+        wx.hideLoading();
+        var datas = JSON.parse(res.data.trim());
+        if (datas.code == 0) {
+          return datas.data.pic_url;
+        }
+      } catch (error) {
+        console.log(error);
+        util.hideLoading();
+        let mRes = await util.showModalBig(
+          '图片' + img_url + '上传失败'
+        );
+        if (mRes.confirm) {
+          await this.upImg(img_url);
+        }
+      }
+    }
+    async onLoad(option) {
+      this.suppliers_id = this.$parent.globalData.suppliers_id ?
+        this.$parent.globalData.suppliers_id :
+        (await this.$parent.getYizhanInfo()).suppliers_id;
+      this.shopImg = {}
+      this.shopImg.img_url = this.$parent.globalData.yizhanInfo.link_img;
+      this.shopImg.upload = false;
+      this.currentStatu = 0;
+      this.getShenheList(this.suppliers_id)
+    }
+    async onShow() {}
+  }
+</script>

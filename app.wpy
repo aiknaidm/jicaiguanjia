@@ -193,6 +193,7 @@
             'pages/my_console_payPhb',
             'pages/my_console_toSureList',
             'pages/my_console_tobalanceDetail',
+            'pages/my_console_friendlyLink',
             'pages/upCase',
             'pages/caseList',
             'pages/addCaseDec',

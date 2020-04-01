@@ -241,6 +241,12 @@ const newapi = {
     kt_zhibo: (data) => fetch(`${host_chk}/kt_zhibo`, 'get', data),
     zhibo_list: (data) => fetch(`${host_chk}/zhibo_list`, 'get', data),
 
+    add_link_img: (data) => fetch(`${host_chk}/add_link_img`, 'get', data),
+    add_link: (data) => fetch(`${host_chk}/add_link`, 'get', data),
+    my_addlink: (data) => fetch(`${host_chk}/my_addlink`, 'get', data),
+    del_link: (data) => fetch(`${host_chk}/del_link`, 'get', data),
+    audit_link: (data) => fetch(`${host_chk}/audit_link`, 'get', data),
+    suppliers_list2: (data) => fetch(`${host_chk}/suppliers_list2`, 'get', data),
 
 
 
