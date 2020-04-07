@@ -1,5 +1,4 @@
 import Util from './util';
-import util from './util';
 
 class Wxml2Canvas {
     constructor(options = {}) {
@@ -80,10 +79,17 @@ class Wxml2Canvas {
         if (this.gradientBackground) {
             let line = this.gradientBackground.line || [0, 0, 0, this.height];
             let color = this.gradientBackground.color || ['#fff', '#fff'];
-            let style = { fill: { line, color } }
+            let style = {
+                fill: {
+                    line,
+                    color
+                }
+            }
             this._drawRectToCanvas(0, 0, this.width, this.height, style);
         } else {
-            let style = { fill: this.background }
+            let style = {
+                fill: this.background
+            }
             this._drawRectToCanvas(0, 0, this.width, this.height, style);
         }
     }
@@ -176,7 +182,11 @@ class Wxml2Canvas {
                 },
                 fail: function(res) {
 
-                    self.errorHandler({ errcode: 1000, errmsg: 'save canvas error', e: res });
+                    self.errorHandler({
+                        errcode: 1000,
+                        errmsg: 'save canvas error',
+                        e: res
+                    });
                 }
             }, self.object);
         }, self.device.system.indexOf('iOS') === -1 ? 300 : 100);
@@ -196,12 +206,15 @@ class Wxml2Canvas {
                 });
                 all[count++] = new Promise((resolve, reject) => {
                     // 非http(s)域名的就不下载了
-                    if (!/^http/.test(item.url) || /^http:\/\/tmp\//.test(item.url) || /^http:\/\/127\.0\.0\.1/.test(item.url)) {
+                    if (!/^http/.test(item.url) || /^http:\/\/tmp\//.test(item.url) ||
+                        /^http:\/\/127\.0\.0\.1/.test(item.url)) {
                         let index = self._findPicIndex(item.url);
                         if (index > -1) {
                             self.allPic[index].local = item.url;
                         }
-                        resolve({ tempFilePath: item.url });
+                        resolve({
+                            tempFilePath: item.url
+                        });
                     } else {
                         wx.downloadFile({
                             url: item.url.replace(/^https?/, 'https'),
@@ -213,7 +226,10 @@ class Wxml2Canvas {
                                 resolve(res);
                             },
                             fail: (res) => {
-                                reject({ errcode: 1001, errmsg: 'download pic error' });
+                                reject({
+                                    errcode: 1001,
+                                    errmsg: 'download pic error'
+                                });
                             }
                         })
                     }
@@ -222,9 +238,13 @@ class Wxml2Canvas {
         });
 
         return Promise.all(all).then(results => {
-            return new Promise(resolve => { resolve() })
+            return new Promise(resolve => {
+                resolve()
+            })
         }).catch((results) => {
-            return new Promise((resolve, reject) => { reject(results) })
+            return new Promise((resolve, reject) => {
+                reject(results)
+            })
         })
     }
 
@@ -234,6 +254,7 @@ class Wxml2Canvas {
     }
 
     _drawRect(item, style, resolve, reject, isImage, isWxml) {
+        // console.log("item, style",style.borderRadius)
         let zoom = this.zoom;
         let leftOffset = 0;
         let topOffset = 0;
@@ -274,13 +295,31 @@ class Wxml2Canvas {
                 }
             }
         } catch (e) {
-            reject && reject({ errcode: (isImage ? 1003 : 1002), errmsg: (isImage ? 'drawImage error' : 'drawRect error'), e });
+            reject && reject({
+                errcode: (isImage ? 1003 : 1002),
+                errmsg: (isImage ? 'drawImage error' : 'drawRect error'),
+                e
+            });
         }
     }
 
     _drawRectToCanvas(x, y, width, height, style, url) {
-        let { fill, border, boxShadow, radius } = style;
-
+        let {
+            fill,
+            border,
+            boxShadow,
+            radius,
+            borderRadius ,
+            backgroundColor,
+            borderColor
+        } = style;
+        if(borderRadius){
+            borderRadius=Util.transferBorderRadius(borderRadius)
+            radius=borderRadius
+            
+            // console.log("borderRadius",borderRadius)
+        }
+if(!url&&backgroundColor) fill=backgroundColor
         this.ctx.save();
         this._drawBoxShadow(boxShadow, (res) => {
             // 真机上填充渐变色时，没有阴影，先画个相等大小的纯色矩形来实现阴影
@@ -292,22 +331,26 @@ class Wxml2Canvas {
 
         var that = this
         if (url) {
+            // console.log("=============1",radius)
             this.ctx.drawImage(url, x, y, width, height)
         } else {
+            // console.log("=============2",radius)
             this._setFill(fill, () => {
+                 // console.log("=============3",radius)
                 try {
                     if (radius) {
+                        console.log("=============x",radius)
                         that.fillRoundRect(that.ctx, x, y, {
-                                width: width,
-                                height: height,
-                                radius: style.radius,
-                                fill
-                            })
-                            // that._drawRoundRectPath(that.ctx, );
-                            // that.cxt.setLineWidth(border.width || 2); //若是给定了值就用给定的值否则给予默认值2  
-                            // cxt.strokeStyle = strokeColor || "#000";
-                            // this.ctx.stroke(x - fixBorder / 2, y - fixBorder / 2, width + fixBorder, height + fixBorder);
-                            // that.ctx.stroke()
+                            width: width,
+                            height: height,
+                            radius: radius,
+                            fill
+                        })
+                        // that._drawRoundRectPath(that.ctx, );
+                        // that.cxt.setLineWidth(border.width || 2); //若是给定了值就用给定的值否则给予默认值2  
+                        // cxt.strokeStyle = strokeColor || "#000";
+                        // this.ctx.stroke(x - fixBorder / 2, y - fixBorder / 2, width + fixBorder, height + fixBorder);
+                        // that.ctx.stroke()
                     } else
                         this.ctx.fillRect(x, y, width, height);
                 } catch (error) {
@@ -317,12 +360,30 @@ class Wxml2Canvas {
             });
         }
 
+ 
+
         this._drawBorder(border, style, (border) => {
-            console.log("border", border)
+            // console.log("======================================border.width", border.width)
             let fixBorder = border.width;
             try {
-
-                that.ctx.strokeRect(x - fixBorder / 2, y - fixBorder / 2, width + fixBorder, height + fixBorder);
+                this.storkRoundRect(that.ctx, x, y, {
+                                          width: width,
+                                          height: height,
+                                          radius: radius,
+                                          borderColor:borderColor
+                                      })
+        //         that.ctx.save();
+        //         that.ctx.translate(x- fixBorder/2 , y- fixBorder/2 );
+        //         //绘制圆角矩形的各个边  
+        //        // console.log("that.ctx",that.ctx)
+        // //        style.width=style.width + fixBorder
+        // //        style.height=style.height   +fixBorder
+        // //     that._drawRoundRectPath(that.ctx, style)
+        // // that.ctx.stroke()
+        // // that.ctx.draw(true)
+        // // that.ctx.restore();
+        //         that.ctx.strokeRect(x - fixBorder / 2, y - fixBorder / 2, width + fixBorder, height +
+        //             fixBorder);
 
             } catch (error) {
                 console.log(error)
@@ -347,7 +408,9 @@ class Wxml2Canvas {
             style.fontSize = this._parseNumber(style.fontSize);
             let fontSize = Math.ceil((style.fontSize || 14) * zoom)
             this.ctx.setTextBaseline('top');
-            this.ctx.font = (`${style.fontWeight ? (style.fontWeight) : 'normal'} ${ fontSize }px ${ style.fontFamily || 'PingFang SC' }`);
+            this.ctx.font = (
+                `${style.fontWeight ? (style.fontWeight) : 'normal'} ${ fontSize }px ${ style.fontFamily || 'PingFang SC' }`
+            );
             this.ctx.setFillStyle(style.color || '#454545');
 
             let text = item.text || '';
@@ -359,8 +422,8 @@ class Wxml2Canvas {
             let whiteSpace = style.whiteSpace || 'wrap';
             let x = 0;
             let y = 0;
-            if(style.textShadow&&style.textShadow.length>0)
-            style.textShadow = Util.transferTextShadow(style.textShadow)
+            if (style.textShadow && style.textShadow.length > 0)
+                style.textShadow = Util.transferTextShadow(style.textShadow)
 
             if (typeof style.padding === 'string') {
                 style.padding = Util.transferPadding(style.padding);
@@ -372,8 +435,9 @@ class Wxml2Canvas {
             if (style.background || style.border) {
                 this._drawTextBackgroud(item, style, textWidth, textHeight, isWxml);
             }
-            if(style.textShadow)
-            this.ctx.setShadow(style.textShadow.offsetX, style.textShadow.offsetY, style.textShadow.blur, style.textShadow.color)
+            if (style.textShadow)
+                this.ctx.setShadow(style.textShadow.offsetX, style.textShadow.offsetY, style.textShadow.blur, style
+                    .textShadow.color)
 
             // 行内文本
             if (type === 'inline-text') {
@@ -384,7 +448,11 @@ class Wxml2Canvas {
                     let length = text.length;
                     let singleLength = Math.floor(length / lineNum);
                     let widthOffset = item.leftOffset ? item.leftOffset - item.originX : 0;
-                    let { endIndex: currentIndex, single, singleWidth } = this._getTextSingleLine(text, width, singleLength, 0, widthOffset)
+                    let {
+                        endIndex: currentIndex,
+                        single,
+                        singleWidth
+                    } = this._getTextSingleLine(text, width, singleLength, 0, widthOffset)
                     x = this._resetTextPositionX(item, style, singleWidth);
                     y = this._resetTextPositionY(item, style);
                     this.ctx.fillText(single, x, y);
@@ -398,7 +466,11 @@ class Wxml2Canvas {
                     textWidth = Math.floor(this.measureWidth(text, style.font || this.ctx.font));
                     item.x = item.originX; // 还原换行后的x
                     for (let i = 0; i < lineNum; i++) {
-                        let { endIndex, single, singleWidth } = this._getTextSingleLine(text, width, singleLength, currentIndex);
+                        let {
+                            endIndex,
+                            single,
+                            singleWidth
+                        } = this._getTextSingleLine(text, width, singleLength, currentIndex);
                         currentIndex = endIndex;
                         if (single) {
                             x = this._resetTextPositionX(item, style, singleWidth, width);
@@ -421,7 +493,7 @@ class Wxml2Canvas {
                         leftOffset = x + lastWidth;
                         topOffset = lineHeight * (lineNum + 1);
                     }
-                    
+
                 } else {
                     x = this._resetTextPositionX(item, style, textWidth, width);
                     y = this._resetTextPositionY(item, style);
@@ -444,7 +516,11 @@ class Wxml2Canvas {
                     }
 
                     for (let i = 0; i < lineNum; i++) {
-                        let { endIndex, single, singleWidth } = this._getTextSingleLine(text, width, singleLength, currentIndex);
+                        let {
+                            endIndex,
+                            single,
+                            singleWidth
+                        } = this._getTextSingleLine(text, width, singleLength, currentIndex);
                         currentIndex = endIndex;
                         x = this._resetTextPositionX(item, style, singleWidth, width);
                         y = this._resetTextPositionY(item, style, i);
@@ -456,7 +532,10 @@ class Wxml2Canvas {
                     let last = text.substring(currentIndex, length);
                     let lastWidth = this.measureWidth(last);
                     if (lastWidth > width) {
-                        let { single, singleWidth } = this._getTextSingleLine(last, width, singleLength);
+                        let {
+                            single,
+                            singleWidth
+                        } = this._getTextSingleLine(last, width, singleLength);
                         lastWidth = singleWidth;
                         last = single.substring(0, single.length - 1) + '...';
                     }
@@ -486,7 +565,11 @@ class Wxml2Canvas {
                 }
             }
         } catch (e) {
-            reject && reject({ errcode: 1004, errmsg: 'drawText error', e: e });
+            reject && reject({
+                errcode: 1004,
+                errmsg: 'drawText error',
+                e: e
+            });
         }
     }
 
@@ -529,12 +612,20 @@ class Wxml2Canvas {
             this._updateProgress(item.progress);
             resolve && resolve();
         } catch (e) {
-            reject && reject({ errcode: (isImage ? 1006 : 1005), errmsg: (isImage ? 'drawCircleImage error' : 'drawCircle error'), e });
+            reject && reject({
+                errcode: (isImage ? 1006 : 1005),
+                errmsg: (isImage ? 'drawCircleImage error' : 'drawCircle error'),
+                e
+            });
         }
     }
 
     _drawCircleToCanvas(x, y, r, style, url) {
-        let { fill, border, boxShadow } = style;
+        let {
+            fill,
+            border,
+            boxShadow
+        } = style;
 
         this.ctx.save();
 
@@ -589,12 +680,20 @@ class Wxml2Canvas {
             this._updateProgress(item.progress);
             resolve && resolve();
         } catch (e) {
-            reject && reject({ errcode: 1007, errmsg: 'drawLine error', e });
+            reject && reject({
+                errcode: 1007,
+                errmsg: 'drawLine error',
+                e
+            });
         }
     }
 
     _drawLineToCanvas(x1, y1, x2, y2, style) {
-        let { stroke, dash, boxShadow } = style;
+        let {
+            stroke,
+            dash,
+            boxShadow
+        } = style;
 
         this.ctx.save();
         if (stroke) {
@@ -634,13 +733,21 @@ class Wxml2Canvas {
             this._updateProgress(item.progress);
             resolve && resolve();
         } catch (e) {
-            reject && reject({ errcode: 1012, errmsg: 'drawRect error', e });
+            reject && reject({
+                errcode: 1012,
+                errmsg: 'drawRect error',
+                e
+            });
         }
     }
 
     // 废弃，合并到_drawRect
     _drawImageToCanvas(url, x, y, width, height, style) {
-        let { fill, border, boxShadow } = style;
+        let {
+            fill,
+            border,
+            boxShadow
+        } = style;
         this.ctx.save();
 
         this._drawBoxShadow(boxShadow);
@@ -656,9 +763,17 @@ class Wxml2Canvas {
     }
     fillRoundRect(cxt, x, y, style) {
 
-        let { fill, width, height, radius } = style
+        let {
+            fill,
+            width,
+            height,
+            radius
+        } = style
+       
         //圆的直径必然要小于矩形的宽高          
-        if (2 * radius > width || 2 * radius > height) { return false; }
+        if (2 * radius > width || 2 * radius > height) {
+            return false;
+        }
 
         cxt.save();
         cxt.translate(x, y);
@@ -666,12 +781,37 @@ class Wxml2Canvas {
         this._drawRoundRectPath(cxt, style);
         cxt.fillStyle = fill || "#000"; //若是给定了值就用给定的值否则给予默认值  
         cxt.fill();
-        // cxt.restore();
+        cxt.restore();
     }
+ storkRoundRect(cxt, x, y, style) {
 
+        let {
+            borderColor,
+            width,
+            height,
+            radius
+        } = style
+       console.log("==borderColor==",borderColor)
+        //圆的直径必然要小于矩形的宽高          
+        if (2 * radius > width || 2 * radius > height) {
+            return false;
+        }
+
+        cxt.save();
+        cxt.translate(x, y);
+        //绘制圆角矩形的各个边  
+        this._drawRoundRectPath(cxt, style);
+        cxt.fillStyle = borderColor || "rgba(0,0,0,0)"; //若是给定了值就用给定的值否则给予默认值  
+        cxt.stroke();
+        cxt.restore();
+    }
     _drawRoundRectPath(cxt, style) {
-        let { width, height, radius } = style
-        console.log("style", style)
+        let {
+            width,
+            height,
+            radius
+        } = style
+        console.log("==============style====================", style)
         cxt.beginPath();
         //从右下角顺时针绘制，弧度从0到1/2PI  
         cxt.arc(width - radius, height - radius, radius, 0, Math.PI / 2);
@@ -707,7 +847,7 @@ class Wxml2Canvas {
 
                 // 上 -> 下
                 let sorted = self._sortListByTop(results[0]);
-                console.log("style", item, sorted)
+                // console.log("style", item, sorted)
                 let count = 0;
                 let progress = 0;
                 Object.keys(sorted).forEach(item => {
@@ -725,7 +865,10 @@ class Wxml2Canvas {
                 });
             });
         } catch (e) {
-            reject && reject({ errcode: 1008, errmsg: 'drawWxml error' });
+            reject && reject({
+                errcode: 1008,
+                errmsg: 'drawWxml error'
+            });
         }
     }
 
@@ -758,6 +901,8 @@ class Wxml2Canvas {
                     function drawWxmlItem() {
                         if (type === 'text') {
                             self._drawWxmlText(sub, resolve2, reject2);
+                        }else if (type === 'rect') {
+                            self._drawWxmlRect(sub, resolve2, reject2);
                         } else if (type === 'image') {
                             self._drawWxmlImage(sub, resolve2, reject2);
                         } else if (type === 'radius-image') {
@@ -788,7 +933,8 @@ class Wxml2Canvas {
 
             // 找出同一top下的最小left和最大right，得到最大的宽度，用于换行
             Object.keys(sorted).forEach(top => {
-                let inlineList = sorted[top].filter(sub => sub.dataset.type && sub.dataset.type.indexOf('inline') > -1);
+                let inlineList = sorted[top].filter(sub => sub.dataset.type && sub.dataset.type.indexOf(
+                    'inline') > -1);
                 inlineList.forEach(sub => {
                     if (sub.left < minLeft) {
                         minLeft = sub.left
@@ -821,10 +967,12 @@ class Wxml2Canvas {
                     list.push(list.splice(position, 1)[0]);
                 }
 
-                let inlineList = list.filter(sub => sub.dataset.type && sub.dataset.type.indexOf('inline') > -1);
+                let inlineList = list.filter(sub => sub.dataset.type && sub.dataset.type.indexOf(
+                    'inline') > -1);
                 let originLeft = (inlineList[0] ? inlineList[0].left : 0);
                 // 换行后和top不相等时，认为是换行了，要清除左边距；当左偏移量大于最大宽度时，也要清除左边距; 当左偏移小于左边距时，也要清除
-                if (Math.abs(topOffset + lastTop - top) > 2 || leftOffset - originLeft - limitLeft >= maxWidth || leftOffset <= originLeft - limitLeft - 2) {
+                if (Math.abs(topOffset + lastTop - top) > 2 || leftOffset - originLeft - limitLeft >=
+                    maxWidth || leftOffset <= originLeft - limitLeft - 2) {
                     leftOffset = 0;
                 }
 
@@ -886,7 +1034,7 @@ class Wxml2Canvas {
 
     _drawWxmlText(sub, resolve, reject) {
         let text = sub.dataset.text || '';
-        console.log("sub.dataset", sub.dataset)
+        // console.log("sub.dataset", sub.dataset)
         if (sub.dataset.maxlength && text.length > sub.dataset.maxlength) {
             text = text.substring(0, sub.dataset.maxlength) + '...';
         }
@@ -917,12 +1065,25 @@ class Wxml2Canvas {
             y: sub.top,
             progress: sub.progress
         }
-
+// console.log("================image sub",sub)
         let res = this._drawRect(imageData, sub, resolve, reject, 'image', 'inline-wxml');
 
         return res
     }
+ _drawWxmlRect(sub, resolve, reject) {
+     // console.log("==========================rect sub",sub)
+        let imageData = {
+            url: sub.dataset.url,
+            x: sub.left,
+            y: sub.top,
+            progress: sub.progress
+        }
+sub.width=sub.width+sub.padding[1]+sub.padding[3]
+sub.height=sub.height+sub.padding[0]+sub.padding[2]
+        let res = this._drawRect(imageData, sub, resolve, reject, false, 'wxml');
 
+        return res
+    }
     _drawWxmlCircleImage(sub, resolve, reject) {
         let imageData = {
             url: sub.dataset.url,
@@ -967,9 +1128,12 @@ class Wxml2Canvas {
                 dataset: true,
                 size: true,
                 rect: true,
-                computedStyle: ['width', 'height', 'font', 'fontSize', 'fontFamily', 'fontWeight', 'fontStyle', 'textAlign',
-                    'color', 'lineHeight', 'border', 'borderColor', 'borderStyle', 'borderWidth', 'verticalAlign', 'boxShadow',
-                    'background', 'backgroundColor', 'backgroundImage', 'backgroundPosition', 'backgroundSize', 'paddingLeft', 'paddingTop',
+                computedStyle: ['width', 'height', 'font', 'fontSize', 'fontFamily', 'fontWeight',
+                    'fontStyle', 'textAlign',
+                    'color', 'lineHeight', 'border', 'borderColor', 'borderRadius','borderStyle',
+                    'borderWidth', 'verticalAlign', 'boxShadow',
+                    'background', 'backgroundColor', 'backgroundImage', 'backgroundPosition',
+                    'backgroundSize', 'paddingLeft', 'paddingTop',
                     'paddingRight', 'paddingBottom', 'textShadow'
                 ]
             }, (res) => {
@@ -978,7 +1142,10 @@ class Wxml2Canvas {
                     self._preloadImage(list).then(result => {
                         resolve(res);
                     }).catch((res) => {
-                        reject && reject({ errcode: 1009, errmsg: 'drawWxml preLoadImage error' });
+                        reject && reject({
+                            errcode: 1009,
+                            errmsg: 'drawWxml preLoadImage error'
+                        });
                     });
                 }
             }).exec();
@@ -986,7 +1153,10 @@ class Wxml2Canvas {
 
         let p2 = new Promise((resolve, reject) => {
             if (!item.limit) {
-                resolve({ top: 0, width: self.width / self.zoom });
+                resolve({
+                    top: 0,
+                    width: self.width / self.zoom
+                });
             }
 
             query.select(`${item.limit}`).fields({
@@ -1173,7 +1343,8 @@ class Wxml2Canvas {
         let lineHeight = this._getLineHeight(style);
         let fontSize = Math.ceil((style.fontSize || 14) * zoom)
 
-        let blockLineHeightFix = (style.dataset && style.dataset.type || '').indexOf('inline') > -1 ? 0 : (lineHeight - fontSize) / 2
+        let blockLineHeightFix = (style.dataset && style.dataset.type || '').indexOf('inline') > -1 ? 0 : (
+            lineHeight - fontSize) / 2
 
         let top = style.padding ? (style.padding[0] || 0) : 0;
 

@@ -416,7 +416,7 @@ export default class Index extends wepy.page {
     toZiXunDetailTap(id) {
       // wx.navigationBarTitleText
       wx.navigateTo({
-        url: '/IndexPages/pages/details?id=' + id
+        url: '/IndexPages/pages/details?id=' + id+'&type=1'
       });
     },
     toZiXunTap: function() {
@@ -429,7 +429,7 @@ export default class Index extends wepy.page {
   this.$parent.globalData.ad_type=ad_type
       if (url != '0') {
         wx.navigateTo({
-          url: '/IndexPages/pages/details?id=' + url+'&type='+ad_type
+          url: '/IndexPages/pages/details?type='+ad_type+'&id=' + url
         });
       }
     },

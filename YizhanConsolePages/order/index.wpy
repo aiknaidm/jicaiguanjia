@@ -533,7 +533,9 @@
                     yizhangou:'wx87bfbcfe887faf4d',
                     jipincang:'wxf48cdd6a7dae8c21',
                     shanghai:'',
-                    qiyegou:'wx7e302245debd521a'
+                    qiyegou:'wx7e302245debd521a',
+                    tongyongban:'wx0d37285e7e208791',
+                    
                 }
                   var that=this
                  wx.navigateToMiniProgram({
