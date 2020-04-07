@@ -48,6 +48,7 @@ margin: auto;
      margin: auto;
      margin-top: 80rpx;
      text-align: center;
+     padding: 40rpx;
      .erweima-bg{
        width:100%;
        height: 100%;
@@ -60,14 +61,28 @@ margin: auto;
        width: 255rpx;
        height: 255rpx;
        margin: auto;
-       margin-top:160rpx ;
+       // margin-top:160rpx ;
        // bottom:285rpx;
        z-index: 10
+     }
+     .title{
+         position: relative;
+         z-index: 10;
+        font-size: 45rpx;
+        margin-top: 80rpx;
+        margin-bottom: 15rpx;
+        font-weight: bold;
+     }
+     .dates{
+         position: relative;
+          z-index: 10;
+         font-size: 24rpx;
+         margin-bottom: 15rpx;
      }
   }
   .text2{
      position: absolute;
-     bottom: 30rpx;
+     bottom: 10rpx;
      font-size: 30rpx;
      color: #fff;
      left: 230rpx;
@@ -90,11 +105,18 @@ margin: auto;
 
         </image>
          <text class="text draw_canvas" data-type="text" data-text="{{text[text_index]}}">{{text[text_index]}}</text>
-         <view class="info draw_canvas" data-type="text">
+         <view class="info draw_canvas" data-type="text" data-text="{{text[text_index]}}">
+          
              <image class="erweima-bg draw_canvas" src="https://lmbge.com/upload/1234/live-2.png" data-type="image" data-url="https://lmbge.com/upload/1234/live-2.png">
              
               </image>
-              <image class="erweima draw_canvas" src="{{erweima}}" data-type="image" data-url="{{erweima}}"></image>
+              <view class="title draw_canvas" data-type="text" data-text="{{zhibo_share_info.name}}">
+                  {{zhibo_share_info.name}}
+              </view>
+              <view class="dates draw_canvas" data-type="text" data-text="{{zhibo_share_info.start_time}}——{{zhibo_share_info.end_time}}">
+                  {{zhibo_share_info.start_time}}——{{zhibo_share_info.end_time}}
+              </view>
+              <image class="erweima draw_canvas" src="{{erweima}}" mode="widthFix " data-type="image" data-url="{{erweima}}"></image>
          </view>
       
        
@@ -119,7 +141,8 @@ export default class newslist extends wepy.page {
     img:"",
     erweima:'',
     text:["来我直播间，看材料了装修， 有问必答！","装修材料怎么选，今晚直播，不见不散","直播选材料，聊一聊，装修建材那些事"],
-    text_index:0
+    text_index:0,
+    zhibo_share_info:{}
   };
   computed = {};
   methods = {
@@ -154,7 +177,7 @@ export default class newslist extends wepy.page {
     });
    newapi.getQRCodeImg({
      suppliers_id:this.suppliers_id,
-     path:'Live/pages/home?roomid='+this.roomid
+     path:'Live/pages/home?roomid='+this.roomid+'&suppliers_id='+this.suppliers_id
 
    }).then(res=>{
      wx.hideLoading();
@@ -206,6 +229,7 @@ export default class newslist extends wepy.page {
       
   }
   async onLoad(option) {
+   this.zhibo_share_info= this.$parent.globalData.zhibo_share_info
    this.roomid=option.roomid?option.roomid:1
    this.suppliers_id=option.suppliers_id?option.suppliers_id:99
    this.text_index=util.randomNum(0,2)

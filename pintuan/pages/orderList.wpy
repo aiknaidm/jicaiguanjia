@@ -94,9 +94,9 @@
       <orderList :orderList.sync="item" :goodsMap.sync="goodsMap[index]" @orderDetail.user="orderDetail" @tuikuan.user="tuikuan">
        
         <view slot="btn" class="price-box price-box2">
-          <view wx:if="{{thisindex==1 && suppliers_id == cur_suppliers_id}}" class="btn topay-btn" @tap="orderDetail({{item}})">去发货</view>
-          <view wx:if="{{thisindex==3 && suppliers_id == cur_suppliers_id && item.tuikuan_status==0}}" class="btn topay-btn" @tap="tuikuan({{item.order_id}},{{index}})">退款</view>
-          <view wx:elif="{{thisindex==3 && suppliers_id == cur_suppliers_id && item.tuikuan_status==1}}" class="btn" >已退款</view>
+          <view wx:if="{{thisindex==2 && suppliers_id == cur_suppliers_id}}" class="btn topay-btn" @tap="orderDetail({{item}})">去发货</view>
+          <view wx:if="{{thisindex==4 && suppliers_id == cur_suppliers_id && item.order_status==14}}" class="btn topay-btn" @tap="tuikuan({{item.order_id}},{{index}})">退款</view>
+          <view wx:elif="{{thisindex==4 && suppliers_id == cur_suppliers_id && item.order_status==16}}" class="btn" >已退款</view>
         </view>
       </orderList>
     </repeat>
@@ -130,11 +130,21 @@
     };
     data = {
       statusType: [
+        '待付款',
         '进行中',
         '待发货',
         '已发货',
         '失败'
       ],
+      status:[
+          'daifukuan',
+          'jinxingzhong',
+          'daifahuo',
+          'yifahuo',
+          'shibai',
+          'daifahuo',
+      ],
+    
       orderList: [],
       goodsMap: [],
       thisindex: '0',
@@ -185,10 +195,17 @@
           });
       },
       async tuikuan(order_id,i) {
-        let data = {order_id};
-        let res = await newapi.pintuan_tuikuan(data);
-        util.showToast("退款成功");
-        this.orderList[i].tuikuan_status=1;
+       // let mRes=  await util.showModalBig("确定要退款吗")
+       //    if (mRes.cancel) {
+       //        return
+       //    }
+        let res = await util.wxpay2(order_id);
+        
+        util.showToast(res.msg);
+        if(res.code==0){
+            this.orderList[i].order_status=16;
+        }
+        
         this.$apply();
       },
       async changeJoinList(suppliers_id, suppliers_name) {
@@ -225,23 +242,7 @@
       suppliers_id = this.cur_suppliers_id
     ) {
       util.showLoading();
-      switch (parseInt(order_status)) {
-        case 0:
-          var type = 'jinxingzhong';
-          break;
-        case 1:
-          var type = 'daifahuo';
-          break;
-        case 2:
-          var type = 'yifahuo';
-          break;
-        case 3:
-          var type = 'shibai';
-          break;
-        default:
-          var type = 'daifahuo';
-          break;
-      }
+     var type=this.status[order_status]
       let data = {
         type,
         page,

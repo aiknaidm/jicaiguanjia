@@ -2,8 +2,9 @@
 </style>
 <template>
   <view>
-    <htmlParser :parserName="name1" :parserContent.sync="articleDetail" wx:if="{{type==1}}"/>
+
     <web-view wx:if="{{type==2}}" src="{{url}}"></web-view>
+        <htmlParser :parserName="name1" :parserContent.sync="articleDetail" wx:else/>
   </view>
 </template>
 
@@ -60,12 +61,12 @@ this.articleDetail.post_title = this.articleDetail.title;
 console.log("option",option)
 // 2 跳转公众号 1跳转页面
     
-this.type=this.$parent.globalData.ad_type
+this.type=option.type
 this.url=this.$parent.globalData.url
 
 console.log(this.type,this.url)
 if(this.type==2) return
-     if (option.type == 'rule'){
+    else if (option.type == 'rule'){
 wx.setNavigationBarTitle({
         title: '平台使用协议'
       });

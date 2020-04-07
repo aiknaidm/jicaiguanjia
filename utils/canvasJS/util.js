@@ -54,7 +54,21 @@ function transferBorder(border = '') {
 
     return res ? obj : null;
 }
+function transferBorderRadius(border = '') {
+    let res = border.match(/(\w+)px/);
+    // console.log("res",res)
+    let obj = {};
 
+    // if (res) {
+    //     obj = {
+    //         width: +res[1],
+    //         style: res[2],
+    //         color: res[3]
+    //     }
+    // }
+
+    return res&&res[1]?res[1]:null;
+}
 
 /**
  * 内边距，依次为上右下左
@@ -113,7 +127,7 @@ function transferTextShadow(shadow = '') {
         color = split[3] || '#ffffff';
     } else {
         split = shadow.split(') ');
-        console.log("split", split)
+        // console.log("split", split)
         color = split[0] + ')'
         shadow = split[1].split('px ');
 
@@ -134,5 +148,6 @@ export default {
     transferColor,
     transferPadding,
     transferBoxShadow,
-    transferTextShadow
+    transferTextShadow,
+    transferBorderRadius
 }

@@ -52,7 +52,8 @@
         padding: 50rpx;
 
         .shop-info-content-img {
-            width: 100%;
+            width: 520rpx;
+            height: 195rpx;
            
         }
 
@@ -140,18 +141,18 @@
 
             </image>
 
-            <view class="shop-info draw_canvas">
-                <image class=" shop-info-logo draw_canvas" src="{{yizhanInfo.img}}" data-type="radius-image" data-url="{{yizhanInfo.img}}"></image>
-                <view class="shop-info-name draw_canvas" data-type="text" data-text="{{yizhanInfo.suppliers_name}}">{{yizhanInfo.suppliers_name}}</view>
-                <view class="shop-info-content draw_canvas" data-type="text" wx:if="{{yizhanInfo.suppliers_id==76}}">
+            <view class="shop-info draw_canvas" data-type="text">
+                <image class=" shop-info-logo draw_canvas" src="{{yizhanInfo.img}}" data-type="image" data-url="{{yizhanInfo.img}}"></image>
+                <view class="shop-info-name draw_canvas" data-type="text" data-text="{{yizhanInfo.suppliers_desc}}">{{yizhanInfo.suppliers_desc}}</view>
+                <view class="shop-info-content draw_canvas" data-type="rect" wx:if="{{yizhanInfo.suppliers_id==76}}">
                     <image class="shop-info-content-img draw_canvas" mode="widthFix" src="https://lmbge.com/upload/1234/shop_img.png"
                         data-type="image" data-url="https://lmbge.com/upload/1234/shop_img.png"></image>
                     <image class="shop-info-content-erweima draw_canvas" src="{{qrurl}}" data-type="image" data-url="{{qrurl}}"></image>
                     <view class="shop-info-content-text draw_canvas" data-type="text" data-text="用微信扫描二维码 进店逛逛吧">用微信扫描二维码
                         进店逛逛吧</view>
                 </view>
-                <view class="shop-info-content2 draw_canvas" data-type="text" wx:else>
-                    <view class="shop-info-content3 draw_canvas" data-type="text">
+                <view class="shop-info-content2 draw_canvas" data-type="rect" wx:else>
+                    <view class="shop-info-content3 draw_canvas" data-type="rect">
                     <image class="shop-info-content-erweima draw_canvas" src="{{qrurl}}" data-type="image" data-url="{{qrurl}}"></image>
                     <view class="shop-info-content-text draw_canvas" data-type="text" data-text="用微信扫描二维码 进店逛逛吧">用微信扫描二维码
                         进店逛逛吧</view>

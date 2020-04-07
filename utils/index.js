@@ -53,6 +53,44 @@ const getStartTime = function() {
 
         return [year, month, day].map(formatNumber).join('-')
     }
+ const wxpay2 = async function(id) {
+     let mRes = await showModalBig('你确定要退款吗');
+     if (mRes.cancel) {
+         return {
+             code: 3,
+             msg: "取消退款"
+         };
+     }
+     showLoading('退款中');
+     try {
+         let data = {
+             desc: "退款",
+             id
+         };
+         let res = await newapi.wxpay2(data);
+         var result = res.data.data;
+         if (res.data.code == 0) {
+              let tuikuanres = await newapi.tuikuan(data);
+             return {
+                 code: 0,
+                 msg: "退款成功"
+             };
+           
+         } else {
+             return {
+                 code: 1,
+                 msg: "退款失败"
+             };
+         }
+     } catch (error) {
+         return {
+             code: 2,
+             msg: "退款失败"
+         };
+ 
+     }
+ }
+ 
     // 提现到零钱
 const wxpay3 = async function() {
     let mRes = await showModalBig('你确定要提现吗');
@@ -360,6 +398,7 @@ export default {
     formatDate1,
     formatNumber,
     wxpay3,
+    wxpay2,
     baozhengjinPay,
     fwfwxpay,
     pay,

@@ -14,7 +14,9 @@ const newapi = {
     fwfpaysuccess: (data) => fetch(`${host_pay}/fwfpaysuccess`, 'GET', data),
     permission_pay: (data) => fetch(`${host_pay}/permission_pay`, 'POST', data),
     permission_paysuccess: (data) => fetch(`${host_pay}/permission_paysuccess`, 'POST', data),
-    wxpay3: (data) => fetch(`${host_pay}/wxpay3`, 'GET', data),
+    wxpay2: (data) => fetch(`${host_pay}/wxpay2`, 'GET', data), //退款
+    wxpay3: (data) => fetch(`${host_pay}/wxpay3`, 'GET', data),//提现
+    tuikuan: (data) => fetch(`${host_pay}/tuikuan`, 'GET', data),//提现
 
     add_form: (data) => fetch(`${host_chk}/add_form`, 'GET', data),
     getUserInfo: (data) => fetch(`${host_chk}/get_user_info`, 'GET', data), //用户信息
@@ -189,6 +191,7 @@ const newapi = {
     pintuan_ddxq: (data) => fetch(`${host_chk}/pintuan_ddxq`, 'GET', data),
     pintuan_fahuo: (data) => fetch(`${host_chk}/pintuan_fahuo`, 'GET', data),
     pintuan_tuikuan: (data) => fetch(`${host_chk}/pintuan_tuikuan`, 'GET', data),
+    
     copy_goods_sel: (data) => fetch(`${host_chk}/copy_goods_sel`, 'POST', data),
     slogan_list: (data) => fetch(`${host_chk}/slogan_list`, 'GET', data),
     group_list: (data) => fetch(`${host_chk}/group_list`, 'POST', data),
@@ -240,7 +243,7 @@ const newapi = {
     zongshuju: (data) => fetch(`${host_chk}/zongshuju`, 'get', data),
     kt_zhibo: (data) => fetch(`${host_chk}/kt_zhibo`, 'get', data),
     zhibo_list: (data) => fetch(`${host_chk}/zhibo_list`, 'get', data),
-
+    zhibo_del:(data)=>fetch(`${host_chk}/zhibo_del`, 'get', data),
 
 
 

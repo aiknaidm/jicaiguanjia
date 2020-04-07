@@ -30,7 +30,7 @@
 <template>
 <view>
    <!-- <view @tap="addLive"> 添加直播</view> -->
-   <view wx:for="{{liveList}}" wx:key="{{index}}" class="live-list">
+   <view wx:for="{{liveList}}" wx:key="{{index}}" class="live-list" @longpress="del({{item.roomid}},{{index}})">
 
 <view>房间号：{{item.roomid}}</view>
 <view>主播名：{{item.anchor_name}}</view>
@@ -77,15 +77,31 @@ export default class newslist extends wepy.page {
   };
   computed = {};
   methods = {
+    async  del(roomid,index){
+          let mRes = await util.showModalBig('你确定要删除吗');
+          if (mRes.cancel) {
+             return
+          }
+          newapi.zhibo_del({roomid}).then(res=>{
+               this.liveList.splice(index,1)
+                this.$apply()
+          })
+        
+      },
       formSubmit(e){
           console.log(e);
           var datas={
                roomid:e.detail.value.name,
-               suppliers_id:this.suppliers_id
+               suppliers_id:this.suppliers_id,
+               is_yizhan:this.is_yizhan
           }
           newapi.kt_zhibo(datas).then(res=>{
 if(res.data.code==0){
+    res.data.data.start_time = util.formatTime(res.data.data.start_time)
+    res.data.data.end_time = util.formatTime(res.data.data.end_time)
  this.liveList.unshift(res.data.data)
+
+ this.$apply()
 }
           })
       },
@@ -94,6 +110,7 @@ if(res.data.code==0){
           this.popupdata.isshowpopup=true
       },
       toShare(item){
+            this.$parent.globalData.zhibo_share_info=item
         wx.navigateTo({ url: 'share_live?roomid='+item.roomid+'&suppliers_id='+this.suppliers_id });
       }
   }
@@ -115,6 +132,7 @@ if(res.data.code==0){
                 wx.navigateBack();
             } else {
                 this.suppliers_id = this.$parent.globalData.suppliers_id
+                this.is_yizhan = this.$parent.globalData.yizhanInfo.is_yizhan;
             }
         this.getLiveList(this.suppliers_id);
   }
