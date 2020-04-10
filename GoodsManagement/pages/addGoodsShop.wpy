@@ -20,7 +20,7 @@
         <search @buttonTap.user="searchTap"></search>
         <form report-submit="true" @submit="submit" @reset="reset">
             <checkbox-group name="suppliers">
-                <view wx:for="{{shopList}}" wx:key="{{index}}" class="shop-list">
+                <view wx:for="{{shopList}}" wx:key="index" class="shop-list">
                     <checkbox checked="{{item.checked}}" value="{{item.suppliers_id}}" />
                     <!-- <view wx:if="{{index==0}}" @tap="getFahuoShop({{item.suppliers_id}},'易站供货')">易站供货</view> -->
                     店铺名：{{item.suppliers_name}}

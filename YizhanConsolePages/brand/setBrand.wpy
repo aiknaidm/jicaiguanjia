@@ -135,7 +135,7 @@
         <view class="banner-add" @tap="addBrand(0)">添加品牌</view>
         <!-- <view class="banner-add" @tap="addBrand(0)">删除品牌</view> -->
         <block>
-            <view class="banner-list" wx:for="{{brands}}" wx:key="{{index}}">
+            <view class="banner-list" wx:for="{{brands}}" wx:key="index">
                 <view class="close">
                     <!-- <text class="iconfont icon-shangla" @tap="moveBrand('shang',{{index}})" wx:if="{{index!=0}}"></text>
                         <text class="iconfont icon-xiala" @tap="moveBrand('xia',{{index}})" wx:if="{{index!=brands.length-1}}"></text> -->

@@ -176,7 +176,7 @@
     </statusTap>
     <view class='checkLists'>
       <!--未审核  -->
-      <view class='check-list' wx:if="{{currentStatu==0}}" wx:for="{{auditlink}}" wx:key="{{index}}">
+      <view class='check-list' wx:if="{{currentStatu==0}}" wx:for="{{auditlink}}" wx:key="index">
         <view class='check-list-img'>
           <image src='{{item.img}}' />
         </view>
@@ -191,7 +191,7 @@
         </view>
       </view>
       <!--待审核  -->
-      <view class='check-list checked-list' wx:if="{{currentStatu==1}}" wx:for="{{addlink}}" wx:key="{{index}}">
+      <view class='check-list checked-list' wx:if="{{currentStatu==1}}" wx:for="{{addlink}}" wx:key="index">
         <view class='check-list-img'>
           <image src='{{item.img}}' />
         </view>
@@ -203,7 +203,7 @@
         </view>
       </view>
       <!--已审核  -->
-      <view class='check-list checked-list' wx:if="{{currentStatu==2}}" wx:for="{{showlink}}" wx:key="{{index}}">
+      <view class='check-list checked-list' wx:if="{{currentStatu==2}}" wx:for="{{showlink}}" wx:key="index">
         <view class='check-list-img'>
           <image src='{{item.img}}' />
         </view>
@@ -248,7 +248,7 @@
         </view>
       </form>
       <view class="list section_gap" @tap.stop="stop">
-        <view wx:for="{{suppliers_list}}" wx:key="{{index}}" @tap.stop="addFriend({{item}})">
+        <view wx:for="{{suppliers_list}}" wx:key="index" @tap.stop="addFriend({{item}})">
           {{item.suppliers_desc}}
         </view>
       </view>

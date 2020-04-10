@@ -63,7 +63,7 @@
            <view wx:if="{{index==1}}" class='shouyi'>￥{{ketx}}</view>
     </view>
   </statusTap>
-  <view class='share-list' wx:for="{{list}}" wx:key="{{index}}" @tap='toShareDetails({{item.id}})' >
+  <view class='share-list' wx:for="{{list}}" wx:key="index" @tap='toShareDetails({{item.id}})' >
     <view>
       <view class='red'>+￥{{item.order_amount}}</view>
       <view>分享所得收益</view>

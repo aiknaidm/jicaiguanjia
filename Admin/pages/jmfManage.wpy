@@ -156,7 +156,7 @@
   <view class='container'>
     <view>
       <search @buttonTap.user="searchTap"></search>
-      <view class='kind' wx:for="{{joinfeeList}}" wx:key="{{index}}" bindlongpress='showActionSheet({{index}},{{item}})'>
+      <view class='kind' wx:for="{{joinfeeList}}" wx:key="index" bindlongpress='showActionSheet({{index}},{{item}})'>
         <view class="kind-1">
           <view class="line1"> {{item.sheng}}-{{item.shi}}-{{item.qu}} </view>
           <view class="line2"> 人口：{{item.renkou}}万人 </view>
@@ -175,7 +175,7 @@
             {{popupdata.shengshiqu}}
           </view>
           <view class="content">
-            <block wx:for="{{popupdata.inputList}}" wx:key="{{index}}">
+            <block wx:for="{{popupdata.inputList}}" wx:key="index">
               <view class='inputList' hidden='{{item.hidden?item.hidden:false}}'>
                 <text wx:if="{{item.name}}">{{item.name?item.name:""}}</text> <input placeholder='{{item.placeholder}}' value="{{item.value?item.value:''}}" type="{{item.type?item.type:'text'}}" name="{{item.inputName}}" />
               </view>

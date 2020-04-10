@@ -188,7 +188,7 @@
       <view class="list">
         <view
           wx:for="{{list}}"
-          wx:key="{{index}}"
+          wx:key="index"
           @tap="changeShopList({{item.id}},{{item.user_nickname}})"
         >{{item.user_nickname}}</view>
       </view>

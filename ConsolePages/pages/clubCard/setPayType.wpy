@@ -102,8 +102,8 @@
             <view class="goods_title">
                 不支持会员卡商品列表
             </view>
-            <view class="a-gooods" wx:for="{{list}}" wx:key="{{index}}">
-                <!-- wx:for="{{list}}" wx:key="{{index}}" -->
+            <view class="a-gooods" wx:for="{{list}}" wx:key="index">
+                <!-- wx:for="{{list}}" wx:key="index" -->
                 <view class="a-goods-conts {{item.active? 'active':''}}" @tap.stop="toGoodDetailsTap({{item.goods_id}},{{item.goods_name}},{{index}})">
                     <view class="goods-info">
                         <view class="img-box">
@@ -129,8 +129,8 @@
             <view class="goods_title">
                 支持会员卡商品列表
             </view>
-            <view class="a-gooods" wx:for="{{list}}" wx:key="{{index}}">
-                <!-- wx:for="{{list}}" wx:key="{{index}}" -->
+            <view class="a-gooods" wx:for="{{list}}" wx:key="index">
+                <!-- wx:for="{{list}}" wx:key="index" -->
                 <view class="a-goods-conts {{item.active? 'active':''}}" @tap.stop="toGoodDetailsTap({{item.goods_id}},{{item.goods_name}},{{index}})">
                     <view class="goods-info">
                         <view class="img-box">

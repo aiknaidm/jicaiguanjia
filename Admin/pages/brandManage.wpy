@@ -144,7 +144,7 @@
         长按编辑
       </view>
       <search @buttonTap.user="searchTap"></search>
-      <view class='kind' wx:for="{{brandList}}" wx:key="{{index}}" bindlongpress='showActionSheet({{index}},{{item}})'>
+      <view class='kind' wx:for="{{brandList}}" wx:key="index" bindlongpress='showActionSheet({{index}},{{item}})'>
         <view class="kind-1">
           <view>
             <image src='{{item.brand_logo}}' /> {{item.brand_name}} </view>
@@ -171,7 +171,7 @@
           <input wx:if="{{!thisBrandId}}" type="text" name="" value="{{thisBrandName}}" bindinput='brandNameIpt' placeholder='请输入品牌名称' />
           <view>上传LOGO</view>
           <view class="cameraBox">
-            <view class="camera" wx:for="{{imgSrc}}" wx:key="{{index}}">
+            <view class="camera" wx:for="{{imgSrc}}" wx:key="index">
               <image src="{{item.img_url}}" />
               <text class="close" @tap='delImg({{index}})'>x</text>
             </view>

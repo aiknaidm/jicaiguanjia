@@ -173,7 +173,7 @@
       <view class="yizhan-list-title">管理的店铺
         <!-- <text class="red">（进货记录）</text> -->
       </view>
-      <view class="yizhan-list-content" wx:for="{{manager_list}}" wx:key="{{index}}">
+      <view class="yizhan-list-content" wx:for="{{manager_list}}" wx:key="index">
         <view>{{item.suppliers_desc}}({{item.is_boss==1?"店主":"管理员"}})</view>
       </view>
     </view>

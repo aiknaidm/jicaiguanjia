@@ -140,7 +140,7 @@
 <template>
   <view class='container'>
     <form report-submit bindsubmit='getFormId'>
-      <view class="checkbox" wx:for="{{items}}" wx:key="{{index}}">
+      <view class="checkbox" wx:for="{{items}}" wx:key="index">
         <view class="checkbox-list-con">
           <view>姓名：{{item.name}}</view>
           <view>电话：{{item.mobile}}</view>

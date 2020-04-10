@@ -155,7 +155,7 @@
     </view>
     <view class='body-bg' wx:if="{{isShowSalesList&&list.length>0}}" bindtap='hiddenSalesList' touchstart='hiddenbg' touchmove="hiddenbg">
       <view class='list'>
-        <view wx:for="{{list}}" wx:key="{{index}}" @tap='changeShopList({{item.id}},{{item.user_nickname}})'>
+        <view wx:for="{{list}}" wx:key="index" @tap='changeShopList({{item.id}},{{item.user_nickname}})'>
           {{item.user_nickname}}
         </view>
       </view>

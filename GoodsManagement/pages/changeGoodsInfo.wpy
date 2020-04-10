@@ -94,7 +94,7 @@ picker {
         <input name="realname" class="input" type="text" value="默认型号" disabled='true'/>
       </view>
     </view>
-    <view class="section" wx:for="{{vip_level}}" wx:key="{{index}}">
+    <view class="section" wx:for="{{vip_level}}" wx:key="index">
       <view class="label" wx:if="{{vip_level==1}}">{{price_text}}</view>
       <view class="label" wx:else>{{index+1}}级{{price_text}}</view>
       <view class="label-right">
@@ -118,7 +118,7 @@ picker {
     </view>
  <block wx:else>
     
-  <view class='goodslist' wx:for="{{properties}}" wx:key="{{index}}">
+  <view class='goodslist' wx:for="{{properties}}" wx:key="index">
     <view class="section">
       <view class="label">
         型号</view>

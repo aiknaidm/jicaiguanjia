@@ -39,6 +39,7 @@
     border: 1px solid #e50012;
     padding: 5rpx 17rpx;
     border-radius: 10rpx;
+    margin-top: 10rpx;
   }
   .pingjia{
 text-align: right;
@@ -57,7 +58,7 @@ border: 1px solid #f0f0f0;
       <orderDetail :orderDetail.sync="orderDetail" :goodsMap.sync="goodsMap" @cancelOrderTap.user="cancelOrderTap" @confirmBtnTap.user="confirmBtnTap">
         <view slot="goodsList">
           <checkbox-group @change="checkboxChange">
-            <block wx:for-items="{{goodsMap}}" wx:key="{{index}}">
+            <block wx:for-items="{{goodsMap}}" wx:key="index">
               <view class="a-goods" data-id="{{item.goods_id}}">
                 <view>
                   <checkbox value="{{item.rec_id}}" wx:if="{{orderDetail.order_status==2&&item.suppliers_id==0&&item.cost_price>0 }}" />
@@ -70,6 +71,7 @@ border: 1px solid #f0f0f0;
                     <view class="goods-name">{{item.goods_name}}</view>
                     <view class="goods-label">{{item.goods_attr}}</view>
                     <view class="goods-label">货号：{{item.goods_sn}}</view>
+                    <view class="goods-label" wx:if="{{item.goods_idh&&item.goods_idh-0>0}}">idh号：{{item.goods_idh}}</view>
                     <view class="goods-label" wx:if="{{item.suppliers_id!=0}}">由{{item.suppliers_name}}发货</view>
                     <view class="goods-label" wx:if="{{item.shipping_status!=0}}">已发货</view>
                     <view class="goods-label" wx:if="{{item.cost_price>0}}">成本价：￥{{item.cost_price}}</view>

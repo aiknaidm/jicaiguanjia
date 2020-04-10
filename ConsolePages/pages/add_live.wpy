@@ -30,7 +30,7 @@
 <template>
 <view>
    <!-- <view @tap="addLive"> 添加直播</view> -->
-   <view wx:for="{{liveList}}" wx:key="{{index}}" class="live-list" @longpress="del({{item.roomid}},{{index}})">
+   <view wx:for="{{liveList}}" wx:key="index" class="live-list" @longpress="del({{item.roomid}},{{index}})">
 
 <view>房间号：{{item.roomid}}</view>
 <view>主播名：{{item.anchor_name}}</view>

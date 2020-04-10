@@ -73,7 +73,7 @@
     <view class='container'>
         <view class="banner-add" @tap="addBanner">添加轮播图</view>
         <block>
-            <view class="banner-list" wx:for="{{banner}}" wx:key="{{index}}" @longpress="delBanner({{index}},{{item}})">
+            <view class="banner-list" wx:for="{{banner}}" wx:key="index" @longpress="delBanner({{index}},{{item}})">
                 <view class="section">
                     <view class="banner-name">
                         显示图片：

@@ -272,7 +272,7 @@
           <navigator url="/ConsolePages/pages/dataManage?suppliers_id={{suppliers_id}}" open-type="navigate" hover-class="none">
             <image src="/images/console/transaction-manage.png" />交易管理
           </navigator>
-          <repeat for="{{tabList}}" wx:key="{{index}}">
+          <repeat for="{{tabList}}" wx:key="index">
             <myList :tabItem="item"></myList>
           </repeat>
         </view>
@@ -300,7 +300,7 @@
           <navigator url="{{}}" open-type="navigate" hover-class="none">
             <image src="/images/console/wdyy.png" />用户管理
           </navigator>
-          <repeat for="{{applicationList}}" wx:key="{{index}}">
+          <repeat for="{{applicationList}}" wx:key="index">
             <!-- 店铺所有者 -->
             <myList :tabItem="item" :suppliers_id.sync="suppliers_id"></myList>
           </repeat>
@@ -312,7 +312,7 @@
         <view class='title'>
           我管理的店铺列表
         </view>
-        <view style='height:100rpx' class="scroll-view-item bc_green" wx:for="{{yizhanlist}}" @tap='changeShop({{item.suppliers_id}})' wx:key="{{index}}">
+        <view style='height:100rpx' class="scroll-view-item bc_green" wx:for="{{yizhanlist}}" @tap='changeShop({{item.suppliers_id}})' wx:key="index">
           {{item.suppliers_desc}}
           <text class='iconfont icon-qiehuan' wx:if="{{item.suppliers_id!==userinfo.suppliers_id}}"></text>
         </view>

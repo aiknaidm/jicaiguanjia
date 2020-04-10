@@ -61,7 +61,7 @@
 </style>
 <template>
     <view class="container">
-        <view class="brand-box" wx:for="{{module}}" wx:key="{{index}}" @tap="toAddBrand({{item.module}})">
+        <view class="brand-box" wx:for="{{module}}" wx:key="index" @tap="toAddBrand({{item.module}})">
             <view class="brand-img">
                 <image src="{{item.brand_img}}" mode="widthFix"></image>
             </view>

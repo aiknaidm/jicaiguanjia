@@ -72,7 +72,7 @@
         <statusTap :statusType.sync="statusType" @statusTap.user="statusTap"></statusTap>
         <view class="message-lists">
             <block wx:if="{{kehuList.length>0}}">
-                <view class="message-list" wx:for="{{kehuList}}" wx:key="{{index}}">
+                <view class="message-list" wx:for="{{kehuList}}" wx:key="index">
                     <view> 客户姓名：{{item.name}}</view>
                     <view> 客户手机：{{item.mobile}}</view>
                     <view> 所在城市：{{item.city}}</view>

@@ -161,7 +161,7 @@
           
         </view> -->
         <view class="yizhan" wx:if="{{suppliers_name.length>0}}" >
-          所属易站：<span wx:for="{{suppliers_name}}" wx:key="{{index}}">
+          所属易站：<span wx:for="{{suppliers_name}}" wx:key="index">
 {{item}}
           </span>
         </view>

@@ -128,7 +128,7 @@
     <view>
       <search @buttonTap.user="searchTap"></search>
        <radio-group @change="radioChange" name="radiobox">
-            <view class='kind' wx:for="{{brandList}}" wx:key="{{index}}" bindlongpress='showActionSheet({{index}},{{item.brand_id}},{{item.brand_name}},{{item.brand_logo}})'>
+            <view class='kind' wx:for="{{brandList}}" wx:key="index" bindlongpress='showActionSheet({{index}},{{item.brand_id}},{{item.brand_name}},{{item.brand_logo}})'>
                 <view class="kind-1">
                 <view> 
                     <radio value="{{item.brand_id}}" checked="{{item.checked}}"  data-catid="{{item.brand_id}}"  />

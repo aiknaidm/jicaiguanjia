@@ -46,7 +46,7 @@ page{
 </style>
 <template>
     <view>
-        <view class="design" wx:for="{{mfsjList}}" wx:key="{{index}}" @tap="itemTap({{index}})">
+        <view class="design" wx:for="{{mfsjList}}" wx:key="index" @tap="itemTap({{index}})">
            <view class="height {{item.active?'active':''}}" >
                 <view >
                 姓名：{{item.name}}

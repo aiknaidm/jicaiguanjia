@@ -349,7 +349,7 @@
         <view class="lianjie" @tap="toSet">设置链接</view>
       </view>
       <view class="cameraBox">
-        <view class="camera" wx:for="{{imgSrc}}" wx:key="{{index}}">
+        <view class="camera" wx:for="{{imgSrc}}" wx:key="index">
           <image src="{{item.img_url}}" />
           <!-- <text class="close" @tap='delImg({{index}})'>x</text> -->
         </view>
@@ -369,7 +369,7 @@
           <view class="cat-title" @tap="xuanze(1)">选择分类
             <image src="/images/enter.png"></image>
           </view>
-          <view class="cat-list" wx:for="{{home_cat.cat1}}" wx:key="{{index}}" @longpress.stop="delCatList({{index}},1)">
+          <view class="cat-list" wx:for="{{home_cat.cat1}}" wx:key="index" @longpress.stop="delCatList({{index}},1)">
             <input value="{{item.sort_order?item.sort_order:50}}" placeholder="排序" @input="changeInput" data-index="{{index}}" data-type="1"></input>
             <view>{{item.cat_name}}</view>
             <image wx:if="{{item.cat_img&&item.cat_img.length>0}}" src="{{item.cat_img}}" @tap="clickImg({{index}},1)"></image>
@@ -384,7 +384,7 @@
           <view class="cat-title" @tap="xuanze(2)">选择分类
             <image src="/images/enter.png"></image>
           </view>
-          <view class="cat-list" wx:for="{{home_cat.cat2}}" wx:key="{{index}}" @longpress.stop="delCatList({{index}},2)" >
+          <view class="cat-list" wx:for="{{home_cat.cat2}}" wx:key="index" @longpress.stop="delCatList({{index}},2)" >
             <input value="{{item.sort_order}}" placeholder="排序" @input="changeInput" data-index="{{index}}" data-type="2"></input>
             <view>{{item.cat_name}}</view>
             <image wx:if="{{item.cat_img&&item.cat_img.length>0}}" src="{{item.cat_img}}" @tap="clickImg({{index}},2)"></image>
@@ -399,7 +399,7 @@
           <view class="cat-title" @tap="xuanze(3)">选择分类
             <image src="/images/enter.png"></image>
           </view>
-          <view class="cat-list" wx:for="{{home_cat.cat3}}" wx:key="{{index}}" @longpress.stop="delCatList({{index}},3)">
+          <view class="cat-list" wx:for="{{home_cat.cat3}}" wx:key="index" @longpress.stop="delCatList({{index}},3)">
             <input value="{{item.sort_order?item.sort_order:50}}" placeholder="排序" @input="changeInput"  data-index="{{index}}" data-type="3"></input>
             <view>{{item.cat_name}}</view>
             <image wx:if="{{item.cat_img&&item.cat_img.length>0}}" src="{{item.cat_img}}" @tap="clickImg({{index}},3)"></image>

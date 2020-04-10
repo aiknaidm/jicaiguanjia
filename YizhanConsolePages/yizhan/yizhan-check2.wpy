@@ -230,7 +230,7 @@
     </statusTap>
     <view class='checkLists'>
       <!--未审核  -->
-      <view class='check-list' wx:if="{{currentStatu==0}}" wx:for="{{shenheList}}" wx:key="{{index}}">
+      <view class='check-list' wx:if="{{currentStatu==0}}" wx:for="{{shenheList}}" wx:key="index">
         <view class='check-list-img'>
           <image src='{{item.img}}' />
         </view>
@@ -248,7 +248,7 @@
         </view>
       </view>
       <!--已审核  -->
-      <view class='check-list checked-list' wx:if="{{currentStatu==1}}" wx:for="{{shenheList}}" wx:key="{{index}}">
+      <view class='check-list checked-list' wx:if="{{currentStatu==1}}" wx:for="{{shenheList}}" wx:key="index">
         <view class='check-list-img'>
           <image src='{{item.img}}' />
         </view>
@@ -300,7 +300,7 @@
     </view>
     <view class='body-bg' wx:if="{{isShowSalesList}}" bindtap='hiddenSalesList' touchstart='hiddenSalesList' touchmove="hiddenSalesList">
       <view class='list'>
-        <view wx:for="{{adminList}}" wx:key="{{index}}" @tap='changeShopList({{item.id}},{{item.user_nickname}})'>
+        <view wx:for="{{adminList}}" wx:key="index" @tap='changeShopList({{item.id}},{{item.user_nickname}})'>
           {{item.user_nickname}}
         </view>
       </view>

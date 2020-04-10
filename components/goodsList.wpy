@@ -440,8 +440,8 @@ overflow: hidden;
     <search @buttonTap.user="searchTap"></search>
     <noorder text="暂无商品" wx:if="{{list.length==0}}"></noorder>
     <view class="goodsList" wx:else>
-      <view class="a-gooods" wx:for="{{list}}" wx:key="{{index}}">
-        <!-- wx:for="{{list}}" wx:key="{{index}}" -->
+      <view class="a-gooods" wx:for="{{list}}" wx:key="index">
+        <!-- wx:for="{{list}}" wx:key="index" -->
         <view class="a-goods-conts " @tap.stop="toChooseTap({{item}})">
           <view class="goods-info">
             <view class="img-box">

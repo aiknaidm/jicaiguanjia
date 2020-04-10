@@ -119,7 +119,7 @@ button {
       </view>
     </view>
     <view class='list'>
-      <view wx:for="{{goodsList}}" wx:key="{{index}}" class="list-label {{cat_id===item.cat_id?'active':''}}" @tap="bindGoodsList({{item}})" @longpress.stop='longtabGoods({{item.cat_name}},{{item.cat_id}},{{index}})'>{{item.cat_name}}
+      <view wx:for="{{goodsList}}" wx:key="index" class="list-label {{cat_id===item.cat_id?'active':''}}" @tap="bindGoodsList({{item}})" @longpress.stop='longtabGoods({{item.cat_name}},{{item.cat_id}},{{index}})'>{{item.cat_name}}
 
       </view>
     </view>

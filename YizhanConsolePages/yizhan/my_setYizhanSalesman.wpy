@@ -201,7 +201,7 @@
    
     <view class='checkLists'>
       <!--已审核  -->
-      <view class='check-list checked-list' wx:for="{{shenheList}}" wx:key="{{index}}">
+      <view class='check-list checked-list' wx:for="{{shenheList}}" wx:key="index">
         <view class='check-list-img'>
           <image src='{{item.avatar}}' />
         </view>
@@ -227,7 +227,7 @@
                                     </navigator> -->
     <view class='body-bg' wx:if="{{isShowSalesList}}" bindtap='hiddenSalesList' touchstart='hiddenSalesList' touchmove="hiddenSalesList">
       <view class='list'>
-        <view wx:for="{{adminList}}" wx:key="{{index}}" @tap='changeShopList({{item.id}},{{item.user_nickname}})'>
+        <view wx:for="{{adminList}}" wx:key="index" @tap='changeShopList({{item.id}},{{item.user_nickname}})'>
           {{item.user_nickname}}
         </view>
       </view>

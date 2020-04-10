@@ -260,7 +260,7 @@
                     <view class="label">
                         <text>*</text>选择分类</view>
                     <view class="label-right" @tap="toCatList">
-                        <view class="cat-list" wx:for="{{catList}}" wx:key="{{index}}">
+                        <view class="cat-list" wx:for="{{catList}}" wx:key="index">
                             {{item.cat_name}}
                         </view>
                     </view>

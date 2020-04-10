@@ -142,7 +142,7 @@
     </view>
     <!-- </form> -->
     
-    <view class="suppliers-list" wx:for="{{suppliers_list}}" wx:key="{{index}}" @tap="addSupplier({{item}})">
+    <view class="suppliers-list" wx:for="{{suppliers_list}}" wx:key="index" @tap="addSupplier({{item}})">
       <view class="supplier-img">
         <image src="{{item.img}}" lazy-load="false" />
       </view>

@@ -267,7 +267,7 @@
     <form report-submit bindsubmit='getFormId'>
         <view class="container">
             <view class="cameraBox">
-                <view class="camera" wx:for="{{imgSrc}}" wx:key="{{index}}">
+                <view class="camera" wx:for="{{imgSrc}}" wx:key="index">
                     <image src="{{item.img_url}}" />
                     <text class="close" @tap='delImg({{index}})'>x</text>
                 </view>

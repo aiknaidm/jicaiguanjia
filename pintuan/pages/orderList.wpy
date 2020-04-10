@@ -83,14 +83,14 @@
             </view>
           </view> -->
     <scroll-view class="scroll-view_H" scroll-x style="width: 100%">
-      <button form-type='submit' @tap="statusTap({{index}})" class="scroll-view-item_H {{index == thisindex ? 'active' : ''}}" wx:for-items="{{statusType}}" wx:key="{{index}}" data-index="{{index}}" data-type="{{statusType[index]}}">
+      <button form-type='submit' @tap="statusTap({{index}})" class="scroll-view-item_H {{index == thisindex ? 'active' : ''}}" wx:for-items="{{statusType}}" wx:key="index" data-index="{{index}}" data-type="{{statusType[index]}}">
                         {{statusType[index]}}
                          <text class='goodsListnum' wx:if="{{goodsListnum[index]}}">{{goodsListnum[index]}}</text>
                         </button>
     </scroll-view>
     <noorder show="2" wx:if="{{orderList.length==0}}" text="暂无订单"></noorder>
     <!-- 订单列表  -->
-    <repeat for="{{orderList}}" wx:key="{{index}}">
+    <repeat for="{{orderList}}" wx:key="index">
       <orderList :orderList.sync="item" :goodsMap.sync="goodsMap[index]" @orderDetail.user="orderDetail" @tuikuan.user="tuikuan">
        
         <view slot="btn" class="price-box price-box2">
@@ -102,7 +102,7 @@
     </repeat>
     <view class='body-bg' bindtap='hiddenJoinList' touchstart='hiddenbg' touchmove="hiddenbg" wx:if="{{ishowjoinlist}}">
       <view class='list'>
-        <view wx:for="{{joinlist}}" wx:key="{{index}}" bindtap='changeJoinList({{item.suppliers_id}},{{item.suppliers_name}})'>
+        <view wx:for="{{joinlist}}" wx:key="index" bindtap='changeJoinList({{item.suppliers_id}},{{item.suppliers_name}})'>
           {{item.suppliers_name}}
         </view>
       </view>

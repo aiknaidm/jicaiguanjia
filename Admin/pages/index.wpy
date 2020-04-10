@@ -142,7 +142,7 @@
     </view>
     <!-- </form> -->
     <view @tap="erweima">生成二维码</view>
-    <view class="suppliers-list" wx:for="{{suppliers_list}}" wx:key="{{index}}" @tap="supplierDetail({{item.suppliers_id}},{{item}},{{index}})">
+    <view class="suppliers-list" wx:for="{{suppliers_list}}" wx:key="index" @tap="supplierDetail({{item.suppliers_id}},{{item}},{{index}})">
       <view class="supplier-img">
         <image src="{{item.img}}" lazy-load="false" />
       </view>

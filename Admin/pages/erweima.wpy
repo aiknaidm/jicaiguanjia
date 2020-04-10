@@ -70,7 +70,7 @@
       <view class='title'>
         请选择店铺
       </view>
-      <view style='height:100rpx' class="scroll-view-item bc_green" wx:for="{{yizhanlist}}" @tap='changeShop({{item.suppliers_id}})' wx:key="{{index}}">
+      <view style='height:100rpx' class="scroll-view-item bc_green" wx:for="{{yizhanlist}}" @tap='changeShop({{item.suppliers_id}})' wx:key="index">
         {{item.suppliers_desc}}
         <text class='iconfont icon-qiehuan'></text>
       </view>

@@ -21,7 +21,7 @@
 <template>
   <view class="container">
     <view class="boss-title">我的店铺</view>
-    <view class="boss-list" wx:for="{{bossList}}" wx:key="{{index}}" @tap="toSuppliersDetail({{item.suppliers_id}})">店铺名：{{item.suppliers_desc}}</view>
+    <view class="boss-list" wx:for="{{bossList}}" wx:key="index" @tap="toSuppliersDetail({{item.suppliers_id}})">店铺名：{{item.suppliers_desc}}</view>
     <view wx:if="{{bossList.length==0}}">你还没有注册店铺！<text @tap="toSuppliersDetail()">点击添加</text></view>
     <view wx:else class="add-boss-list" @tap="toSuppliersDetail()"><text>新店注册</text></view>
   </view>

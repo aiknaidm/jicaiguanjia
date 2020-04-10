@@ -404,6 +404,7 @@
         border: 1px solid #e50012;
         padding: 5rpx 17rpx;
         border-radius: 10rpx;
+          margin-top: 10rpx;
     }
     .fuwufei {
         max-height: 80rpx;
@@ -430,7 +431,7 @@
 </style>
 <template>
      <view class="goods-list">
-          <block wx:for-items="{{goods}}" wx:key="{{index}}">
+          <block wx:for-items="{{goods}}" wx:key="index">
         <view class="a-goods" data-id="{{item.goods_id}}">
             <view class="img-box">
                 <image src="{{item.goods_imgs}}" class="img" />
@@ -440,6 +441,7 @@
                     <view class="goods-name">{{item.goods_name}}</view>
                     <view class="goods-label">{{item.goods_attr}}</view>
                     <view class="goods-label">货号：{{item.goods_sn}}</view>
+                    <view class="goods-label" wx:if="{{item.goods_idh&&item.goods_idh-0>0}}">idh号：{{item.goods_idh}}</view>
                     <block wx:if="{{orderDetail.suppliers_id==76}}">
                         <view class="goods-label" wx:if="{{item.cost_price>0}}">成本价：￥{{item.cost_price}}
                             <view class="goods-btn" data-item="{{item}}" data-index="{{index}}" @tap="setCostPrice">修改成本价</view>

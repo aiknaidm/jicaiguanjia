@@ -163,7 +163,7 @@
     </view>
   </view>
 
-  <view wx:for-items="{{moneyList}}" wx:key="{{index}}" @tap="toDetail({{item}})">
+  <view wx:for-items="{{moneyList}}" wx:key="index" @tap="toDetail({{item}})">
     <view bindtap="moneyDetail" data-id='{{item.id}}' data-userid='{{item.user_id}}'>
       <view class='jy-content'>
 

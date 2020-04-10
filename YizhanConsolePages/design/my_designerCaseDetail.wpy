@@ -293,7 +293,7 @@
           <view class="listOption">风格</view>
         </view>
         <view class='list'>
-          <view wx:for="{{fengge}}" wx:key="{{index}}" class="list-label {{fengge_id==item.id?'active':''}}" @tap="bindfengge({{item.id}})">{{item.name}}
+          <view wx:for="{{fengge}}" wx:key="index" class="list-label {{fengge_id==item.id?'active':''}}" @tap="bindfengge({{item.id}})">{{item.name}}
             <text class='iconfont icon-guanbi' wx:if="{{longdelbrand}}" catchtap='bindBrandDel' data-id="{{item.brand_id}}"></text>
           </view>
         </view>
@@ -303,7 +303,7 @@
           <view class="listOption">户型</view>
         </view>
         <view class='list'>
-          <view wx:for="{{huxing}}" wx:key="{{index}}" class="list-label {{huxing_id===item.id?'active':''}}" @tap="bindhuxing({{item.id}})">{{item.name}}
+          <view wx:for="{{huxing}}" wx:key="index" class="list-label {{huxing_id===item.id?'active':''}}" @tap="bindhuxing({{item.id}})">{{item.name}}
             <text class='iconfont icon-guanbi' wx:if="{{longdelkind}}" catchtap='bindKindDel'></text>
           </view>
         </view>
@@ -313,7 +313,7 @@
           <view class="listOption">面积</view>
         </view>
         <view class='list'>
-          <view wx:for="{{mianji}}" wx:key="{{index}}" class="list-label {{mianji_id===item.id?'active':''}}" @tap="bindmianji({{item.id}})">{{item.name}}
+          <view wx:for="{{mianji}}" wx:key="index" class="list-label {{mianji_id===item.id?'active':''}}" @tap="bindmianji({{item.id}})">{{item.name}}
             <text class='iconfont icon-guanbi' wx:if="{{longdelkind}}" catchtap='bindKindDel'></text>
           </view>
         </view>
@@ -323,7 +323,7 @@
           <view class="listOption">价格</view>
         </view>
         <view class='list'>
-          <view wx:for="{{jiage}}" wx:key="{{index}}" class="list-label {{jiage_id===item.id?'active':''}}" @tap="bindjiage({{item.id}})">{{item.name}}
+          <view wx:for="{{jiage}}" wx:key="index" class="list-label {{jiage_id===item.id?'active':''}}" @tap="bindjiage({{item.id}})">{{item.name}}
             <text class='iconfont icon-guanbi' wx:if="{{longdelkind}}" catchtap='bindKindDel'></text>
           </view>
         </view>

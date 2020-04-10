@@ -65,7 +65,7 @@ checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
 <view class='container'>
   <form report-submit bindsubmit='getFormId'>
     <checkbox-group bindchange="checkboxChange">
-      <label class="checkbox" wx:for="{{items}}" wx:key="{{index}}">
+      <label class="checkbox" wx:for="{{items}}" wx:key="index">
         <checkbox value="{{item.id}}" checked="{{item.checked}}" color="#e50012" />{{item.kefu_name}} 电话：{{item.mobile}}
       </label>
     </checkbox-group>

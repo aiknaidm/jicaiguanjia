@@ -65,7 +65,7 @@ border-radius:10rpx;
     <userInfo :userData.sync="userInfo" @getUserInfo2.user="getUserInfo2"></userInfo>
    
     <view class="info_list">
-      <repeat for="{{tabList}}" wx:key="{{index}}">
+      <repeat for="{{tabList}}" wx:key="index">
         <myList :tabItem="item"></myList>
       </repeat>
       

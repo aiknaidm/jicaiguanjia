@@ -258,7 +258,7 @@
                     </view>
                 </view>
                 <view class="cameraBox">
-                    <view class="camera" wx:for="{{imgSrc}}" wx:key="{{index}}">
+                    <view class="camera" wx:for="{{imgSrc}}" wx:key="index">
                         <image src="{{item.img_url}}" />
                         <text class="close" @tap='delImg({{index}})'>x</text>
                     </view>
@@ -281,7 +281,7 @@
                     请输入新分类名称
                 </view>
                 <view class="cameraBox">
-                    <view class="camera" wx:for="{{imgSrc}}" wx:key="{{index}}">
+                    <view class="camera" wx:for="{{imgSrc}}" wx:key="index">
                         <image src="{{item.img_url}}" />
                         <text class="close" @tap='delImg({{index}})'>x</text>
                     </view>

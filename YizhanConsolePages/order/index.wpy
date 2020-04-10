@@ -335,7 +335,7 @@
 <template>
     <form >
         <view class="container">
-            <block wx:for="{{goodsList}}" wx:key="{{index}}">
+            <block wx:for="{{goodsList}}" wx:key="index">
                 <view class="listBox listBox2 {{isdisable?'disable':''}}">
                     <view class="listOption">商品图</view>
                     <image wx:if="{{item.goods_img==''}}" data-index="{{index}}" src="/images/add_img.png" @tap='chooseImg' mode='aspectFit' />

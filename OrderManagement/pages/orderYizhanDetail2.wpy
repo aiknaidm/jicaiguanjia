@@ -32,7 +32,7 @@
     <form @reset="reset">
       <orderDetail :orderDetail.sync="orderDetail" :goodsMap.sync="goodsMap" @cancelOrderTap.user="cancelOrderTap" @confirmBtnTap.user="confirmBtnTap">
         <view slot="goodsList">
-            <block wx:for-items="{{goodsMap}}" wx:key="{{index}}">
+            <block wx:for-items="{{goodsMap}}" wx:key="index">
               <view class="a-goods" data-id="{{item.goods_id}}">
                 <view class="img-box">
                   <image src="{{item.goods_imgs}}" class="img" />

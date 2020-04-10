@@ -50,7 +50,7 @@
       <!-- <swiper-item @tap="toBannerDetail2">
         <image src="http://wsc.jicaizx.com/images/ad2.jpg?{{date}}" mode="aspectFill"/>
       </swiper-item> -->
-      <block wx:for="{{imgs}}" wx:key="{{index}}">
+      <block wx:for="{{imgs}}" wx:key="index">
         <swiper-item bindtap="toBannerDetail({{item}})">
           <image src="{{item}}" mode="aspectFit"/>
         </swiper-item>

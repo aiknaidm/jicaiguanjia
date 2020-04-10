@@ -49,7 +49,7 @@ border-radius: 50px;
 </style>
 <template>
 <view>
-<view class="case-list" wx:for="{{caseList}}" wx:key="{{index}}" @tap="toDetail({{item.article_id}})">
+<view class="case-list" wx:for="{{caseList}}" wx:key="index" @tap="toDetail({{item.article_id}})">
     <view class="case-list-img">
         <image
           src="{{item.file_url}}"

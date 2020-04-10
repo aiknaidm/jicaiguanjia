@@ -4,7 +4,7 @@
   <view class="container">
     <statusTap :statusType.sync="statusType" @statusTap.user="statusTap" wx:if="{{showSatuts}}"></statusTap>
     <noOrder text="暂无文章" show="2" wx:if="{{newsList.length==0}}"></noOrder>
-    <repeat wx:for="{{newsList}}" wx:key="{{index}}">
+    <repeat wx:for="{{newsList}}" wx:key="index">
       <newsList :newsList.sync="item" @toDetail.user="toDetail"></newsList>
     </repeat>
   </view>

@@ -594,13 +594,13 @@ display: inline-block;
       </view>
   
     <view class='search-title'>
-       <view @tap="statusTap3({{index}})" class="status-label {{index == currentType ? 'active' : ''}} {{isclick?'down':'up'}}" wx:for-items="{{statusType2}}" wx:key="{{index}}" data-index="{{index}}" data-name="{{item.name}}">
+       <view @tap="statusTap3({{index}})" class="status-label {{index == currentType ? 'active' : ''}} {{isclick?'down':'up'}}" wx:for-items="{{statusType2}}" wx:key="index" data-index="{{index}}" data-name="{{item.name}}">
         <view class='border'>{{item}}
           <text class='iconfont icon-jiantou'></text>
         </view>
         <!-- <image rc='/images/sanjiao-active.png' class='img'/> -->
       </view>
-      <view @tap="statusTap({{index}})" class="status-label {{index == currentType ? 'active' : ''}} {{isclick?'down':'up'}}" wx:for-items="{{statusType}}" wx:key="{{index}}" data-index="{{index}}" data-name="{{item.name}}">
+      <view @tap="statusTap({{index}})" class="status-label {{index == currentType ? 'active' : ''}} {{isclick?'down':'up'}}" wx:for-items="{{statusType}}" wx:key="index" data-index="{{index}}" data-name="{{item.name}}">
         <view class='border'>{{item}}
           <text class='iconfont icon-jiantou'></text>
         </view>
@@ -657,8 +657,8 @@ display: inline-block;
     <noorder text="暂无商品" wx:if="{{list.length==0}}"></noorder>
     <view class="goodsList" wx:else>
        
-      <view class="a-gooods" wx:for="{{list}}" wx:key="{{index}}">
-        <!-- wx:for="{{list}}" wx:key="{{index}}" -->
+      <view class="a-gooods" wx:for="{{list}}" wx:key="index">
+        <!-- wx:for="{{list}}" wx:key="index" -->
         <view class="a-goods-conts {{item.active? 'active':''}}" @tap='selectTap({{index}})'>
           <view class="goods-info">
             <view class="img-box" @tap.stop="toGoodDetailsTap({{item.goods_id}},{{item.goods_name}},{{index}})">
@@ -703,21 +703,21 @@ display: inline-block;
     <!--商品分类显示  -->
     <view class='body-bg' bindtap='hiddenFenleiList' touchstart='hiddenbg' touchmove="hiddenbg" wx:if="{{ishowfenlei}}">
       <view class='list'>
-        <view wx:for="{{fenleilist}}" wx:key="{{index}}" bindtap='changeShopList({{item.cat_id}},{{item.cat_name}})'>
+        <view wx:for="{{fenleilist}}" wx:key="index" bindtap='changeShopList({{item.cat_id}},{{item.cat_name}})'>
           {{item.cat_name}}
         </view>
       </view>
     </view>
     <view class='body-bg' bindtap='hiddenJoinList' touchstart='hiddenbg' touchmove="hiddenbg" wx:if="{{ishowjoinlist}}">
       <view class='list'>
-        <view wx:for="{{joinlist}}" wx:key="{{index}}" bindtap='changeJoinList({{item.suppliers_id}},{{item.suppliers_name}})'>
+        <view wx:for="{{joinlist}}" wx:key="index" bindtap='changeJoinList({{item.suppliers_id}},{{item.suppliers_name}})'>
           {{item.suppliers_name}}
         </view>
       </view>
     </view>
     <view class='body-bg' bindtap='hiddenJoinList' touchstart='hiddenbg' touchmove="hiddenbg" wx:if="{{ishowxiajialist}}">
       <view class='list'>
-        <view wx:for="{{xiajialist}}" wx:key="{{index}}" bindtap='changexiajiaList({{index-1}})'>
+        <view wx:for="{{xiajialist}}" wx:key="index" bindtap='changexiajiaList({{index-1}})'>
           {{item}}
         </view>
       </view>

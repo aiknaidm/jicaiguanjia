@@ -153,7 +153,7 @@
         <picker mode="date" value="{{end_time}}" start="{{start_time}}" end="{{now_time}}" bindchange="bindEndTimeChange">{{end_time}}</picker><text class="iconfont icon-xiala"></text>
       </view>
       <view class="status-box">
-        <view @tap="statusTap" class="status-label {{index == currentType ? 'active' : ''}}" wx:for-items="{{statusType}}" wx:key="{{index}}" data-index="{{index}}" data-statu="{{statusKey[index]}}">
+        <view @tap="statusTap" class="status-label {{index == currentType ? 'active' : ''}}" wx:for-items="{{statusType}}" wx:key="index" data-index="{{index}}" data-statu="{{statusKey[index]}}">
           {{item}}
         </view>
       </view>
@@ -190,7 +190,7 @@
     </view>
     <view class="body-bg" wx:if="{{isShowSalesList&&list.length>0}}" bindtap="hiddenSalesList" touchstart="hiddenbg" touchmove="hiddenbg">
       <view class="list">
-        <view wx:for="{{list}}" wx:key="{{index}}" @tap="changeShopList({{item.id}},{{item.user_nickname}})">{{item.user_nickname}}</view>
+        <view wx:for="{{list}}" wx:key="index" @tap="changeShopList({{item.id}},{{item.user_nickname}})">{{item.user_nickname}}</view>
       </view>
     </view>
   </view>

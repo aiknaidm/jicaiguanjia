@@ -146,14 +146,14 @@
       </view>
     </view>
     <view class="status-box">
-      <view @tap="statusTap" class="status-label {{index == currentType ? 'active' : ''}}" wx:for-items="{{statusType}}" wx:key="{{index}}" data-index="{{index}}" data-statu="{{statusKey[index]}}">
+      <view @tap="statusTap" class="status-label {{index == currentType ? 'active' : ''}}" wx:for-items="{{statusType}}" wx:key="index" data-index="{{index}}" data-statu="{{statusKey[index]}}">
         {{item}}
         <view class="{{tabClass[index]}}"></view>
       </view>
     </view>
    <view class='checkLists'>
       <!--未审核  -->
-      <view class='check-list' wx:if="{{currentStatu==0}}" wx:for="{{shenheList}}" wx:key="{{index}}" data-id="{{item.user_id}}" @tap='toCheckDetail'>
+      <view class='check-list' wx:if="{{currentStatu==0}}" wx:for="{{shenheList}}" wx:key="index" data-id="{{item.user_id}}" @tap='toCheckDetail'>
         <view class='check-list-img'>
           <image src='{{item.avatar}}' />
         </view>
@@ -170,7 +170,7 @@
         </view>
       </view>
       <!--已审核  -->
-      <view class='check-list checked-list' wx:if="{{currentStatu==1}}" wx:for="{{shenheList}}" wx:key="{{index}}" @tap='toCheckDetail' data-id="{{item.user_id}}">
+      <view class='check-list checked-list' wx:if="{{currentStatu==1}}" wx:for="{{shenheList}}" wx:key="index" @tap='toCheckDetail' data-id="{{item.user_id}}">
         <view class='check-list-img'>
           <image src='{{item.avatar}}' />
         </view>
@@ -193,7 +193,7 @@
     <!-- <navigator url='/ConsolePages/pages/my_addManagerInfo?type=member&sales_id={{sales_id}}'>    <view class='addmember'>+添加会员</view></navigator> -->
     <view class='body-bg' wx:if="{{isShowSalesList}}" bindtap='hiddenSalesList' touchstart='hiddenbg' touchmove="hiddenbg">
       <view class='list'>
-        <view wx:for="{{adminList}}" wx:key="{{index}}" @tap='changeShopList({{item.id}},{{item.user_nickname}})'>
+        <view wx:for="{{adminList}}" wx:key="index" @tap='changeShopList({{item.id}},{{item.user_nickname}})'>
           {{item.user_nickname}}
         </view>
       </view>

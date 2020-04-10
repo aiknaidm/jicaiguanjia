@@ -128,7 +128,7 @@
     <view>
       <search @buttonTap.user="searchTap"></search>
       <checkbox-group name="checkboxbox">
-        <view class='kind' wx:for="{{usersList}}" wx:key="{{index}}" @tap="checkboxChange({{index}})">
+        <view class='kind' wx:for="{{usersList}}" wx:key="index" @tap="checkboxChange({{index}})">
           <view class="kind-1">
             <view>
               <checkbox value="{{item.user_id}}" checked="{{item.checked}}" />

@@ -46,10 +46,10 @@
 </style>
 <template>
   <view class="message-lists">
-    <view class="message-list" wx:for="{{messageList}}" wx:key="{{index}}">
+    <view class="message-list" wx:for="{{messageList}}" wx:key="index">
       {{item.content}}
       <scroll-view scroll-x class="imgs">
-        <image @tap="showImg({{item.imgs}},{{index}})" src="{{img_item.url}}" wx:for="{{item.imgs}}" wx:key="{{index}}" wx:for-item="img_item" wx:for-index="img_index" />
+        <image @tap="showImg({{item.imgs}},{{index}})" src="{{img_item.url}}" wx:for="{{item.imgs}}" wx:key="index" wx:for-item="img_item" wx:for-index="img_index" />
       </scroll-view>
       <text class="copy" @tap="copyTxt({{item.content}})">复制文字</text>
     </view>

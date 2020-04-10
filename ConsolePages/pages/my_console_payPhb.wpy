@@ -57,7 +57,7 @@
       <picker mode="date" value="{{start_time}}" end="{{now_time}}" bindchange="bindStartTimeChange">{{start_time}}</picker><text class="iconfont icon-xiala"></text><text style="color:#888;padding:0 20rpx;">到</text>
       <picker mode="date" value="{{end_time}}" start="{{datas.start_time}}" end="{{now_time}}" bindchange="bindEndTimeChange">{{end_time}}</picker><text class="iconfont icon-xiala"></text>
     </view>
-    <view class="phb-list" wx:for="{{phbList}}" wx:key="{{index}}" @tap="toCheckDetail({{item.user_id}})">
+    <view class="phb-list" wx:for="{{phbList}}" wx:key="index" @tap="toCheckDetail({{item.user_id}})">
       <!-- <view class="phb-top">充值日期：{{item.pay_time}}</view> -->
       <view class="phb-center">
         <view class="num">{{index+1}}</view>

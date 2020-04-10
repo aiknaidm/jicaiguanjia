@@ -414,7 +414,7 @@
   <view class='container'>
     <view class='body-bg' wx:if="{{isShowSalesList}}" bindtap='hiddenSalesList' touchstart='hiddenbg' touchmove="hiddenbg">
       <view class='list'>
-        <view wx:for="{{adminList}}" wx:key="{{index}}" @tap='changeShopList({{item.id}},{{item.user_nickname}})'>
+        <view wx:for="{{adminList}}" wx:key="index" @tap='changeShopList({{item.id}},{{item.user_nickname}})'>
           {{item.user_nickname}}
         </view>
       </view>
@@ -470,7 +470,7 @@
     <view wx:if="{{datas.keyword&&showtxt}}" class="search-text">
       搜索“{{orderStatus[orderStatusIndex].name}} {{datas.keyword}}”的结果为
     </view>
-    <view wx:for-items="{{goodsMap}}" wx:key="{{index}}" class='list-box'>
+    <view wx:for-items="{{goodsMap}}" wx:key="index" class='list-box'>
       <view @tap="orderDetail({{orderList[index].order_id}})">
         <view wx:if="{{item.length==1}}" class="img-box1">
           <image src="{{item[0].goods_imgs}}" class="goods-img">

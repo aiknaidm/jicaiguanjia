@@ -64,7 +64,7 @@
       </view>
     </view>
     <view class='data-num'>
-      <block wx:for="{{tabList}}" wx:key="{{index}}">
+      <block wx:for="{{tabList}}" wx:key="index">
         <view class="weui_cell">
           <view class="weui_cell_hd">
             {{item.num}}

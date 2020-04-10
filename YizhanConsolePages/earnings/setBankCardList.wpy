@@ -86,11 +86,11 @@ width:300rpx;
 <template>
     <!--pages/qb-bangding/index.wxml-->
     <view class='container'>
-        <!-- <view class='qb-card' wx:for-items="{{card}}" wx:key="{{index}}"  style='top:{{(index*180)}}rpx;background-color:{{item.yinhang=="b"?"#3b5f93":""}};background-color:{{item.yinhang=="c"?"#296b68":""}};background-color:{{item.yinhang=="a"?"#bd3b4a":""}};z-index:{{index}}' >
+        <!-- <view class='qb-card' wx:for-items="{{card}}" wx:key="index"  style='top:{{(index*180)}}rpx;background-color:{{item.yinhang=="b"?"#3b5f93":""}};background-color:{{item.yinhang=="c"?"#296b68":""}};background-color:{{item.yinhang=="a"?"#bd3b4a":""}};z-index:{{index}}' >
         <view class='qb-card-img'>
           <image src='{{item.background}}' class='img2'></image>
         </view>  -->
-        <view class='qb-card' wx:for-items="{{bankCardList}}" wx:key="{{index}}" style='top:{{(index*180)+30}}rpx;background-color:{{item.color}};z-index:{{index}}'>
+        <view class='qb-card' wx:for-items="{{bankCardList}}" wx:key="index" style='top:{{(index*180)+30}}rpx;background-color:{{item.color}};z-index:{{index}}'>
             <view data-id='{{item.id}}' data-userid='{{item.user_id}}' class='qb-card-detail'>
                 <view class='qb-card-img'>
                     <image src='{{item.logo}}' class='img2'></image>
