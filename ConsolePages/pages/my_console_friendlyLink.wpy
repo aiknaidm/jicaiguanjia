@@ -183,8 +183,8 @@
         <view class='check-list-content'>
           <view>店铺名称：{{item.suppliers_desc}}</view>
           <!-- <view @tap.stop='tocallphone({{item.mobile}})'>手机号码：{{item.mobile}}
-                    <text class='iconfont icon-shouji'></text>
-                  </view> -->
+                      <text class='iconfont icon-shouji'></text>
+                    </view> -->
         </view>
         <view class='check-list-btn'>
           <button @tap.stop='showSlider({{item}})'>审核</button>
@@ -203,8 +203,13 @@
         </view>
       </view>
       <!--已审核  -->
+<<<<<<< HEAD
       <view class='check-list checked-list' wx:if="{{currentStatu==2}}" wx:for="{{showlink}}" wx:key="index">
         <view class='check-list-img'>
+=======
+      <view class='check-list checked-list' wx:if="{{currentStatu==2}}" wx:for="{{showlink}}" wx:key="{{index}}">
+        <view class='check-list-img' @tap="showImg({{item.img}})">
+>>>>>>> 3a2ce8abd5e2cf620b5076dbf1ccf1dec1652d5b
           <image src='{{item.img}}' />
         </view>
         <view class='check-list-content'>
@@ -226,12 +231,12 @@
       </view>
     </view>
     <!-- <view wx:if="{{currentStatu<3 && shenheList.length==0}}">
-              <noOrder text="暂无店铺"></noOrder>
-            </view> -->
+                <noOrder text="暂无店铺"></noOrder>
+              </view> -->
     <view class='addmember' @tap="showSuppliersList">+添加友情店铺</view>
     <view class='body-bg' wx:if="{{isShowSlider}}" bindtap='hiddenSuppliersList' touchstart='hiddenSuppliersList' touchmove="hiddenSuppliersList">
-      <form report-submit bindsubmit="toFindSuppliers">
-        <view class="list section_gap" wx:if="{{suppliers_list.length==0}}" @tap.stop="stop">
+      <view class="list section_gap" wx:if="{{suppliers_list.length==0}}" @tap.stop="stop">
+        <form report-submit bindsubmit="toFindSuppliers">
           <view class="body-line">
             <text class="section__title">店铺名</text>
             <view class="body-view">
@@ -245,12 +250,31 @@
             </view>
           </view>
           <button form-type='submit'>搜索</button>
-        </view>
-      </form>
+        </form>
+      </view>
       <view class="list section_gap" @tap.stop="stop">
         <view wx:for="{{suppliers_list}}" wx:key="index" @tap.stop="addFriend({{item}})">
           {{item.suppliers_desc}}
         </view>
+      </view>
+    </view>
+    <view class='body-bg' wx:if="{{isShowEdit}}" bindtap='hiddenEdit' touchstart='hiddenEdit' touchmove="hiddenEdit">
+      <view class="list section_gap" @tap.stop="stop">
+        <form report-submit bindsubmit="EditSubmit">
+          <view class="body-line">
+            <text class="section__title">是否显示</text>
+            <view class="body-view">
+              <switch color="#e50012" checked="{{show_status}}" name="show_status" />
+            </view>
+          </view>
+          <view class="body-line">
+            <text class="section__title">排序</text>
+            <view class="body-view">
+              <input name="show_order" value='{{show_order}}' placeholder='请输入排序编号' />
+            </view>
+          </view>
+          <button form-type='submit'>确定</button>
+        </form>
       </view>
     </view>
   </view>
@@ -279,7 +303,11 @@
       link_img: '',
       shopImg: 0,
       isShowSlider: false,
+      isShowEdit: false,
       suppliers_list: [],
+      link_id: 0,
+      show_status: 0,
+      show_order: 50,
     };
     computed = {};
     components = {
@@ -295,6 +323,16 @@
       hiddenSuppliersList() {
         this.isShowSlider = false;
         this.$apply();
+      },
+      hiddenEdit() {
+        this.isShowEdit = false;
+        this.$apply();
+      },
+      showImg(url) {
+        wx.previewImage({
+          current: url, // 当前显示图片的http链接
+          urls: [url] // 需要预览的图片http链接列表
+        })
       },
       async addFriend(item) {
         let mRes = await util.showModalBig(
@@ -385,6 +423,20 @@
         }
         this.$apply();
       },
+      async EditSubmit(e){
+        var link_id = this.link_id;
+        var show_status = e.detail.value.show_status ? 1 : 0;
+        var show_order = e.detail.value.show_order;
+        await newapi.set_link({
+          link_id,
+          show_status,
+          show_order,
+        });
+        util.showModal("修改成功");
+        this.isShowEdit = false;
+        this.getShenheList(this.suppliers_id);
+        this.$apply();
+      },
       //解除关系提示
       async toJiechu(item) {
         let mRes = await util.showActionSheet(['取消申请']);
@@ -393,8 +445,14 @@
         }
       },
       async toEdit(item) {
-        let mRes = await util.showActionSheet(['解除关系']);
+        let mRes = await util.showActionSheet(['编辑','解除关系']);
         if (mRes.tapIndex == 0) {
+          this.link_id = item.link_id;
+          this.show_status = item.show_status;
+          this.show_order = item.show_order;
+          this.isShowEdit = true;
+          this.$apply();
+        } else if (mRes.tapIndex == 1) {
           this.dodellink(item.link_id);
         }
       },

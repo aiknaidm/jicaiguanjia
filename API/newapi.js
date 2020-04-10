@@ -252,6 +252,7 @@ const newapi = {
     del_link: (data) => fetch(`${host_chk}/del_link`, 'get', data),
     audit_link: (data) => fetch(`${host_chk}/audit_link`, 'get', data),
     suppliers_list2: (data) => fetch(`${host_chk}/suppliers_list2`, 'get', data),
+    set_link: (data) => fetch(`${host_chk}/set_link`, 'get', data),
 
 
 
