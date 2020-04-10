@@ -203,13 +203,10 @@
         </view>
       </view>
       <!--已审核  -->
-<<<<<<< HEAD
+
       <view class='check-list checked-list' wx:if="{{currentStatu==2}}" wx:for="{{showlink}}" wx:key="index">
         <view class='check-list-img'>
-=======
-      <view class='check-list checked-list' wx:if="{{currentStatu==2}}" wx:for="{{showlink}}" wx:key="{{index}}">
-        <view class='check-list-img' @tap="showImg({{item.img}})">
->>>>>>> 3a2ce8abd5e2cf620b5076dbf1ccf1dec1652d5b
+
           <image src='{{item.img}}' />
         </view>
         <view class='check-list-content'>
