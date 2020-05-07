@@ -48,13 +48,17 @@
       position: relative;
       z-index: 10;
       margin-top: 20rpx;
+      overflow: hidden;
+      image{
+          width: 100%;
+      }
   }
   .name{
       font-size:40rpx;
-   
+   margin: 15rpx 0;
       font-weight:bold;
       color:rgba(0,0,0,1);
-      line-height:54px;
+      // line-height:54px;
       text-align: left;
       position: relative;
       z-index: 10;
@@ -102,7 +106,8 @@
 
         </image>
         <image class="haibao draw_canvas" src="https://lmbge.com/upload/1234/haibao_{{text_index}}.png" data-type="image" data-url="https://lmbge.com/upload/1234/haibao_{{text_index}}.png"></image>
-        <image class="cover draw_canvas" src="{{zhibo_share_info.cover_img}}" data-type="image" data-url="{{zhibo_share_info.cover_img}}"></image>
+     
+       <image class="cover draw_canvas" src="{{zhibo_share_info.cover_img}}" data-type="image" data-url="{{zhibo_share_info.cover_img}}" data-mode="aspectFill" mode="aspectFill"></image>
         
         <view class="name draw_canvas" data-type="text" data-text="{{zhibo_share_info.name}}">
             {{zhibo_share_info.name}}

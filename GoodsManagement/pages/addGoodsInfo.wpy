@@ -372,7 +372,7 @@
             <block wx:if='{{goods_attr.length==0}}'>
                 <view class="listBox">
                                     <view class="listOption">商品idh号</view>
-                                  <input class="shownnum" placeholder="商品idh号(不设定则自动生成)" name="goods_idh" type="text" value="{{goods_idh}}" wx:if="{{suppliers_id==99}}"/>
+                                  <input class="shownnum" placeholder="商品idh号(不设定则自动生成)" name="goods_idh" type="text" value="{{goods_idh}}" wx:if="{{suppliers_id==525}}"/>
                                 </view>
                 <view class="listBox" wx:for="{{vip_level}}" wx:key="index">
                     <view class="listOption" wx:if="{{lev==1}}">{{price_text}}</view>
@@ -424,8 +424,8 @@
                             <input class="shownnum" @change="getAttrhyPrice({{index}},{{index2}})" type='digit' value="{{item['attr_price'+(index2==0?'':index2+1)]}}"
                                 name="attr_value{{index2==0?'':index2+1}}" />
                         </view>
-                        <view class="listBox">
-                            <view class="listOption" wx:if="{{suppliers_id==99}}">商品idh号</view>
+                        <view class="listBox" wx:if="{{suppliers_id==525}}">
+                            <view class="listOption" >商品idh号</view>
                             <input class="shownnum" @input='getAttrIdh({{index}})' type='digit' value='{{item.goods_idh}}' />
                         </view>
                         <view class="listBox">

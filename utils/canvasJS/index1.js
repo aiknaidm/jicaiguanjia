@@ -12,7 +12,7 @@ class Wxml2Canvas {
         }
 
         this.element = options.element;
-        this.object = options.obj; 
+        this.object = options.obj;
         this.width = options.width * this.zoom || 0;
         this.height = options.height * this.zoom || 0;
         this.destWidth = options.destWidth || this.width * 2;
