@@ -1,0 +1,298 @@
+<style lang="less">
+  .table {
+    border: 0px solid darkgray;
+  }
+  .tr {
+    display: flex;
+    width: 1460rpx;
+    align-items: center;
+  }
+  .td {
+    width: 160rpx;
+    justify-content: center;
+    text-align: center;
+    height: 80rpx;
+    display: flex;
+    align-items: center;
+    border: 1px solid #f0f0f0;
+  }
+  .bg-w {
+    background: snow;
+  }
+  .bg-g {
+    background: #E6F3F9;
+  }
+  .th {
+    width: 160rpx;
+    justify-content: center;
+    background: #c6e8d9;
+    color: #41b480; // display: flex;
+    height: 120rpx;
+    align-items: center;
+    text-align: center;
+    border: 1px solid #f0f0f0;
+  }
+  .up {
+    font-size: 22rpx; // width: 91rpx;
+    // height: 60rpx;
+    // line-height: 60rpx;
+  }
+  .down {
+    font-size: 40rpx; // width: 91rpx;
+    // height: 50rpx;
+    // line-height: 50rpx;
+  }
+  .sjd {
+    color: #fd647c;
+  }
+  .f-grey {
+    background: #e0e0e0;
+    color: #555;
+  }
+</style>
+<template>
+  <view class='container'>
+    <scroll-view scroll-x>
+      <view class="table">
+        <view class="tr bg-w">
+          <view class="th"></view>
+          <view wx:for="{{day}}" wx:key="index" @tap="morderDay({{index}})" class="th {{index==nowDayIndex ? 'active' : ''}}">
+            <view class="up">
+              <view wx:if="{{index==0}}">今天</view>
+              <view wx:else>{{item.week}}</view>
+            </view>
+            <view class="down">
+              <view>{{item.wook}}</view>
+            </view>
+            <view class="up">
+              <view>{{medical_order[index]}}人</view>
+            </view>
+          </view>
+          <view class="th"></view>
+        </view>
+        <block wx:for="{{list_week}}" wx:key="{{index}}">
+          <view class="tr">
+            <view class="td sjd">{{item.time_text}}</view>
+            <view @tap="to_medical(0,{{index}})" class="td {{item.name1 ? 'bg-g' : ''}} {{item.name1=='休息' ? 'f-grey' : ''}}">{{item.name1}}</view>
+            <view @tap="to_medical(1,{{index}})" class="td {{item.name2 ? 'bg-g' : ''}} {{item.name2=='休息' ? 'f-grey' : ''}}">{{item.name2}}</view>
+            <view @tap="to_medical(2,{{index}})" class="td {{item.name3 ? 'bg-g' : ''}} {{item.name3=='休息' ? 'f-grey' : ''}}">{{item.name3}}</view>
+            <view @tap="to_medical(3,{{index}})" class="td {{item.name4 ? 'bg-g' : ''}} {{item.name4=='休息' ? 'f-grey' : ''}}">{{item.name4}}</view>
+            <view @tap="to_medical(4,{{index}})" class="td {{item.name5 ? 'bg-g' : ''}} {{item.name5=='休息' ? 'f-grey' : ''}}">{{item.name5}}</view>
+            <view @tap="to_medical(5,{{index}})" class="td {{item.name6 ? 'bg-g' : ''}} {{item.name6=='休息' ? 'f-grey' : ''}}">{{item.name6}}</view>
+            <view @tap="to_medical(6,{{index}})" class="td {{item.name7 ? 'bg-g' : ''}} {{item.name7=='休息' ? 'f-grey' : ''}}">{{item.name7}}</view>
+            <view class="td sjd">{{item.time_text}}</view>
+          </view>
+        </block>
+      </view>
+    </scroll-view>
+  </view>
+</template>
+
+<script>
+  var that;
+  import wepy from 'wepy';
+  import statusTap from '../components/statusTap';
+  import newapi from '../API/newapi';
+  import util from '../utils/index';
+  export default class newslist extends wepy.page {
+    config = {
+      navigationBarTitleText: '一周详情'
+    };
+    components = {
+      statusTap
+    };
+    data = {
+      funcArr: [],
+      medical_order: [],
+      week: ["周一", "周二", "周三", "周四", "周五", "周六", "周日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+      day: [],
+      list: [],
+      list_week: [],
+    };
+    computed = {};
+    methods = {
+      async morderDay(i) {
+        let mRes = await util.showModalBig("整日设为休息？");
+        if (mRes.confirm) {
+          util.showLoading();
+          var date = this.day[i].proDate;
+          var suppliers_id = this.suppliers_id;
+          let data = {
+            date,
+            suppliers_id
+          };
+          let res = await newapi.morder_day(data);
+          util.hideLoading();
+          var list_week = this.list[i];
+          list_week.forEach((item, index) => {
+            //this.list[i][j].name = "休息";
+            list_week[index].name = "休息";
+            this.funcArr[i](index, "休息");
+          });
+          this.$apply();
+        }
+      },
+      async to_medical(i, j) {
+        var item = this.list[i][j];
+        if (item.name == null || item.name == '') {
+          let mRes = await util.showModalBig("设为休息？");
+          if (mRes.confirm) {
+            util.showLoading();
+            var suppliers_id = this.suppliers_id;
+            var date = this.day[i].proDate;
+            var week = this.day[i].week;
+            var time_id = item.time_id;
+            var time_text = item.time_text;
+            var is_show = 0;
+            let data = {
+              suppliers_id,
+              date,
+              week,
+              time_id,
+              time_text,
+              order_ids: '',
+              order_items: '',
+              name: '休息',
+              mobile: '',
+              is_show,
+            };
+            let res = await newapi.add_morder(data);
+            util.hideLoading();
+            if (res.data.code == 0) {
+              // util.showModal("成功");
+              this.list[i][j].name = "休息";
+              this.funcArr[i](j, "休息");
+            } else {
+              util.showModal(res.data.message);
+            }
+            this.$apply();
+          }
+        } else if (item.name == '休息') {
+          let mRes = await util.showModalBig("取消休息？");
+          if (mRes.confirm) {
+            util.showLoading();
+            var suppliers_id = this.suppliers_id;
+            var date = this.day[i].proDate;
+            var time_id = item.time_id;
+            var time_text = item.time_text;
+            var is_show = 0;
+            let data = {
+              suppliers_id,
+              date,
+              time_text,
+            };
+            let res = await newapi.del_morder(data);
+            util.hideLoading();
+            if (res.data.code == 0) {
+              // util.showModal("成功");
+              this.list[i][j].name = "";
+              this.funcArr[i](j, "");
+            } else {
+              util.showModal(res.data.message);
+            }
+            this.$apply();
+          }
+        } else {
+          util.showModal(item.name + "\r\n" + item.mobile + "\r\n" + item.order_items + "\r\n" + item.remark);
+        }
+      }
+    };
+    events = {};
+    func1(j, text) {
+      that.list_week[j].name1 = text;
+    }
+    func2(j, text) {
+      that.list_week[j].name2 = text;
+    }
+    func3(j, text) {
+      that.list_week[j].name3 = text;
+    }
+    func4(j, text) {
+      that.list_week[j].name4 = text;
+    }
+    func5(j, text) {
+      that.list_week[j].name5 = text;
+    }
+    func6(j, text) {
+      that.list_week[j].name6 = text;
+    }
+    func7(j, text) {
+      that.list_week[j].name7 = text;
+    }
+    async getProWeekList() {
+      let date = new Date();
+      let dateTime = date.getTime(); // 获取现在的时间
+      let dateDay = date.getDay(); // 获取现在的星期数
+      let oneDayTime = 24 * 60 * 60 * 1000; //一天的时间
+      let wook, proDate;
+      for (let i = 0; i < 7; i++) {
+        let time = dateTime + i * oneDayTime;
+        wook = new Date(time).getDate();
+        proDate = util.formatDate(time / 1000); //date格式转换为yyyy-mm-dd格式的字符串
+        this.day[i] = {
+          week: this.week[dateDay + i - 1],
+          wook: wook,
+          proDate: proDate,
+        }
+        this.$apply();
+      }
+    }
+    async getmedicalOrder() {
+      let data = {
+        //suppliers_id: this.suppliers_id
+      };
+      let res = await newapi.medical_order(data);
+      if (res.data.code == 0) {
+        this.medical_order = res.data.data;
+        this.$apply();
+      } else {
+        util.showToast(res.data.message);
+      }
+    }
+    async getMedicalLog() {
+      util.showLoading();
+      var suppliers_id = this.suppliers_id;
+      let data = {
+        suppliers_id
+      };
+      let res = await newapi.get_week_order(data);
+      util.hideLoading();
+      if (res.data.code == 0) {
+        this.list = res.data.data;
+        var list_week = this.list[0];
+        list_week.forEach((item, index) => {
+          list_week[index].time_text = item.time_text;
+          list_week[index].name1 = item.name == null ? "" : item.name;
+          list_week[index].name2 = this.list[1][index].name == null ? "" : this.list[1][index].name;
+          list_week[index].name3 = this.list[2][index].name == null ? "" : this.list[2][index].name;
+          list_week[index].name4 = this.list[3][index].name == null ? "" : this.list[3][index].name;
+          list_week[index].name5 = this.list[4][index].name == null ? "" : this.list[4][index].name;
+          list_week[index].name6 = this.list[5][index].name == null ? "" : this.list[5][index].name;
+          list_week[index].name7 = this.list[6][index].name == null ? "" : this.list[6][index].name;
+        });
+        this.list_week = list_week;
+        this.$apply();
+      } else {
+        util.showToast(res.data.message);
+      }
+    }
+    setFuncArray() {
+      this.funcArr.push(this.func1)
+      this.funcArr.push(this.func2)
+      this.funcArr.push(this.func3)
+      this.funcArr.push(this.func4)
+      this.funcArr.push(this.func5)
+      this.funcArr.push(this.func6)
+      this.funcArr.push(this.func7)
+    }
+    async onLoad(option) {
+      that = this;
+      // await this.$parent.loginInfo();
+      this.suppliers_id = 516; //this.$parent.globalData.suppliers_id;
+      await this.getProWeekList();
+      await this.getmedicalOrder();
+      this.getMedicalLog();
+      this.setFuncArray();
+    }
+  }
+</script>

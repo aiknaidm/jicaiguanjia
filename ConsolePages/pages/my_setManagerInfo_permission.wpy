@@ -20,11 +20,28 @@
     display: inline-block;
     margin-bottom: 10rpx;
   }
+  .listBox {
+    height: 90rpx;
+    line-height: 90rpx;
+    border-bottom: 1px solid#e4e4e4;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .listBox3 .listOption {
+    width: 300rpx;
+  }
 </style>
 <template>
   <view class='container'>
     <form report-submit="true" @submit="submit" @reset="reset">
       <view>
+            <view class="listBox listBox3">
+                <view class="listOption">设为技师</view>
+                <view>
+                    <switch checked="{{is_techn}}" name="is_techn" bindchange="isTechnChange" color="#e50012" />
+                </view>
+            </view>
         <radio-group class="radio-group">
           选择身份:
           <label class="radio" wx:for="{{items}}" @tap="radioChange({{item}})">
@@ -93,11 +110,25 @@
       permission: [],
       is_zidingyi: false,
       this_permission: [],
-      this_value: ""
+      this_value: "",
+      is_techn: 0
     };
     computed = {};
     components = {};
     methods = {
+      isTechnChange(e){
+        var is_techn = e.detail.value ? 1 : 0;
+        var user_id = this.user_id;
+        var suppliers_id = this.suppliers_id;
+        newapi.techn_manage({
+            is_techn,
+            user_id,
+            suppliers_id
+          }).then(res => {
+            if (res.data.code == 0) util.showToast("设置成功")
+            else util.showToast(res.data.messages)
+          })
+      },
       submit(e) {
         var permission_list = e.detail.value.permission;
         permission_list.toString()
@@ -201,6 +232,8 @@ this.suppliers_id =option.suppliers_id
       })
       this.this_value = res.data.data[0].juese
       this.is_zidingyi = true;
+      this.is_techn = res.data.data[0].is_techn;
+      this.user_id = res.data.data[0].user_id;
       this.permission = this.setPermission(this.permission, this.this_permission)
       this.$apply();
     }

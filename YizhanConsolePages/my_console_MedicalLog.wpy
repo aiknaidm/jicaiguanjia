@@ -1,0 +1,140 @@
+<style lang="less">
+  .share-list {
+    display: flex;
+    justify-content: space-between;
+    font-size: 28rpx;
+    padding: 20rpx 40rpx;
+    border-top: 16rpx solid #f0f0f0;
+    position: relative;
+  }
+  .status-box {
+    height: auto;
+    line-height: 50rpx;
+  }
+  .status-box .status-label {
+    padding: 20rpx 40rpx;
+  }
+  .tixian {
+    text-align: right;
+  }
+  .data {
+    color: #666;
+    font-size: 26rpx;
+  }
+  .iconfont {
+    color: #aaa;
+  }
+  .tixian-btn {
+    background: #e50012;
+    color: #fff;
+    padding: 5rpx 10rpx;
+    font-size: 25rpx;
+    border-radius: 4rpx;
+  }
+  .icon-yitixian {
+    position: absolute;
+    font-size: 110rpx;
+    right: 75rpx;
+    top: 0rpx;
+    z-index: 10;
+  }
+</style>
+<template>
+  <view class='container'>
+    <statusTap :statusType="statusType" :currentType.sync="status" @statusTap.user="statusTap">
+    </statusTap>
+    <view class='share-list' wx:for="{{list}}" wx:key="index">
+      <view>
+        <view>到店时间：{{item.order_date}} {{item.week}} {{item.order_time}}</view>
+        <view>预约项目：{{item.order_items}}</view>
+        <view>预约医师：{{item.techn_name}}</view>
+        <!-- <view>姓名：{{item.name}}</view>
+        <view>年龄：{{item.age}}</view>
+        <view wx:if="{{item.remark}}">备注：{{item.remark}}</view> -->
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import statusTap from '../components/statusTap';
+  import newapi from '../API/newapi';
+  import util from '../utils/index';
+  export default class newslist extends wepy.page {
+    config = {
+      navigationBarTitleText: '预约记录'
+    };
+    components = {
+      statusTap
+    };
+    data = {
+      statusType: ['预约中', '已完成'],
+      statusKey: ['1', '2'],
+      currentType: 0,
+      currentStatu: '0',
+      status: '0',
+      list: [],
+      shareDetail: [],
+      page: 1,
+      isMoreData: true,
+    };
+    computed = {};
+    methods = {
+      statusTap(index) {
+        var curType = index;
+        var curStatu = this.statusKey[index];
+        this.currentType = curType;
+        this.currentStatu = curStatu;
+        this.getMedicalLog(curStatu);
+      },
+    };
+    events = {};
+    async getIndexNewsList(id) {}
+    // 分享列表
+    async getMedicalLog(type = 1) {
+      util.showLoading();
+      let data = {
+        order_status: type,
+        page: this.page,
+        suppliers_id: this.suppliers_id
+      };
+      let res = await newapi.morderlist(data);
+      util.hideLoading();
+      if (res.data.code == 0) {
+        var datas = res.data.data;
+        if (this.page == 1)
+          this.list = datas;
+        else
+          this.list.push(...datas);
+        if (datas.length < 50)
+          this.isMoreData = false;
+        else
+          this.isMoreData = true;
+        this.$apply();
+      } else {
+        util.showToast(res.data.message);
+      }
+    }
+    dataForEach(data) {
+      data.forEach(function(item, index) {
+        if (data[index].add_time)
+          data[index].add_time_t = util.formatTime(item.add_time);
+      });
+      return data;
+    }
+    async onLoad(option) {
+      // await this.$parent.loginInfo();
+      this.suppliers_id = 516; //this.$parent.globalData.suppliers_id;
+      this.page = 1;
+      this.isMoreData = true;
+      this.getMedicalLog();
+    }
+    onReachBottom() {
+      if (this.isMoreData) {
+        this.page = this.page + 1;
+        this.getMedicalLog();
+      }
+    }
+  }
+</script>

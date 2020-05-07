@@ -1,0 +1,396 @@
+<style lang="less">
+  .container {
+    background: transparent;
+    padding-bottom: 100rpx;
+  }
+  .checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 20rpx 40rpx;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .checkbox-list-con {
+    flex: 1;
+  }
+  checkbox {
+    margin-right: 20rpx;
+  }
+  .btn2 {
+    display: flex;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+  }
+  .btn2 button {
+    flex: 1;
+    text-align: center;
+    line-height: 88rpx;
+    background: #e50012;
+    color: #fff;
+    border-radius: 0px;
+  }
+  /* checkbox未选中时样式 */
+  checkbox .wx-checkbox-input {
+    border-radius: 50%;
+    height: 36rpx;
+    width: 36rpx;
+    margin-top: -4rpx;
+    /* 自定义样式.... */
+  }
+  /* checkbox选中时样式 */
+  checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
+    font-family: 'iconfont';
+    content: '\e6c6';
+    font-size: 30rpx;
+    /* background-color: #e02e24; */
+    /* border: 1rpx solid #e02e24; */
+    /* 自定义样式.... */
+  }
+  form {
+    display: block;
+    width: 100%;
+  }
+  .changeTitle {
+    background-color: #fff;
+    border-radius: 10rpx;
+    font-size: 30rpx;
+    overflow: hidden;
+    width: 80%;
+    margin: auto;
+    z-index: 10
+  }
+  .changeTitle.active {
+    position: relative;
+    top: -200rpx;
+  }
+  .inputList {
+    display: flex;
+    align-items: center;
+  }
+  .inputList text {
+    width: 150rpx;
+    padding: 0 10rpx;
+  }
+  .inputList input {
+    flex: 1;
+    border: 1px solid #f0f0f0;
+    margin-bottom: 20rpx;
+    line-height: 88rpx;
+    height: 88rpx;
+    padding: 0 20rpx;
+  }
+  .inputList .picker {
+    flex: 1;
+    width: 100%;
+    border: 1px solid #f0f0f0;
+    margin-bottom: 20rpx;
+    line-height: 88rpx;
+    height: 88rpx;
+    padding: 0 20rpx;
+  }
+  .changeTitle .title {
+    padding: 40rpx;
+    padding-bottom: 0;
+    text-align: center;
+  }
+  .changeTitle .content {
+    padding: 40rpx;
+  }
+  .changeTitle .content textarea {
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    width: 400rpx;
+    padding: 10rpx;
+    height: 120rpx;
+    position: relative;
+    z-index: 1000;
+  }
+  .changeTitle .btn {
+    display: flex;
+    position: relative;
+    z-index: 10;
+  }
+  .changeTitle .btn {
+    background-color: #f0f0f0;
+    text-align: center;
+    line-height: 88rpx;
+  }
+  .changeTitle .btn button {
+    flex: 1;
+    border: 1px solid #ccc;
+    padding: 0;
+    margin: 0;
+    border-radius: 0;
+  }
+  button::after {
+    border: none;
+  }
+  input {
+    outline: none;
+    border: none;
+    list-style: none;
+  }
+  .icon-youcecaidan {
+    color: #e50012;
+  }
+</style>
+<template>
+  <view class='container'>
+    <search @buttonTap.user="searchTap"></search>
+    <statusTap :statusType="statusType" :currentType.sync="currentType" @statusTap.user="statusTap">
+    </statusTap>
+    <view class="checkbox" wx:for="{{items}}" wx:key="{{index}}">
+      <view class="checkbox-list-con">
+        <view>{{item.medical_name}}</view>
+        <view wx:if="{{item.market_price>0}}">金额：{{item.market_price}}</view>
+      </view>
+      <view class="check-list-btn">
+        <text @tap="toEdit({{item}})" class="iconfont icon-youcecaidan"></text>
+      </view>
+    </view>
+    <view class='btn2'>
+      <button @tap='addMedicalInfo' form-type='submit'>添加</button>
+    </view>
+    <popupbox :popupdata.sync="popupdata" @formSubmit.user="formSubmit">
+    </popupbox>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import newapi from '../API/newapi';
+  import util from '../utils/index';
+  import statusTap from '../components/statusTap';
+  import popupbox from '../components/popupbox';
+  import search from '../components/search';
+  export default class my_setMedical extends wepy.page {
+    config = {
+      navigationBarTitleText: '预约项目管理'
+    };
+    data = {
+      statusType: ['可见项目', '隐藏项目'],
+      statusKey: ['0', '1'],
+      currentType: 0,
+      items: [],
+      popupdata: {},
+      medical_id: 0,
+      items1: [{
+          name: '',
+          value: '0',
+          checked: true
+        },
+        {
+          name: '',
+          value: '1'
+        },
+      ],
+      item1: 0,
+      keyword: "",
+      page: 1,
+    };
+    components = {
+      search,
+      statusTap,
+      popupbox
+    };
+    methods = {
+      statusTap(index) {
+        var curType = index;
+        this.currentType = curType;
+        this.items = this.medicalList[this.currentType];
+        this.$apply();
+      },
+      searchTap(val) {
+        this.isMoreData = true;
+        this.keyword = val;
+        this.page = 1;
+        this.medicalList();
+      },
+      retu() {
+        return;
+      },
+      quxiaoChange() {
+        this.popupdata.isshowpopup = false;
+      },
+      radioChange1: function(e) {
+        this.item1 = e.detail.value;
+        this.$apply();
+      },
+      async formSubmit(e) {
+        console.log('picker发送选择改变，携带值为', e);
+        if (e.detail.value.medical_name === '') {
+          util.showModal('内容不能为空');
+          return;
+        }
+        var medical_id = this.medical_id;
+        var medical_name = e.detail.value.medical_name;
+        // var market_price = e.detail.value.market_price;
+        let data = {
+          medical_id,
+          medical_name,
+          // market_price,
+          suppliers_id: this.suppliers_id,
+        };
+        let res = await newapi.medical_add(data);
+        if (res.data.code == 0) {
+          util.showModal('添加成功');
+          this.popupdata.isshowpopup = false;
+          this.medicalList();
+        } else {
+          util.showModal('请求超时');
+        }
+      },
+      // 添加信息
+      addMedicalInfo: function() {
+        this.medical_id = 0;
+        var popupdata = {
+          isshowpopup: true,
+          title: '添加',
+          inputList: [{
+            name: '',
+            placeholder: '请填写名称',
+            inputName: 'medical_name',
+          // }, {
+          //   name: '',
+          //   placeholder: '请填写价格',
+          //   inputName: 'market_price',
+          //   type: 'number',
+          }]
+        };
+        this.popupdata = popupdata;
+        this.$apply();
+      },
+      showpopup: function() {
+        this.addMedicalInfo();
+      },
+      async toEdit(item) {
+        if (this.currentType == 0) {
+          let mRes = await util.showActionSheet([
+            "编辑", "设为隐藏"
+          ]);
+          switch (mRes.tapIndex) {
+            case 0:
+              this.upMedicalInfo(item);
+              break;
+            case 1:
+              this.delMedicalInfo(item.medical_id, 0, 1);
+              break;
+          }
+        } else if (this.currentType == 1) {
+          let mRes = await util.showActionSheet([
+            "设为可见", "删除"
+          ]);
+          switch (mRes.tapIndex) {
+            case 0:
+              this.delMedicalInfo(item.medical_id, 0, 0);
+              break;
+            case 1:
+              this.delMedicalInfo(item.medical_id, 1, 1);
+              break;
+          }
+        }
+      },
+    };
+    events = {};
+    async onLoad(option) {
+      this.isMoreData = true;
+      this.page = 1;
+      this.suppliers_id = 516; //this.$parent.globalData.suppliers_id;
+      var popupdata = {
+        isshowpopup: false,
+        title: '添加',
+        inputList: [{
+          name: '',
+          placeholder: '请填写名称',
+          inputName: 'medical_name',
+        // }, {
+        //   name: '',
+        //   placeholder: '请填写价格',
+        //   inputName: 'market_price',
+        //   type: 'number',
+        }]
+      };
+      this.popupdata = popupdata;
+      this.medicalList();
+    }
+    // 删除信息
+    async delMedicalInfo(medical_id, sure, is_delete) {
+      var t = "确定删除该项目？";
+      if (sure == 0) {
+        if (is_delete == 1) {
+          t = "确定设置为隐藏？";
+        } else {
+          t = "确定设置为可见？";
+        }
+      }
+      let mRes = await util.showModalBig(t);
+      if (mRes.confirm) {
+        var res = await this.delMedical(medical_id, sure, is_delete);
+        if (res.data.code == 0) {
+          util.showModal('成功');
+          this.medicalList();
+        } else {
+          util.showModal(res.data.message);
+        }
+      }
+    }
+    async delMedical(medical_id, sure, is_delete) {
+      let data = {
+        medical_id,
+        is_sure: sure,
+        is_delete
+      };
+      let res = await newapi.medical_del(data);
+      return res
+    }
+    upMedicalInfo(item) {
+      this.medical_id = item.medical_id;
+      this.popupdata.isshowpopup = true;
+      this.popupdata.title = "编辑";
+      this.popupdata.inputList = [{
+        name: '',
+        placeholder: '请填写名称',
+        inputName: 'medical_name',
+        value: item.medical_name
+      // }, {
+      //   name: '',
+      //   placeholder: '请填写价格',
+      //   inputName: 'market_price',
+      //   type: 'number',
+      //   value: item.market_price
+      }];
+      this.$apply();
+    }
+    async medicalList() {
+      util.showLoading();
+      var res = await newapi.medical_list({
+        suppliers_id: this.suppliers_id,
+        keyword: this.keyword,
+        page: this.page
+      });
+      // var datas = res.data.data.data;
+      // if (this.page == 1) {
+      //   this.items = datas;
+      // } else {
+      //   this.items.push(...datas)
+      // }
+      // if (datas.length < 50) {
+      //   this.isMoreData = false;
+      // }
+      this.medicalList[0] = res.data.data.show;
+      this.medicalList[1] = res.data.data.hide;
+      this.items = this.medicalList[this.currentType];
+      util.hideLoading();
+      this.$apply();
+    }s
+    // onReachBottom() {
+    //   if (this.isMoreData) {
+    //     this.page = this.page + 1;
+    //     this.medicalList();
+    //   }
+    // }
+  }
+</script>

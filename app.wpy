@@ -234,6 +234,10 @@
         {
           root: 'YizhanConsolePages',
           pages: [
+            'my_console_Medical',
+            'my_console_MedicalWeek',
+            'my_console_MedicalLog',
+            'my_console_setMedical',
             'order/index',
             'earnings/index',
             'earnings/withdraw',

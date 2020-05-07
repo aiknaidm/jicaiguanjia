@@ -231,7 +231,7 @@
     </view>
     <view class='checkLists'>
       <!--未审核  -->
-      <view class='check-list' wx:if="{{currentStatu==0}}" wx:for="{{shenheList}}" wx:key="index" data-id="{{item.user_id}}" @tap='toCheckDetail'>
+      <view class='check-list' wx:if="{{currentStatu<2}}" wx:for="{{shenheList}}" wx:key="index" data-id="{{item.user_id}}" @tap='toCheckDetail'>
         <view class='check-list-img'>
           <image src='{{item.avatar}}' />
         </view>
@@ -248,7 +248,7 @@
         </view>
       </view>
       <!--已审核  -->
-      <view class='check-list checked-list' wx:if="{{currentStatu==1}}" wx:for="{{shenheList}}" wx:key="index" @tap='toCheckDetail' data-id="{{item.user_id}}">
+      <view class='check-list checked-list' wx:if="{{currentStatu==2}}" wx:for="{{shenheList}}" wx:key="index" @tap='toCheckDetail' data-id="{{item.user_id}}">
         <view class='check-list-img'>
           <image src='{{item.avatar}}' />
         </view>
@@ -289,10 +289,10 @@
       navigationBarTitleText: '会员管理'
     };
     data = {
-      statusType: ['未审核', '已审核'],
-      statusKey: ['0', '1'],
+      statusType: ['未审核', '已审核', '游客'],
+      statusKey: ['1', '2', '0'],
       currentType: 0,
-      currentStatu: '0',
+      currentStatu: '1',
       shenheList: [],
       sales_id: 0,
       isShowSalesList: false,
@@ -338,14 +338,14 @@
         util.submitFormId(e.detail.formId);
       },
       statusTap: function(e) {
-        this.yhData.shenhe = e.currentTarget.dataset.index
-        this.yhData.page = 1
-        this.shenheList = [];
-        this.getShenheList();
         var curType = e.currentTarget.dataset.index;
         var curStatu = e.currentTarget.dataset.statu;
         this.currentType = curType;
         this.currentStatu = curStatu;
+        this.yhData.shenhe = e.currentTarget.dataset.statu
+        this.yhData.page = 1
+        this.shenheList = [];
+        this.getShenheList();
       },
       //需要审核提示
       async toShenhe(e) {
@@ -433,6 +433,7 @@
         else
           this.isMoreData = true;
       }
+      console.log("aaaaaaaaaaa",this.shenheList);
       this.$apply();
     }
     //解除关系
@@ -509,7 +510,7 @@
       this.qurenNum = datas.num1
       this.$apply();
     }
-    initData(suppliers_id, sales_id = 0, shenhe = 0, keyword = '') {
+    initData(suppliers_id, sales_id = 0, shenhe = 1, keyword = '') {
       let data = {
         suppliers_id,
         sales_id,

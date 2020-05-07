@@ -39,8 +39,8 @@ const newapi = {
     banggeList: (data) => fetch(`${host_chk}/shifu_list`, 'GET', data),
     addBangge: (data) => fetch(`${host_chk}/add_shifu`, 'GET', data),
     delBangge: (data) => fetch(`${host_chk}/del_shifu`, 'GET', data),
-    // yhlb: (data) => fetch(`${host_chk}/yhlb`, 'GET', data), //会员管理
-    yhlb: (data) => fetch(`${host_chk}/yhlb_new`, 'GET', data),
+    yhlb: (data) => fetch(`${host_chk}/yhlb`, 'GET', data), //会员管理
+    // oyhlb: (data) => fetch(`${host_chk}/yhlb_new`, 'GET', data),
     jcgx: (data) => fetch(`${host_chk}/jcgx`, 'GET', data),
     yhsh: (data) => fetch(`${host_chk}/yhsh`, 'GET', data),
     find_users: (data) => fetch(`${host_chk}/find_users`, 'GET', data),
@@ -253,6 +253,17 @@ const newapi = {
     audit_link: (data) => fetch(`${host_chk}/audit_link`, 'get', data),
     suppliers_list2: (data) => fetch(`${host_chk}/suppliers_list2`, 'get', data),
     set_link: (data) => fetch(`${host_chk}/set_link`, 'get', data),
+    techn_manage: (data) => fetch(`${host_chk}/techn_manage`, 'get', data),
+    medical_add: (data) => fetch(`${host_chk}/medical_manage`, 'get', data),
+    medical_del: (data) => fetch(`${host_chk}/medical_del`, 'get', data),
+    medical_list: (data) => fetch(`${host_chk}/medical_list`, 'get', data),
+    medical_order: (data) => fetch(`${host_chk}/medical_order`, 'get', data),
+    morder_list: (data) => fetch(`${host_chk}/morder_list`, 'get', data),
+    get_week_order: (data) => fetch(`${host_chk}/get_week_order`, 'get', data),
+    add_morder: (data) => fetch(`${host_chk}/add_morder`, 'post', data),
+    morder_day: (data) => fetch(`${host_chk}/morder_day`, 'get', data),
+    del_morder: (data) => fetch(`${host_chk}/del_morder`, 'get', data),
+    morderlist: (data) => fetch(`${host_chk}/morderlist`, 'get', data),
 
 
 

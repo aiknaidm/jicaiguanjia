@@ -1,0 +1,250 @@
+<style lang="less">
+  page {
+    background-color: #fff;
+  }
+  .gs_sign_content {
+    padding: 20rpx;
+  }
+  .gs_week {
+    overflow: hidden;
+  }
+  .gs_wook {
+    display: flex;
+    text-align: center;
+    position: relative;
+    box-sizing: border-box;
+    color: #333;
+  }
+  .gs_wook_content {
+    margin: 0 7rpx;
+    background-color: #f0f0f0;
+    border-radius: 8px 8px 8px 8px;
+  }
+  .up {
+    font-size: 22rpx;
+    width: 91rpx;
+    height: 60rpx;
+    line-height: 60rpx;
+  }
+  .down {
+    font-size: 40rpx;
+    width: 91rpx;
+    height: 50rpx;
+    line-height: 50rpx;
+  }
+  .gs_sign_box {
+    background-color: #fff;
+    margin: 0 auto;
+    position: relative;
+    border-radius: 15rpx;
+  }
+  .active {
+    color: #fff;
+    background: linear-gradient(0deg, #69DC75, #41B480); //background: linear-gradient(80deg, #ff5f5c, #fb8767);
+  }
+  .title-list {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+  }
+  .title {
+    margin: 2rpx 30rpx;
+    height: 80rpx;
+    line-height: 80rpx;
+    font-size: 36rpx;
+    font-weight: bold;
+  }
+  .title-right {
+    height: 60rpx;
+    line-height: 60rpx;
+    padding: 0 20rpx;
+    margin: 10rpx 30rpx;
+    border-radius: 20px;
+    border: 1px solid #f0f0f0;
+    font-size: 26rpx;
+  }
+  .data-list {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    margin-top: 25rpx;
+    margin-bottom: 25rpx;
+  }
+  .data-item {
+    box-shadow: 0px 3px 3px 1px #ddd;
+    border-radius: 8px;
+    padding: 20rpx;
+    line-height: 50rpx;
+  }
+  .data-item-up {
+    font-size: 28rpx;
+  }
+  .data-item-down {
+    font-size: 40rpx;
+  }
+  .morder-list {
+    display: flex;
+    justify-content: space-between;
+    padding: 16rpx 30rpx;
+  }
+  .morder-list-left {
+    width: 20%;
+    color: #fff;
+    background: linear-gradient(0deg, #69DC75, #41B480);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .morder-list-right {
+    width: 80%;
+    padding: 18rpx;
+    font-size: 28rpx;
+    color: #41B480;
+    background-color: #eeeeee;
+    border-radius: 8px;
+  }
+</style>
+<template>
+  <view class='container'>
+    <view class="title">预约客户</view>
+    <view class="data-list">
+      <view class="data-item">
+        <view class="data-item-up">今日预约客户</view>
+        <view class="data-item-down">{{medical_order[0]}}人</view>
+      </view>
+      <view class="data-item">
+        <view class="data-item-up">明日预约客户</view>
+        <view class="data-item-down">{{medical_order[1]}}人</view>
+      </view>
+      <view class="data-item">
+        <view class="data-item-up">累计预约客户</view>
+        <view class="data-item-down">{{medical_order[7]}}人</view>
+      </view>
+    </view>
+    <view class="title-list">
+      <view class="title">预约列表</view>
+      <view class="title-right" @tap.stop="gotoWeek">一周详情</view>
+    </view>
+    <view class='gs_sign_box'>
+      <view class='gs_sign_content'>
+        <view class='gs_wook'>
+          <view wx:for="{{day}}" wx:key="index" @tap="chooseDay({{index}})" class="gs_wook_content {{index==nowDayIndex ? 'active' : ''}}">
+            <view class="up">
+              <view wx:if="{{index==0}}">今天</view>
+              <view wx:else>{{item.week}}</view>
+            </view>
+            <view class="down">
+              <view>{{item.wook}}</view>
+            </view>
+            <view class="up">
+              <view>{{medical_order[index]}}人</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class='morder-list' wx:if="{{morder_list.length==0}}">
+      还没有订单呢，快邀请客户预约吧！
+    </view>
+    <view class='morder-list' wx:for="{{morder_list}}" wx:key="{{index}}">
+      <view class='morder-list-left'>{{item.order_time}}</view>
+      <view class='morder-list-right'>
+        <view>用户：{{item.name}}</view>
+        <view wx:if="{{item.mobile}}" @tap='callTel({{item.mobile}})'>电话：{{item.mobile}}</view>
+        <view>{{item.order_items}}</view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import statusTap from '../components/statusTap';
+  import newapi from '../API/newapi';
+  import util from '../utils/index';
+  export default class newslist extends wepy.page {
+    config = {
+      navigationBarTitleText: '预约'
+    };
+    components = {};
+    data = {
+      medical_order: [],
+      nowDayIndex: 0,
+      week: ["周一", "周二", "周三", "周四", "周五", "周六", "周日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+      day: [],
+      morder_list: [],
+    };
+    computed = {};
+    methods = {
+      gotoWeek() {
+        wx.navigateTo({
+          url: 'my_console_MedicalWeek'
+        });
+      },
+      chooseDay(i) {
+        this.nowDayIndex = i;
+        this.getmorderList();
+        this.$apply();
+      },
+      callTel(phoneNumber) {
+        wx.makePhoneCall({
+          phoneNumber
+        });
+      },
+    };
+    events = {};
+    async getProWeekList() {
+      let date = new Date();
+      let dateTime = date.getTime(); // 获取现在的时间
+      let dateDay = date.getDay(); // 获取现在的星期数
+      let oneDayTime = 24 * 60 * 60 * 1000; //一天的时间
+      let wook, proDate;
+      for (let i = 0; i < 7; i++) {
+        let time = dateTime + i * oneDayTime;
+        wook = new Date(time).getDate();
+        proDate = util.formatDate(time / 1000); //date格式转换为yyyy-mm-dd格式的字符串
+        this.day[i] = {
+          week: this.week[dateDay + i - 1],
+          wook: wook,
+          proDate: proDate,
+        }
+        this.$apply();
+      }
+    }
+    async getmedicalOrder() {
+      let data = {
+        //suppliers_id: this.suppliers_id
+      };
+      let res = await newapi.medical_order(data);
+      if (res.data.code == 0) {
+        this.medical_order = res.data.data;
+        this.$apply();
+      } else {
+        util.showToast(res.data.message);
+      }
+    }
+    async getmorderList() {
+      var date = this.day[this.nowDayIndex].proDate;
+      let data = {
+        date
+      };
+      let res = await newapi.morder_list(data);
+      if (res.data.code == 0) {
+        this.morder_list = res.data.data;
+        this.$apply();
+      } else {
+        util.showToast(res.data.message);
+      }
+    }
+    async onLoad(option) {
+      await this.$parent.loginInfo();
+      this.suppliers_id = this.$parent.globalData.suppliers_id;
+      util.showLoading();
+      await this.getProWeekList();
+      await this.getmedicalOrder();
+      await this.getmorderList();
+      util.hideLoading();
+    }
+  }
+</script>
