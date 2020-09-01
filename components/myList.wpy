@@ -64,7 +64,7 @@ button {
 </style>
 <template>
 
-  <view class="weui_cell" @tap="toUrl({{tabItem.url}},{{tabItem.type}})" tabItem="列表内容">
+  <view class="weui_cell" @tap="toUrl({{tabItem.url}},{{tabItem.type}},{{tabItem.appId}})" tabItem="列表内容">
     <view class="weui_cell_hd" style="background:{{tabItem.bgcolor}}" wx:if="{{tabItem.icon&&tabItem.icon!=''}}">
       <image @tap="dingyue" src="{{tabItem.icon}}" />
      
@@ -104,10 +104,11 @@ export default class myList extends wepy.component {
          }
       })
     },
-    toUrl(url, type) {
+    toUrl(url, type,appId) {
       if (type && type == 1) {
+        
         wx.navigateToMiniProgram({
-          appId: this.tabItem.appId,
+          appId: appId,
           path: url,
           // envVersion: 'release',
           envVersion: 'develop',

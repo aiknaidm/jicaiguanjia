@@ -209,30 +209,32 @@ var self=this
                 this.is_join = this.yizhanInfo.is_join;
                 var appId = "";
                 var path = "";
-
+                   path = '/pages/home?suppliers_id=' + this.$parent.globalData.suppliers_id;
+                // 跳转装饰材料一站购
                 if (this.is_yizhan == 1 || this.is_join == 1) {
                     appId = "wx87bfbcfe887faf4d";
-                    path = '/pages/home?suppliers_id=' + this.$parent.globalData.suppliers_id;
+                 
 
-                } else if (this.$parent.globalData.suppliers_id == 525) {
+                } 
+                // 上海
+                else if (this.$parent.globalData.suppliers_id == 525) {
                     appId = "wxedc203036acbc9e4";
 
-                } else if (this.$parent.globalData.suppliers_id == 847) {
+                } 
+                // 吉品仓
+                else if (this.$parent.globalData.suppliers_id == 847) {
                     appId = "wxf48cdd6a7dae8c21";
 
-                } else if (this.$parent.globalData.suppliers_id == 76) {
+                } 
+                // 吉采易站批发版 
+                else if (this.$parent.globalData.suppliers_id == 76) {
                     appId = "wx7e302245debd521a";
 
-                } else {
+                } 
+                // 吉采一站购（）
+                else {
                     appId = "wx0d37285e7e208791";
-                    path = '/pages/home?suppliers_id=' + this.$parent.globalData.suppliers_id;
-
-                    // path = '/Shop/pages/index?suppliers_id=' +
-                    //   this.$parent.globalData.suppliers_id +
-                    //   '&sales_id=' +
-                    //   this.sales_id +
-                    //   '&sales_name=' +
-                    //   this.yizhanInfo.user_nickname;
+                    path = '/Shop/pages/index/index?suppliers_id=' + this.$parent.globalData.suppliers_id;
                 }
                 wx.navigateToMiniProgram({
                     appId,
@@ -275,16 +277,15 @@ var self=this
             this.yizhanInfo = yizhanInfo;
             var is_yizhan = yizhanInfo.is_yizhan;
             var is_join = yizhanInfo.is_join;
-            console.log("isyizhan", is_yizhan, "isjion", is_join)
-            var path;
+           
+            var path="";
+
             if (is_yizhan == 1) {
-                path = '/pages/home?suppliers_id=' + suppliers_id + '&share_suppliers_id=' + suppliers_id +
+                path = 'suppliers_id=' + suppliers_id + '&share_suppliers_id=' + suppliers_id +
                     '&share_user_id=' + userInfo.user_id + '&sales_id=' + userInfo.user_id;
             } else if (is_join == 1) {
-                path = '/pages/home?suppliers_id=' + yizhanInfo.yizhan_suppliers_id + '&share_suppliers_id=' +
+                path = 'suppliers_id=' + yizhanInfo.yizhan_suppliers_id + '&share_suppliers_id=' +
                     suppliers_id + '&share_user_id=' + userInfo.user_id + '&sales_id=' + userInfo.user_id;
-            } else if (suppliers_id == 847) {
-                path = '/pages/home';
             } else {
                 // path = '/Shop/pages/index?suppliers_id=' +
                 //   suppliers_id +
@@ -292,8 +293,17 @@ var self=this
                 //   this.sales_id +
                 //   '&sales_name=' +
                 //   this.sales_name;
-                path = '/pages/home?suppliers_id=' + suppliers_id + '&share_suppliers_id=' + suppliers_id +
+                path = 'suppliers_id=' + suppliers_id + '&share_suppliers_id=' + suppliers_id +
                     '&share_user_id=' + userInfo.user_id + '&sales_id=' + userInfo.user_id;
+            }
+         
+            if (this.is_yizhan == 1 || this.is_join == 1||this.$parent.globalData.suppliers_id == 525||this.$parent.globalData.suppliers_id == 847||this.$parent.globalData.suppliers_id == 76) {
+              path = '/pages/home?'+path;     
+            } 
+               // 跳转吉采一站购（吉采易站通用版）
+            else {            
+                path = '/Shop/pages/index/index?' + path;
+
             }
             let data = {
                 path,
@@ -313,6 +323,7 @@ var self=this
             var height = wx.getSystemInfoSync().windowHeight;
             var width = wx.getSystemInfoSync().windowWidth;
             this.initImg()
+            util.hideLoading()
             this.$apply()
         }
         initImg() {

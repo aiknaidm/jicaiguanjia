@@ -889,10 +889,10 @@
             this.suppliers_id = yizhanInfo.suppliers_id;
             // shop_appid
             var appId = ''
-            var path = ''
+            var  path = '/pages/home?suppliers_id=' + yizhanInfo.suppliers_id;
             if (yizhanInfo.is_yizhan == 1 || yizhanInfo.is_join == 1) {
                 appId = "wx87bfbcfe887faf4d";
-                path = '/pages/home?suppliers_id=' + yizhanInfo.suppliers_id;
+              
             } else if (yizhanInfo.suppliers_id == 525) {
                 appId = "wxedc203036acbc9e4";
             } else if (yizhanInfo.suppliers_id == 847) {
@@ -902,7 +902,7 @@
 
             } else {
                 appId = "wx0d37285e7e208791";
-                path = '/pages/home?suppliers_id=' + yizhanInfo.suppliers_id;
+                path = 'Shop/pages/index/index?suppliers_id=' + yizhanInfo.suppliers_id;
                 // path = '/Shop/pages/index?suppliers_id=' +
                 //   this.$parent.globalData.suppliers_id +
                 //   '&sales_id=' +

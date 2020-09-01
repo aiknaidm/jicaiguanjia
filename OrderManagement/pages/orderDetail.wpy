@@ -61,6 +61,7 @@ border: 1px solid #ddd;
                 <radio value="0" checked="false" color='red' />否
               </label>
         </radio-group>
+        
         <button class="quxiao-btn" @tap="cancelorder({{orderDetail.order_id}})" wx:if="{{orderDetail.pay_id==2}}">取消订单</button>
         <button class="confirm-btn" form-type="submit" data-order_id="{{orderDetail.order_id}}">发货</button>
       </view>
